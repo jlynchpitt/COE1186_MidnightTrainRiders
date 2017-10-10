@@ -72,12 +72,12 @@ public class TrainControlPanel extends JPanel
         vitalInfoPanel.setLayout(panelLayout);
         
         //Dynamic text labels
-        Label commandedAuthority = new Label(new Integer(tc.authority).toString() + " blocks");
-        Label commandedSetSpeed = new Label(new Integer(tc.ctcCommandedSetSpeed).toString() + " MPH");
-        Label actualPower = new Label(new Double(tc.commandedPower).toString() + " Watts");
-        Label actualSpeed = new Label(new Double(tc.actualSpeed).toString() + " MPH");
-        Label announcements = new Label(tc.announcements);
-        Label faults = new Label(tc.trainFaults);
+        Label commandedAuthority = new Label(new Integer(trainController.authority).toString() + " blocks");
+        Label commandedSetSpeed = new Label(new Integer(trainController.ctcCommandedSetSpeed).toString() + " MPH");
+        Label actualPower = new Label(new Double(trainController.commandedPower).toString() + " Watts");
+        Label actualSpeed = new Label(new Double(trainController.actualSpeed).toString() + " MPH");
+        Label announcements = new Label(trainController.announcements);
+        Label faults = new Label(trainController.trainFaults);
         
         //Add all labels to layout
         vitalInfoPanel.add(new JLabel("Authority: "));
@@ -126,7 +126,7 @@ public class TrainControlPanel extends JPanel
         //
         setSpeed = new JFormattedTextField(formatter);
         setSpeed.setColumns(1);
-        setSpeed.setValue(0);
+        setSpeed.setValue(trainController.driverCommandedSetSpeed);
         setSpeed.addPropertyChangeListener(this); //TODO: Handle listeners
         
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -135,7 +135,9 @@ public class TrainControlPanel extends JPanel
         c.gridy = 0;
         speedControlPanel.add(setSpeed, c);
         
-        JButton brake = new JButton("Apply Standard Brake"); //TODO: Change button text based on train controller
+        JButton brake = new JButton(); //TODO: Change button text based on train controller
+        String buttonText = trainController.brakeApplied ? "Release Brake" : " Apply Brake";
+        setControlButtonState(brake, buttonText, trainController.brakeApplied);
     	c.fill = GridBagConstraints.HORIZONTAL;
     	c.insets = new Insets(10,0,5,0);
     	c.weightx = 0.5;
@@ -145,6 +147,8 @@ public class TrainControlPanel extends JPanel
     	speedControlPanel.add(brake, c);
     	
     	JButton eBrake = new JButton("Apply Emergency Brake");
+    	buttonText = trainController.eBrakeApplied ? "Release E-Brake" : " Apply E-Brake";
+        setControlButtonState(eBrake, buttonText, trainController.eBrakeApplied);
     	c.fill = GridBagConstraints.HORIZONTAL;
     	c.weightx = 0.5;
     	c.gridwidth = 2;
@@ -223,6 +227,8 @@ public class TrainControlPanel extends JPanel
         nonVitalControlPanel.add(setTemp, c);
         
         JButton openRDoor = new JButton("Open Right Door"); //TODO: Change button text based on train controller
+        buttonText = trainController.rightDoorOpen ? "Close R Door" : " Open R Door";
+        setControlButtonState(openRDoor, buttonText, trainController.rightDoorOpen);
     	c.fill = GridBagConstraints.HORIZONTAL;
     	c.insets = new Insets(0,0,5,0);
     	c.weightx = 0.5;
@@ -232,6 +238,8 @@ public class TrainControlPanel extends JPanel
     	nonVitalControlPanel.add(openRDoor, c);
     	
     	JButton openLDoor = new JButton("Open Left Door");
+    	buttonText = trainController.leftDoorOpen ? "Close L Door" : " Open L Door";
+        setControlButtonState(openLDoor, buttonText, trainController.leftDoorOpen);
     	c.fill = GridBagConstraints.HORIZONTAL;
     	c.insets = new Insets(0,0,10,0);
     	c.weightx = 0.5;
@@ -241,6 +249,8 @@ public class TrainControlPanel extends JPanel
     	nonVitalControlPanel.add(openLDoor, c);
     	
     	JButton turnOnLights = new JButton("Turn On Lights");
+    	buttonText = trainController.lightsOn ? "Turn Off Lights" : " Turn On Lights";
+        setControlButtonState(turnOnLights, buttonText, trainController.lightsOn);
     	c.fill = GridBagConstraints.HORIZONTAL;
     	c.weightx = 0.5;
     	c.gridwidth = 2;
@@ -323,5 +333,19 @@ public class TrainControlPanel extends JPanel
             Number value = (Number)e.getNewValue();
             //sliderModel.setDoubleValue(value.doubleValue());
         }
+    }
+    
+    private static void setControlButtonState(JButton button, String newText, boolean activated) {
+    	button.setText(newText);
+    	
+    	//If button activated -> Color = red
+    	if(activated) {
+    		button.setContentAreaFilled(false);
+    		button.setBackground(Color.RED);
+    		button.setOpaque(true);
+    	}
+    	else {
+    		button.setBackground(null);
+    	}
     }
 }

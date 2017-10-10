@@ -143,6 +143,12 @@ public class TrainControlUI {
     	tch = new TrainControllerHelper();
     	tch.addNewTrain(123);    
     	TrainController tc456 = tch.addNewTrain(456);
+    	tc456.brakeApplied = false;
+    	tc456.eBrakeApplied = false;
+    	tc456.leftDoorOpen = true;
+    	tc456.rightDoorOpen = true;
+    	tc456.lightsOn = true;
+
     	//Temporary testing of displaying initial state of a new train controller
     	
         //Schedule a job for the event-dispatching thread:
