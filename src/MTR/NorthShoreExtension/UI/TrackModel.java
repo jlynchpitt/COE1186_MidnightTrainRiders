@@ -6,8 +6,9 @@ import javax.swing.*;
 import java.util.Arrays;
 
 public class TrackModel extends JPanel implements MouseListener {
-	class Data{
-		String linestatus;
+	//load csv into db
+    class Data{
+		String linestatus; 
 		int speed;
 		int authority;
 		String section;
@@ -20,14 +21,18 @@ public class TrackModel extends JPanel implements MouseListener {
 		String trackStatus;
 		String heater;
 	}
-	String dataString = "Choose a Track for information!";
+	//read in from db here
+	String status = "Free";
+	Boolean clicked = false;
+	String dataString = " ";
 	Point p = new Point();
 	JTable table;
 	String[] colNames = {"Line/Status","Speed/Authority","Section","Block","Length (m)", 
 			"Grade(%)", "Speed Limit (km/hr)","Infrastructre", "Elevation(m)",
 			"Cumlative Elevation", "Track Status", "Heater"};
-	String colString = Arrays.toString(colNames).replaceAll("\\[|\\]|,|\\s", "  ");
-	//will eventaully be the number of lines in a read in csv, but for now just working with the example
+	//String colString = Arrays.toString(colNames).replaceAll("\\[|\\]|,|\\s", "  ");
+	//will eventually be the number of lines in a read in csv, but for now just working with the example
+	String colString = " ";
 	Data[] data = new Data[1];
 	
 	   public static void main(String[] a) {
@@ -41,11 +46,37 @@ public class TrackModel extends JPanel implements MouseListener {
 		   }
 		   public void paint(Graphics g) {
 			   //add lights!!!
-			  g.setColor(Color.black);
-			  g.drawString(colString, 20, 490);
-			  g.drawString(dataString, 20, 520);
+			   //for box and words!
+			  if(clicked) {
+				  g.setColor(Color.black);
+				  g.drawString(colString, 85, 490);
+				  g.drawString(dataString, 85, 520);
+				  g.drawLine(75, 470, 1130, 470);
+				  g.drawLine(75, 500, 1130, 500);
+				  g.drawLine(75, 530, 1130, 530);
+				  g.drawLine(75, 470, 75, 530);
+				  g.drawLine(1130, 470, 1130, 530);
+				  g.drawLine(1060, 470, 1060, 530);
+				  g.drawLine(970, 470, 970, 530);
+				  g.drawLine(840, 470, 840, 530);
+				  g.drawLine(750, 470, 750, 530);
+				  g.drawLine(660, 470, 660, 530);
+				  g.drawLine(520, 470, 520, 530);
+				  g.drawLine(460, 470, 460, 530);
+				  g.drawLine(380, 470, 380, 530);
+				  g.drawLine(330, 470, 330, 530);
+			  	  g.drawLine(270, 470, 270, 530);
+			  	  g.drawLine(170, 470, 170, 530);
+			  	  g.setColor(Color.white);
+			  	  g.fillRect(550, 550, 80, 30);
+			  	  g.setColor(Color.black);
+			  	  g.drawString("Break", 572, 570);
+			  }
+			  
 			  g.setColor(Color.white);
-		      g.fillRect (10, 10, 1178, 450);
+		      g.fillRoundRect (10, 10, 1178, 450, 90, 90);
+		      g.setColor(Color.black);
+		      g.drawRoundRect(10, 10, 1178, 450, 90, 90);
 		      g.setColor(Color.green);
 		      g.drawLine(589, 40, 589, 100);
 		      g.drawLine(589, 110, 589, 200);
@@ -62,8 +93,8 @@ public class TrackModel extends JPanel implements MouseListener {
 		      g.setColor(Color.gray);
 		      g.fillOval(590, 150, 25, 15);
 		      g.setColor(Color.black);
-		      g.drawRect(880, 20, 300, 150);
-		      g.drawString("Inputs for Individual Testing:", 890, 40);
+		      g.drawRoundRect(870, 20, 300, 150, 90, 90);
+		      g.drawString("Inputs for Individual Testing:", 900, 40);
 		   }
 		   
 		    public void mousePressed(MouseEvent e) {}
@@ -76,40 +107,58 @@ public class TrackModel extends JPanel implements MouseListener {
 	            //note in final version will just add the row because will be preloaded
 	            //green lines
 	            if((x>=580 && x<=600) && (y>=64 && y<=120)) {
-	            		dataString = "  Green/Free           55/3                A           1           100             0.5                     55                                              0.5                        0.5                                       off";
+	            		clicked = true;
+	            		colString = Arrays.toString(colNames).replaceAll("\\[|\\]|,|\\s", "  ");
+	            		dataString = "  Green/"+status+"           55/3                A           1           100             0.5                     55                                              0.5                        0.5                                       off";
 	            		repaint();
 	            }
 	            else if((x>=580 && x<=600) && (y>=135 && y<=218)) {
-	            		dataString = "  Green/Free           55/3                A           2           100              1                      55                     PIONEER                  1                         1.5                                       off";
+	            		clicked = true;
+	            		colString = Arrays.toString(colNames).replaceAll("\\[|\\]|,|\\s", "  ");
+	            		dataString = "  Green/"+status+"          55/3                A           2           100              1                      55                     PIONEER                  1                         1.5                                       off";
 	            		repaint();
 	            }
 	            else if((x>=580 && x<=600) && (y>=236 && y<=318)) {
-	            		dataString = "  Green/Free           55/3                A           3           100             1.5                     55                                              1.5                         3                                       off";
+	            		clicked = true;
+	            		colString = Arrays.toString(colNames).replaceAll("\\[|\\]|,|\\s", "  ");
+	            		dataString = "  Green/"+status+"           55/3                A           3           100             1.5                     55                                              1.5                         3                                       off";
 	            		repaint();
                 }
 	            //red lines
 	            else if((y>=190 && y<=210) && (x>=398 && x<=447)) {
-	            		dataString = "  Red/Free              55/3                A           1            50             0.5                     40                                              0.25                        0.25                                       off";
+	            		clicked = true;
+	            		colString = Arrays.toString(colNames).replaceAll("\\[|\\]|,|\\s", "  ");
+	            		dataString = "  Red/"+status+"              55/3                A           1            50             0.5                     40                                              0.25                        0.25                                       off";
 	            		repaint();
 	            }
 	            else if((y>=232 && y<=242) && (x>=398 && x<=447)) {
-	            		dataString = "  Red/Free              55/3                A           2            50              1                      40                                              0.50                        0.75                                       off";
+	            		clicked = true;
+	            		colString = Arrays.toString(colNames).replaceAll("\\[|\\]|,|\\s", "  ");
+	            		dataString = "  Red/"+status+"              55/3                A           2            50              1                      40                                              0.50                        0.75                                       off";
 	            		repaint();
 	            }
 	            else if((y>=220 && y<=270) && (x>=460 && x<=499)) {
-	            		dataString = "  Red/Free              55/3                A           3            50             1.5                     40                      SWITCH             0.75                      1.50                                       off";
+	            		clicked = true;
+	            		colString = Arrays.toString(colNames).replaceAll("\\[|\\]|,|\\s", "  ");
+	            		dataString = "  Red/"+status+"              55/3                A           3            50             1.5                     40                      SWITCH             0.75                      1.50                                       off";
 	            		repaint();
 	            }
 	            else if((y>=220 && y<=270) && (x>=510 && x<=600)) {
-	            		dataString = "  Red/Free              55/3                B           4            50              2                      40                                              1.00                        2.50                                       off";
+	            		clicked = true;
+	            		colString = Arrays.toString(colNames).replaceAll("\\[|\\]|,|\\s", "  ");
+	            		dataString = "  Red/"+status+"              55/3                B           4            50              2                      40                                              1.00                        2.50                                       off";
 	            		repaint();
 	            }
 	            else if((y>=220 && y<=270) && (x>=611 && x<=685)) {
-	            		dataString = "  Red/Free              55/3                B           5            50             1.5                     40                                              0.75                        3.25                                       off";
+	            		clicked = true;
+	            		colString = Arrays.toString(colNames).replaceAll("\\[|\\]|,|\\s", "  ");
+	            		dataString = "  Red/"+status+"              55/3                B           5            50             1.5                     40                                              0.75                        3.25                                       off";
 	            		repaint();
 	            }
 	            else if((y>=220 && y<=270) && (x>=692 && x<=736)) {
-	            		dataString = "  Red/Free              55/3                B           6            50              1                      40                                              0.50                        3.75                                       off";
+	            		clicked = true;
+	            		colString = Arrays.toString(colNames).replaceAll("\\[|\\]|,|\\s", "  ");
+	            		dataString = "  Red/"+status+"              55/3                B           6            50              1                      40                                              0.50                        3.75                                       off";
 	            		repaint();
 	            }
 	            
