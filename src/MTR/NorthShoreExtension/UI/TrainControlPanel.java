@@ -76,6 +76,7 @@ public class TrainControlPanel extends JPanel
         
         //Add components
         c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = new Insets(10,0,15,0);
         c.weightx = 0.5;
         c.gridx = 0;
         c.gridy = 0;
@@ -103,6 +104,7 @@ public class TrainControlPanel extends JPanel
         
         JButton brake = new JButton("Apply Standard Brake"); //TODO: Change button text based on train controller
     	c.fill = GridBagConstraints.HORIZONTAL;
+    	c.insets = new Insets(10,0,5,0);
     	c.weightx = 0.5;
     	c.gridwidth = 2;
     	c.gridx = 0;
@@ -161,9 +163,10 @@ public class TrainControlPanel extends JPanel
         
         //Add components
         c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = new Insets(0,0,15,0);
         c.weightx = 0.5;
         c.gridx = 0;
-        c.gridy = 3;
+        c.gridy = 0;
         nonVitalControlPanel.add(new JLabel("Set Temp (deg F): "), c);
         
         //Create the set speed field format, and then the text field.
@@ -183,23 +186,25 @@ public class TrainControlPanel extends JPanel
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 0.5;
         c.gridx = 1;
-        c.gridy = 3;
+        c.gridy = 0;
         nonVitalControlPanel.add(setTemp, c);
         
         JButton openRDoor = new JButton("Open Right Door"); //TODO: Change button text based on train controller
     	c.fill = GridBagConstraints.HORIZONTAL;
-    	c.weightx = 0.5;
-    	c.gridwidth = 2;
-    	c.gridx = 0;
-    	c.gridy = 0;
-    	nonVitalControlPanel.add(openRDoor, c);
-    	
-    	JButton openLDoor = new JButton("Open Left Door");
-    	c.fill = GridBagConstraints.HORIZONTAL;
+    	c.insets = new Insets(0,0,5,0);
     	c.weightx = 0.5;
     	c.gridwidth = 2;
     	c.gridx = 0;
     	c.gridy = 1;
+    	nonVitalControlPanel.add(openRDoor, c);
+    	
+    	JButton openLDoor = new JButton("Open Left Door");
+    	c.fill = GridBagConstraints.HORIZONTAL;
+    	c.insets = new Insets(0,0,10,0);
+    	c.weightx = 0.5;
+    	c.gridwidth = 2;
+    	c.gridx = 0;
+    	c.gridy = 2;
     	nonVitalControlPanel.add(openLDoor, c);
     	
     	JButton turnOnLights = new JButton("Turn On Lights");
@@ -207,7 +212,7 @@ public class TrainControlPanel extends JPanel
     	c.weightx = 0.5;
     	c.gridwidth = 2;
     	c.gridx = 0;
-    	c.gridy = 2;
+    	c.gridy = 3;
     	nonVitalControlPanel.add(turnOnLights, c);
     	
     	nonVitalControlPanel.setBorder(BorderFactory.createCompoundBorder(
@@ -219,10 +224,18 @@ public class TrainControlPanel extends JPanel
     	bottomControlPanel.add(trackInfoPanel);
     	bottomControlPanel.add(nonVitalControlPanel);
 
-    	GridLayout overallLayout = new GridLayout(2, 1);
-        setLayout(overallLayout);
-        add(vitalInfoPanel);
-    	add(bottomControlPanel);
+    	//GridLayout overallLayout = new GridLayout(2, 1);
+        //setLayout(overallLayout);
+    	setLayout(new GridBagLayout());
+        c = new GridBagConstraints();
+        c.fill = GridBagConstraints.HORIZONTAL;
+    	c.weightx = 0.5;
+    	c.gridwidth = 1;
+    	c.gridx = 0;
+    	c.gridy = 0;
+        add(vitalInfoPanel, c);
+        c.gridy = 1;
+    	add(bottomControlPanel, c);
     }
 
     //Don't allow this panel to get taller than its preferred size.
