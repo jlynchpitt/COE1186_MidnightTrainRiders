@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 import MTR.NorthShoreExtension.Backend.TrainController;
+import MTR.NorthShoreExtension.Backend.TrainControllerHelper;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -14,20 +15,21 @@ public class TrainControlUI {
     //null (use the default), "Metal", "System", "Motif", "GTK+"
     final static String LOOKANDFEEL = null;
     
-    JPanel mainPane;
+    private JPanel mainPane;
+    public static TrainControllerHelper tch;
     
     public TrainControlUI() {
-    	//TODO: Get list of Train Controller objects + create a panel for each
-        //Temporary test - create 1 train controller object + panel
-        TrainController tc = new TrainController(123);
         
       //Create a JPanel, and add the ConversionPanels to it.
         mainPane = new JPanel();
         mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.PAGE_AXIS));
         mainPane.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
         mainPane.add(Box.createRigidArea(new Dimension(0, 5)));
-        mainPane.add(new TrainControlPanel(tc));
-        mainPane.add(Box.createGlue());
+        
+        for(TrainController tc : tch.getTrainControllerList()) {
+	        mainPane.add(new TrainControlPanel(tc));
+	        mainPane.add(Box.createGlue());
+        }
     }
     
 	private static void initLookAndFeel() {
@@ -84,9 +86,9 @@ public class TrainControlUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         //Create and set up the content pane.
-        TrainControlUI converter = new TrainControlUI();
-        converter.mainPane.setOpaque(true); //content panes must be opaque
-        frame.setContentPane(converter.mainPane);
+        TrainControlUI tcUI = new TrainControlUI();
+        tcUI.mainPane.setOpaque(true); //content panes must be opaque
+        frame.setContentPane(tcUI.mainPane);
 
         //Display the window.
         frame.pack();
@@ -94,6 +96,11 @@ public class TrainControlUI {
     }
 
     public static void main(String[] args) {
+    	//Create TrainControllerHelper
+    	tch = new TrainControllerHelper();
+    	tch.addNewTrain(123);    
+    	tch.addNewTrain(456);
+    	
         //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.
         javax.swing.SwingUtilities.invokeLater(new Runnable() {

@@ -278,6 +278,7 @@ public class TrainControlPanel extends JPanel
         int i = unitChooser.getSelectedIndex();
         //sliderModel.setMultiplier(units[i].multiplier);
         //controller.resetMaxValues(false);
+        System.out.print("action");
     }
 
     /**

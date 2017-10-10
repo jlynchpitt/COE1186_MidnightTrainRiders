@@ -18,7 +18,7 @@ public class TrainControllerHelper {
 	private Timer powerTimer = new Timer();
 	List<TrainController> tcList = new ArrayList<TrainController>();
 	
-	TrainControllerHelper(){
+	public TrainControllerHelper(){
 		//Initialize Timer - Timer controls updating the commanded power every second
 		powerTimer.scheduleAtFixedRate(new TimerTask() {
 			@Override
