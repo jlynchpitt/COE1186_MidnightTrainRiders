@@ -1,3 +1,12 @@
+/*
+ * Filename: TrainControllerHelper.java
+ * Author: Joe Lynch
+ * Date Created: 10/9/2017
+ * File Description: This is a helper class for the individual Train Controllers and acts
+ * 			as a mediator between the front end and backend. One of these must be 
+ * 			instantiated within the main function. It holds a list of each Train Controller
+ * 			and a timer to trigger the power calculations.
+ */
 package MTR.NorthShoreExtension.Backend;
 
 import java.util.ArrayList;

@@ -1,3 +1,14 @@
+/*
+ * Filename: TrainController.java
+ * Author: Joe Lynch
+ * Date Created: 10/9/2017
+ * File Description: This is the backend for the Train Controller. One of these objects
+ * 			will be instantiated with each train. It's main function is calculating
+ * 			a power command to be sent to the train model to drive the train at the
+ * 			proper speed. This is a vital safety component and must take every 
+ * 			precaution to not crash the train.
+ */
+
 package MTR.NorthShoreExtension.Backend;
 
 public class TrainController {
