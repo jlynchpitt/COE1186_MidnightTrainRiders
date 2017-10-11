@@ -44,6 +44,7 @@ public class TrackModel extends JPanel implements MouseListener {
 		      f.setSize(1200, 700);
 		      f.addMouseListener(mouse);
 		      f.add(mouse);
+		      f.setResizable(false);
 		      f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		      f.setVisible(true);
 		   }
