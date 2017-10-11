@@ -61,7 +61,7 @@ public class TrackModel extends JPanel implements MouseListener {
 				  g.drawLine(75, 530, 1130, 530);
 				  g.drawLine(75, 470, 75, 530);
 				  g.drawLine(1130, 470, 1130, 530);
-				  g.drawLine(1060, 470, 1060, 530);
+				 /* g.drawLine(1060, 470, 1060, 530);
 				  g.drawLine(970, 470, 970, 530);
 				  g.drawLine(840, 470, 840, 530);
 				  g.drawLine(750, 470, 750, 530);
@@ -71,7 +71,7 @@ public class TrackModel extends JPanel implements MouseListener {
 				  g.drawLine(380, 470, 380, 530);
 				  g.drawLine(330, 470, 330, 530);
 			  	  g.drawLine(270, 470, 270, 530);
-			  	  g.drawLine(170, 470, 170, 530);
+			  	  g.drawLine(170, 470, 170, 530);*/
 			  	  g.setColor(Color.red);
 			  	  g.fillRect(550, 550, 80, 30);
 			  	  g.setColor(Color.white);
