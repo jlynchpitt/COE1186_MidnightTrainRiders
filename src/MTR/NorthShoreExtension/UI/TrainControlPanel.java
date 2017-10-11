@@ -364,6 +364,8 @@ public class TrainControlPanel extends JPanel
         		newButtonText = "Release Brake";
         		setButtonActivated = true;
         	}
+        	
+        	trainController.brakeApplied = setButtonActivated;
         		
         	setControlButtonState(brake, newButtonText, setButtonActivated);
         }
@@ -378,6 +380,8 @@ public class TrainControlPanel extends JPanel
         		newButtonText = "Release E-Brake";
         		setButtonActivated = true;
         	}
+        	
+        	trainController.eBrakeApplied = setButtonActivated;
         		
         	setControlButtonState(eBrake, newButtonText, setButtonActivated);
         }
@@ -393,6 +397,8 @@ public class TrainControlPanel extends JPanel
         		setButtonActivated = true;
         	}
         		
+        	trainController.rightDoorOpen = setButtonActivated;
+
         	setControlButtonState(openRDoor, newButtonText, setButtonActivated);
         }
         else if(e.getSource() == openLDoor) {
@@ -407,6 +413,8 @@ public class TrainControlPanel extends JPanel
         		setButtonActivated = true;
         	}
         		
+        	trainController.leftDoorOpen = setButtonActivated;
+
         	setControlButtonState(openLDoor, newButtonText, setButtonActivated);
         }
         else if(e.getSource() == turnOnLights) {
@@ -421,12 +429,14 @@ public class TrainControlPanel extends JPanel
         		setButtonActivated = true;
         	}
         		
+        	trainController.lightsOn = setButtonActivated;
+
         	setControlButtonState(turnOnLights, newButtonText, setButtonActivated);
         }
         else if(e.getSource() == trainController) {
-        	switch(e.getID()) {
-        	case 1: 
+        	if(e.getActionCommand().equals("powerCmd_actualSpeed")) {
         		updateUISpeed(actualSpeed, trainController.actualSpeed);
+        		updateUIPower(actualPower, trainController.powerCommand);
         	}
         }
     }
@@ -440,8 +450,10 @@ public class TrainControlPanel extends JPanel
             Number value = (Number)e.getNewValue();
             //sliderModel.setDoubleValue(value.doubleValue());
         }*/
-    	
-    	System.out.println("Train ID: " + trainController.getTrainID() + " property name: " + e.getPropertyName() + " new speed: " +e.getNewValue());
+    	if(e.getSource().equals(setSpeed)) {
+    		int newSetSpeed = Integer.parseInt(((JFormattedTextField)e.getSource()).getText());
+    		trainController.driverCommandedSetSpeed = newSetSpeed;
+    	}
     }
     
     private void setControlButtonState(JButton button, String newText, boolean activated) {
@@ -465,7 +477,7 @@ public class TrainControlPanel extends JPanel
      * Used for any label that displays a speed
      */
     private void updateUISpeed(JLabel label, double speed) {
-    	label.setText(speed + " MPH");
+    	label.setText(String.format("%.2f MPH", speed));
     }
     
     /*
@@ -481,6 +493,6 @@ public class TrainControlPanel extends JPanel
      * Used for any label that displays power
      */
     private void updateUIPower(JLabel label, double power) {
-    	label.setText(power + " kilowatts");
+    	label.setText(String.format("%.2f kilowatts", power));
     }
 }

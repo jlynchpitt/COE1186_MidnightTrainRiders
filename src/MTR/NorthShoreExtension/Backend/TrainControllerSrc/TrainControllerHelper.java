@@ -36,7 +36,7 @@ public class TrainControllerHelper {
 					tc.calculatePowerCommand();
 				}
 			}
-		}, 0, 1000); //TODO: Update period based on time clock multiplier
+		}, 0, 500); //TODO: Update period based on time clock multiplier
 	}
 
 	public TrainController addNewTrain(int trainID) {
