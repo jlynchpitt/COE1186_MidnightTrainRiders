@@ -211,7 +211,7 @@ public class TrackModel extends JPanel implements MouseListener {
 	            		dataString = "  Red/"+status+"              55/3                B           6            50              1                      40                                              0.50                        3.75                                       off";
 	            		if((x>=550 && x<=630) && (y>=550 && y<=590)) {
 	            			failure = true;
-	            			System.out.println("working");
+	            			
 	            		}
 	            		repaint();
 	            }
