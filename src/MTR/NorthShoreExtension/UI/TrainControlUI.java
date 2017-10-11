@@ -46,8 +46,8 @@ package MTR.NorthShoreExtension.UI;
 import javax.swing.*;
 import javax.swing.event.*;
 
-import MTR.NorthShoreExtension.Backend.TrainController;
-import MTR.NorthShoreExtension.Backend.TrainControllerHelper;
+import MTR.NorthShoreExtension.Backend.TrainControllerSrc.TrainController;
+import MTR.NorthShoreExtension.Backend.TrainControllerSrc.TrainControllerHelper;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -56,7 +56,7 @@ import java.util.*;
 public class TrainControlUI {
 	//Specify the look and feel to use.  Valid values:
     //null (use the default), "Metal", "System", "Motif", "GTK+"
-    final static String LOOKANDFEEL = "System";
+    final static String LOOKANDFEEL = null;
     
     private JPanel mainPane;
     public static TrainControllerHelper tch;

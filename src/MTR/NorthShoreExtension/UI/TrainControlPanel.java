@@ -48,6 +48,7 @@ import java.text.NumberFormat;
 import javax.swing.text.NumberFormatter;
 import java.beans.*; //property change stuff
 import MTR.NorthShoreExtension.Backend.*;
+import MTR.NorthShoreExtension.Backend.TrainControllerSrc.TrainController;
 
 public class TrainControlPanel extends JPanel
                              implements ActionListener,
@@ -57,12 +58,12 @@ public class TrainControlPanel extends JPanel
     NumberFormat numberFormat;
     
     /* Vital Info Components*/
-    Label commandedAuthority;
-    Label commandedSetSpeed;
-    Label actualPower;
-    Label actualSpeed;
-    Label announcements;
-    Label faults;
+    JLabel commandedAuthority;
+    JLabel commandedSetSpeed;
+    JLabel actualPower;
+    JLabel actualSpeed;
+    JLabel announcements;
+    JLabel faults;
     
     /* Vital Controls Components */
     JFormattedTextField setSpeed;
@@ -70,12 +71,12 @@ public class TrainControlPanel extends JPanel
     JButton eBrake;
     
     /* Track Info Components */
-    Label trackID;
-    Label trackLength;
-    Label trackGrade;
-    Label trackSpeedLimit;
-    Label trackUnderground;
-    Label stoppedAtStation;
+    JLabel trackID;
+    JLabel trackLength;
+    JLabel trackGrade;
+    JLabel trackSpeedLimit;
+    JLabel trackUnderground;
+    JLabel stoppedAtStation;
     
     /* Non-Vital Controls Components */
     JFormattedTextField setTemp;
@@ -87,6 +88,7 @@ public class TrainControlPanel extends JPanel
         
     	//Save arguments in instance variables.
         trainController = tc;
+        trainController.setTrainControlPanel(this);
         
         setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createTitledBorder("Train ID: " + new Integer(trainController.getTrainID()).toString()),
@@ -98,12 +100,12 @@ public class TrainControlPanel extends JPanel
         vitalInfoPanel.setLayout(panelLayout);
         
         //Dynamic text labels
-        commandedAuthority = new Label(new Integer(trainController.authority).toString() + " blocks");
-        commandedSetSpeed = new Label(new Integer(trainController.ctcCommandedSetSpeed).toString() + " MPH");
-        actualPower = new Label(new Double(trainController.commandedPower).toString() + " Watts");
-        actualSpeed = new Label(new Double(trainController.actualSpeed).toString() + " MPH");
-        announcements = new Label(trainController.announcements);
-        faults = new Label(trainController.trainFaults);
+        commandedAuthority = new JLabel(new Integer(trainController.authority).toString() + " blocks");
+        commandedSetSpeed = new JLabel(new Integer(trainController.ctcCommandedSetSpeed).toString() + " MPH");
+        actualPower = new JLabel(new Double(trainController.powerCommand).toString() + " kilowatts");
+        actualSpeed = new JLabel(new Double(trainController.actualSpeed).toString() + " MPH");
+        announcements = new JLabel(trainController.announcements);
+        faults = new JLabel(trainController.trainFaults);
         
         //Add all labels to layout
         vitalInfoPanel.add(new JLabel("Authority: "));
@@ -195,12 +197,12 @@ public class TrainControlPanel extends JPanel
         trackInfoPanel.setLayout(trackInfoPanelLayout);
         
         //Dynamic text labels
-        trackID = new Label(trainController.trackID);
-        trackLength = new Label(new Integer(trainController.trackLength).toString() + " feet");
-        trackGrade = new Label(new Double(trainController.trackGrade).toString() + "%");
-        trackSpeedLimit = new Label(new Double(trainController.trackSpeedLimit).toString() + " MPH");
-        trackUnderground = new Label(trainController.trackUnderground ? "Yes" : "No");
-        stoppedAtStation = new Label(trainController.stoppedAtStation ? "Yes" : "No");
+        trackID = new JLabel(trainController.trackID);
+        trackLength = new JLabel(new Integer(trainController.trackLength).toString() + " feet");
+        trackGrade = new JLabel(new Double(trainController.trackGrade).toString() + "%");
+        trackSpeedLimit = new JLabel(new Double(trainController.trackSpeedLimit).toString() + " MPH");
+        trackUnderground = new JLabel(trainController.trackUnderground ? "Yes" : "No");
+        stoppedAtStation = new JLabel(trainController.stoppedAtStation ? "Yes" : "No");
         
         //Add all labels to layout
         trackInfoPanel.add(new JLabel("ID: "));
@@ -421,6 +423,12 @@ public class TrainControlPanel extends JPanel
         		
         	setControlButtonState(turnOnLights, newButtonText, setButtonActivated);
         }
+        else if(e.getSource() == trainController) {
+        	switch(e.getID()) {
+        	case 1: 
+        		updateUISpeed(actualSpeed, trainController.actualSpeed);
+        	}
+        }
     }
 
     /**
@@ -428,13 +436,15 @@ public class TrainControlPanel extends JPanel
      * number as you'd get from getText) changes.
      */
     public void propertyChange(PropertyChangeEvent e) {
-        if ("value".equals(e.getPropertyName())) {
+        /*if ("value".equals(e.getPropertyName())) {
             Number value = (Number)e.getNewValue();
             //sliderModel.setDoubleValue(value.doubleValue());
-        }
+        }*/
+    	
+    	System.out.println("Train ID: " + trainController.getTrainID() + " property name: " + e.getPropertyName() + " new speed: " +e.getNewValue());
     }
     
-    private static void setControlButtonState(JButton button, String newText, boolean activated) {
+    private void setControlButtonState(JButton button, String newText, boolean activated) {
     	button.setText(newText);
     	
     	//If button activated -> Color = red
@@ -448,5 +458,29 @@ public class TrainControlPanel extends JPanel
     		button.setBackground(null);
     		button.setOpaque(true);
     	}
+    }
+    
+    /*
+     * Adds units onto a value before being displayed in the UI
+     * Used for any label that displays a speed
+     */
+    private void updateUISpeed(JLabel label, double speed) {
+    	label.setText(speed + " MPH");
+    }
+    
+    /*
+     * Adds units onto a value before being displayed in the UI
+     * Used for any label that displays authority
+     */
+    private void updateUIAuthority(JLabel label, double auth) {
+    	label.setText(auth + " blocks");
+    }
+    
+    /*
+     * Adds units onto a value before being displayed in the UI
+     * Used for any label that displays power
+     */
+    private void updateUIPower(JLabel label, double power) {
+    	label.setText(power + " kilowatts");
     }
 }

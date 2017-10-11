@@ -7,7 +7,7 @@
  * 			instantiated within the main function. It holds a list of each Train Controller
  * 			and a timer to trigger the power calculations.
  */
-package MTR.NorthShoreExtension.Backend;
+package MTR.NorthShoreExtension.Backend.TrainControllerSrc;
 
 import java.util.ArrayList;
 import java.util.List;
