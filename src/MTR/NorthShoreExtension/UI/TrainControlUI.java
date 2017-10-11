@@ -139,7 +139,7 @@ public class TrainControlUI {
     }
 
     public static void main(String[] args) {
-    	//Create TrainControllerHelper
+    	//Create TrainControllerHelper - with sample test data to show different UI states
     	tch = new TrainControllerHelper();
     	tch.addNewTrain(123);    
     	TrainController tc456 = tch.addNewTrain(456);
@@ -148,8 +148,6 @@ public class TrainControlUI {
     	tc456.leftDoorOpen = true;
     	tc456.rightDoorOpen = true;
     	tc456.lightsOn = true;
-
-    	//Temporary testing of displaying initial state of a new train controller
     	
         //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.

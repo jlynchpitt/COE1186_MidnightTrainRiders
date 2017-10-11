@@ -53,9 +53,35 @@ public class TrainControlPanel extends JPanel
                              implements ActionListener,
                                         ChangeListener,
                                         PropertyChangeListener {
-    JFormattedTextField setSpeed;
     TrainController trainController;
     NumberFormat numberFormat;
+    
+    /* Vital Info Components*/
+    Label commandedAuthority;
+    Label commandedSetSpeed;
+    Label actualPower;
+    Label actualSpeed;
+    Label announcements;
+    Label faults;
+    
+    /* Vital Controls Components */
+    JFormattedTextField setSpeed;
+    JButton brake;
+    JButton eBrake;
+    
+    /* Track Info Components */
+    Label trackID;
+    Label trackLength;
+    Label trackGrade;
+    Label trackSpeedLimit;
+    Label trackUnderground;
+    Label stoppedAtStation;
+    
+    /* Non-Vital Controls Components */
+    JFormattedTextField setTemp;
+    JButton openRDoor;
+    JButton openLDoor;
+    JButton turnOnLights;
 
     TrainControlPanel(TrainController tc) {
         
@@ -72,12 +98,12 @@ public class TrainControlPanel extends JPanel
         vitalInfoPanel.setLayout(panelLayout);
         
         //Dynamic text labels
-        Label commandedAuthority = new Label(new Integer(trainController.authority).toString() + " blocks");
-        Label commandedSetSpeed = new Label(new Integer(trainController.ctcCommandedSetSpeed).toString() + " MPH");
-        Label actualPower = new Label(new Double(trainController.commandedPower).toString() + " Watts");
-        Label actualSpeed = new Label(new Double(trainController.actualSpeed).toString() + " MPH");
-        Label announcements = new Label(trainController.announcements);
-        Label faults = new Label(trainController.trainFaults);
+        commandedAuthority = new Label(new Integer(trainController.authority).toString() + " blocks");
+        commandedSetSpeed = new Label(new Integer(trainController.ctcCommandedSetSpeed).toString() + " MPH");
+        actualPower = new Label(new Double(trainController.commandedPower).toString() + " Watts");
+        actualSpeed = new Label(new Double(trainController.actualSpeed).toString() + " MPH");
+        announcements = new Label(trainController.announcements);
+        faults = new Label(trainController.trainFaults);
         
         //Add all labels to layout
         vitalInfoPanel.add(new JLabel("Authority: "));
@@ -135,7 +161,8 @@ public class TrainControlPanel extends JPanel
         c.gridy = 0;
         speedControlPanel.add(setSpeed, c);
         
-        JButton brake = new JButton(); //TODO: Change button text based on train controller
+        brake = new JButton();
+        brake.addActionListener(this);
         String buttonText = trainController.brakeApplied ? "Release Brake" : " Apply Brake";
         setControlButtonState(brake, buttonText, trainController.brakeApplied);
     	c.fill = GridBagConstraints.HORIZONTAL;
@@ -146,7 +173,8 @@ public class TrainControlPanel extends JPanel
     	c.gridy = 1;
     	speedControlPanel.add(brake, c);
     	
-    	JButton eBrake = new JButton("Apply Emergency Brake");
+    	eBrake = new JButton("Apply Emergency Brake");
+    	eBrake.addActionListener(this);
     	buttonText = trainController.eBrakeApplied ? "Release E-Brake" : " Apply E-Brake";
         setControlButtonState(eBrake, buttonText, trainController.eBrakeApplied);
     	c.fill = GridBagConstraints.HORIZONTAL;
@@ -167,12 +195,12 @@ public class TrainControlPanel extends JPanel
         trackInfoPanel.setLayout(trackInfoPanelLayout);
         
         //Dynamic text labels
-        Label trackID = new Label(trainController.trackID);
-        Label trackLength = new Label(new Integer(trainController.trackLength).toString() + " feet");
-        Label trackGrade = new Label(new Double(trainController.trackGrade).toString() + "%");
-        Label trackSpeedLimit = new Label(new Double(trainController.trackSpeedLimit).toString() + " MPH");
-        Label trackUnderground = new Label(trainController.trackUnderground ? "Yes" : "No");
-        Label stoppedAtStation = new Label(trainController.stoppedAtStation ? "Yes" : "No");
+        trackID = new Label(trainController.trackID);
+        trackLength = new Label(new Integer(trainController.trackLength).toString() + " feet");
+        trackGrade = new Label(new Double(trainController.trackGrade).toString() + "%");
+        trackSpeedLimit = new Label(new Double(trainController.trackSpeedLimit).toString() + " MPH");
+        trackUnderground = new Label(trainController.trackUnderground ? "Yes" : "No");
+        stoppedAtStation = new Label(trainController.stoppedAtStation ? "Yes" : "No");
         
         //Add all labels to layout
         trackInfoPanel.add(new JLabel("ID: "));
@@ -215,7 +243,7 @@ public class TrainControlPanel extends JPanel
         //aha -- it changes the value property but doesn't cause the result to
         //be parsed (that happens on focus loss/return, I think).
         //
-        JFormattedTextField setTemp = new JFormattedTextField(nvFormatter);
+        setTemp = new JFormattedTextField(nvFormatter);
         setTemp.setColumns(5);
         setTemp.setValue(trainController.setTemp);
         setTemp.addPropertyChangeListener(this); //TODO: Handle listeners
@@ -226,7 +254,8 @@ public class TrainControlPanel extends JPanel
         c.gridy = 0;
         nonVitalControlPanel.add(setTemp, c);
         
-        JButton openRDoor = new JButton("Open Right Door"); //TODO: Change button text based on train controller
+        openRDoor = new JButton("Open Right Door"); //TODO: Change button text based on train controller
+        openRDoor.addActionListener(this);
         buttonText = trainController.rightDoorOpen ? "Close R Door" : " Open R Door";
         setControlButtonState(openRDoor, buttonText, trainController.rightDoorOpen);
     	c.fill = GridBagConstraints.HORIZONTAL;
@@ -237,7 +266,8 @@ public class TrainControlPanel extends JPanel
     	c.gridy = 1;
     	nonVitalControlPanel.add(openRDoor, c);
     	
-    	JButton openLDoor = new JButton("Open Left Door");
+    	openLDoor = new JButton("Open Left Door");
+    	openLDoor.addActionListener(this);
     	buttonText = trainController.leftDoorOpen ? "Close L Door" : " Open L Door";
         setControlButtonState(openLDoor, buttonText, trainController.leftDoorOpen);
     	c.fill = GridBagConstraints.HORIZONTAL;
@@ -248,7 +278,8 @@ public class TrainControlPanel extends JPanel
     	c.gridy = 2;
     	nonVitalControlPanel.add(openLDoor, c);
     	
-    	JButton turnOnLights = new JButton("Turn On Lights");
+    	turnOnLights = new JButton("Turn On Lights");
+    	turnOnLights.addActionListener(this);
     	buttonText = trainController.lightsOn ? "Turn Off Lights" : " Turn On Lights";
         setControlButtonState(turnOnLights, buttonText, trainController.lightsOn);
     	c.fill = GridBagConstraints.HORIZONTAL;
@@ -317,11 +348,79 @@ public class TrainControlPanel extends JPanel
      * Responds to the user choosing a new unit from the combo box.
      */
     public void actionPerformed(ActionEvent e) {
-        //Combo box event. Set new maximums for the sliders.
-        //int i = unitChooser.getSelectedIndex();
-        //sliderModel.setMultiplier(units[i].multiplier);
-        //controller.resetMaxValues(false);
-        System.out.print("action");
+    	String newButtonText = "";
+    	boolean setButtonActivated = false;
+    	
+        if(e.getSource() == brake) {
+        	if(brake.getBackground() == Color.RED) {
+        		//button originally activated
+        		newButtonText = "Apply Brake";
+        		setButtonActivated = false;
+        	}
+        	else {
+        		
+        		newButtonText = "Release Brake";
+        		setButtonActivated = true;
+        	}
+        		
+        	setControlButtonState(brake, newButtonText, setButtonActivated);
+        }
+        else if(e.getSource() == eBrake) {
+        	if(eBrake.getBackground() == Color.RED) {
+        		//button originally activated
+        		newButtonText = "Apply E-Brake";
+        		setButtonActivated = false;
+        	}
+        	else {
+        		
+        		newButtonText = "Release E-Brake";
+        		setButtonActivated = true;
+        	}
+        		
+        	setControlButtonState(eBrake, newButtonText, setButtonActivated);
+        }
+        else if(e.getSource() == openRDoor) {
+        	if(openRDoor.getBackground() == Color.RED) {
+        		//button originally activated
+        		newButtonText = "Open R Door";
+        		setButtonActivated = false;
+        	}
+        	else {
+        		
+        		newButtonText = "Close R Door";
+        		setButtonActivated = true;
+        	}
+        		
+        	setControlButtonState(openRDoor, newButtonText, setButtonActivated);
+        }
+        else if(e.getSource() == openLDoor) {
+        	if(openLDoor.getBackground() == Color.RED) {
+        		//button originally activated
+        		newButtonText = "Open L Door";
+        		setButtonActivated = false;
+        	}
+        	else {
+        		
+        		newButtonText = "Close L Door";
+        		setButtonActivated = true;
+        	}
+        		
+        	setControlButtonState(openLDoor, newButtonText, setButtonActivated);
+        }
+        else if(e.getSource() == turnOnLights) {
+        	if(turnOnLights.getBackground() == Color.RED) {
+        		//button originally activated
+        		newButtonText = "Turn On Lights";
+        		setButtonActivated = false;
+        	}
+        	else {
+        		
+        		newButtonText = "Turn Off Lights";
+        		setButtonActivated = true;
+        	}
+        		
+        	setControlButtonState(turnOnLights, newButtonText, setButtonActivated);
+        }
     }
 
     /**
@@ -345,7 +444,9 @@ public class TrainControlPanel extends JPanel
     		button.setOpaque(true);
     	}
     	else {
+    		button.setContentAreaFilled(true);
     		button.setBackground(null);
+    		button.setOpaque(true);
     	}
     }
 }
