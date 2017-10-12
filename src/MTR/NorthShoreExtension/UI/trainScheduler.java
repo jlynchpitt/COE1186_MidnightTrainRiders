@@ -26,7 +26,6 @@
 * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF 
 * SUCH DAMAGE.
 */
-package MTR.NorthShoreExtension.UI;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -99,11 +98,21 @@ public class trainScheduler extends JFrame {
 		radioBtns.add(green);
 		radioBtns.add(red);
 		rightPanel.add(radioBtns);
+		rightPanel.setBorder(BorderFactory.createLineBorder(Color.black,2));
 		
 		stops.setEditable(false);
 		rightPanel.add(stops);
 		
-		JPanel departure = new JPanel(new GridLayout(1,5));
+		//JPanel departure = new JPanel(new GridLayout(1,5));
+		JPanel departure = new JPanel(new GridBagLayout());
+		GridBagConstraints gbc =  new GridBagConstraints();
+		JLabel label = new JLabel("Departure Time: ");
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.gridwidth = 5;
+		departure.add(label, gbc);
+		
 		JTextField hour1 = new JTextField(1);
 		JTextField hour0 = new JTextField(1);
 		JTextField split = new JTextField(3);
@@ -115,11 +124,23 @@ public class trainScheduler extends JFrame {
 		split.setEditable(false);
 		mins1.setText("0");
 		mins0.setText("0");
-		departure.add(hour1);
-		departure.add(hour0);
-		departure.add(split);
-		departure.add(mins1);
-		departure.add(mins0);
+		
+		gbc.gridwidth = 1;
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		departure.add(hour1, gbc);
+		gbc.gridx = 1;
+		gbc.gridy = 1;
+		departure.add(hour0, gbc);
+		gbc.gridx = 2;
+		gbc.gridy = 1;
+		departure.add(split, gbc);
+		gbc.gridx = 3;
+		gbc.gridy = 1;
+		departure.add(mins1, gbc);
+		gbc.gridx = 4;
+		gbc.gridy = 1;
+		departure.add(mins0, gbc);
 		rightPanel.add(departure);
 		
 		rightPanel.add(addStop);

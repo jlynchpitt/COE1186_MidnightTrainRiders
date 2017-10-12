@@ -7,7 +7,8 @@
 * 
 * 
 * 
-* 
+* Just the Menu right now, once database links have been established will work on the
+* reporting function.
 * 
 * 
 * 
@@ -26,7 +27,6 @@
 * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF 
 * SUCH DAMAGE.
 */
-package MTR.NorthShoreExtension.UI;
 
 import java.awt.*;
 import java.awt.event.*;

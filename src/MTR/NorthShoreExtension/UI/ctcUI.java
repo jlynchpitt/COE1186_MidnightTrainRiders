@@ -28,7 +28,6 @@
 */
 
 //package MTR.NorthShoreExtension.UI;
-package MTR.NorthShoreExtension.UI;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -59,11 +58,10 @@ public class ctcUI {
 		String currentTime = sdf.format(cal.getTime());
 		
 		JButton schedTrain, schedRepair, reporting, trnInfo, trnCtrl, trkCtrl, timeMult;
-		JPanel runningMode, thrput, trainNum, ambientTemp, currTime;
+		JPanel runningMode, thrput, trainNum, ambientTemp, currTime, trkModel;
 		int tempF = 56;
 		int numTrains = 0;
 		int throughput = 0;
-		
 		
 		pane.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -108,10 +106,10 @@ public class ctcUI {
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.weightx = 0.0;
 		gbc.weighty = 0.0;
-		gbc.gridwidth = 1;
+		
 		gbc.gridx = 4;
 		gbc.gridy = 3;
-		pane.add(reporting, gbc);
+		pane.add(reporting, gbc);		
 		
 		//create the section for the Run Mode selection
 		runningMode = new JPanel();
@@ -231,6 +229,19 @@ public class ctcUI {
 		gbc.gridy = 4; //fifth row
 		
 		pane.add(trkCtrl, gbc);
+		
+		//trackModel Panel
+		trkModel = new JPanel();
+		trkModel.setBorder(BorderFactory.createLineBorder(Color.black,1));
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		//gbc.ipady = 200;
+		
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		gbc.gridwidth = 4;
+		gbc.gridheight = 3;
+		pane.add(trkModel, gbc);
+		//--------------
 	}
 		
 		private static void initLookAndFeel() {
@@ -271,15 +282,13 @@ public class ctcUI {
 			
 			//setup the window
 			JFrame frame = new JFrame("CTC");
-			frame.setSize(2400, 2400); //doesn't change the size for some reason
+			
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			
 			ctcUI(frame.getContentPane());
-			//ctcUI ctc = new ctcUI();
-			//ctc.mainPane.setOpaque(true); //must be opaque to be visible
-			//frame.setContentPane(ctc.mainPane);
 			
 			frame.pack();
+			//frame.setSize(850, 500); Need to find ideal size after syncing with Track Model
 			frame.setVisible(true);
 		}
 		
