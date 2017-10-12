@@ -102,7 +102,7 @@ public class TrainControlPanel extends JPanel
         //Dynamic text labels
         commandedAuthority = new JLabel(new Integer(trainController.authority).toString() + " blocks");
         commandedSetSpeed = new JLabel(new Integer(trainController.ctcCommandedSetSpeed).toString() + " MPH");
-        actualPower = new JLabel(new Double(trainController.powerCommand).toString() + " kilowatts");
+        actualPower = new JLabel(new Double(trainController.powerCommand).toString() + " horsepower");
         actualSpeed = new JLabel(new Double(trainController.actualSpeed).toString() + " MPH");
         announcements = new JLabel(trainController.announcements);
         faults = new JLabel(trainController.trainFaults);
@@ -451,6 +451,7 @@ public class TrainControlPanel extends JPanel
             //sliderModel.setDoubleValue(value.doubleValue());
         }*/
     	if(e.getSource().equals(setSpeed)) {
+    		//TODO: Handle speeds > 1000 - issue with , in 1,000
     		int newSetSpeed = Integer.parseInt(((JFormattedTextField)e.getSource()).getText());
     		trainController.driverCommandedSetSpeed = newSetSpeed;
     	}
@@ -493,6 +494,6 @@ public class TrainControlPanel extends JPanel
      * Used for any label that displays power
      */
     private void updateUIPower(JLabel label, double power) {
-    	label.setText(String.format("%.2f kilowatts", power));
+    	label.setText(String.format("%.2f horsepower", power));
     }
 }

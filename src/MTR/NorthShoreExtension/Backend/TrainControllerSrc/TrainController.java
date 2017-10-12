@@ -57,8 +57,8 @@ public class TrainController {
 		//trainModel = tm;
 		
 		//Initialize pid controller
-		pid = new MiniPID(6,1,0.0);
-		pid.setOutputLimits(0, 120); //Train engine power limits: 0-120 kW
+		pid = new MiniPID(0.4, 0.25, 0);
+		pid.setOutputLimits(0, 160); //Train engine power limits: 0-120 kW (0-160 horsepower)
 		pid.setSetpoint(0);
 		//pid.setDirection(true);
 	}
@@ -75,6 +75,10 @@ public class TrainController {
 		String actionCommand = "powerCmd";
 		
 		if(!eBrakeApplied && !brakeApplied && authority > 0) {
+			//Simple check against speed limit
+			if(driverCommandedSetSpeed > trackSpeedLimit) {
+				driverCommandedSetSpeed = trackSpeedLimit;
+			}
 			//Use PID loop to calculate next power command - pass to train model + UI
 			//double speedError = trainSetSpeed - actualSpeed; //TODO: Change this back to trainSetSpeed
 			//double speedError = driverCommandedSetSpeed - actualSpeed;
@@ -93,7 +97,8 @@ public class TrainController {
 			//Power (W) = Force (kg * m/s2) * Velocity (m/s)
 			//TrainForce = mass * acceleration = 51.43 tons * 0.5 m/s2 (train 2/3 loaded) = 46656.511 kg * 0.5 m/s2
 			//Velocity = Power/Train Force			
-			double msSpeed = (powerCommand * 1000)/(46656.511 * 0.5);
+			//NOTE: 1.34102 converts horsepower back to kWatts
+			double msSpeed = (powerCommand * 1000 / 1.34102)/((46656.511/9.8) * 0.5);
 			actualSpeed = msSpeed * 2.23694;
 			
 			actionCommand = "powerCmd_actualSpeed";
