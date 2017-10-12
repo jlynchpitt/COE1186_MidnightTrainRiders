@@ -1,12 +1,10 @@
-package MTR.NorthShoreExtension.UI;
-
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JList;
 import java.awt.BorderLayout;
 import javax.swing.AbstractListModel;
-//import net.miginfocom.swing.MigLayout;
+import net.miginfocom.swing.MigLayout;
 import java.awt.GridLayout;
 import java.awt.GridBagLayout;
 import java.awt.Choice;
@@ -33,6 +31,7 @@ public class TrainmodelUI {
 	private JFrame frame;
 	private JLabel lblLights;
 	private JLabel lblAuthority;
+	private JLabel lblDeceleration;
 
 	/**
 	 * Launch the application.
@@ -96,11 +95,11 @@ public class TrainmodelUI {
 	 */
 	private void initialize(int i) {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 1200, 600);
+		frame.setBounds(100, 100, 1000, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 100, 150, 0, 150, 0, 150, 0, 150, 0, 150, 50, 0, 0};
-		gridBagLayout.rowHeights = new int[]{100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0};
+		gridBagLayout.rowHeights = new int[]{100, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0};
 		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		frame.getContentPane().setLayout(gridBagLayout);
@@ -301,7 +300,7 @@ public class TrainmodelUI {
 		gbc_lblHeight.gridy = 8;
 		frame.getContentPane().add(lblHeight, gbc_lblHeight);
 		
-		JLabel lblDeceleration = new JLabel("Deceleration:"+String.format("%.3f", tr[i].getDeceleration()*3.28084)+"ft/s^2");
+		lblDeceleration = new JLabel("Deceleration:"+String.format("%.3f", tr[i].getDeceleration()*3.28084)+"ft/s^2");
 		GridBagConstraints gbc_lblDeceleration = new GridBagConstraints();
 		gbc_lblDeceleration.anchor = GridBagConstraints.WEST;
 		gbc_lblDeceleration.insets = new Insets(0, 0, 5, 5);
@@ -394,6 +393,14 @@ public class TrainmodelUI {
 		frame.getContentPane().add(btnNewButton_2, gbc_btnNewButton_2);
 		
 		JButton btnNewButton_3 = new JButton("Passenger E-Brake");
+		btnNewButton_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				emergencystop();
+			}
+
+		
+		});
+		
 		GridBagConstraints gbc_btnNewButton_3 = new GridBagConstraints();
 		gbc_btnNewButton_3.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnNewButton_3.insets = new Insets(0, 0, 5, 5);
@@ -406,7 +413,6 @@ public class TrainmodelUI {
 		    @Override
 		    public void actionPerformed(ActionEvent e){
 		    	update(comboBox.getSelectedIndex());
-		    	System.out.println(comboBox.getSelectedIndex());
 		    }
 
 		});
@@ -424,6 +430,12 @@ public class TrainmodelUI {
 			lblLights = new JLabel("Lights: Off");
 		}
 		lblAuthority.setText("Authority: "+tr[i].getAuthority());
+	}
+	
+	private void emergencystop() {
+		lblNewLabel_5.setText("Acceleration: 0.000ft/s^2");
+		lblSpeed.setText("Speed: 0.000ft/s");
+		lblDeceleration.setText("Deceleration: 0.000ft/s^2");
 	}
 	
 	
