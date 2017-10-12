@@ -73,6 +73,13 @@ public class ctcUI {
 		gbc.insets = new Insets(0,0,5,0);
 		//set up the first button
 		schedTrain = new JButton("Schedule Train");
+		schedTrain.setMnemonic(KeyEvent.VK_T);
+		schedTrain.setActionCommand("schedTrain");
+		schedTrain.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFrame schedulerT = new trainScheduler();
+			}
+		});
 		gbc.weightx = 0.0; //sets the width of the segment
 		gbc.weighty = 0.0;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -263,6 +270,7 @@ public class ctcUI {
 			
 			//setup the window
 			JFrame frame = new JFrame("CTC");
+			frame.setSize(2400, 2400); //doesn't change the size for some reason
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			
 			ctcUI(frame.getContentPane());
