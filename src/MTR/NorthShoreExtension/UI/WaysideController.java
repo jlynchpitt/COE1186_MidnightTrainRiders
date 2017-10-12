@@ -1,5 +1,4 @@
 package MTR.NorthShoreExtension.UI;
-
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Component;
@@ -135,7 +134,7 @@ public class WaysideController
 	   ButtonBox.add(SaveButton, BorderLayout.EAST);
 	   ButtonBox.add(SwtchCtrlButton, BorderLayout.EAST);
 	   ButtonBox.add(TrackInfoButton, BorderLayout.EAST);	  //add to frame
-	   plc.add(text, BorderLayout.WEST);  //add to frame 
+	   plc.add(text, BorderLayout.WEST);  //add tframo e 
 	   plc.add(ButtonBox, BorderLayout.WEST);
 	   //f.getContentPane().add(plc);
    }
@@ -192,16 +191,16 @@ public class WaysideController
 		
 		ActionAdder();
 	   DefaultTableModel dm = new DefaultTableModel();
-    dm.setDataVector(new Object[][] { { "button 1", "foo", "foo", "foo" },
-        { "button 2", "bar", "bar", "bar" } }, new Object[] { "Line", "Occupied Track", "Dest Track", "Athrty" });
+    dm.setDataVector(new Object[][] { { "Green", "C5", "Swtch", "20 mi" },
+        { "Red", "D7", "T4", "12mi" } }, new Object[] { "Line", "Occupied Track", "Dest Track", "Athrty" });
 
     JTable table = new JTable(dm);
 
 
 //---------------------------------------------------------------------		
 	DefaultTableModel am = new DefaultTableModel();
-    am.setDataVector(new Object[][] { { "button 1", "foo" },
-        { "button 2", "bar" } }, new Object[] { "Xing", "Line"});
+    am.setDataVector(new Object[][] { { "Green", "C5" },
+        { "Red", "A2" } }, new Object[] { "Xing", "Line"});
 
     JTable lighttable = new JTable(am);
     JScrollPane scroll = new JScrollPane(table);
