@@ -77,6 +77,7 @@ public class WaysideController
 			  f.getContentPane().removeAll();
 			  FrameTracker = 1;
 			  f.getContentPane().add(SC);
+			  f.revalidate();
 		  }
 		});
 	TrackInfoButton.addActionListener(new ActionListener()
@@ -87,6 +88,7 @@ public class WaysideController
 			f.getContentPane().removeAll();
 		  FrameTracker = 2;
 		  f.getContentPane().add(TI);
+		  f.revalidate();
 	  }
 	});
 	
@@ -98,6 +100,7 @@ public class WaysideController
 			f.getContentPane().removeAll();
 		  FrameTracker = 2;
 		  f.getContentPane().add(plc);
+		  f.revalidate();
 	  }
 	});
 		
