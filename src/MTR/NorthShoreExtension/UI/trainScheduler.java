@@ -27,7 +27,7 @@
 * SUCH DAMAGE.
 */
 
-+package MTR.NorthShoreExtension.UI;
+package MTR.NorthShoreExtension.UI;
 
 import java.awt.*;
 import java.awt.event.*;

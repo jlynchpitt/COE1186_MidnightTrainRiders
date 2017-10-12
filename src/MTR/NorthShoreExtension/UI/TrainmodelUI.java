@@ -1,10 +1,12 @@
+package MTR.NorthShoreExtension.UI;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JList;
 import java.awt.BorderLayout;
 import javax.swing.AbstractListModel;
-import net.miginfocom.swing.MigLayout;
+//import net.miginfocom.swing.MigLayout;
 import java.awt.GridLayout;
 import java.awt.GridBagLayout;
 import java.awt.Choice;
