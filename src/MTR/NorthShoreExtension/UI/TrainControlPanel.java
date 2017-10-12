@@ -43,6 +43,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.font.TextAttribute;
 import java.util.*;
 import java.text.NumberFormat;
 import javax.swing.text.NumberFormatter;
@@ -108,7 +109,7 @@ public class TrainControlPanel extends JPanel
         faults = new JLabel(trainController.trainFaults);
         
         //Add all labels to layout
-        vitalInfoPanel.add(new JLabel("Authority: "));
+        vitalInfoPanel.add(newTitleLabel("Authority: "));
         vitalInfoPanel.add(commandedAuthority);
         vitalInfoPanel.add(new JLabel("Power: "));
         vitalInfoPanel.add(actualPower);
@@ -141,7 +142,7 @@ public class TrainControlPanel extends JPanel
         c.weightx = 0.5;
         c.gridx = 0;
         c.gridy = 0;
-        speedControlPanel.add(new JLabel("Set Speed (MPH): "), c);
+        speedControlPanel.add(new JLabel("Driver Set Speed (MPH): "), c);
         
         //Create the set speed field format, and then the text field.
         numberFormat = NumberFormat.getNumberInstance();
@@ -495,5 +496,19 @@ public class TrainControlPanel extends JPanel
      */
     private void updateUIPower(JLabel label, double power) {
     	label.setText(String.format("%.2f horsepower", power));
+    }
+    
+    private JLabel newTitleLabel(String lableText) {
+    	JLabel jl = new JLabel(lableText);
+    	
+    	//Map<TextAttribute, Object> attributes = new HashMap<>();
+
+    	//attributes.put(TextAttribute.FAMILY, Font.DIALOG);
+    	//attributes.put(TextAttribute.WEIGHT, TextAttribute.WEIGHT_SEMIBOLD);
+    	//attributes.put(TextAttribute.SIZE, 12);
+
+    	//jl.setFont(Font.getFont(attributes));
+    	//jl.setFont(new Font("Serif", Font.BOLD, 11));
+    	return jl;
     }
 }

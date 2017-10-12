@@ -75,14 +75,21 @@ public class TrainController {
 		String actionCommand = "powerCmd";
 		
 		if(!eBrakeApplied && !brakeApplied && authority > 0) {
-			//Simple check against speed limit
+			//Simple check against speed limit TODO: Move these checks into setters
 			if(driverCommandedSetSpeed > trackSpeedLimit) {
-				driverCommandedSetSpeed = trackSpeedLimit;
+				trainSetSpeed = trackSpeedLimit;
 			}
+			else if(driverCommandedSetSpeed > ctcCommandedSetSpeed) {
+				trainSetSpeed = ctcCommandedSetSpeed;
+			}
+			else {
+				trainSetSpeed = driverCommandedSetSpeed;
+			}
+				
 			//Use PID loop to calculate next power command - pass to train model + UI
 			//double speedError = trainSetSpeed - actualSpeed; //TODO: Change this back to trainSetSpeed
 			//double speedError = driverCommandedSetSpeed - actualSpeed;
-			double speedError = actualSpeed - driverCommandedSetSpeed;
+			double speedError = actualSpeed - trainSetSpeed;
 			powerCommand = pid.getOutput(speedError, 0);
 		}
 		else {
