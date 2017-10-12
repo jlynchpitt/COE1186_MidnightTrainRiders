@@ -23,6 +23,7 @@ import javax.swing.table.TableCellRenderer;
 
 public class WaysideController
 {
+	//imports all packages
 	public static String SampleCode = "Int total = 0;\n Public static void main (String [] args)\n{\n    If (traindist <= 100)\n    {\n        Do\n        {\n            Close gate\n            Signal light\n        }\n    }\n    Public boolean distmeas(int trackcount)\n    {\n        For (int x = 0; x < trackcount; x++)\n        {\n            Total += x; \n        }\n        If (total <= standarddist)\n        {\n            Return true;\n        }\n        Else\n        {\n            Return false;\n        ]\n    }\n}";
 	//basic frame and components
 	public static JPanel plc = new JPanel();
@@ -37,22 +38,27 @@ public class WaysideController
 	public static JButton TrackInfoButton = new JButton("To Track Info Hub"); //create one of the buttons
 	public static int FrameTracker = 0;
       
-   public static void main(String[] args)
+   public static void main(String[] args) //main body
    {
-	   
+	   //setup panels
 	   PLCSetup();
 	   TrackInfoSetup();
 	   SwitchSetup();
+	   //add action
 	    ActionAdder();  
-	
+	//create frame 
 	  int width = 750;
       int height = 500;
       f.setSize(width, height);
 	  f.getContentPane().add(plc);
       f.setVisible(true);
    } 
+   
+   //set the functions of the buttons
    public static void ActionAdder()
    {
+	   
+	   //exit window
 	   f.addWindowListener
 	   (
 			new WindowAdapter() 
@@ -68,7 +74,7 @@ public class WaysideController
 	  SC -- 1
 	  TI -- 2
 	  */
-
+		//button that goes to switch control
 	  SwtchCtrlButton.addActionListener(new ActionListener()
 		{
 		  public void actionPerformed(ActionEvent e)
@@ -79,6 +85,7 @@ public class WaysideController
 			  f.revalidate();
 		  }
 		});
+	//button that goes to track info
 	TrackInfoButton.addActionListener(new ActionListener()
 	{
 	  public void actionPerformed(ActionEvent e)
@@ -91,6 +98,7 @@ public class WaysideController
 	  }
 	});
 	
+	//button that goes to plc
 	PLCButton.addActionListener(new ActionListener()
 	{
 	  public void actionPerformed(ActionEvent e)
@@ -106,6 +114,8 @@ public class WaysideController
 		
 
    }
+   
+   //register all panels
    public static void ComponentAdder()
    {
 	   PLCSetup();
@@ -115,7 +125,7 @@ public class WaysideController
    
    
  
-   
+ //set up plc panel  
    public static void PLCSetup()
    {
 	   
@@ -127,6 +137,7 @@ public class WaysideController
 	   ActionAdder();
 	   String[] choices = { "Green Line","Red Line"};
 	   final JComboBox<String> cb = new JComboBox<String>(choices);
+	   //create button box
 	   Box ButtonBox;
 	   ButtonBox = Box.createVerticalBox();
 	   ButtonBox.add( Box.createVerticalStrut( 25 ) );
@@ -140,7 +151,7 @@ public class WaysideController
    }
   
 
-
+//set up switch panel
   public static void SwitchSetup()
    {
 	   
@@ -182,6 +193,8 @@ public class WaysideController
 	   
    }
    
+   
+   //set up track info panel
    
    public static void TrackInfoSetup()
    {
