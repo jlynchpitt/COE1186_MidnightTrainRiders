@@ -1,7 +1,7 @@
 /*
 * Filename: ctcUI.java
 * Author: Matt Snyder
-* Last Edited: 10/11/2017
+* Last Edited: 10/12/2017
 * File Description: This contains the main frame for the CTC GUI. 
 * 
 * 
@@ -42,7 +42,7 @@ public class ctcUI {
 	//"Motif", "GTK+"
 	
 	final static String LOOKANDFEEL = "System";
-	final static boolean shouldFill = true;
+	final static boolean shouldFill = true; //used in testing GridBagLayout
 	final static boolean shouldWeightX = true;
 	final static boolean RIGHT_TO_LEFT = false;
 	
@@ -89,7 +89,21 @@ public class ctcUI {
 		gbc.gridy = 2;
 		pane.add(schedRepair, gbc);
 		
-		
+		reporting = new JButton("Reporting");
+		reporting.setActionCommand("report");
+		reporting.setMnemonic(KeyEvent.VK_R);
+		reporting.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFrame reportingWindow = new reportingMenu();
+			}
+		});
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.weightx = 0.0;
+		gbc.weighty = 0.0;
+		gbc.gridwidth = 1;
+		gbc.gridx = 4;
+		gbc.gridy = 3;
+		pane.add(reporting, gbc);
 		
 		//create the section for the Run Mode selection
 		runningMode = new JPanel();
@@ -182,15 +196,6 @@ public class ctcUI {
 		gbc.gridy = 0;
 		pane.add(ambientTemp, gbc);
 		//-----------------
-		
-		reporting = new JButton("Reporting");
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.weightx = 0.0;
-		gbc.weighty = 0.0;
-		gbc.gridwidth = 1;
-		gbc.gridx = 4;
-		gbc.gridy = 3;
-		pane.add(reporting, gbc);
 		
 		timeMult = new JButton("Time Mult.: 10x");
 		gbc.gridx = 0;
