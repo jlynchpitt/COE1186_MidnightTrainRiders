@@ -324,6 +324,7 @@ public class MiniPID{
 		// Restrict output to our specified output and ramp limits
 		if(outputRampRate!=0){
 			output=constrain(output, lastOutput-outputRampRate,lastOutput+outputRampRate);
+			System.out.println("output ramp rate: " + output);
 		}
 		if(minOutput!=maxOutput){ 
 			output=constrain(output, minOutput,maxOutput);
@@ -334,7 +335,7 @@ public class MiniPID{
 
 		// Get a test printline with lots of details about the internal 
 		// calculations. This can be useful for debugging. 
-		// System.out.printf("Final output %5.2f [ %5.2f, %5.2f , %5.2f  ], eSum %.2f\n",output,Poutput, Ioutput, Doutput,errorSum );
+		//System.out.printf("Final output %5.2f [ %5.2f, %5.2f , %5.2f  ], eSum %.2f\n",output,Poutput, Ioutput, Doutput,errorSum );
 		// System.out.printf("%5.2f\t%5.2f\t%5.2f\t%5.2f\n",output,Poutput, Ioutput, Doutput );
 
 		lastOutput=output;

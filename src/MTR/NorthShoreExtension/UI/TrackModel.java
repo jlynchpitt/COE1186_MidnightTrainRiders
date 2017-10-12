@@ -76,7 +76,7 @@ public class TrackModel extends JPanel implements MouseListener {
 			  		g.drawString(status, 135, 520);
 			  	  }			 
 			  }
-			  g.setColor(Color.white);
+			  g.setColor(Color.white); 
 		      g.fillRoundRect (10, 10, 1178, 450, 90, 90);
 		      g.setColor(Color.black);
 		      g.drawRoundRect(10, 10, 1178, 450, 90, 90);
