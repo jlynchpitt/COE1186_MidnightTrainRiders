@@ -1,3 +1,4 @@
+package MTR.NorthShoreExtension.UI;
 
 public class Train {
 	private double length, height, width, trainmass; // static float variables
