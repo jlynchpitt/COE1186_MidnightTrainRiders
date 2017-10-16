@@ -60,7 +60,6 @@ public class TrainController {
 		pid = new MiniPID(0.4, 0.25, 0);
 		pid.setOutputLimits(0, 160); //Train engine power limits: 0-120 kW (0-160 horsepower)
 		pid.setSetpoint(0);
-		//pid.setDirection(true);
 	}
 	
 	public int getTrainID() {
@@ -96,17 +95,9 @@ public class TrainController {
 			powerCommand = 0;
 			pid.reset();
 		}
-		
-		//System.out.println("Train id: " + trainID + " Speed error: " + speedError + " power command: " + powerCommand);
-		
+				
 		if(CONNECTEDTOTRAINMODEL == false) {
-			//simple calculation of speed based on powerCommand
-			//Power (W) = Force (kg * m/s2) * Velocity (m/s)
-			//TrainForce = mass * acceleration = 51.43 tons * 0.5 m/s2 (train 2/3 loaded) = 46656.511 kg * 0.5 m/s2
-			//Velocity = Power/Train Force			
-			//NOTE: 1.34102 converts horsepower back to kWatts
-			double msSpeed = (powerCommand * 1000 / 1.34102)/((46656.511/9.8) * 0.5);
-			actualSpeed = msSpeed * 2.23694;
+			actualSpeed = calculateBasicSpeed();
 			
 			actionCommand = "powerCmd_actualSpeed";
 		}
@@ -122,6 +113,14 @@ public class TrainController {
 	private double calculateBasicSpeed() {
 		//for testing purposes when not attached to train model
 		//simple velocity calculation for demonstration of adjusting power command
-		return 0.0;
+		
+		//Power (W) = Force (kg * m/s2) * Velocity (m/s)
+		//TrainForce = mass * acceleration = 51.43 tons * 0.5 m/s2 (train 2/3 loaded) = 46656.511 kg * 0.5 m/s2
+		//Velocity = Power/Train Force			
+		//NOTE: 1.34102 converts horsepower back to kWatts
+		double msSpeed = (powerCommand * 1000 / 1.34102)/((46656.511/9.8) * 0.5);
+		double speed = msSpeed * 2.23694;
+		
+		return speed;
 	}
 }

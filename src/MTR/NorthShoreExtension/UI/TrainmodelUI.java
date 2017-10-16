@@ -1,3 +1,9 @@
+/*
+ * Filename: TrainModelUI.java
+ * Author: 
+ * Date Created:
+ * File Description: 
+ */
 package MTR.NorthShoreExtension.UI;
 
 import java.awt.EventQueue;
@@ -23,7 +29,9 @@ import javax.swing.JSeparator;
 import java.awt.Color;
 import javax.swing.SwingConstants;
 
-public class TrainmodelUI {
+import MTR.NorthShoreExtension.Backend.TrainSrc.Train;
+
+public class TrainModelUI {
 	private static Train[] tr;
 	private JLabel lblPassengers;
 	private JLabel lblNewLabel_5;
@@ -74,7 +82,7 @@ public class TrainmodelUI {
 			
 			public void run() {
 				try {
-					TrainmodelUI window = new TrainmodelUI();
+					TrainModelUI window = new TrainModelUI();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -86,7 +94,7 @@ public class TrainmodelUI {
 	/**
 	 * Create the application.
 	 */
-	public TrainmodelUI() {
+	public TrainModelUI() {
 		System.out.println(tr[1].getAcceleration());
 		
 		initialize(0);

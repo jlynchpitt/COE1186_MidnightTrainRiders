@@ -1,3 +1,10 @@
+/*
+ * Filename: TrackModelUI.java
+ * Author: 
+ * Date Created:
+ * File Description: 
+ */
+
 package MTR.NorthShoreExtension.UI;
 
 import java.awt.*;
@@ -5,7 +12,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.util.Arrays;
 
-public class TrackModel extends JPanel implements MouseListener {
+public class TrackModelUI extends JPanel implements MouseListener {
     class Data{
 		String linestatus; 
 		int speed;
@@ -42,7 +49,7 @@ public class TrackModel extends JPanel implements MouseListener {
 	   }
 	   
 	   public static void createandshowGUI() {
-		      TrackModel mouse = new TrackModel();
+		      TrackModelUI mouse = new TrackModelUI();
 		      JFrame f = new JFrame("Track Model UI");
 		      f.setSize(1200, 700);
 		      f.addMouseListener(mouse);
