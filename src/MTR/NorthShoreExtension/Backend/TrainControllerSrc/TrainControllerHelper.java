@@ -40,7 +40,7 @@ public class TrainControllerHelper {
 	}
 
 	public TrainController addNewTrain(int trainID) {
-		TrainController tc = new TrainController(trainID);
+		TrainController tc = new TrainController(trainID, null);
 		
 		//Add tc to list of trianControllers
 		tcList.add(tc);

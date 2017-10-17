@@ -58,26 +58,28 @@ public class TrainControlPanel extends JPanel
     TrainController trainController;
     NumberFormat numberFormat;
     
+    /* Panels */
+    JPanel nonVitalInfoPanel;
+    JPanel vitalInfoPanel;
+    JPanel speedControlPanel;
+    JPanel nonVitalControlPanel;
+    
     /* Vital Info Components*/
     JLabel commandedAuthority;
     JLabel commandedSetSpeed;
+    JLabel trainSetSpeed;
     JLabel actualPower;
     JLabel actualSpeed;
+    
+    /* Non Vital Info Components */
     JLabel announcements;
     JLabel faults;
+    JLabel internalTemp;
     
     /* Vital Controls Components */
     JFormattedTextField setSpeed;
     JButton brake;
     JButton eBrake;
-    
-    /* Track Info Components */
-    JLabel trackID;
-    JLabel trackLength;
-    JLabel trackGrade;
-    JLabel trackSpeedLimit;
-    JLabel trackUnderground;
-    JLabel stoppedAtStation;
     
     /* Non-Vital Controls Components */
     JFormattedTextField setTemp;
@@ -95,222 +97,34 @@ public class TrainControlPanel extends JPanel
                         BorderFactory.createTitledBorder("Train ID: " + new Integer(trainController.getTrainID()).toString()),
                         BorderFactory.createEmptyBorder(5,5,5,5)));        
         
-        /* Top panel for displaying vital info */
-        JPanel vitalInfoPanel = new JPanel();
-        GridLayout panelLayout = new GridLayout(2,6);
-        vitalInfoPanel.setLayout(panelLayout);
-        
-        //Dynamic text labels
-        commandedAuthority = new JLabel(new Integer(trainController.authority).toString() + " blocks");
-        commandedSetSpeed = new JLabel(new Integer(trainController.ctcCommandedSetSpeed).toString() + " MPH");
-        actualPower = new JLabel(new Double(trainController.powerCommand).toString() + " horsepower");
-        actualSpeed = new JLabel(new Double(trainController.actualSpeed).toString() + " MPH");
-        announcements = new JLabel(trainController.announcements);
-        faults = new JLabel(trainController.trainFaults);
-        
-        //Add all labels to layout
-        vitalInfoPanel.add(newTitleLabel("Authority: "));
-        vitalInfoPanel.add(commandedAuthority);
-        vitalInfoPanel.add(new JLabel("Power: "));
-        vitalInfoPanel.add(actualPower);
-        vitalInfoPanel.add(new JLabel("Announcements: "));
-        vitalInfoPanel.add(announcements);
-        vitalInfoPanel.add(new JLabel("Commanded Set Speed: "));
-        vitalInfoPanel.add(commandedSetSpeed);
-        vitalInfoPanel.add(new JLabel("Actual Speed: "));
-        vitalInfoPanel.add(actualSpeed);
-        vitalInfoPanel.add(new JLabel("Train Faults: "));
-        vitalInfoPanel.add(faults);       
-        
-        vitalInfoPanel.setBorder(BorderFactory.createCompoundBorder(
-                        BorderFactory.createTitledBorder("Vital Info"),
-                        BorderFactory.createEmptyBorder(5,5,5,5)));
+        createNonVitalInfoPanel(); //Top panel
 
         /* Bottom control panel */
         JPanel bottomControlPanel = new JPanel();
         GridLayout bottomPanelLayout = new GridLayout(1,3);
         bottomControlPanel.setLayout(bottomPanelLayout);
         
-        /* Vital Speed control panel */
-        JPanel speedControlPanel = new JPanel();
-        speedControlPanel.setLayout(new GridBagLayout()); 
-        GridBagConstraints c = new GridBagConstraints();
-        
-        //Add components
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.insets = new Insets(10,0,15,0);
-        c.weightx = 0.5;
-        c.gridx = 0;
-        c.gridy = 0;
-        speedControlPanel.add(new JLabel("Driver Set Speed (MPH): "), c);
-        
-        //Create the set speed field format, and then the text field.
-        numberFormat = NumberFormat.getNumberInstance();
-        numberFormat.setMaximumFractionDigits(0);
-        NumberFormatter formatter = new NumberFormatter(numberFormat);
-        formatter.setAllowsInvalid(false);
-        formatter.setCommitsOnValidEdit(true);//seems to be a no-op --
-        //aha -- it changes the value property but doesn't cause the result to
-        //be parsed (that happens on focus loss/return, I think).
-        //
-        setSpeed = new JFormattedTextField(formatter);
-        setSpeed.setColumns(1);
-        setSpeed.setValue(trainController.driverCommandedSetSpeed);
-        setSpeed.addPropertyChangeListener(this); //TODO: Handle listeners
-        
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.weightx = 0.5;
-        c.gridx = 1;
-        c.gridy = 0;
-        speedControlPanel.add(setSpeed, c);
-        
-        brake = new JButton();
-        brake.addActionListener(this);
-        String buttonText = trainController.brakeApplied ? "Release Brake" : " Apply Brake";
-        setControlButtonState(brake, buttonText, trainController.brakeApplied);
-    	c.fill = GridBagConstraints.HORIZONTAL;
-    	c.insets = new Insets(10,0,5,0);
-    	c.weightx = 0.5;
-    	c.gridwidth = 2;
-    	c.gridx = 0;
-    	c.gridy = 1;
-    	speedControlPanel.add(brake, c);
+        createVitalControlsPanel();
     	
-    	eBrake = new JButton("Apply Emergency Brake");
-    	eBrake.addActionListener(this);
-    	buttonText = trainController.eBrakeApplied ? "Release E-Brake" : " Apply E-Brake";
-        setControlButtonState(eBrake, buttonText, trainController.eBrakeApplied);
-    	c.fill = GridBagConstraints.HORIZONTAL;
-    	c.weightx = 0.5;
-    	c.gridwidth = 2;
-    	c.gridx = 0;
-    	c.gridy = 2;
-    	speedControlPanel.add(eBrake, c);
+    	createVitalInfoPanel();
     	
-    	speedControlPanel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createTitledBorder("Speed Controls"),
-                BorderFactory.createEmptyBorder(5,5,5,5)));
-    	
-    	
-    	/* Track Info Panel */
-    	JPanel trackInfoPanel = new JPanel();
-        GridLayout trackInfoPanelLayout = new GridLayout(6,2);
-        trackInfoPanel.setLayout(trackInfoPanelLayout);
-        
-        //Dynamic text labels
-        trackID = new JLabel(trainController.trackID);
-        trackLength = new JLabel(new Integer(trainController.trackLength).toString() + " feet");
-        trackGrade = new JLabel(new Double(trainController.trackGrade).toString() + "%");
-        trackSpeedLimit = new JLabel(new Double(trainController.trackSpeedLimit).toString() + " MPH");
-        trackUnderground = new JLabel(trainController.trackUnderground ? "Yes" : "No");
-        stoppedAtStation = new JLabel(trainController.stoppedAtStation ? "Yes" : "No");
-        
-        //Add all labels to layout
-        trackInfoPanel.add(new JLabel("ID: "));
-        trackInfoPanel.add(trackID);
-        trackInfoPanel.add(new JLabel("Length: "));
-        trackInfoPanel.add(trackLength);
-        trackInfoPanel.add(new JLabel("Grade: "));
-        trackInfoPanel.add(trackGrade);
-        trackInfoPanel.add(new JLabel("Speed Limit: "));
-        trackInfoPanel.add(trackSpeedLimit);
-        trackInfoPanel.add(new JLabel("Underground: "));
-        trackInfoPanel.add(trackUnderground);
-        trackInfoPanel.add(new JLabel("Stopped at Station: "));
-        trackInfoPanel.add(stoppedAtStation);  
-        
-    	trackInfoPanel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createTitledBorder("Track Info"),
-                BorderFactory.createEmptyBorder(5,5,5,5)));
-        
-        
-        /* Non-Vital Train Controls */
-        JPanel nonVitalControlPanel = new JPanel();
-        nonVitalControlPanel.setLayout(new GridBagLayout()); 
-        c = new GridBagConstraints();
-        
-        //Add components
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.insets = new Insets(0,0,15,0);
-        c.weightx = 0.5;
-        c.gridx = 0;
-        c.gridy = 0;
-        nonVitalControlPanel.add(new JLabel("Set Temp (deg F): "), c);
-        
-        //Create the set speed field format, and then the text field.
-        NumberFormat nvNumberFormat = NumberFormat.getNumberInstance();
-        nvNumberFormat.setMaximumFractionDigits(0);
-        NumberFormatter nvFormatter = new NumberFormatter(nvNumberFormat);
-        nvFormatter.setAllowsInvalid(false);
-        nvFormatter.setCommitsOnValidEdit(true);//seems to be a no-op --
-        //aha -- it changes the value property but doesn't cause the result to
-        //be parsed (that happens on focus loss/return, I think).
-        //
-        setTemp = new JFormattedTextField(nvFormatter);
-        setTemp.setColumns(5);
-        setTemp.setValue(trainController.setTemp);
-        setTemp.addPropertyChangeListener(this); //TODO: Handle listeners
-        
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.weightx = 0.5;
-        c.gridx = 1;
-        c.gridy = 0;
-        nonVitalControlPanel.add(setTemp, c);
-        
-        openRDoor = new JButton("Open Right Door"); //TODO: Change button text based on train controller
-        openRDoor.addActionListener(this);
-        buttonText = trainController.rightDoorOpen ? "Close R Door" : " Open R Door";
-        setControlButtonState(openRDoor, buttonText, trainController.rightDoorOpen);
-    	c.fill = GridBagConstraints.HORIZONTAL;
-    	c.insets = new Insets(0,0,5,0);
-    	c.weightx = 0.5;
-    	c.gridwidth = 2;
-    	c.gridx = 0;
-    	c.gridy = 1;
-    	nonVitalControlPanel.add(openRDoor, c);
-    	
-    	openLDoor = new JButton("Open Left Door");
-    	openLDoor.addActionListener(this);
-    	buttonText = trainController.leftDoorOpen ? "Close L Door" : " Open L Door";
-        setControlButtonState(openLDoor, buttonText, trainController.leftDoorOpen);
-    	c.fill = GridBagConstraints.HORIZONTAL;
-    	c.insets = new Insets(0,0,10,0);
-    	c.weightx = 0.5;
-    	c.gridwidth = 2;
-    	c.gridx = 0;
-    	c.gridy = 2;
-    	nonVitalControlPanel.add(openLDoor, c);
-    	
-    	turnOnLights = new JButton("Turn On Lights");
-    	turnOnLights.addActionListener(this);
-    	buttonText = trainController.lightsOn ? "Turn Off Lights" : " Turn On Lights";
-        setControlButtonState(turnOnLights, buttonText, trainController.lightsOn);
-    	c.fill = GridBagConstraints.HORIZONTAL;
-    	c.weightx = 0.5;
-    	c.gridwidth = 2;
-    	c.gridx = 0;
-    	c.gridy = 3;
-    	nonVitalControlPanel.add(turnOnLights, c);
-    	
-    	nonVitalControlPanel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createTitledBorder("Non-Vital Controls"),
-                BorderFactory.createEmptyBorder(5,5,5,5)));    	
+    	createNonVitalControlsPanel();
     	
     	//Combine all panels
     	bottomControlPanel.add(speedControlPanel);
-    	bottomControlPanel.add(trackInfoPanel);
+    	bottomControlPanel.add(vitalInfoPanel);
     	bottomControlPanel.add(nonVitalControlPanel);
 
     	//GridLayout overallLayout = new GridLayout(2, 1);
         //setLayout(overallLayout);
     	setLayout(new GridBagLayout());
-        c = new GridBagConstraints();
+        GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
     	c.weightx = 0.5;
     	c.gridwidth = 1;
     	c.gridx = 0;
     	c.gridy = 0;
-        add(vitalInfoPanel, c);
+        add(nonVitalInfoPanel, c);
         c.gridy = 1;
     	add(bottomControlPanel, c);
     }
@@ -366,7 +180,7 @@ public class TrainControlPanel extends JPanel
         		setButtonActivated = true;
         	}
         	
-        	trainController.brakeApplied = setButtonActivated;
+        	trainController.operateBrake(setButtonActivated);
         		
         	setControlButtonState(brake, newButtonText, setButtonActivated);
         }
@@ -382,7 +196,7 @@ public class TrainControlPanel extends JPanel
         		setButtonActivated = true;
         	}
         	
-        	trainController.eBrakeApplied = setButtonActivated;
+        	trainController.operateEmergencyBrake(setButtonActivated);
         		
         	setControlButtonState(eBrake, newButtonText, setButtonActivated);
         }
@@ -398,7 +212,7 @@ public class TrainControlPanel extends JPanel
         		setButtonActivated = true;
         	}
         		
-        	trainController.rightDoorOpen = setButtonActivated;
+        	trainController.operateRightDoor(setButtonActivated);
 
         	setControlButtonState(openRDoor, newButtonText, setButtonActivated);
         }
@@ -414,7 +228,7 @@ public class TrainControlPanel extends JPanel
         		setButtonActivated = true;
         	}
         		
-        	trainController.leftDoorOpen = setButtonActivated;
+        	trainController.operateLeftDoor(setButtonActivated);
 
         	setControlButtonState(openLDoor, newButtonText, setButtonActivated);
         }
@@ -430,14 +244,14 @@ public class TrainControlPanel extends JPanel
         		setButtonActivated = true;
         	}
         		
-        	trainController.lightsOn = setButtonActivated;
+        	trainController.operateLights(setButtonActivated);
 
         	setControlButtonState(turnOnLights, newButtonText, setButtonActivated);
         }
         else if(e.getSource() == trainController) {
         	if(e.getActionCommand().equals("powerCmd_actualSpeed")) {
-        		updateUISpeed(actualSpeed, trainController.actualSpeed);
-        		updateUIPower(actualPower, trainController.powerCommand);
+        		updateUISpeed(actualSpeed, trainController.getActualSpeed());
+        		updateUIPower(actualPower, trainController.getPower());
         	}
         }
     }
@@ -454,7 +268,7 @@ public class TrainControlPanel extends JPanel
     	if(e.getSource().equals(setSpeed)) {
     		//TODO: Handle speeds > 1000 - issue with , in 1,000
     		int newSetSpeed = Integer.parseInt(((JFormattedTextField)e.getSource()).getText());
-    		trainController.driverCommandedSetSpeed = newSetSpeed;
+    		trainController.setDriverCommandedSetSpeed(newSetSpeed);
     	}
     }
     
@@ -479,7 +293,9 @@ public class TrainControlPanel extends JPanel
      * Used for any label that displays a speed
      */
     private void updateUISpeed(JLabel label, double speed) {
-    	label.setText(String.format("%.2f MPH", speed));
+    	if(label != null) {
+    		label.setText(String.format("%.2f MPH", speed));
+    	}
     }
     
     /*
@@ -487,7 +303,9 @@ public class TrainControlPanel extends JPanel
      * Used for any label that displays authority
      */
     private void updateUIAuthority(JLabel label, double auth) {
-    	label.setText(auth + " blocks");
+    	if(label != null) {
+    		label.setText(auth + " blocks");
+    	}
     }
     
     /*
@@ -495,7 +313,9 @@ public class TrainControlPanel extends JPanel
      * Used for any label that displays power
      */
     private void updateUIPower(JLabel label, double power) {
-    	label.setText(String.format("%.2f horsepower", power));
+    	if(label != null) {
+    		label.setText(String.format("%.2f horsepower", power));
+    	}
     }
     
     private JLabel newTitleLabel(String lableText) {
@@ -510,5 +330,205 @@ public class TrainControlPanel extends JPanel
     	//jl.setFont(Font.getFont(attributes));
     	//jl.setFont(new Font("Serif", Font.BOLD, 11));
     	return jl;
+    }
+    
+    /* Functions for making JPanels */
+    private void createVitalInfoPanel() {
+    	/* Track Info Panel */
+    	vitalInfoPanel = new JPanel();
+        GridLayout vitalInfoPanelLayout = new GridLayout(6,2);
+        vitalInfoPanel.setLayout(vitalInfoPanelLayout);
+        
+        //Dynamic text labels        
+        commandedAuthority = new JLabel(new Integer(trainController.getAuthority()).toString() + " blocks");
+        commandedSetSpeed = new JLabel(new Integer(trainController.getCTCCommandedSetSpeed()).toString() + " MPH");
+        trainSetSpeed = new JLabel(new Integer(trainController.getTrainSetSpeed()).toString() + " MPH");
+        actualPower = new JLabel(new Double(trainController.getPower()).toString() + " horsepower");
+        actualSpeed = new JLabel(new Double(trainController.getActualSpeed()).toString() + " MPH");
+        
+        
+        //Add all labels to layout
+        vitalInfoPanel.add(new JLabel("Train Set Speed: "));
+        vitalInfoPanel.add(trainSetSpeed);
+        vitalInfoPanel.add(new JLabel("Power: "));
+        vitalInfoPanel.add(actualPower);
+        vitalInfoPanel.add(new JLabel("Actual Speed: "));
+        vitalInfoPanel.add(actualSpeed);
+        vitalInfoPanel.add(new JLabel(""));
+        vitalInfoPanel.add(new JLabel(""));
+        vitalInfoPanel.add(new JLabel("Commanded Authority: "));
+        vitalInfoPanel.add(commandedAuthority);
+        vitalInfoPanel.add(new JLabel("Commanded Set Speed: "));
+        vitalInfoPanel.add(commandedSetSpeed);
+        
+    	vitalInfoPanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createTitledBorder("Vital Info"),
+                BorderFactory.createEmptyBorder(5,5,5,5)));
+        
+    }
+    
+    private void createNonVitalInfoPanel() {
+    	/* Top panel for displaying non-vital info */
+        nonVitalInfoPanel = new JPanel();
+        GridLayout panelLayout = new GridLayout(0,6);
+        nonVitalInfoPanel.setLayout(panelLayout);
+        
+        //Dynamic text labels
+        announcements = new JLabel(trainController.getAnnouncements());
+        faults = new JLabel(trainController.getTrainFaults());
+        internalTemp = new JLabel(new Double(trainController.getInternalTemp()).toString() + " deg F");
+        
+        //Add all labels to layout
+        nonVitalInfoPanel.add(new JLabel("Announcements: "));
+        nonVitalInfoPanel.add(announcements);
+        nonVitalInfoPanel.add(new JLabel("Train Faults: "));
+        nonVitalInfoPanel.add(faults);       
+        nonVitalInfoPanel.add(new JLabel("Inside Temp: "));
+        nonVitalInfoPanel.add(internalTemp);       
+        
+        nonVitalInfoPanel.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createTitledBorder("Non-Vital Info"),
+                        BorderFactory.createEmptyBorder(5,5,5,5)));
+    }
+
+    private void createVitalControlsPanel() {
+    	/* Vital Speed control panel */
+        speedControlPanel = new JPanel();
+        speedControlPanel.setLayout(new GridBagLayout()); 
+        GridBagConstraints c = new GridBagConstraints();
+        
+        //Add components
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = new Insets(10,0,15,0);
+        c.weightx = 0.5;
+        c.gridx = 0;
+        c.gridy = 0;
+        speedControlPanel.add(new JLabel("Driver Set Speed (MPH): "), c);
+        
+        //Create the set speed field format, and then the text field.
+        numberFormat = NumberFormat.getNumberInstance();
+        numberFormat.setMaximumFractionDigits(0);
+        NumberFormatter formatter = new NumberFormatter(numberFormat);
+        formatter.setAllowsInvalid(false);
+        formatter.setCommitsOnValidEdit(true);//seems to be a no-op --
+        //aha -- it changes the value property but doesn't cause the result to
+        //be parsed (that happens on focus loss/return, I think).
+        //
+        setSpeed = new JFormattedTextField(formatter);
+        setSpeed.setColumns(1);
+        setSpeed.setValue(trainController.getDriverCommandedSetSpeed());
+        setSpeed.addPropertyChangeListener(this); //TODO: Handle listeners
+        
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weightx = 0.5;
+        c.gridx = 1;
+        c.gridy = 0;
+        speedControlPanel.add(setSpeed, c);
+        
+        brake = new JButton();
+        brake.addActionListener(this);
+        boolean brakeApplied = trainController.isBrakeApplied();
+        String buttonText = brakeApplied ? "Release Brake" : " Apply Brake";
+        setControlButtonState(brake, buttonText, brakeApplied);
+    	c.fill = GridBagConstraints.HORIZONTAL;
+    	c.insets = new Insets(10,0,5,0);
+    	c.weightx = 0.5;
+    	c.gridwidth = 2;
+    	c.gridx = 0;
+    	c.gridy = 1;
+    	speedControlPanel.add(brake, c);
+    	
+    	eBrake = new JButton("Apply Emergency Brake");
+    	eBrake.addActionListener(this);
+    	boolean eBrakeApplied = trainController.isEBrakeApplied();
+    	buttonText = eBrakeApplied ? "Release E-Brake" : " Apply E-Brake";
+        setControlButtonState(eBrake, buttonText, eBrakeApplied);
+    	c.fill = GridBagConstraints.HORIZONTAL;
+    	c.weightx = 0.5;
+    	c.gridwidth = 2;
+    	c.gridx = 0;
+    	c.gridy = 2;
+    	speedControlPanel.add(eBrake, c);
+    	
+    	speedControlPanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createTitledBorder("Speed Controls"),
+                BorderFactory.createEmptyBorder(5,5,5,5)));
+    }
+    
+    private void createNonVitalControlsPanel() {
+    	/* Non-Vital Train Controls */
+        nonVitalControlPanel = new JPanel();
+        nonVitalControlPanel.setLayout(new GridBagLayout()); 
+        GridBagConstraints c = new GridBagConstraints();
+        
+        //Add components
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = new Insets(0,0,15,0);
+        c.weightx = 0.5;
+        c.gridx = 0;
+        c.gridy = 0;
+        nonVitalControlPanel.add(new JLabel("Set Temp (deg F): "), c);
+        
+        //Create the set speed field format, and then the text field.
+        NumberFormat nvNumberFormat = NumberFormat.getNumberInstance();
+        nvNumberFormat.setMaximumFractionDigits(0);
+        NumberFormatter nvFormatter = new NumberFormatter(nvNumberFormat);
+        nvFormatter.setAllowsInvalid(false);
+        nvFormatter.setCommitsOnValidEdit(true);//seems to be a no-op --
+        //aha -- it changes the value property but doesn't cause the result to
+        //be parsed (that happens on focus loss/return, I think).
+        //
+        setTemp = new JFormattedTextField(nvFormatter);
+        setTemp.setColumns(5);
+        setTemp.setValue(trainController.getInternalTemp());
+        setTemp.addPropertyChangeListener(this); //TODO: Handle listeners
+        
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weightx = 0.5;
+        c.gridx = 1;
+        c.gridy = 0;
+        nonVitalControlPanel.add(setTemp, c);
+        
+        openRDoor = new JButton("Open Right Door"); //TODO: Change button text based on train controller
+        openRDoor.addActionListener(this);
+        boolean rightDoorOpen = trainController.isRightDoorOpen();
+        String buttonText = rightDoorOpen ? "Close R Door" : " Open R Door";
+        setControlButtonState(openRDoor, buttonText, rightDoorOpen);
+    	c.fill = GridBagConstraints.HORIZONTAL;
+    	c.insets = new Insets(0,0,5,0);
+    	c.weightx = 0.5;
+    	c.gridwidth = 2;
+    	c.gridx = 0;
+    	c.gridy = 1;
+    	nonVitalControlPanel.add(openRDoor, c);
+    	
+    	openLDoor = new JButton("Open Left Door");
+    	openLDoor.addActionListener(this);
+    	boolean leftDoorOpen = trainController.isLeftDoorOpen();
+    	buttonText = leftDoorOpen ? "Close L Door" : " Open L Door";
+        setControlButtonState(openLDoor, buttonText, leftDoorOpen);
+    	c.fill = GridBagConstraints.HORIZONTAL;
+    	c.insets = new Insets(0,0,10,0);
+    	c.weightx = 0.5;
+    	c.gridwidth = 2;
+    	c.gridx = 0;
+    	c.gridy = 2;
+    	nonVitalControlPanel.add(openLDoor, c);
+    	
+    	turnOnLights = new JButton("Turn On Lights");
+    	turnOnLights.addActionListener(this);
+    	boolean lightsOn = trainController.areLightsOn();
+    	buttonText = lightsOn ? "Turn Off Lights" : " Turn On Lights";
+        setControlButtonState(turnOnLights, buttonText, lightsOn);
+    	c.fill = GridBagConstraints.HORIZONTAL;
+    	c.weightx = 0.5;
+    	c.gridwidth = 2;
+    	c.gridx = 0;
+    	c.gridy = 3;
+    	nonVitalControlPanel.add(turnOnLights, c);
+    	
+    	nonVitalControlPanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createTitledBorder("Non-Vital Controls"),
+                BorderFactory.createEmptyBorder(5,5,5,5)));    	
     }
 }

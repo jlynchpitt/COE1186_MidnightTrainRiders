@@ -13,48 +13,43 @@ package MTR.NorthShoreExtension.Backend.TrainControllerSrc;
 
 import java.awt.event.ActionEvent;
 
+import MTR.NorthShoreExtension.Backend.TrainSrc.Train;
 import MTR.NorthShoreExtension.UI.TrainControlPanel;
 
 public class TrainController {
 	//TODO: Change these variables to private and add getters/setters
 	
 	private int trainID = 0;
-	//public TrainModel = null;
+	public Train trainModel = null;
 	private TrainControlPanel trainControlPanel;
 	private MiniPID pid;
 	private boolean CONNECTEDTOTRAINMODEL = false; //This must be true when in the full system - for testing individual submodule
 	
 	//Vital train controls/info
-	public double powerCommand = 0; //kilowatts
-	public double actualSpeed = 0; //MPH
-	public int ctcCommandedSetSpeed = 0; //MPH
-	public int driverCommandedSetSpeed = 0; //MPH
-	public int trainSetSpeed = 0; //MPH - the actual speed the train is set to
-	public int authority = 0; //# of tracks/blocks
-	public boolean brakeApplied = true; //default to brakes applied
-	public boolean eBrakeApplied = true; //emergency brake - default to brakes applied
-	public String trainFaults = "none"; //TODO: Possibly change to enumerated type
-	public String announcements = "at Steel Plaza";
+	private double powerCommand = 0; //kilowatts
+	private double actualSpeed = 0; //MPH
+	private int ctcCommandedSetSpeed = 0; //MPH
+	private int driverCommandedSetSpeed = 0; //MPH
+	private int trainSetSpeed = 0; //MPH - the actual speed the train is set to
+	private int authority = 0; //# of tracks/blocks
+	private boolean brakeApplied = true; //default to brakes applied
+	private boolean eBrakeApplied = true; //emergency brake - default to brakes applied
 	
-	//Current track info TODO: Change defaults - just for testing purposes
-	public String trackID = "Green-A-1"; 
-	public int trackLength = 200; //feet
-	public double trackGrade = 0.5; //%
-	public int trackSpeedLimit = 55; //mph
-	public boolean trackUnderground = false;
-	public boolean stoppedAtStation = false;	
+	/* Non-Vital Train Info */
+	private String trainFaults = "none"; //TODO: Possibly change to enumerated type
+	private String announcements = "at Steel Plaza";
 	
 	//non-vital train controls
-	public boolean rightDoorOpen = false;
-	public boolean leftDoorOpen = false;
-	public boolean lightsOn = false;
-	public int setTemp = 73; //default room temperature is 73 degrees
-	public int actualTemp = 73; //TODO: Change actual temp to outside temp to start
+	private boolean rightDoorOpen = false;
+	private boolean leftDoorOpen = false;
+	private boolean lightsOn = false;
+	private int setTemp = 73; //default room temperature is 73 degrees
+	private double internalTemp = 73; //TODO: Change actual temp to outside temp to start
 	
 	//TODO: Pass in train model object
-	public TrainController(int id){
+	public TrainController(int id, Train t){
 		trainID = id;
-		//trainModel = tm;
+		trainModel = t;
 		
 		//Initialize pid controller
 		pid = new MiniPID(0.4, 0.25, 0);
@@ -75,10 +70,7 @@ public class TrainController {
 		
 		if(!eBrakeApplied && !brakeApplied && authority > 0) {
 			//Simple check against speed limit TODO: Move these checks into setters
-			if(driverCommandedSetSpeed > trackSpeedLimit) {
-				trainSetSpeed = trackSpeedLimit;
-			}
-			else if(driverCommandedSetSpeed > ctcCommandedSetSpeed) {
+			if(driverCommandedSetSpeed > ctcCommandedSetSpeed) {
 				trainSetSpeed = ctcCommandedSetSpeed;
 			}
 			else {
@@ -108,6 +100,114 @@ public class TrainController {
 			trainControlPanel.actionPerformed(new ActionEvent(this, 1, actionCommand));
 			//trainControlPanel.firePropertyChange("actualSpeed", 0.0, actualSpeed); property change listener may not be registered
 		}
+	}
+	
+	/* Functions for vital user inputs */
+	public void setDriverCommandedSetSpeed(int speed) {
+		driverCommandedSetSpeed = speed;
+	}
+	
+	public void operateBrake(boolean applied) {
+		brakeApplied = applied;
+	}
+	
+	public void operateEmergencyBrake(boolean applied) {
+		eBrakeApplied = applied;
+	}
+	
+	/* Functions for non-vital user inputs */
+	public void operateRightDoor(boolean open) {
+		rightDoorOpen = open;
+	}
+	
+	public void operateLeftDoor(boolean open) {
+		leftDoorOpen = open;
+	}
+	
+	public void operateLights(boolean on) {
+		lightsOn = on;
+	}
+	
+	public void setInsideTemperature(int temp) {
+		setTemp = temp;
+	}
+	
+	/* Functions for receiving inputs from the train model */
+	public void TrainControl_setActualSpeed(double speed) {
+		actualSpeed = speed;
+	}
+	
+	public void TrainControl_setAuthority(int auth) {
+		authority = auth;
+	}
+	
+	public void TrainControl_setCommandedSpeed(int speed) {
+		ctcCommandedSetSpeed = speed;
+	}
+	
+	public void TrainControl_sendBeaconInfo(int beacon) {
+		//translate beacon
+	}
+	
+	public void TrainControl_setFaultStatus(int status) {
+		//TODO: Define status as enumerated type
+	}
+	
+	/* Functions called by UI to get Train Control info */
+	public int getAuthority() {
+		return authority;
+	}
+	
+	public int getCTCCommandedSetSpeed() {
+		return ctcCommandedSetSpeed;
+	}
+	
+	public int getDriverCommandedSetSpeed() {
+		return driverCommandedSetSpeed;
+	}
+	
+	public int getTrainSetSpeed() {
+		return trainSetSpeed;
+	}
+	
+	public double getPower() {
+		return powerCommand;
+	}
+	
+	public double getActualSpeed() {
+		return actualSpeed;
+	}
+	
+	public String getAnnouncements() {
+		return announcements;
+	}
+	
+	public String getTrainFaults() {
+		return trainFaults;
+	}
+	
+	public double getInternalTemp() {
+		return internalTemp;
+	}
+	
+	public boolean isBrakeApplied() {
+		return brakeApplied;
+	}
+	
+	public boolean isEBrakeApplied() {
+		return eBrakeApplied;
+	}
+	
+	public boolean isRightDoorOpen() {
+		return rightDoorOpen;
+	}
+	
+	public boolean isLeftDoorOpen() {
+		return leftDoorOpen;
+	}
+	
+	public boolean areLightsOn() {
+		return lightsOn;
 	}
 	
 	private double calculateBasicSpeed() {

@@ -1,5 +1,5 @@
 /*
-* Filename: reportingMenu.java
+* Filename: ReportingMenuUI.java
 * Author: Matt Snyder
 * Last Edited: 10/12/2017
 * File Description: The Reporting Menu
