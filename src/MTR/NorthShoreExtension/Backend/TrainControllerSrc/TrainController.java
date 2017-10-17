@@ -47,12 +47,12 @@ public class TrainController {
 	private double internalTemp = 73; //TODO: Change actual temp to outside temp to start
 	
 	//TODO: Pass in train model object
-	public TrainController(int id, Train t){
+	public TrainController(int id, Train t, double pid_p, double pid_i){
 		trainID = id;
 		trainModel = t;
 		
 		//Initialize pid controller
-		pid = new MiniPID(0.4, 0.25, 0);
+		pid = new MiniPID(pid_p, pid_i, 0);
 		pid.setOutputLimits(0, 160); //Train engine power limits: 0-120 kW (0-160 horsepower)
 		pid.setSetpoint(0);
 	}

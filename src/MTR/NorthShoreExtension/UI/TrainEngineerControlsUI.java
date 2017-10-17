@@ -1,11 +1,10 @@
 /*
- * Filename: TrainControlUI.java
+ * Filename: TrainEngineerControlsUI.java
  * Author: Joe Lynch
- * Date Created: 10/9/2017
- * File Description: This contains the main frame for the Train Controller GUI 
- * 			as well as a main function to run the Train Controller as an individual 
- * 			sub-module. The main function sets up several sample Train Controllers 
- * 			for demonstration purposes.
+ * Date Created: 10/16/2017
+ * File Description: This contains the main frame for the Train Engineer Controls 
+ * 			The Engineer Controls allow the train engineer to set the kp and ki 
+ * 			parameters for trains that have not yet left the yard.
  * 
  * 			NOTE: This file was originally taken from Oracle example code and modified.
  * 				  Oracle's license agreement is included below.
@@ -45,32 +44,76 @@ package MTR.NorthShoreExtension.UI;
 
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.text.NumberFormatter;
 
 import MTR.NorthShoreExtension.Backend.TrainControllerSrc.TrainController;
 import MTR.NorthShoreExtension.Backend.TrainControllerSrc.TrainControllerHelper;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.text.NumberFormat;
 import java.util.*;
 
-public class TrainControlUI {
+public class TrainEngineerControlsUI extends JPanel implements PropertyChangeListener {
 	//Specify the look and feel to use.  Valid values:
     //null (use the default), "Metal", "System", "Motif", "GTK+"
     final static String LOOKANDFEEL = "System";
     
     private JPanel mainPane;
-    public static TrainControllerHelper tch;
+    private JFormattedTextField kp, ki;
+    public static TrainControllerHelper trainControllerHelper;
     
-    public TrainControlUI() {
+    public TrainEngineerControlsUI(TrainControllerHelper tch) {
+        trainControllerHelper = tch;
+        
+        //Create the set speed field format, and then the text field.
+        NumberFormat numberFormat = NumberFormat.getNumberInstance();
+        numberFormat.setMaximumFractionDigits(2);
+        NumberFormatter formatter = new NumberFormatter(numberFormat);
+        formatter.setAllowsInvalid(false);
+        formatter.setCommitsOnValidEdit(true);//seems to be a no-op --
+        //aha -- it changes the value property but doesn't cause the result to
+        //be parsed (that happens on focus loss/return, I think).
+    
         mainPane = new JPanel();
-        mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.PAGE_AXIS));
+        mainPane.setLayout(new GridBagLayout());
         mainPane.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
         mainPane.add(Box.createRigidArea(new Dimension(0, 5)));
         
-        for(TrainController tc : tch.getTrainControllerList()) {
-	        mainPane.add(new TrainControlPanel(tc));
-	        mainPane.add(Box.createGlue());
-        }
+        GridBagConstraints c = new GridBagConstraints();
+        
+        //Add components
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = new Insets(0,0,15,0);
+        c.weightx = 0.5;
+        c.gridx = 0;
+        c.gridy = 0;
+        mainPane.add(new JLabel("PID kp: "), c);
+        
+        c.gridx = 1;
+        kp = new JFormattedTextField(formatter);
+        kp.setColumns(1);
+        kp.setValue(trainControllerHelper.getPIDParameter_p());
+        kp.addPropertyChangeListener(this);
+        mainPane.add(kp, c);
+        
+        c.gridx = 0;
+        c.gridy = 1;
+        mainPane.add(new JLabel("PID ki: "), c);
+        
+        c.gridx = 1;
+        ki = new JFormattedTextField(formatter);
+        ki.setColumns(1);
+        ki.setValue(trainControllerHelper.getPIDParameter_i());
+        ki.addPropertyChangeListener(this);
+        mainPane.add(ki, c);
+        
+        c.gridx = 0;
+        c.gridy = 2;
+    	c.gridwidth = 2;
+    	mainPane.add(new JLabel("Note these parameters will take effect on trains that have not left the yard"), c);
     }
     
 	private static void initLookAndFeel() {
@@ -118,43 +161,50 @@ public class TrainControlUI {
      * this method should be invoked from the
      * event-dispatching thread.
      */
-    private static void createAndShowGUI() {
+    private static void createAndShowGUI(TrainControllerHelper tch) {
         //Set the look and feel.
         initLookAndFeel();
 
         //Create and set up the window.
-        JFrame frame = new JFrame("Train Controllers");
+        JFrame frame = new JFrame("Train Engineer Controls");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         //Create and set up the content pane.
-        TrainControlUI tcUI = new TrainControlUI();
-        tcUI.mainPane.setOpaque(true); //content panes must be opaque
-        frame.setContentPane(tcUI.mainPane);
+        TrainEngineerControlsUI tecUI = new TrainEngineerControlsUI(tch);
+        tecUI.mainPane.setOpaque(true); //content panes must be opaque
+        frame.setContentPane(tecUI.mainPane);
 
         //Display the window.
         frame.pack();
         frame.setVisible(true);
     }
+    
+    /**
+     * Detects when the value of the text field (not necessarily the same
+     * number as you'd get from getText) changes.
+     */
+    public void propertyChange(PropertyChangeEvent e) {
+    	if(e.getSource().equals(kp) || e.getSource().equals(ki)) {
+    		//TODO: Handle speeds > 1000 - issue with , in 1,000
+    		double newKp = Double.parseDouble((kp).getText());
+    		double newKi = Double.parseDouble((ki).getText());
+    		trainControllerHelper.setPIDParameters(newKp, newKi);
+    	}
+    }
 
     public static void main(String[] args) {
     	//Create TrainControllerHelper - with sample test data to show different UI states
-    	tch = new TrainControllerHelper();
-    	TrainController tc123 = tch.addNewTrain(123); 
-    	tc123.TrainControl_setAuthority(5);
-    	tc123.TrainControl_setCommandedSpeed(65);
-    	/*TrainController tc456 = tch.addNewTrain(456);
-    	tc456.brakeApplied = false;
-    	tc456.eBrakeApplied = false;
-    	tc456.leftDoorOpen = true;
-    	tc456.rightDoorOpen = true;
-    	tc456.lightsOn = true;*/
+    	TrainControllerHelper tch = new TrainControllerHelper();
+    	
     	
         //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                createAndShowGUI();
+                createAndShowGUI(tch);
             }
         });
     }
+
+
 }

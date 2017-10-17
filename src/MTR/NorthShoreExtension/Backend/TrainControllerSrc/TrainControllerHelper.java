@@ -24,6 +24,8 @@ import java.util.TimerTask;
  * 		
  */
 public class TrainControllerHelper {
+	private double pid_p = 0.4;
+	private double pid_i = 0.25; 
 	private Timer powerTimer = new Timer();
 	List<TrainController> tcList = new ArrayList<TrainController>();
 	
@@ -40,7 +42,7 @@ public class TrainControllerHelper {
 	}
 
 	public TrainController addNewTrain(int trainID) {
-		TrainController tc = new TrainController(trainID, null);
+		TrainController tc = new TrainController(trainID, null, pid_p, pid_i);
 		
 		//Add tc to list of trianControllers
 		tcList.add(tc);
@@ -50,5 +52,19 @@ public class TrainControllerHelper {
 	
 	public List<TrainController> getTrainControllerList(){
 		return tcList;
+	}
+	
+	public void setPIDParameters(double kp, double ki) {
+		pid_p = kp;
+		pid_i = ki;
+	}
+	
+	public double getPIDParameter_p() {
+		return pid_p;
+	}
+	
+
+	public double getPIDParameter_i() {
+		return pid_i;
 	}
 }
