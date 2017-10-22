@@ -55,12 +55,13 @@ public class TrackModelUI extends JPanel implements MouseListener {
     public class TrainGraphic extends JPanel{
     		private static final long serialVersionUID = 1L;
     		TrainGraphic(){
-    			setPreferredSize(new Dimension(500,100));
+    			setPreferredSize(new Dimension(1000,600));
     		}
     		@Override
     		public void paintComponent(Graphics g) {
     			super.paintComponent(g);
-    			g.fillRect(200,62,30,10);
+    			g.setColor(Color.white);
+    			g.fillRoundRect(10,10,975,400,15,15);
     		}
     }
  
