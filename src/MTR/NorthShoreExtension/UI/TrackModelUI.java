@@ -51,6 +51,18 @@ public class TrackModelUI extends JPanel implements MouseListener {
             }
         }
     }
+    
+    public class TrainGraphic extends JPanel{
+    		private static final long serialVersionUID = 1L;
+    		TrainGraphic(){
+    			setPreferredSize(new Dimension(500,100));
+    		}
+    		@Override
+    		public void paintComponent(Graphics g) {
+    			super.paintComponent(g);
+    			g.fillRect(200,62,30,10);
+    		}
+    }
  
     /**
      * Create the GUI and show it.  For thread safety,
@@ -58,12 +70,16 @@ public class TrackModelUI extends JPanel implements MouseListener {
      * event-dispatching thread.
      */
     private static void createAndShowGUI() {
-        //Set the look and feel.
+        TrackModelUI instance = new TrackModelUI();
+    		//Set the look and feel.
         initLookAndFeel();
  
         //Create and set up the window.
         JFrame frame = new JFrame("Track Model UI");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JPanel panel = new JPanel();
+        panel.add(instance.new TrainGraphic());
+        frame.add(panel);
 
         //Display the window.
         frame.pack();
