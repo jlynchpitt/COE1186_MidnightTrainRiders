@@ -1,28 +1,21 @@
-/*
- * Filename: Train.java
- * Author: 
- * Date Created:
- * File Description: 
- */
-
-package MTR.NorthShoreExtension.Backend.TrainSrc;
 
 public class Train {
-	private double length, height, width, trainmass; // static float variables
+	final double length=32.2;
+	final double height=3.42;
+	final double width=2.65;
+	final double trainmass=40900;
+	
+	
 	private int cars; //static int variables
 	private double acceleration, velocity, deceleration, passengermass; //dynamic float variables
 	private int temperature, passengers, crewcount; //dynamic int variables
-	private boolean opendoors, lightson;
+	private boolean leftdoor,rightdoor, lightson;
 	private String authority;
 	private double maxacceleration, maxvelocity, maxdeceleration;
 	private int maxpassengers;
 	
 	public Train(){
-		this.setLength(32.2);
-		this.setHeight(3.42);
-		this.setWidth(2.65);
-		this.setCars(5);
-		this.setTrainmass(40900);
+		
 	}
 
 	public double getAcceleration() {
@@ -85,9 +78,6 @@ public class Train {
 		return width;
 	}
 
-	public void setWidth(double width) {
-		this.width = width;
-	}
 
 	public double getPassengermass() {
 		return passengermass;
@@ -96,30 +86,20 @@ public class Train {
 	public void setPassengermass(double passengermass) {
 		this.passengermass = passengermass;
 	}
-
+	
+	public double getTrainmass() {
+		return trainmass;
+	}
+	
 	public double getLength() {
 		return length;
 	}
 
-	public void setLength(double length) {
-		this.length = length;
-	}
 
 	public double getHeight() {
 		return height;
 	}
 
-	public void setHeight(double height) {
-		this.height = height;
-	}
-
-	public double getTrainmass() {
-		return trainmass;
-	}
-
-	public void setTrainmass(double trainmass) {
-		this.trainmass = trainmass;
-	}
 
 	public int getCars() {
 		return cars;
@@ -167,14 +147,18 @@ public class Train {
 	public boolean getOpendoors() {
 		return opendoors;
 	}
-	public void setLightson(boolean b) {
+	public void turnLightsOn(boolean b) {
 		// TODO Auto-generated method stub
-		
+		this.lightson=b;
 	}
 
-	public void setOpendoors(boolean b) {
+	public void openLeftDoor(boolean b) {
 		// TODO Auto-generated method stub
-		
+		this.leftdoor=b;
+	}
+	
+	public void openRightDoor(boolean b) {
+		this.rightdoor=b;
 	}
 
 
