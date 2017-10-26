@@ -1,4 +1,4 @@
-package MTR.NorthShoreExtension.ProofOfConcept.Database;
+package MTR.NorthShoreExtension.ProofOfConcept;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class Sample
+public class SampleDB
  {
  public static void main(String[] args) throws ClassNotFoundException
   {

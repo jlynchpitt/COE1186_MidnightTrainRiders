@@ -5,7 +5,7 @@
  * File Description: 
  */
 
-package MTR.NorthShoreExtension.UI;
+package MTR.NorthShoreExtension.ProofOfConcept;
 
 import java.awt.*;
 import java.awt.event.*;

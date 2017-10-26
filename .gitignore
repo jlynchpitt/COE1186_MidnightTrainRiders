@@ -3,3 +3,4 @@ bin/**
 .classpath
 .project
 sample.db
+.DS_Store

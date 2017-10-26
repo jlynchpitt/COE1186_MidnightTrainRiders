@@ -153,6 +153,10 @@ public class TrainController {
 		//TODO: Define status as enumerated type
 	}
 	
+	public void TrainControl_setActualTemp(double temp) {
+		
+	}
+	
 	/* Functions called by UI to get Train Control info */
 	public int getAuthority() {
 		return authority;
