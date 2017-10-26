@@ -27,8 +27,8 @@
 * SUCH DAMAGE.
 */
 
-//+package MTR.NorthShoreExtension.UI;
 +package MTR.NorthShoreExtension.UI;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -48,10 +48,9 @@ public class repairScheduler extends JFrame {
 	private String[] redLineSections = {"1","2","3","4","5","6","7","8","9","10","11","12","13"};
 	private String[] repairTypes = {"Broken Rail","Broken Track Heater", "Stuck Train: Engine Failure", "Stuck Train: Break Failure"};
 	private JComboBox<String> blockGrn = new JComboBox(greenLineBlocks);
-	private JComboBox<String> sectionGrn = new JComboBox(greenLineSections);
 	private JComboBox<String> blockRed = new JComboBox(redLineBlocks);
-	private JComboBox<String> sectionRed = new JComboBox(redLineSections);
-	private JComboBox<String> repairChoice = new JComboBox(repairTypes);
+	private JComboBox<String> repairChoiceRed = new JComboBox(repairTypes);
+	private JComboBox<String> repairChoiceGrn = new JComboBox(repairTypes);
 	
 	public repairScheduler() {
 		render();
@@ -65,21 +64,31 @@ public class repairScheduler extends JFrame {
 		GridBagConstraints gbcRed = new GridBagConstraints();
 		GridBagConstraints gbcGrn = new GridBagConstraints();
 		
-		JLabel redRepairs = new JLabel("Red Line Repairs:");
+		JLabel redRepairs = new JLabel("Red Line Repairs: ");
 		gbcRed.gridx = 0;
 		gbcRed.gridy = 0;
 		gbcRed.insets = new Insets (0,0,5,0);
 		gbcRed.fill = GridBagConstraints.HORIZONTAL;
-		gbcRed.gridwidth = 2;
+		//gbcRed.gridwidth = 2;
+		gbcRed.gridwidth = 1;
 		redPanel.add(redRepairs, gbcRed);
 		
-		JLabel grnRepairs = new JLabel("Green Line Repairs:");
+		gbcRed.gridx = 1;
+		gbcRed.gridy = 0;
+		redPanel.add(repairChoiceRed,gbcRed);
+		
+		JLabel grnRepairs = new JLabel("Green Line Repairs: ");
 		gbcGrn.gridx = 0;
 		gbcGrn.gridy = 0;
 		gbcGrn.insets = new Insets (0,0,5,0);
 		gbcGrn.fill = GridBagConstraints.HORIZONTAL;
-		gbcGrn.gridwidth = 2;
+		gbcGrn.gridwidth = 1;
 		grnPanel.add(grnRepairs, gbcGrn);
+		
+		gbcGrn.gridx = 1;
+		gbcGrn.gridy = 0;
+		grnPanel.add(repairChoiceGrn,gbcGrn);
+		
 		
 		JLabel blockChoiceR = new JLabel("Choose a section: ");
 		gbcRed.gridx = 0;
