@@ -1,0 +1,235 @@
+/*
+* Filename: trainScheduler.java
+* Author: Matt Snyder
+* Last Edited: 10/12/2017
+* File Description: This contains the Train Scheduler. 
+* 
+* 
+* 
+* 
+* 
+* 
+* 
+* 
+* 
+* 
+* 
+* 
+* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HODLERS AND CONTRIBUTORS "AS IS" AND ANY
+* EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+* OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCALIMED. IN NO EVENT
+* SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, 
+* INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING BUT NOT LIMITED
+* TO, PROCUREMENT OF SUBSITUTE GOODS OR SERVICES; LOSS OF USE, DATA OR PROFITS; OR
+* BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+* CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+* ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF 
+* SUCH DAMAGE.
+*/
+
+//+package MTR.NorthShoreExtension.UI;
+
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class trainSchedulerUI extends JFrame {
+	//create two arrays for demo purpose. actual will have the list imported from the database
+	String[] grnLineStops = {"Choose a stop...", "A1", "A2", "A3", "A4", "B1", "B2", "B3", "C1", "C2"};
+	String[] redLineStops = {"Choose a stop...", "A1", "A2", "A3", "B1", "B2", "B3", "B4", "B5", "C1"};
+	int x = 1; //number of stops
+	int auth[] = new int[99];
+	//double depart[] = new double[99];
+	
+	private JFrame frame = new JFrame("Schedule A Train");
+	private JTabbedPane tabbedPane = new JTabbedPane();
+	private JButton addStop = new JButton("Add A Stop");
+	private JButton schedTrain = new JButton("Schedule Train");
+	private JComboBox<String> stops = new JComboBox<String>(grnLineStops);
+	
+	public trainSchedulerUI() {
+		render();
+	}
+	
+	public void render() {
+		JPanel grnTrain = new JPanel();
+		JPanel redTrain = new JPanel();
+		JPanel schedule = new JPanel();
+		grnTrain.setLayout(new GridLayout(1,2));
+		redTrain.setLayout(new GridLayout(1,2));
+		
+		JPanel grnLeft = new JPanel();
+		JPanel grnRght = new JPanel(new GridLayout(5,1));
+		JPanel redLeft = new JPanel();
+		JPanel redRght = new JPanel(new GridLayout(5,1));
+		
+		JTextArea stopRouteRed = new JTextArea(50, 40);
+		stopRouteRed.setText("Add a Stop...");
+		stopRouteRed.setEditable(false);
+		redLeft.add(stopRouteRed);
+		
+		JTextArea stopRouteGrn = new JTextArea(50, 40);
+		stopRouteGrn.setText("Add a Stop...");
+		stopRouteGrn.setEditable(false);
+		grnLeft.add(stopRouteGrn);
+		
+		redTrain.add(redLeft);
+		redTrain.add(redRght);
+		grnTrain.add(grnLeft);
+		grnTrain.add(grnRght);
+		
+		tabbedPane.addTab("Red Line", redTrain);
+		tabbedPane.addTab("Green Line", grnTrain);
+		tabbedPane.addTab("Schedules", schedule);
+		
+		//add it all together and make it visible
+		frame.add(tabbedPane);
+		frame.setSize(400, 800);
+		frame.setVisible(true);
+		frame.setLocationRelativeTo(null);
+	
+		/*
+		auth[0] = 0;
+	
+		JPanel panel = new JPanel(new GridLayout(1,2));
+		panel.setBorder(BorderFactory.createLineBorder(Color.black,1));
+		//right panel
+		JPanel rightPanel = new JPanel(new GridLayout(5,1));
+		JPanel leftPanel = new JPanel();
+		JTextArea stopRoute = new JTextArea(50, 40);
+		//left panel
+		
+		stopRoute.setText("Add a Stop....");
+		stopRoute.setEditable(false);
+		leftPanel.add(stopRoute);
+				
+		panel.add(leftPanel);
+		
+		JPanel radioBtns = new JPanel();
+		JRadioButton green = new JRadioButton("Green Line");
+		JRadioButton red = new JRadioButton("Red Line");
+		ButtonGroup line = new ButtonGroup();
+		line.add(green);
+		line.add(red);
+		red.setBackground(Color.red);
+		green.setBackground(Color.green);
+		green.setSelected(true);
+		radioBtns.setBackground(Color.green);
+		
+		green.setMnemonic(KeyEvent.VK_G);
+		green.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (green.isSelected()) {
+					radioBtns.setBackground(Color.green);
+					//stops.setModel(grnLineStops); //find out why I can't change the data
+				}
+			}
+		});
+		
+		red.setMnemonic(KeyEvent.VK_R);
+		red.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (red.isSelected()) {
+					radioBtns.setBackground(Color.red);
+				}
+			}
+		});
+		
+		radioBtns.add(green);
+		radioBtns.add(red);
+		rightPanel.add(radioBtns);
+		rightPanel.setBorder(BorderFactory.createLineBorder(Color.black,2));
+		
+		stops.setEditable(false);
+		rightPanel.add(stops);
+		
+		//JPanel departure = new JPanel(new GridLayout(1,5));
+		JPanel departure = new JPanel(new GridBagLayout());
+		GridBagConstraints gbc =  new GridBagConstraints();
+		JLabel label = new JLabel("Departure Time: ");
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.gridwidth = 5;
+		departure.add(label, gbc);
+		
+		JTextField hour1 = new JTextField(1);
+		JTextField hour0 = new JTextField(1);
+		JTextField split = new JTextField(3);
+		JTextField mins1 = new JTextField(1);
+		JTextField mins0 = new JTextField(1);
+		hour1.setText("0");
+		hour0.setText("0");
+		split.setText(" : ");
+		split.setEditable(false);
+		mins1.setText("0");
+		mins0.setText("0");
+		
+		gbc.gridwidth = 1;
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		departure.add(hour1, gbc);
+		gbc.gridx = 1;
+		gbc.gridy = 1;
+		departure.add(hour0, gbc);
+		gbc.gridx = 2;
+		gbc.gridy = 1;
+		departure.add(split, gbc);
+		gbc.gridx = 3;
+		gbc.gridy = 1;
+		departure.add(mins1, gbc);
+		gbc.gridx = 4;
+		gbc.gridy = 1;
+		departure.add(mins0, gbc);
+		rightPanel.add(departure);
+		
+		rightPanel.add(addStop);
+		
+		addStop.setMnemonic(KeyEvent.VK_A);
+		addStop.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String line = "";
+				if (green.isSelected()) {
+					line = "Green Line";
+				} else {
+					line = "Red Line";
+				}
+				int nextAuth = Math.abs(stops.getSelectedIndex() - auth[x-1]);
+				auth[x] = stops.getSelectedIndex();
+				String stop = stops.getSelectedItem().toString();
+				String depart = (hour1.getText() + hour0.getText() + ":" + mins1.getText() + mins0.getText());
+				String nextStop = "Stop " + x + ": \n " + line + ": " + stop + " \n Departure: " + depart + "\n Authority: " + nextAuth + " \n Suggested Speed: MAX";
+				String previous =  stopRoute.getText();
+				stopRoute.setText(previous + "\n\n" + nextStop);
+				x++;
+			}
+		});
+		
+		rightPanel.add(schedTrain);
+		schedTrain.setMnemonic(KeyEvent.VK_S);
+		schedTrain.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String writ = stopRoute.getText();
+				String toWrite = writ + "\n\n Scheduling Train...!";
+				stopRoute.setText(toWrite);
+				stops.setEnabled(false);
+				hour1.setEnabled(false);
+				hour0.setEnabled(false);
+				mins1.setEnabled(false);
+				mins0.setEnabled(false);
+				addStop.setEnabled(false);
+				schedTrain.setEnabled(false);
+			}
+		});
+		
+		panel.add(rightPanel);
+		
+		frame.add(panel);
+		frame.setSize(800, 700);
+		frame.setVisible(true);
+		frame.setLocationRelativeTo(null);
+		*/
+	}
+	
+	
+}

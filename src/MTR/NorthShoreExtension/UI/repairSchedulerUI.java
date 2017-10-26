@@ -27,13 +27,13 @@
 * SUCH DAMAGE.
 */
 
-+package MTR.NorthShoreExtension.UI;
+//+package MTR.NorthShoreExtension.UI;
 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class repairScheduler extends JFrame {
+public class repairSchedulerUI extends JFrame {
 	
 	private JFrame frame = new JFrame("Schedule A Repair");
 	private JTabbedPane tabbedPane = new JTabbedPane();
@@ -52,7 +52,7 @@ public class repairScheduler extends JFrame {
 	private JComboBox<String> repairChoiceRed = new JComboBox(repairTypes);
 	private JComboBox<String> repairChoiceGrn = new JComboBox(repairTypes);
 	
-	public repairScheduler() {
+	public repairSchedulerUI() {
 		render();
 	}
 	
