@@ -27,7 +27,7 @@
 * SUCH DAMAGE.
 */
 
-+package MTR.NorthShoreExtension.UI;
+//+package MTR.NorthShoreExtension.UI;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -80,7 +80,7 @@ public class ctcUI {
 		schedTrain.setActionCommand("schedTrain");
 		schedTrain.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFrame schedulerT = new trainScheduler();
+				JFrame schedulerT = new trainSchedulerUI();
 			}
 		});
 		gbc.weightx = 0.0; //sets the width of the segment
@@ -96,7 +96,7 @@ public class ctcUI {
 		schedRepair.setMnemonic(KeyEvent.VK_P);
 		schedRepair.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFrame schedulerR = new repairScheduler();
+				JFrame schedulerR = new repairSchedulerUI();
 			}
 		});
 		gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -111,7 +111,7 @@ public class ctcUI {
 		reporting.setMnemonic(KeyEvent.VK_R);
 		reporting.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFrame reportingWindow = new reportingMenu();
+				JFrame reportingWindow = new reportingMenuUI();
 			}
 		});
 		gbc.fill = GridBagConstraints.HORIZONTAL;
