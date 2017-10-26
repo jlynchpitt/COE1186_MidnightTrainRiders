@@ -81,5 +81,13 @@ public class TrackModel {
 		trackOccupency[(trackOccupency.length - 1)] = trackid;
 		//have wayside type and send the updated array of occupied tracks
 	}
+	
+	public static void TrackModel_sellTicket() {
+		
+	}
+	
+	public static void TrackModel_setSpeedAuthority(int speed, int authority) {
+		
+	}
 
 }
