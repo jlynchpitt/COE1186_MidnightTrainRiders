@@ -5,12 +5,12 @@ import java.util.Map;
 
 public class TrackModel {
 	//private WaysideControllerHelper wayside;
-	static int trackOccupency[] = new int[300];
-	static int brokenTrack[] = new int[300];
-	static Map<Integer, TrainsOperating> trainList = new HashMap<Integer, TrainsOperating>();
-	static TrainsOperating newTrain;
-	static TrainsOperating update;
-	static double difference;
+	private static int trackOccupency[] = new int[300];
+	private static int brokenTrack[] = new int[300];
+	private static Map<Integer, TrainsOperating> trainList = new HashMap<Integer, TrainsOperating>();
+	private static TrainsOperating newTrain;
+	private static TrainsOperating update;
+	private static double difference;
 	
 	public TrackModel(/*WaysideControllerHelper t*/) {
 		
@@ -48,7 +48,7 @@ public class TrackModel {
 			//read csv into database
 	}
 	
-	public static void TrackModel_setSwitch(int trackid) {
+	public static void TrackModel_setSwitch(int trackid, int tracksend) {
 		//set into db the trackid of the switch where it will go
 	}
 	

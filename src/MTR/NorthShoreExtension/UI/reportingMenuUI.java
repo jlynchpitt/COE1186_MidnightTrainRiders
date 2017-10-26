@@ -1,5 +1,5 @@
 /*
-* Filename: reportingMenu.java
+* Filename: ReportingMenuUI.java
 * Author: Matt Snyder
 * Last Edited: 10/12/2017
 * File Description: The Reporting Menu
@@ -28,14 +28,14 @@
 * SUCH DAMAGE.
 */
 
-//+package MTR.NorthShoreExtension.UI;
+package MTR.NorthShoreExtension.UI;
 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
 
-public class reportingMenuUI extends JFrame {
+public class ReportingMenuUI extends JFrame {
 	private JFrame frame = new JFrame("Reporting");
 	private JButton powerGraph = new JButton("Speed/Power Graph");
 	private JButton passengerGraph = new JButton("Passenger Flow Graph");
@@ -43,7 +43,7 @@ public class reportingMenuUI extends JFrame {
 	private JButton delayLog = new JButton("Delay Log");
 	private JButton incidentLog = new JButton("Incident Log");
 	
-	public reportingMenuUI() {
+	public ReportingMenuUI() {
 		render();
 	}
 	

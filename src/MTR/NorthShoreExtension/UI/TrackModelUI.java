@@ -5,11 +5,13 @@ import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+import MTR.NorthShoreExtension.Backend.TrackModelSrc.*;
  
 public class TrackModelUI extends JPanel implements MouseListener {
 	//Specify the look and feel to use.  Valid values:
     //null (use the default), "Metal", "System", "Motif", "GTK+"
     final static String LOOKANDFEEL = null;
+    TrackModel trackFunctions = new TrackModel();
     
     private static void initLookAndFeel() {
         String lookAndFeel = null;

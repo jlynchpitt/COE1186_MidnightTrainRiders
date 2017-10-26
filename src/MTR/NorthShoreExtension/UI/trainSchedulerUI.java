@@ -1,8 +1,8 @@
 /*
-* Filename: trainScheduler.java
+* Filename: ctcUI.java
 * Author: Matt Snyder
 * Last Edited: 10/12/2017
-* File Description: This contains the Train Scheduler. 
+* File Description: This contains the user interface for the Train Scheduler. 
 * 
 * 
 * 
@@ -27,13 +27,13 @@
 * SUCH DAMAGE.
 */
 
-//+package MTR.NorthShoreExtension.UI;
+package MTR.NorthShoreExtension.UI;
 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class trainSchedulerUI extends JFrame {
+public class TrainSchedulerUI extends JFrame {
 	//create two arrays for demo purpose. actual will have the list imported from the database
 	String[] grnLineStops = {"Choose a stop...", "A1", "A2", "A3", "A4", "B1", "B2", "B3", "C1", "C2"};
 	String[] redLineStops = {"Choose a stop...", "A1", "A2", "A3", "B1", "B2", "B3", "B4", "B5", "C1"};
@@ -42,53 +42,15 @@ public class trainSchedulerUI extends JFrame {
 	//double depart[] = new double[99];
 	
 	private JFrame frame = new JFrame("Schedule A Train");
-	private JTabbedPane tabbedPane = new JTabbedPane();
 	private JButton addStop = new JButton("Add A Stop");
 	private JButton schedTrain = new JButton("Schedule Train");
 	private JComboBox<String> stops = new JComboBox<String>(grnLineStops);
 	
-	public trainSchedulerUI() {
+	public TrainSchedulerUI() {
 		render();
 	}
 	
 	public void render() {
-		JPanel grnTrain = new JPanel();
-		JPanel redTrain = new JPanel();
-		JPanel schedule = new JPanel();
-		grnTrain.setLayout(new GridLayout(1,2));
-		redTrain.setLayout(new GridLayout(1,2));
-		
-		JPanel grnLeft = new JPanel();
-		JPanel grnRght = new JPanel(new GridLayout(5,1));
-		JPanel redLeft = new JPanel();
-		JPanel redRght = new JPanel(new GridLayout(5,1));
-		
-		JTextArea stopRouteRed = new JTextArea(50, 40);
-		stopRouteRed.setText("Add a Stop...");
-		stopRouteRed.setEditable(false);
-		redLeft.add(stopRouteRed);
-		
-		JTextArea stopRouteGrn = new JTextArea(50, 40);
-		stopRouteGrn.setText("Add a Stop...");
-		stopRouteGrn.setEditable(false);
-		grnLeft.add(stopRouteGrn);
-		
-		redTrain.add(redLeft);
-		redTrain.add(redRght);
-		grnTrain.add(grnLeft);
-		grnTrain.add(grnRght);
-		
-		tabbedPane.addTab("Red Line", redTrain);
-		tabbedPane.addTab("Green Line", grnTrain);
-		tabbedPane.addTab("Schedules", schedule);
-		
-		//add it all together and make it visible
-		frame.add(tabbedPane);
-		frame.setSize(400, 800);
-		frame.setVisible(true);
-		frame.setLocationRelativeTo(null);
-	
-		/*
 		auth[0] = 0;
 	
 		JPanel panel = new JPanel(new GridLayout(1,2));
@@ -228,7 +190,6 @@ public class trainSchedulerUI extends JFrame {
 		frame.setSize(800, 700);
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
-		*/
 	}
 	
 	
