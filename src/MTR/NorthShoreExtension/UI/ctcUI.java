@@ -27,13 +27,14 @@
 * SUCH DAMAGE.
 */
 
-//package MTR.NorthShoreExtension.UI;
-
-package MTR.NorthShoreExtension.UI;
++package MTR.NorthShoreExtension.UI;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.*;
 import javax.swing.*;
+import javax.imageio.*;
+import java.io.*;
 import java.util.*;
 import java.time.*;
 import java.text.*;
@@ -48,10 +49,11 @@ public class ctcUI {
 	final static boolean shouldWeightX = true;
 	final static boolean RIGHT_TO_LEFT = false;
 	
-	private JPanel mainPane;
+	private static JPanel pane;
 	
-	public static void ctcUI(Container pane) {
-		
+	//public static void ctcUI(Container pane) {
+	  public ctcUI() {
+		  pane = new JPanel();
 		if (RIGHT_TO_LEFT) {
 			pane.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
 		}
@@ -78,7 +80,7 @@ public class ctcUI {
 		schedTrain.setActionCommand("schedTrain");
 		schedTrain.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFrame schedulerT = new TrainSchedulerUI();
+				JFrame schedulerT = new trainScheduler();
 			}
 		});
 		gbc.weightx = 0.0; //sets the width of the segment
@@ -90,6 +92,13 @@ public class ctcUI {
 		pane.add(schedTrain, gbc);
 		
 		schedRepair = new JButton("Schedule Repair");
+		schedRepair.setActionCommand("repairTrain");
+		schedRepair.setMnemonic(KeyEvent.VK_P);
+		schedRepair.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFrame schedulerR = new repairScheduler();
+			}
+		});
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.weightx = 0.0;
 		gbc.weighty = 0.0;
@@ -102,7 +111,7 @@ public class ctcUI {
 		reporting.setMnemonic(KeyEvent.VK_R);
 		reporting.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFrame reportingWindow = new ReportingMenuUI();
+				JFrame reportingWindow = new reportingMenu();
 			}
 		});
 		gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -235,8 +244,18 @@ public class ctcUI {
 		//trackModel Panel
 		trkModel = new JPanel();
 		trkModel.setBorder(BorderFactory.createLineBorder(Color.black,1));
+		BufferedImage image;
+		try {
+			image = ImageIO.read(new File("images/TrackLayout.png"));
+		} catch (IOException ex) {
+			image = null;
+		}
+		JLabel picLabel = new JLabel(new ImageIcon(image));
+		trkModel.add(picLabel);
+		
 		gbc.fill = GridBagConstraints.HORIZONTAL;
-		//gbc.ipady = 200;
+		gbc.ipady = 20;
+		gbc.ipadx = 20;
 		
 		gbc.gridx = 0;
 		gbc.gridy = 1;
@@ -244,9 +263,11 @@ public class ctcUI {
 		gbc.gridheight = 3;
 		pane.add(trkModel, gbc);
 		//--------------
+		
+		pane.setSize(850, 500);
 	}
 		
-		private static void initLookAndFeel() {
+	private static void initLookAndFeel() {
 			String lookAndFeel = null;
 			
 			if (LOOKANDFEEL != null) {
@@ -284,13 +305,16 @@ public class ctcUI {
 			
 			//setup the window
 			JFrame frame = new JFrame("CTC");
-			
+			frame.setResizable(false);
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			
-			ctcUI(frame.getContentPane());
+			//ctcUI(frame.getContentPane());
+			ctcUI ctc1 = new ctcUI();
+			ctcUI.pane.setOpaque(true);
+			frame.setContentPane(ctc1.pane);
 			
-			frame.pack();
-			//frame.setSize(850, 500); Need to find ideal size after syncing with Track Model
+			frame.pack(); //this conforms the size of the frame to the size of the contents
+			//frame.setSize(850, 500); //Need to find ideal size after syncing with Track Model?
 			frame.setVisible(true);
 		}
 		
