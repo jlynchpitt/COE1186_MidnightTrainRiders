@@ -7,7 +7,6 @@ import java.awt.event.*;
 import java.util.*;
  
 public class TrackModelUI extends JPanel implements MouseListener {
- 
 	//Specify the look and feel to use.  Valid values:
     //null (use the default), "Metal", "System", "Motif", "GTK+"
     final static String LOOKANDFEEL = null;
@@ -62,6 +61,7 @@ public class TrackModelUI extends JPanel implements MouseListener {
     			super.paintComponent(g);
     			g.setColor(Color.white);
     			g.fillRoundRect(10,10,975,400,15,15);
+    			//call to database to set x and y values for lines and arcs
     		}
     }
  
