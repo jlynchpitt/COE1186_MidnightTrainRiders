@@ -27,7 +27,7 @@ import javax.swing.table.TableCellRenderer;
 
 
 
-public class WaysideController
+public class WaysideControllerUI
 {
 	//imports all packages
 	public static String SampleCode = "Int total = 0;\n Public static void main (String [] args)\n{\n    If (traindist <= 100)\n    {\n        Do\n        {\n            Close gate\n            Signal light\n        }\n    }\n    Public boolean distmeas(int trackcount)\n    {\n        For (int x = 0; x < trackcount; x++)\n        {\n            Total += x; \n        }\n        If (total <= standarddist)\n        {\n            Return true;\n        }\n        Else\n        {\n            Return false;\n        ]\n    }\n}";
@@ -44,12 +44,9 @@ public class WaysideController
 	public static JButton TrackInfoButton = new JButton("To Track Info Hub"); //create one of the buttons
 	public static int FrameTracker = 0;
 	
-	public static int[] AuthorityArray;
-	public static int[] SpeedArray;
-	public static int[] TrackOccupancyArray;
-	public static int[] BrokenTrackArray;
 	
-    public static WaysideFunctions obj = new WaysideFunctions();
+	
+    
 	  
 	  //public static int[] ProtoArray = {0,1,2,3,4,5,6};
    public static void main(String[] args) //main body
@@ -68,12 +65,7 @@ public class WaysideController
       f.setVisible(true);
 	  
 	  
-	  AuthorityArray = obj.WaysideController_Authority();
 	  
-	  SpeedArray = obj.WaysideController_Speed();
-	  TrackOccupancyArray = obj.WaysideController_TrackOccupancy();
-	  BrokenTrackArray = obj.WaysideController_BrokenTrack();
-
    } 
    
    //set the functions of the buttons
@@ -255,30 +247,7 @@ public class WaysideController
 	
    }
 
-   public static int[] CTC_getOccupancy()
-   {
-	   //int[] OccupancyArray = new int[4];  
-	   return TrackOccupancyArray;
-   }
-   
-   public static int[] CTC_getBrokenTrack()
-   {
-	   //int[] BrokenTrackArray = new int[4];	   
-	   return BrokenTrackArray;
-   }
-   
-   public static int[] TrackModel_setSpeed()
-   {
-	   //int[] SpeedArray = new int[4];
-	   return SpeedArray;
-   }
-   
-	public static int[] TrackModel_setAuthority()
-   {
-	   //int[] AuthorityArray = new int[4];    
-	   return AuthorityArray;
-   }
-   
+
    
    
 }
