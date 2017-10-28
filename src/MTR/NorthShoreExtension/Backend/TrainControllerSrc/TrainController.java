@@ -20,7 +20,7 @@ public class TrainController {
 	//TODO: Change these variables to private and add getters/setters
 	
 	private int trainID = 0;
-	public Train trainModel = null;
+	private Train trainModel = null;
 	private TrainControlPanel trainControlPanel;
 	private MiniPID pid;
 	private boolean CONNECTEDTOTRAINMODEL = false; //This must be true when in the full system - for testing individual submodule
@@ -154,6 +154,10 @@ public class TrainController {
 	}
 	
 	public void TrainControl_setActualTemp(double temp) {
+		
+	}
+	
+	public void TrainControl_setPassengerEBrake(boolean eBrakeApplied) {
 		
 	}
 	
