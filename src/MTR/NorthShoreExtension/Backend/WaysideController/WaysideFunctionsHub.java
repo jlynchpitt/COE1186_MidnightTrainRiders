@@ -4,7 +4,7 @@
  * Date Created:10/27
  * File Description: Creates basic wayside UI and basic functionalities
  */
-package MTR.NorthShoreExtension.UI;
+package MTR.NorthShoreExtension.Backend.WaysideController;
 
 public class WaysideFunctionsHub 
 {
