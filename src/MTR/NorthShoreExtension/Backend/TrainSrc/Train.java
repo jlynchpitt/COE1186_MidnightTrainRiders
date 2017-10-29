@@ -1,5 +1,7 @@
 package MTR.NorthShoreExtension.Backend.TrainSrc;
 
+import MTR.NorthShoreExtension.Backend.TrainControllerSrc.TrainController;
+
 public class Train {
 	final double length=32.2;
 	final double height=3.42;
@@ -10,21 +12,55 @@ public class Train {
 	private int cars; //static int variables
 	private double acceleration, velocity, deceleration, passengermass; //dynamic float variables
 	private int temperature, passengers, crewcount; //dynamic int variables
-	private boolean leftdoor,rightdoor, lightson;
+	private boolean leftdoor, rightdoor, lightson;
 	private String authority;
 	private double maxacceleration, maxvelocity, maxdeceleration;
 	private int maxpassengers;
 	
+	private TrainController tc;
+	private TrainMovement tm;
+	
 	public Train(){
-		
+		tm = new TrainMovement(this.getTotalMass());
+	}
+	
+	//Functions that the Train Controller Calls//
+	public void TrainModel_setPower(double p){
+		tm.setMovement(p);										// calls the set power function in the TrainMovement Class
+		tc.TrainControl_setActualSpeed(tm.getVelocity());	// This line receives the velocity from the train movement class and sends it to the train controller
+	}
+	
+	public void TrainModel_turnLightsOn(boolean l) {
+		this.lightson=l;
+	}
+	
+	public void TrainModel_openRightDoor(boolean o) {
+		this.rightdoor=o;
+	}
+	
+	public void TrainModel_openLeftDoor(boolean o) {
+		this.rightdoor=o;
+	}
+	
+	public void TrainModel_setTemperatureSetting(int t) {
+		this.temperature = t;
+	}
+	
+	public void TrainModel_setBrake(boolean b) {
+		tm.setBrake(b);
+	}
+	
+	public void TrainModel_setEBrake(boolean b) {
+		tm.seteBrake(b);
 	}
 
+	
 	public double getAcceleration() {
 		return acceleration;
 	}
-
-	public void setAcceleration(double acceleration) {
-		this.acceleration = acceleration;
+	
+	public double getDeceleration() {
+		return deceleration;
 	}
 
 	public double getVelocity() {
@@ -35,10 +71,7 @@ public class Train {
 		this.velocity = velocity;
 	}
 
-	public double getDeceleration() {
-		return deceleration;
-	}
-
+	
 	public void setDeceleration(double deceleration) {
 		this.deceleration = deceleration;
 	}
@@ -80,15 +113,15 @@ public class Train {
 	}
 
 
-	public double getPassengermass() {
+	public double getPassengerMass() {
 		return passengermass;
 	}
 
-	public void setPassengermass(double passengermass) {
+	public void setPassengerMass(double passengermass) {
 		this.passengermass = passengermass;
 	}
 	
-	public double getTrainmass() {
+	public double getTrainMass() {
 		return trainmass;
 	}
 	
@@ -145,9 +178,7 @@ public class Train {
 	public boolean getLightson() {
 		return lightson;
 	}
-	public boolean getOpendoors() {
-		return opendoors;
-	}
+
 	public void turnLightsOn(boolean b) {
 		// TODO Auto-generated method stub
 		this.lightson=b;
@@ -162,7 +193,10 @@ public class Train {
 		this.rightdoor=b;
 	}
 
-
 	
+	
+	public double getTotalMass() {
+		return(passengermass+trainmass);
+	}
 	
 }

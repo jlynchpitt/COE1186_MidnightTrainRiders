@@ -4,3 +4,4 @@ bin/**
 .project
 *.db
 .DS_Store
+/bin/
