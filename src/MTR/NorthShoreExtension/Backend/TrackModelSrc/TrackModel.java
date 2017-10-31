@@ -5,16 +5,12 @@ import java.util.Map;
 
 public class TrackModel {
 	//private WaysideControllerHelper wayside;
-	private static int trackOccupency[] = new int[300];
-	private static int brokenTrack[] = new int[300];
-	private static Map<Integer, TrainsOperating> trainList = new HashMap<Integer, TrainsOperating>();
-	private static TrainsOperating newTrain;
-	private static TrainsOperating update;
-	private static double difference;
-	
-	public TrackModel(/*WaysideControllerHelper t*/) {
-		
-	}
+	static int trackOccupency[] = new int[300];
+	static int brokenTrack[] = new int[300];
+	static Map<Integer, TrainsOperating> trainList = new HashMap<Integer, TrainsOperating>();
+	static TrainsOperating newTrain;
+	static TrainsOperating update;
+	static double difference;
 	
 	class Track{
 		String line;
@@ -36,12 +32,17 @@ public class TrackModel {
 		int curveStart;
 		int curveEnd;
 		int trackID;
+		int beacon;
 	}
 	
 	class TrainsOperating{
 		int trainID;
 		double distanceLeft;
 		int trackOccupying;
+	}
+	
+	public TrackModel(/*WaysideControllerHelper t*/) {
+		
 	}
 	
 	public static void loadCSV() {
@@ -88,6 +89,11 @@ public class TrackModel {
 	
 	public static void TrackModel_setSpeedAuthority(int speed, int authority) {
 		
+	}
+	
+	public static void beacon() {
+		//if infrastructure = station
+		//if infrastructure = switch
 	}
 
 }
