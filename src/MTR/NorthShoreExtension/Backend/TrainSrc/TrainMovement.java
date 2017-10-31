@@ -13,7 +13,7 @@ public class TrainMovement {
 	private double xForce;			//in Newtons, this is the force in the x direction neglecting friction//
 	private double totalForce; 		//in Newtowns//
 	private double pheta;			//angle of the slope//
-	private boolean engineFailure, signalFailure, breakFailure, eBrake, brake;
+	private boolean eBrake, brake;
 	final double staticFriction = 0.78; //Static Friciton of hard Steel on Steel//
 	final double kineticFriction = 0.42; //Kinetic Friction of hard Steel on steel//
 	final double gravity =  9.807; //expressed in m/s^2//
@@ -22,9 +22,6 @@ public class TrainMovement {
 	
 	
 	public TrainMovement(double m){
-		engineFailure=false;
-		signalFailure=false;
-		breakFailure=false;
 		eBrake=false;
 		this.mass=m;
 	}
@@ -68,11 +65,19 @@ public class TrainMovement {
 		    acceleration = totalForce/mass;
 			
 		}else if(eBrake==true) {
-			acceleration = eBrakeAcc;
+			if(velocity>0) {
+				acceleration = eBrakeAcc;
+			}
 		}else if(brake==true && eBrake==false){
-			acceleration = brakeAcc;
+			if(velocity>0) {
+				acceleration = brakeAcc;
+			}
 		}
 		nextVelocity = acceleration+velocity;
+		if(nextVelocity<0) {
+			nextVelocity=0;
+			acceleration=0;
+		}
 		distance = 0.5*acceleration+velocity;
 		velocity = nextVelocity;
 	}

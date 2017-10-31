@@ -10,18 +10,21 @@ public class Train {
 	
 	
 	private int cars; //static int variables
-	private double acceleration, velocity, deceleration, passengermass; //dynamic float variables
 	private int temperature, passengers, crewcount; //dynamic int variables
 	private boolean leftdoor, rightdoor, lightson;
-	private String authority;
+	private String trainID, authority;
 	private double maxacceleration, maxvelocity, maxdeceleration;
 	private int maxpassengers;
+	private boolean engineFailure, signalFailure, brakeFailure, passengerEBrake;
 	
 	private TrainController tc;
 	private TrainMovement tm;
+	Passengers p;
 	
-	public Train(){
+	public Train(String t){
 		tm = new TrainMovement(this.getTotalMass());
+		p = new Passengers();
+		trainID=t;
 	}
 	
 	//Functions that the Train Controller Calls//
@@ -39,7 +42,7 @@ public class Train {
 	}
 	
 	public void TrainModel_openLeftDoor(boolean o) {
-		this.rightdoor=o;
+		this.leftdoor=o;
 	}
 	
 	public void TrainModel_setTemperatureSetting(int t) {
@@ -56,24 +59,23 @@ public class Train {
 
 	
 	public double getAcceleration() {
-		return acceleration;
+		if(tm.getAcceleration()>0) {
+			return tm.getAcceleration();
+		}else {
+			return 0;
+		}
 	}
 	
 	public double getDeceleration() {
-		return deceleration;
+		if(tm.getAcceleration()<0) {
+			return tm.getAcceleration()*-1;
+		}else {
+			return 0;
+		}
 	}
 
 	public double getVelocity() {
-		return velocity;
-	}
-
-	public void setVelocity(double velocity) {
-		this.velocity = velocity;
-	}
-
-	
-	public void setDeceleration(double deceleration) {
-		this.deceleration = deceleration;
+		return tm.getVelocity();
 	}
 
 	public String getAuthority() {
@@ -114,12 +116,9 @@ public class Train {
 
 
 	public double getPassengerMass() {
-		return passengermass;
+		return p.getPassengerWeight();
 	}
 
-	public void setPassengerMass(double passengermass) {
-		this.passengermass = passengermass;
-	}
 	
 	public double getTrainMass() {
 		return trainmass;
@@ -196,7 +195,26 @@ public class Train {
 	
 	
 	public double getTotalMass() {
-		return(passengermass+trainmass);
+		return(p.getPassengerWeight()+trainmass);
 	}
 	
+	public void setEngineFailure(boolean b) {
+		this.engineFailure=b;
+		tm.setBrake(true);
+	}
+	
+	public void setSignalFailure(boolean b) {
+		this.signalFailure=b;
+		tm.setBrake(true);
+	}
+	
+	public void setBrakeFailure(boolean b) {
+		this.brakeFailure=b;
+		tm.seteBrake(true);
+	}
+	
+	public void setPassnegerEBraker(boolean b) {
+		this.passengerEBrake=b;
+		tm.seteBrake(true);
+	}
 }
