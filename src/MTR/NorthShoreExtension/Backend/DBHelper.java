@@ -113,15 +113,29 @@ public class DBHelper {
 	}
 	
 	public void addTrainStateRecord(int trainID, int time, int powerCmd, int speedCmd, double actualSpeed) throws SQLException {
-		Connection connection = connect();
+		Connection connection = null;
 		
-		Statement statement = connection.createStatement();
-		statement.setQueryTimeout(30); //TODO: Is this needed?
-		
-	    statement.executeUpdate("INSERT INTO " + TRAIN_CONTROLS_TABLENAME + " values(' "+trainID+"', '"+time+"', '"
-	    		+powerCmd+"', '"+speedCmd+"', '"+actualSpeed+")");   
-	    
-	    connection.close();
+		try {
+			connection = connect();
+			
+			Statement statement = connection.createStatement();
+			statement.setQueryTimeout(30); //TODO: Is this needed?
+			
+		    statement.executeUpdate("INSERT INTO " + TRAIN_CONTROLS_TABLENAME + " values(' "+trainID+"', '"+time+"', '"
+		    		+powerCmd+"', '"+speedCmd+"', '"+actualSpeed+")");   
+		}
+		catch(SQLException e){  
+			 System.err.println(e.getMessage()); 
+		 }       
+		 finally {         
+			 try {
+	               if(connection != null)
+	                  connection.close();
+		     }
+		     catch(SQLException e) {  // Use SQLException class instead.          
+		    	 System.err.println(e); 
+		     }
+		 }
 	}
 	
 	/**
