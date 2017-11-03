@@ -25,7 +25,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.*;
 
-public class TrainEngineerUI implements PropertyChangeListener, ActionListener {
+public class TrainEngineerUI implements ActionListener {
 	//Specify the look and feel to use.  Valid values:
     //null (use the default), "Metal", "System", "Motif", "GTK+"
     final static String LOOKANDFEEL = "System";
@@ -33,6 +33,7 @@ public class TrainEngineerUI implements PropertyChangeListener, ActionListener {
     private JPanel mainPane;
     private JFormattedTextField setKp;
     private JFormattedTextField setKi;
+    private JButton submitButton;
     private TrainControllerHelper tch;
     
     public TrainEngineerUI(TrainControllerHelper tch) {
@@ -66,8 +67,7 @@ public class TrainEngineerUI implements PropertyChangeListener, ActionListener {
         
         setKp = new JFormattedTextField(nvFormatter);
         setKp.setColumns(5);
-        setKp.setValue(50);
-        setKp.addPropertyChangeListener(this);
+        setKp.setValue(tch.getPIDParameter_p());
         
         c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = new Insets(0,-50,0,75);
@@ -86,8 +86,7 @@ public class TrainEngineerUI implements PropertyChangeListener, ActionListener {
         
         setKi = new JFormattedTextField(nvFormatter);
         setKi.setColumns(5);
-        setKi.setValue(60);
-        setKi.addPropertyChangeListener(this);
+        setKi.setValue(tch.getPIDParameter_i());
         
         c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = new Insets(0,-50,0,75);
@@ -97,7 +96,7 @@ public class TrainEngineerUI implements PropertyChangeListener, ActionListener {
         mainPane.add(setKi, c);
  
         /* Add submit button */
-    	JButton submitButton = new JButton("Submit PI Parameters");
+    	submitButton = new JButton("Submit PI Parameters");
     	submitButton.addActionListener(this);
     	c.fill = GridBagConstraints.HORIZONTAL;
     	c.insets = new Insets(25,40,0,40);
@@ -110,23 +109,17 @@ public class TrainEngineerUI implements PropertyChangeListener, ActionListener {
     	mainPane.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createTitledBorder("PI Parameters"),
                 BorderFactory.createEmptyBorder(5,5,5,5)));    	
-    }
-    
-    /**
-     * Detects when the value of the text field (not necessarily the same
-     * number as you'd get from getText) changes.
-     */
-    public void propertyChange(PropertyChangeEvent e) {
-        /*if ("value".equals(e.getPropertyName())) {
-            Number value = (Number)e.getNewValue();
-            //sliderModel.setDoubleValue(value.doubleValue());
-        }*/
-    	if(e.getSource().equals(setKp)) {
-    		//TODO: Handle speeds > 1000 - issue with , in 1,000
-    		//int newSetSpeed = Integer.parseInt(((JFormattedTextField)e.getSource()).getText());
-    		//trainController.setDriverCommandedSetSpeed(newSetSpeed);
-    	}
-    }
+    }    
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == submitButton) {
+        	Double Kp = Double.parseDouble(setKp.getText());
+        	Double Ki = Double.parseDouble(setKi.getText());
+        	
+        	tch.setPIDParameters(Kp,Ki);
+        }
+	}
     
 	private static void initLookAndFeel() {
         String lookAndFeel = null;
@@ -205,10 +198,4 @@ public class TrainEngineerUI implements PropertyChangeListener, ActionListener {
             }
         });
     }
-
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
 }
