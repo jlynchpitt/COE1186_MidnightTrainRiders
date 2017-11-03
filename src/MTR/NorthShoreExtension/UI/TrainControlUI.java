@@ -118,7 +118,7 @@ public class TrainControlUI {
      * this method should be invoked from the
      * event-dispatching thread.
      */
-    private static void createAndShowGUI() {
+    private static void createAndShowTrainControlGUI() {
         //Set the look and feel.
         initLookAndFeel();
 
@@ -139,7 +139,7 @@ public class TrainControlUI {
     public static void main(String[] args) {
     	//Create TrainControllerHelper - with sample test data to show different UI states
     	tch = new TrainControllerHelper();
-    	TrainController tc123 = tch.addNewTrain(123); 
+    	TrainController tc123 = tch.addNewTrainController(123); 
     	tc123.TrainControl_setAuthority(5);
     	tc123.TrainControl_setCommandedSpeed(65);
     	/*TrainController tc456 = tch.addNewTrain(456);
@@ -153,7 +153,7 @@ public class TrainControlUI {
         //creating and showing this application's GUI.
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                createAndShowGUI();
+                createAndShowTrainControlGUI();
             }
         });
     }

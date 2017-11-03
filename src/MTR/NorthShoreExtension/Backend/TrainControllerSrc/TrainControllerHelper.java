@@ -41,7 +41,7 @@ public class TrainControllerHelper {
 		}, 0, 500); //TODO: Update period based on time clock multiplier
 	}
 
-	public TrainController addNewTrain(int trainID) {
+	public TrainController addNewTrainController(int trainID) {
 		TrainController tc = new TrainController(trainID, null, pid_p, pid_i);
 		
 		//Add tc to list of trianControllers
@@ -51,6 +51,7 @@ public class TrainControllerHelper {
 	}
 	
 	public List<TrainController> getTrainControllerList(){
+		//TODO: Sort by train ID
 		return tcList;
 	}
 	
