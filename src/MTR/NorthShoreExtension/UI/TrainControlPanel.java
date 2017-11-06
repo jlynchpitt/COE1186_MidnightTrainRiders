@@ -55,7 +55,17 @@ public class TrainControlPanel extends JPanel
                              implements ActionListener,
                                         ChangeListener,
                                         PropertyChangeListener {
-    TrainController trainController;
+	//Action Performed commands from backend
+	public static final String VITAL = "vitalInfo";
+	public static final String TRACK_INFO = "trackInfo";
+	public static final String TEMPERATURE = "temperature";
+	public static final String DOORS = "doors";
+	public static final String LIGHTS = "lights";
+	public static final String BRAKES = "brakes";
+	public static final String ANNOUNCEMENT = "announcement";
+	public static final String FAULT = "trainFault";
+    
+	TrainController trainController;
     NumberFormat numberFormat;
     
     /* Panels */
@@ -77,7 +87,7 @@ public class TrainControlPanel extends JPanel
     JLabel internalTemp;
     
     /* Vital Controls Components */
-    JFormattedTextField setSpeed;
+    JFormattedTextField driverSetSpeed;
     JButton brake;
     JButton eBrake;
     
@@ -249,9 +259,51 @@ public class TrainControlPanel extends JPanel
         	setControlButtonState(turnOnLights, newButtonText, setButtonActivated);
         }
         else if(e.getSource() == trainController) {
-        	if(e.getActionCommand().equals("powerCmd_actualSpeed")) {
-        		updateUISpeed(actualSpeed, trainController.getActualSpeed());
+        	//backend info updated - update it in the UI
+        	switch(e.getActionCommand()) {
+        	case VITAL:
+        		updateUISpeed(trainSetSpeed, trainController.getTrainSetSpeed());
         		updateUIPower(actualPower, trainController.getPower());
+        		updateUISpeed(actualSpeed, trainController.getActualSpeed());
+
+        		//commanded authority
+        		updateUIAuthority(commandedAuthority, trainController.getAuthority());
+        		updateUISpeed(commandedSetSpeed, trainController.getCTCCommandedSetSpeed());
+        		break;
+        	case TRACK_INFO:
+        		break;
+        	case TEMPERATURE:
+        		internalTemp.setText(Double.toString(trainController.getInternalTemp()));
+        		break;
+        	case DOORS:
+        		boolean rOpen = trainController.isRightDoorOpen();
+        		String rButtonText = rOpen == true ? "Close R Door" : "Open R Door";
+        		setControlButtonState(openRDoor, rButtonText, rOpen);
+
+        		boolean lOpen = trainController.isLeftDoorOpen();
+        		String lButtonText = lOpen == true ? "Close L Door" : "Open L Door";
+        		setControlButtonState(openLDoor, lButtonText, lOpen);
+        		break;
+        	case LIGHTS:
+        		boolean lightsOn = trainController.areLightsOn();
+        		String lightText = lightsOn == true ? "Turn Off Lights" : "Turn On Lights";
+        		setControlButtonState(openLDoor, lightText, lightsOn);
+        		break;
+        	case BRAKES:
+        		boolean brakeApplied = trainController.isBrakeApplied();
+        		String brakeText = brakeApplied == true ? "Release Brake" : "Apply Brake";
+        		setControlButtonState(brake, brakeText, brakeApplied);
+
+        		boolean eBrakeApplied = trainController.isEBrakeApplied();
+        		String eBrakeText = eBrakeApplied == true ? "Release E-Brake" : "Apply E-Brake";
+        		setControlButtonState(eBrake, eBrakeText, eBrakeApplied);
+        		break;
+        	case ANNOUNCEMENT:
+        		announcements.setText(trainController.getAnnouncements());
+        		break;
+        	case FAULT:
+        		faults.setText(trainController.getTrainFaults());
+        		break;
         	}
         }
     }
@@ -265,7 +317,7 @@ public class TrainControlPanel extends JPanel
             Number value = (Number)e.getNewValue();
             //sliderModel.setDoubleValue(value.doubleValue());
         }*/
-    	if(e.getSource().equals(setSpeed)) {
+    	if(e.getSource().equals(driverSetSpeed)) {
     		//TODO: Handle speeds > 1000 - issue with , in 1,000
     		int newSetSpeed = Integer.parseInt(((JFormattedTextField)e.getSource()).getText());
     		trainController.setDriverCommandedSetSpeed(newSetSpeed);
@@ -414,16 +466,16 @@ public class TrainControlPanel extends JPanel
         //aha -- it changes the value property but doesn't cause the result to
         //be parsed (that happens on focus loss/return, I think).
         //
-        setSpeed = new JFormattedTextField(formatter);
-        setSpeed.setColumns(1);
-        setSpeed.setValue(trainController.getDriverCommandedSetSpeed());
-        setSpeed.addPropertyChangeListener(this); //TODO: Handle listeners
+        driverSetSpeed = new JFormattedTextField(formatter);
+        driverSetSpeed.setColumns(1);
+        driverSetSpeed.setValue(trainController.getDriverCommandedSetSpeed());
+        driverSetSpeed.addPropertyChangeListener(this); //TODO: Handle listeners
         
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 0.5;
         c.gridx = 1;
         c.gridy = 0;
-        speedControlPanel.add(setSpeed, c);
+        speedControlPanel.add(driverSetSpeed, c);
         
         brake = new JButton();
         brake.addActionListener(this);

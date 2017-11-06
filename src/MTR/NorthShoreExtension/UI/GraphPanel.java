@@ -118,15 +118,15 @@ public class GraphPanel extends JPanel {
         }
         
         //Write x + y axis labels
-        Font f = new Font(Font.SANS_SERIF, 3, 20);
+        Font f = new Font(Font.SANS_SERIF, 3, 22);
         g2.setFont(f);
         FontMetrics metrics = g2.getFontMetrics();        
         int labelWidth = metrics.stringWidth(xAxisLabel);
         int y0 = getHeight() - padding - axisLabelPadding;
-        g2.drawString(xAxisLabel, getWidth() / 2 - labelWidth / 2, y0 + metrics.getHeight() + 3);
+        g2.drawString(xAxisLabel, getWidth() / 2, y0 + metrics.getHeight() + 3);
         
         int xx = padding;
-        int yy = getHeight() / 2 - labelWidth / 2;
+        int yy = getHeight() / 2; // - labelWidth / 2;
         g2.translate((float)xx,(float)yy);
         g2.rotate(Math.toRadians(-90));
         g2.drawString(yAxisLabel,0,0);

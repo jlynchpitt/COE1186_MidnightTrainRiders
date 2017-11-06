@@ -5,16 +5,15 @@ import java.util.Map;
 
 public class TrackModel {
 	//private WaysideControllerHelper wayside;
-	private static int trackOccupency[] = new int[300];
-	private static int brokenTrack[] = new int[300];
-	private static Map<Integer, TrainsOperating> trainList = new HashMap<Integer, TrainsOperating>();
-	private static TrainsOperating newTrain;
-	private static TrainsOperating update;
-	private static double difference;
-	
-	public TrackModel(/*WaysideControllerHelper t*/) {
-		
-	}
+	static Map<Integer, Track> trackList = new HashMap<Integer, Track>();
+	static Track updateTrack;
+	static int trackOccupency[] = new int[300];
+	static int brokenTrack[] = new int[300];
+	static Map<Integer, TrainsOperating> trainList = new HashMap<Integer, TrainsOperating>();
+	static TrainsOperating newTrain;
+	static TrainsOperating update;
+	static double difference;
+	static int speed, authority;
 	
 	class Track{
 		String line;
@@ -36,12 +35,18 @@ public class TrackModel {
 		int curveStart;
 		int curveEnd;
 		int trackID;
+		int trackNext;
+		int beacon;
 	}
 	
 	class TrainsOperating{
 		int trainID;
 		double distanceLeft;
 		int trackOccupying;
+	}
+	
+	public TrackModel(/*WaysideControllerHelper t*/) {
+		
 	}
 	
 	public static void loadCSV() {
@@ -83,11 +88,23 @@ public class TrackModel {
 	}
 	
 	public static void TrackModel_sellTicket() {
-		
+		//random number generator at each station
 	}
 	
-	public static void TrackModel_setSpeedAuthority(int speed, int authority) {
-		
+	public static void TrackModel_setSpeedAuthority(int trackid, int s, int a) {
+		updateTrack = trackList.get(trackid);
+		trackList.remove(trackid);
+		updateTrack.authority = a;
+		updateTrack.speed = s;
+		trackList.put(trackid, updateTrack);
+		//train update speed and authority 
+		//convert authority to number of blocks
+	}
+	
+	public static void beacon() {
+		//if infrastructure = station
+		//if infrastructure = switch
+		//call Joji's beacon function
 	}
 
 }

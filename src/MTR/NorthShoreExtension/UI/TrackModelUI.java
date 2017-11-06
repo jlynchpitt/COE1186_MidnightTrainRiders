@@ -12,6 +12,7 @@ public class TrackModelUI extends JPanel implements MouseListener {
     //null (use the default), "Metal", "System", "Motif", "GTK+"
     final static String LOOKANDFEEL = null;
     TrackModel trackFunctions = new TrackModel();
+ 
     
     private static void initLookAndFeel() {
         String lookAndFeel = null;
@@ -53,9 +54,9 @@ public class TrackModelUI extends JPanel implements MouseListener {
         }
     }
     
-    public class TrainGraphic extends JPanel{
+    public class TrackGraphic extends JPanel{
     		private static final long serialVersionUID = 1L;
-    		TrainGraphic(){
+    		TrackGraphic(){
     			setPreferredSize(new Dimension(1000,600));
     		}
     		@Override
@@ -81,7 +82,7 @@ public class TrackModelUI extends JPanel implements MouseListener {
         JFrame frame = new JFrame("Track Model UI");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JPanel panel = new JPanel();
-        panel.add(instance.new TrainGraphic());
+        panel.add(instance.new TrackGraphic());
         frame.add(panel);
 
         //Display the window.

@@ -24,7 +24,8 @@ public class DBHelper {
 	private static final String TRACK_INFO_COLUMNS = "trackID INTEGER, line STRING, section STRING, number INTEGER, "
 			+ "length INTEGER, grade REAL, speedLimit INTEGER, infrastructure STRING, switchPosition INTEGER, elevation REAL, "
 			+ "cumElevation REAL, startX INTEGER, startY INTEGER, endX INTEGER, endY INTEGER, curveStart INTEGER, "
-			+ "curveEnd INTEGER, trackStatus STRING, heater STRING, speed INTEGER, authority INTEGER, occupied INTEGER";
+			+ "curveEnd INTEGER, trackStatus STRING, heater STRING, speed INTEGER, authority INTEGER, occupied INTEGER,"
+			+ "nextTrack INTEGER";
 	
 	//NOTE: All times are integers as # of seconds since 1970
 	private static final String TRAIN_CONTROLS_TABLENAME = "TrainControls";
@@ -79,7 +80,7 @@ public class DBHelper {
 	
 	public void addTrack(int trackID, String line, String section, int blockNum, int blockLength, double blockGrade, 
 			int speedLimit, String infrastructure, double elevation, double cumulativeElevation, int startX, int startY, 
-			int endX, int endY, int curveStart, int curveEnd, String heater) throws SQLException {
+			int endX, int endY, int curveStart, int curveEnd, String heater, int nextTrack) throws SQLException {
 		Connection connection = connect();
 		
 		Statement statement = connection.createStatement();
@@ -88,7 +89,7 @@ public class DBHelper {
 	    statement.executeUpdate("INSERT INTO " + TRACK_INFO_TABLENAME + " values(' "+trackID+"', '"+line+"', '"+section+"', '"
 	    +blockNum+"', '"+blockLength+"', '"+blockGrade+"', '"+speedLimit+"', '"+infrastructure+"', '0', '"+elevation+"', '"
 	    		+cumulativeElevation+"', '"+startX+"', '"+startY+"', '"+endX+"', '"+endY+"', '"+curveStart+"', '"+curveEnd+
-	    		"', '', '"+heater+"', '0', '0', '0')");   
+	    		"', '', '"+heater+"', '0', '0', '0', '"+nextTrack+"')");   
 	    
 	    connection.close();
 	    //default trainStatus = ""
@@ -113,15 +114,29 @@ public class DBHelper {
 	}
 	
 	public void addTrainStateRecord(int trainID, int time, int powerCmd, int speedCmd, double actualSpeed) throws SQLException {
-		Connection connection = connect();
+		Connection connection = null;
 		
-		Statement statement = connection.createStatement();
-		statement.setQueryTimeout(30); //TODO: Is this needed?
-		
-	    statement.executeUpdate("INSERT INTO " + TRAIN_CONTROLS_TABLENAME + " values(' "+trainID+"', '"+time+"', '"
-	    		+powerCmd+"', '"+speedCmd+"', '"+actualSpeed+")");   
-	    
-	    connection.close();
+		try {
+			connection = connect();
+			
+			Statement statement = connection.createStatement();
+			statement.setQueryTimeout(30); //TODO: Is this needed?
+			
+		    statement.executeUpdate("INSERT INTO " + TRAIN_CONTROLS_TABLENAME + " values(' "+trainID+"', '"+time+"', '"
+		    		+powerCmd+"', '"+speedCmd+"', '"+actualSpeed+")");   
+		}
+		catch(SQLException e){  
+			 System.err.println(e.getMessage()); 
+		 }       
+		 finally {         
+			 try {
+	               if(connection != null)
+	                  connection.close();
+		     }
+		     catch(SQLException e) {  // Use SQLException class instead.          
+		    	 System.err.println(e); 
+		     }
+		 }
 	}
 	
 	/**
