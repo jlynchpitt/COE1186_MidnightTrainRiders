@@ -22,8 +22,12 @@ public class TrainController {
 	private int trainID = 0;
 	private Train trainModel = null;
 	private TrainControlPanel trainControlPanel;
-	private MiniPID pid;
 	private boolean CONNECTEDTOTRAINMODEL = false; //This must be true when in the full system - for testing individual submodule
+	
+	//PID controllers
+	private MiniPID spdPID1;
+	private MiniPID spdPID2;
+	private MiniPID spdPID3;
 	
 	//Vital train controls/info
 	private double powerCommand = 0; //kilowatts
@@ -51,10 +55,14 @@ public class TrainController {
 		trainID = id;
 		trainModel = t;
 		
-		//Initialize pid controller
-		pid = new MiniPID(pid_p, pid_i, 0);
-		pid.setOutputLimits(0, 160); //Train engine power limits: 0-120 kW (0-160 horsepower)
-		pid.setSetpoint(0);
+		//Initialize pid controllers
+		spdPID1 = new MiniPID(pid_p, pid_i, 0);
+		spdPID2 = new MiniPID(pid_p, pid_i, 0);
+		spdPID3 = new MiniPID(pid_p, pid_i, 0);
+
+		configSpeedPID(spdPID1);
+		configSpeedPID(spdPID2);
+		configSpeedPID(spdPID3);
 	}
 	
 	public int getTrainID() {
@@ -81,11 +89,24 @@ public class TrainController {
 			//double speedError = trainSetSpeed - actualSpeed; //TODO: Change this back to trainSetSpeed
 			//double speedError = driverCommandedSetSpeed - actualSpeed;
 			double speedError = actualSpeed - trainSetSpeed;
-			powerCommand = pid.getOutput(speedError, 0);
+			double tempPC1 = spdPID1.getOutput(speedError, 0);
+			double tempPC2 = spdPID2.getOutput(speedError, 0);
+			double tempPC3 = spdPID3.getOutput(speedError, 0);
+			
+			Double tempPC = powerOutputSelector(tempPC1, tempPC2, tempPC3);
+			if(tempPC != null /* && validatePowerCommand(tempPC)*/) {
+				powerCommand = tempPC;
+			}
+			else {
+				//power command validation failed - set power to 0
+				powerCommand = 0;
+			}
 		}
 		else {
 			powerCommand = 0;
-			pid.reset();
+			spdPID1.reset();
+			spdPID2.reset();
+			spdPID3.reset();
 		}
 				
 		if(CONNECTEDTOTRAINMODEL == false) {
@@ -101,7 +122,7 @@ public class TrainController {
 			//trainControlPanel.firePropertyChange("actualSpeed", 0.0, actualSpeed); property change listener may not be registered
 		}
 	}
-	
+
 	/* Functions for vital user inputs */
 	public void setDriverCommandedSetSpeed(int speed) {
 		driverCommandedSetSpeed = speed;
@@ -230,5 +251,34 @@ public class TrainController {
 		double speed = msSpeed * 2.23694;
 		
 		return speed;
+	}
+	
+	private void configSpeedPID(MiniPID pid) {
+		pid.setOutputLimits(0, 160); //Train engine power limits: 0-120 kW (0-160 horsepower)
+		pid.setSetpoint(0);
+	}
+	
+	/*
+	 * Compare 3 power commands
+	 * Allow for 1 dissenting power command + still produce valid power command
+	 * 
+	 * if all 3 different - return null
+	 */
+	private Double powerOutputSelector(double pc1, double pc2, double pc3) {
+		if(pc1 == pc2 && pc2 == pc3) {
+			return pc1;
+		}
+		else if(pc1 == pc2) {
+			return pc1;
+		}
+
+		else if(pc1 == pc3) {
+			return pc1;
+		}
+
+		else if(pc2 == pc3) {
+			return pc2;
+		}
+		return null;
 	}
 }
