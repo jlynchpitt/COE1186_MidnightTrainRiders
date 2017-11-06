@@ -92,7 +92,21 @@ public class LoadTrackModelUI extends JPanel
 					br = new BufferedReader(new FileReader(file));
 					while((line = br.readLine())!=null) {
 						String[] trackInfo = line.split(",");
-						load.addTrack(Integer.parseInt(trackInfo[0]), trackInfo[1], trackInfo[2], Integer.parseInt(trackInfo[3]), Integer.parseInt(trackInfo[4]), Double.parseDouble(trackInfo[5]), Integer.parseInt(trackInfo[6]), trackInfo[7], Double.parseDouble(trackInfo[8]), Double.parseDouble(trackInfo[9]), Integer.parseInt(trackInfo[10]), Integer.parseInt(trackInfo[11]), Integer.parseInt(trackInfo[12]), Integer.parseInt(trackInfo[13]), Integer.parseInt(trackInfo[14]), Integer.parseInt(trackInfo[15]), trackInfo[16], Integer.parseInt(trackInfo[17]));
+						String curveStart = trackInfo[14];
+						int curveStartFinal;
+						String curveEnd = trackInfo[15];
+						int curveEndFinal;
+						if(curveStart!=null) {
+							curveStartFinal = Integer.parseInt(trackInfo[14]);
+						}else {
+							curveStartFinal = -1;
+						}
+						if(curveEnd!=null) {
+							curveEndFinal = Integer.parseInt(trackInfo[15]);
+						}else {
+							curveEndFinal = -1;
+						}
+						load.addTrack(Integer.parseInt(trackInfo[0].replaceAll("[^0-9]", "")), trackInfo[1], trackInfo[2], Integer.parseInt(trackInfo[3].replaceAll("[^0-9]", "")), Integer.parseInt(trackInfo[4].replaceAll("[^0-9]", "")), Double.parseDouble(trackInfo[5]), Integer.parseInt(trackInfo[6].replaceAll("[^0-9]", "")), trackInfo[7], Double.parseDouble(trackInfo[8]), Double.parseDouble(trackInfo[9]), Integer.parseInt(trackInfo[10].replaceAll("[^0-9]", "")), Integer.parseInt(trackInfo[11].replaceAll("[^0-9]", "")), Integer.parseInt(trackInfo[12].replaceAll("[^0-9]", "")), Integer.parseInt(trackInfo[13].replaceAll("[^0-9]", "")), curveStartFinal, curveEndFinal, trackInfo[16], Integer.parseInt(trackInfo[17].replaceAll("[^0-9]", "")));
 					}
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
@@ -115,7 +129,8 @@ public class LoadTrackModelUI extends JPanel
                 log.append("Open command cancelled by user." + newline);
             }
             log.setCaretPosition(log.getDocument().getLength());
- 
+            String[] args = null;
+			TrackModelUI.main(args);
         //Handle save button action.
         } else if (e.getSource() == saveButton) {
             int returnVal = fc.showSaveDialog(LoadTrackModelUI.this);
@@ -148,7 +163,7 @@ public class LoadTrackModelUI extends JPanel
      */
     private static void createAndShowGUI() {
         //Create and set up the window.
-        JFrame frame = new JFrame("FileChooserDemo");
+        JFrame frame = new JFrame("Load Track");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
  
         //Add content to the window.
