@@ -17,11 +17,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DBHelper {
+	int[] returnArray = new int[5]; 
 	//Table names
 	private static final String DBName = "jdbc:sqlite:MTRDatabase.db";
 	
 	private static final String TRACK_INFO_TABLENAME = "TrackInfo";
-	private static final String TRACK_INFO_COLUMNS = "trackID INTEGER, line STRING, section STRING, number INTEGER, "
+	private static final String TRACK_INFO_COLUMNS = "rowID INTEGER, trackID INTEGER, line STRING, section STRING, number INTEGER, "
 			+ "length INTEGER, grade REAL, speedLimit INTEGER, infrastructure STRING, switchPosition INTEGER, elevation REAL, "
 			+ "cumElevation REAL, startX INTEGER, startY INTEGER, endX INTEGER, endY INTEGER, curveStart INTEGER, "
 			+ "curveEnd INTEGER, trackStatus STRING, heater STRING, speed INTEGER, authority INTEGER, occupied INTEGER,"
@@ -78,7 +79,7 @@ public class DBHelper {
 		 }
 	}
 	
-	public void addTrack(int trackID, String line, String section, int blockNum, int blockLength, double blockGrade, 
+	public void addTrack(int rowID, int trackID, String line, String section, int blockNum, int blockLength, double blockGrade, 
 			int speedLimit, String infrastructure, double elevation, double cumulativeElevation, int startX, int startY, 
 			int endX, int endY, int curveStart, int curveEnd, String heater, int nextTrack) throws SQLException {
 		Connection connection = connect();
@@ -86,7 +87,7 @@ public class DBHelper {
 		Statement statement = connection.createStatement();
 		statement.setQueryTimeout(30); //TODO: Is this needed?
 		
-	    statement.executeUpdate("INSERT INTO " + TRACK_INFO_TABLENAME + " values(' "+trackID+"', '"+line+"', '"+section+"', '"
+	    statement.executeUpdate("INSERT INTO " + TRACK_INFO_TABLENAME + " values(' "+rowID+"' , ' "+trackID+"', '"+line+"', '"+section+"', '"
 	    +blockNum+"', '"+blockLength+"', '"+blockGrade+"', '"+speedLimit+"', '"+infrastructure+"', '0', '"+elevation+"', '"
 	    		+cumulativeElevation+"', '"+startX+"', '"+startY+"', '"+endX+"', '"+endY+"', '"+curveStart+"', '"+curveEnd+
 	    		"', '', '"+heater+"', '0', '0', '0', '"+nextTrack+"')");   
@@ -111,6 +112,18 @@ public class DBHelper {
 
 	public void updateTrackOccupied(String line, String section, int blockNum, boolean isOccupied) {
 		
+	}
+	
+	public String getColor(int rowID) {
+		//TODO how to call for values in here
+		String color = null;
+		return color;
+	}
+	
+	public int[] getDrawingCoordinates(int rowID) {
+		//TODO: how to call for values here
+		returnArray[0] = 1;
+		return returnArray;
 	}
 	
 	public void addTrainStateRecord(int trainID, int time, int powerCmd, int speedCmd, double actualSpeed) throws SQLException {

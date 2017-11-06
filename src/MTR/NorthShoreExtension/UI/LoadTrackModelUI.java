@@ -90,6 +90,7 @@ public class LoadTrackModelUI extends JPanel
                 String line;
 				try {
 					br = new BufferedReader(new FileReader(file));
+					int row = 0;
 					while((line = br.readLine())!=null) {
 						String[] trackInfo = line.split(",");
 						String curveStart = trackInfo[14];
@@ -106,7 +107,8 @@ public class LoadTrackModelUI extends JPanel
 						}else {
 							curveEndFinal = -1;
 						}
-						load.addTrack(Integer.parseInt(trackInfo[0].replaceAll("[^0-9]", "")), trackInfo[1], trackInfo[2], Integer.parseInt(trackInfo[3].replaceAll("[^0-9]", "")), Integer.parseInt(trackInfo[4].replaceAll("[^0-9]", "")), Double.parseDouble(trackInfo[5]), Integer.parseInt(trackInfo[6].replaceAll("[^0-9]", "")), trackInfo[7], Double.parseDouble(trackInfo[8]), Double.parseDouble(trackInfo[9]), Integer.parseInt(trackInfo[10].replaceAll("[^0-9]", "")), Integer.parseInt(trackInfo[11].replaceAll("[^0-9]", "")), Integer.parseInt(trackInfo[12].replaceAll("[^0-9]", "")), Integer.parseInt(trackInfo[13].replaceAll("[^0-9]", "")), curveStartFinal, curveEndFinal, trackInfo[16], Integer.parseInt(trackInfo[17].replaceAll("[^0-9]", "")));
+						load.addTrack(row, Integer.parseInt(trackInfo[0].replaceAll("[^0-9]", "")), trackInfo[1], trackInfo[2], Integer.parseInt(trackInfo[3].replaceAll("[^0-9]", "")), Integer.parseInt(trackInfo[4].replaceAll("[^0-9]", "")), Double.parseDouble(trackInfo[5]), Integer.parseInt(trackInfo[6].replaceAll("[^0-9]", "")), trackInfo[7], Double.parseDouble(trackInfo[8]), Double.parseDouble(trackInfo[9]), Integer.parseInt(trackInfo[10].replaceAll("[^0-9]", "")), Integer.parseInt(trackInfo[11].replaceAll("[^0-9]", "")), Integer.parseInt(trackInfo[12].replaceAll("[^0-9]", "")), Integer.parseInt(trackInfo[13].replaceAll("[^0-9]", "")), curveStartFinal, curveEndFinal, trackInfo[16], Integer.parseInt(trackInfo[17].replaceAll("[^0-9]", "")));
+						row++;
 					}
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block

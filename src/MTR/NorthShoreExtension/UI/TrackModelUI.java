@@ -5,6 +5,8 @@ import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+
+import MTR.NorthShoreExtension.Backend.DBHelper;
 import MTR.NorthShoreExtension.Backend.TrackModelSrc.*;
  
 public class TrackModelUI extends JPanel implements MouseListener {
@@ -12,6 +14,8 @@ public class TrackModelUI extends JPanel implements MouseListener {
     //null (use the default), "Metal", "System", "Motif", "GTK+"
     final static String LOOKANDFEEL = null;
     TrackModel trackFunctions = new TrackModel();
+    int numTrack = 250;
+    DBHelper load;
  
     
     private static void initLookAndFeel() {
@@ -56,6 +60,8 @@ public class TrackModelUI extends JPanel implements MouseListener {
     
     public class TrackGraphic extends JPanel{
     		private static final long serialVersionUID = 1L;
+    		int[] drawArray = new int[5];
+    		String color;
     		TrackGraphic(){
     			setPreferredSize(new Dimension(1000,600));
     		}
@@ -64,6 +70,25 @@ public class TrackModelUI extends JPanel implements MouseListener {
     			super.paintComponent(g);
     			g.setColor(Color.white);
     			g.fillRoundRect(10,10,975,400,15,15);
+    			for(int i=0;i<numTrack;i++) {
+    				color = load.getColor(i);
+    				if(color.equals("green")) {
+    					g.setColor(Color.green);
+    				}
+    				else if(color.equals("red")) {
+    					g.setColor(Color.red);
+    				}
+    				else {
+    					g.setColor(Color.black);
+    				}
+    				drawArray = load.getDrawingCoordinates(i);
+    				if(drawArray[4]==-1) {
+    					g.drawArc(drawArray[0], drawArray[2], (drawArray[2]-drawArray[0]), (drawArray[3]-drawArray[1]), drawArray[4], drawArray[5]);
+    				}
+    				else {
+    					g.drawLine(drawArray[0], drawArray[1], drawArray[2], drawArray[3]);
+    				}
+    			}
     			//call to database to set x and y values for lines and arcs
     		}
     }
