@@ -23,6 +23,7 @@ public class TrainController {
 	private Train trainModel = null;
 	private TrainControlPanel trainControlPanel;
 	private boolean CONNECTEDTOTRAINMODEL = false; //This must be true when in the full system - for testing individual submodule
+	private boolean manualMode = true;
 	
 	//PID controllers
 	private MiniPID spdPID1;
@@ -50,6 +51,10 @@ public class TrainController {
 	private int setTemp = 73; //default room temperature is 73 degrees
 	private double internalTemp = 73; //TODO: Change actual temp to outside temp to start
 	
+	//Track Info
+	private int speedLimit = 0; //MPH
+	private int length = 0; //feet
+	
 	//TODO: Pass in train model object
 	public TrainController(int id, Train t, double pid_p, double pid_i){
 		trainID = id;
@@ -74,8 +79,6 @@ public class TrainController {
 	}
 	
 	public void calculatePowerCommand() {
-		String actionCommand = "powerCmd";
-		
 		if(!eBrakeApplied && !brakeApplied && authority > 0) {
 			//Simple check against speed limit TODO: Move these checks into setters
 			if(driverCommandedSetSpeed > ctcCommandedSetSpeed) {
@@ -86,8 +89,6 @@ public class TrainController {
 			}
 				
 			//Use PID loop to calculate next power command - pass to train model + UI
-			//double speedError = trainSetSpeed - actualSpeed; //TODO: Change this back to trainSetSpeed
-			//double speedError = driverCommandedSetSpeed - actualSpeed;
 			double speedError = actualSpeed - trainSetSpeed;
 			double tempPC1 = spdPID1.getOutput(speedError, 0);
 			double tempPC2 = spdPID2.getOutput(speedError, 0);
@@ -111,21 +112,16 @@ public class TrainController {
 				
 		if(CONNECTEDTOTRAINMODEL == false) {
 			actualSpeed = calculateBasicSpeed();
-			
-			actionCommand = "powerCmd_actualSpeed";
 		}
 		
-		//TODO: This may be an issue when working with full subsystem and train control UI popup is closed
-		if(trainControlPanel != null) {
-			//TODO: Find out what needs to be passed in event
-			trainControlPanel.actionPerformed(new ActionEvent(this, 1, actionCommand));
-			//trainControlPanel.firePropertyChange("actualSpeed", 0.0, actualSpeed); property change listener may not be registered
-		}
+		updateUI(TrainControlPanel.VITAL);
 	}
 
-	/* Functions for vital user inputs */
+	/* Functions for UI to call to set vital user inputs */
 	public void setDriverCommandedSetSpeed(int speed) {
 		driverCommandedSetSpeed = speed;
+
+		updateTrainSetSpeed();
 	}
 	
 	public void operateBrake(boolean applied) {
@@ -134,40 +130,63 @@ public class TrainController {
 	
 	public void operateEmergencyBrake(boolean applied) {
 		eBrakeApplied = applied;
+		
+		if(trainModel != null) {
+			//trainModel.TrainModel_operateBrake(applied);
+		}
 	}
 	
 	/* Functions for non-vital user inputs */
 	public void operateRightDoor(boolean open) {
 		rightDoorOpen = open;
+		
+		if(trainModel != null) {
+			//trainModel.TrainModel_openRightDoor(open);
+		}
 	}
 	
 	public void operateLeftDoor(boolean open) {
 		leftDoorOpen = open;
+		
+		if(trainModel != null) {
+			//trainModel.TrainModel_openLeftDoor(open);
+		}
 	}
 	
 	public void operateLights(boolean on) {
 		lightsOn = on;
+		
+		if(trainModel != null) {
+			//trainModel.TrainModel_TurnLightsOn(open);
+		}
 	}
 	
 	public void setInsideTemperature(int temp) {
 		setTemp = temp;
+		
+		if(trainModel != null) {
+			//trainModel.TrainModel_setTemperature(open);
+		}
 	}
 	
 	/* Functions for receiving inputs from the train model */
 	public void TrainControl_setActualSpeed(double speed) {
 		actualSpeed = speed;
+		
+		updateUI(TrainControlPanel.VITAL);
 	}
 	
-	public void TrainControl_setAuthority(int auth) {
-		authority = auth;
-	}
-	
-	public void TrainControl_setCommandedSpeed(int speed) {
+	public void TrainControl_setCommandedSpeedAuthority(int speed, int auth) {
 		ctcCommandedSetSpeed = speed;
+		authority = auth;
+		
+		updateTrainSetSpeed();
+		
+		updateUI(TrainControlPanel.VITAL);
 	}
 	
 	public void TrainControl_sendBeaconInfo(int beacon) {
-		//translate beacon
+		//translate beacon - TODO: 
 	}
 	
 	public void TrainControl_setFaultStatus(int status) {
@@ -175,11 +194,16 @@ public class TrainController {
 	}
 	
 	public void TrainControl_setActualTemp(double temp) {
+		internalTemp = temp;
 		
+		updateUI(TrainControlPanel.TEMPERATURE);
 	}
 	
-	public void TrainControl_setPassengerEBrake(boolean eBrakeApplied) {
+	public void TrainControl_setPassengerEBrake() {
+		//NOTE: Emergency brake can only be set from train model - it cannot be released
+		eBrakeApplied = true;
 		
+		updateUI(TrainControlPanel.BRAKES);
 	}
 	
 	/* Functions called by UI to get Train Control info */
@@ -239,6 +263,12 @@ public class TrainController {
 		return lightsOn;
 	}
 	
+	/* Functions called by TrainControllerHelper */
+	public void setOperationMode(boolean manual) {
+		manualMode = manual;
+	}
+	
+	/* Private helper functions*/
 	private double calculateBasicSpeed() {
 		//for testing purposes when not attached to train model
 		//simple velocity calculation for demonstration of adjusting power command
@@ -281,4 +311,24 @@ public class TrainController {
 		}
 		return null;
 	}
+	
+	private void updateTrainSetSpeed() {
+		if(driverCommandedSetSpeed <= ctcCommandedSetSpeed && driverCommandedSetSpeed < speedLimit) {
+			trainSetSpeed = driverCommandedSetSpeed;
+		}
+		else if(ctcCommandedSetSpeed <= speedLimit) {
+			trainSetSpeed = ctcCommandedSetSpeed;
+		}
+		else {
+			trainSetSpeed = speedLimit;
+		}
+	}
+	
+	private void updateUI(String command) {
+		//TODO: This may be an issue when working with full subsystem and train control UI popup is closed
+		if(trainControlPanel != null) {
+			trainControlPanel.actionPerformed(new ActionEvent(this, 1, command));
+		}
+	}
+
 }
