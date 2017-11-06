@@ -3,14 +3,17 @@ package MTR.NorthShoreExtension.UI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
+
 import javax.swing.*;
 import javax.swing.filechooser.*;
+
+import MTR.NorthShoreExtension.Backend.DBHelper;
+
 import javax.swing.SwingUtilities;
 import javax.jnlp.*;
  
 import java.io.*;
+import java.sql.SQLException;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -28,6 +31,7 @@ public class LoadTrackModelUI extends JPanel
     JButton openButton, saveButton;
     JTextArea log;
     JFileChooser fc;
+    static DBHelper load;
  
     public LoadTrackModelUI() {
         super(new BorderLayout());
@@ -82,7 +86,30 @@ public class LoadTrackModelUI extends JPanel
  
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
-                //This is where a real application would open the file.
+                BufferedReader br = null;
+                String line;
+				try {
+					br = new BufferedReader(new FileReader(file));
+					while((line = br.readLine())!=null) {
+						String[] trackInfo = line.split(",");
+						load.addTrack(Integer.parseInt(trackInfo[0]), trackInfo[1], trackInfo[2], Integer.parseInt(trackInfo[3]), Integer.parseInt(trackInfo[4]), Double.parseDouble(trackInfo[5]), Integer.parseInt(trackInfo[6]), trackInfo[7], Double.parseDouble(trackInfo[8]), Double.parseDouble(trackInfo[9]), Integer.parseInt(trackInfo[10]), Integer.parseInt(trackInfo[11]), Integer.parseInt(trackInfo[12]), Integer.parseInt(trackInfo[13]), Integer.parseInt(trackInfo[14]), Integer.parseInt(trackInfo[15]), trackInfo[16], Integer.parseInt(trackInfo[17]));
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (NumberFormatException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+                try {
+					br.close();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
                 log.append("Opening: " + file.getName() + "." + newline);
             } else {
                 log.append("Open command cancelled by user." + newline);
@@ -132,9 +159,10 @@ public class LoadTrackModelUI extends JPanel
         frame.setVisible(true);
     }
  
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ClassNotFoundException {
         //Schedule a job for the event dispatch thread:
         //creating and showing this application's GUI.
+    		load = new DBHelper();
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 //Turn off metal's use of bold fonts
