@@ -17,7 +17,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DBHelper {
-	int[] returnArray = new int[5]; 
+	int[] returnArray = new int[6]; 
 	//Table names
 	private static final String DBName = "jdbc:sqlite:MTRDatabase.db";
 	
@@ -26,7 +26,7 @@ public class DBHelper {
 			+ "length INTEGER, grade REAL, speedLimit INTEGER, infrastructure STRING, switchPosition INTEGER, elevation REAL, "
 			+ "cumElevation REAL, startX INTEGER, startY INTEGER, endX INTEGER, endY INTEGER, curveStart INTEGER, "
 			+ "curveEnd INTEGER, trackStatus STRING, heater STRING, speed INTEGER, authority INTEGER, occupied INTEGER,"
-			+ "nextTrack INTEGER";
+			+ "nextTrack INTEGER" + "prevTrack INTEGER" + "secondSwitch INTEGER" + "switchPosition INTEGER";
 	
 	//NOTE: All times are integers as # of seconds since 1970
 	private static final String TRAIN_CONTROLS_TABLENAME = "TrainControls";
@@ -81,7 +81,8 @@ public class DBHelper {
 	
 	public void addTrack(int rowID, int trackID, String line, String section, int blockNum, int blockLength, double blockGrade, 
 			int speedLimit, String infrastructure, double elevation, double cumulativeElevation, int startX, int startY, 
-			int endX, int endY, int curveStart, int curveEnd, String heater, int nextTrack) throws SQLException {
+			int endX, int endY, int curveStart, int curveEnd, String heater, int nextTrack, int prevTrack, int secondSwitch, 
+			int switchPosition) throws SQLException {
 		Connection connection = connect();
 		
 		Statement statement = connection.createStatement();
@@ -90,12 +91,64 @@ public class DBHelper {
 	    statement.executeUpdate("INSERT INTO " + TRACK_INFO_TABLENAME + " values(' "+rowID+"' , ' "+trackID+"', '"+line+"', '"+section+"', '"
 	    +blockNum+"', '"+blockLength+"', '"+blockGrade+"', '"+speedLimit+"', '"+infrastructure+"', '0', '"+elevation+"', '"
 	    		+cumulativeElevation+"', '"+startX+"', '"+startY+"', '"+endX+"', '"+endY+"', '"+curveStart+"', '"+curveEnd+
-	    		"', '', '"+heater+"', '0', '0', '0', '"+nextTrack+"')");   
+	    		"', '', '"+heater+"', '0', '0', '0', '"+nextTrack+"','"+prevTrack+"','"+secondSwitch+"','"+switchPosition+"')");   
 	    
 	    connection.close();
 	    //default trainStatus = ""
 	    //default speed, authority, occupied = 0
 	    //default switchPosition = 0
+	}
+	public void showTrackTest() {
+		Connection connection = null;
+		
+		try {
+			connection = connect();
+			
+			Statement statement = connection.createStatement();
+			statement.setQueryTimeout(30); //TODO: Is this needed?
+			
+			ResultSet resultSet = statement.executeQuery("SELECT * from TrackInfo");  
+			 while(resultSet.next())
+		        {
+		           // iterate & read the result set
+		           System.out.println("rowID = " + resultSet.getString("rowID"));
+		           System.out.println("trackID = " + resultSet.getInt("trackID"));
+		           System.out.println("line = " + resultSet.getString("line"));
+		           System.out.println("section = " + resultSet.getInt("section"));
+		           System.out.println("number = " + resultSet.getInt("number"));
+		           System.out.println("length = " + resultSet.getInt("length"));
+		           System.out.println("grade = " + resultSet.getInt("grade"));
+		           System.out.println("speedLimit = " + resultSet.getInt("speedLimit"));
+		           System.out.println("infrastructure = " + resultSet.getInt("infrastructure"));
+		           System.out.println("switchPosition = " + resultSet.getInt("switchPosition"));
+		           System.out.println("elevation = " + resultSet.getInt("elevation"));
+		           System.out.println("cumElevation = " + resultSet.getInt("cumElevation"));
+		           System.out.println("startX = " + resultSet.getInt("startX"));
+		           System.out.println("startY = " + resultSet.getInt("startY"));
+		           System.out.println("endX = " + resultSet.getInt("endX"));
+		           System.out.println("endY = " + resultSet.getInt("endY"));
+		           System.out.println("curveStart = " + resultSet.getInt("curveStart"));
+		           System.out.println("curveEnd = " + resultSet.getInt("curveEnd"));
+		           System.out.println("trackStatus = " + resultSet.getInt("trackStatus"));
+		           System.out.println("heater = " + resultSet.getInt("heater"));
+		           System.out.println("speed = " + resultSet.getInt("speed"));
+		           System.out.println("authority = " + resultSet.getInt("authority"));
+		           System.out.println("occupied = " + resultSet.getInt("occupied"));
+		           System.out.println("nextTrack = " + resultSet.getInt("nextTrack"));
+		        }
+		}
+		catch(SQLException e){  
+			 System.err.println(e.getMessage()); 
+		 }       
+		 finally {         
+			 try {
+	               if(connection != null)
+	                  connection.close();
+		     }
+		     catch(SQLException e) {  // Use SQLException class instead.          
+		    	 System.err.println(e); 
+		     }
+		 }
 	}
 	
 	public void updateTrackStatus(String line, String section, int blockNum, String status) {
@@ -115,14 +168,65 @@ public class DBHelper {
 	}
 	
 	public String getColor(int rowID) {
-		//TODO how to call for values in here
+		Connection connection = null;
 		String color = null;
+		
+		try {
+			connection = connect();
+			
+			Statement statement = connection.createStatement();
+			statement.setQueryTimeout(30); //TODO: Is this needed?
+			
+		    ResultSet resultSet = statement.executeQuery("SELECT * from TrackInfo where rowID = '"+rowID+"'");   
+		    color = resultSet.getString("line");
+		    System.out.println("color = " + color);
+		}
+		catch(SQLException e){  
+			 System.err.println(e.getMessage()); 
+		 }       
+		 finally {         
+			 try {
+	               if(connection != null)
+	                  connection.close();
+		     }
+		     catch(SQLException e) {  // Use SQLException class instead.          
+		    	 System.err.println(e); 
+		     }
+		 }
+		//TODO how to call for values in here
 		return color;
 	}
 	
 	public int[] getDrawingCoordinates(int rowID) {
 		//TODO: how to call for values here
-		returnArray[0] = 1;
+		Connection connection = null;
+		
+		try {
+			connection = connect();
+			
+			Statement statement = connection.createStatement();
+			statement.setQueryTimeout(30); //TODO: Is this needed?
+			
+			ResultSet resultSet = statement.executeQuery("SELECT * from TrackInfo where rowID = '"+rowID+"'");   
+			returnArray[0] = resultSet.getInt("startX");
+			returnArray[1] = resultSet.getInt("startY");
+		    returnArray[2] = resultSet.getInt("endX");
+		    returnArray[3] = resultSet.getInt("endY");
+		    returnArray[4] = resultSet.getInt("curveStart");
+		    returnArray[5] = resultSet.getInt("curveEnd");
+		}
+		catch(SQLException e){  
+			 System.err.println(e.getMessage()); 
+		 }       
+		 finally {         
+			 try {
+	               if(connection != null)
+	                  connection.close();
+		     }
+		     catch(SQLException e) {  // Use SQLException class instead.          
+		    	 System.err.println(e); 
+		     }
+		 }
 		return returnArray;
 	}
 	
