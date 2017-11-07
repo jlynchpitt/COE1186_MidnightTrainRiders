@@ -27,18 +27,27 @@ public class TrainControllerHelper {
 	private double pid_p = 0.4;
 	private double pid_i = 0.25; 
 	private Timer powerTimer = new Timer();
-	List<TrainController> tcList = new ArrayList<TrainController>();
+	private List<TrainController> tcList = new ArrayList<TrainController>();
+	private boolean manualMode = true;
+	private int clockMultiplier = 1;
+	private TimerTask powerTimerTask;
+	private long simulatedClockTime = System.currentTimeMillis();
 	
 	public TrainControllerHelper(){
 		//Initialize Timer - Timer controls updating the commanded power every second
-		powerTimer.scheduleAtFixedRate(new TimerTask() {
+		powerTimerTask = new TimerTask() {
 			@Override
 			public void run() {
 				for(TrainController tc : tcList ){
 					tc.calculatePowerCommand();
 				}
+				
+				//Update simulated clock time - assume every running of timer task is 1 second in the "real world"
+				simulatedClockTime += 1000;
 			}
-		}, 0, 500); //TODO: Update period based on time clock multiplier
+		};
+		
+		powerTimer.scheduleAtFixedRate(powerTimerTask, 0, 1000);
 	}
 
 	public TrainController addNewTrainController(int trainID) {
@@ -67,5 +76,23 @@ public class TrainControllerHelper {
 
 	public double getPIDParameter_i() {
 		return pid_i;
+	}
+	
+	public void TrainControlHelper_setOperationMode(boolean manMode) {
+		manualMode = manMode;
+		
+		for(TrainController tc : tcList ){
+			tc.TrainControl_setOperationMode(manMode);
+		}
+	}
+	
+	public void TrainControlHelper_setTimeMultiplier(int mult) {
+		clockMultiplier = mult;
+		
+		rescheduleTimer();
+	}
+	
+	private void rescheduleTimer() {
+		powerTimer.scheduleAtFixedRate(powerTimerTask, 0, 1000/clockMultiplier);
 	}
 }

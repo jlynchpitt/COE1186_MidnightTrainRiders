@@ -262,13 +262,13 @@ public class TrainControlPanel extends JPanel
         	//backend info updated - update it in the UI
         	switch(e.getActionCommand()) {
         	case VITAL:
-        		updateUISpeed(trainSetSpeed, trainController.getTrainSetSpeed());
+        		updateUIIntSpeed(trainSetSpeed, trainController.getTrainSetSpeed());
         		updateUIPower(actualPower, trainController.getPower());
-        		updateUISpeed(actualSpeed, trainController.getActualSpeed());
+        		updateUIDoubleSpeed(actualSpeed, trainController.getActualSpeed());
 
         		//commanded authority
         		updateUIAuthority(commandedAuthority, trainController.getAuthority());
-        		updateUISpeed(commandedSetSpeed, trainController.getCTCCommandedSetSpeed());
+        		updateUIIntSpeed(commandedSetSpeed, trainController.getCTCCommandedSetSpeed());
         		break;
         	case TRACK_INFO:
         		break;
@@ -342,11 +342,21 @@ public class TrainControlPanel extends JPanel
     
     /*
      * Adds units onto a value before being displayed in the UI
-     * Used for any label that displays a speed
+     * Used for any label that displays a double based speed
      */
-    private void updateUISpeed(JLabel label, double speed) {
+    private void updateUIDoubleSpeed(JLabel label, double speed) {
     	if(label != null) {
     		label.setText(String.format("%.2f MPH", speed));
+    	}
+    }
+    
+    /*
+     * Adds units onto a value before being displayed in the UI
+     * Used for any label that displays an integer based speed
+     */
+    private void updateUIIntSpeed(JLabel label, double speed) {
+    	if(label != null) {
+    		label.setText(String.format("%.0f MPH", speed));
     	}
     }
     
@@ -356,7 +366,7 @@ public class TrainControlPanel extends JPanel
      */
     private void updateUIAuthority(JLabel label, double auth) {
     	if(label != null) {
-    		label.setText(auth + " blocks");
+    		label.setText(String.format("%.0f blocks", auth));
     	}
     }
     

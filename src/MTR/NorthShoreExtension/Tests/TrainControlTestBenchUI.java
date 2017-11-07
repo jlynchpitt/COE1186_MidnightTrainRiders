@@ -1,11 +1,10 @@
 /*
- * Filename: TrainControlUI.java
+ * Filename: TrainControlTestBenchUI.java
  * Author: Joe Lynch
- * Date Created: 10/9/2017
- * File Description: This contains the main frame for the Train Controller GUI 
- * 			as well as a main function to run the Train Controller as an individual 
- * 			sub-module. The main function sets up several sample Train Controllers 
- * 			for demonstration purposes.
+ * Date Created: 11/7/2017
+ * File Description: This contains the main frame for the Train Controller Test
+ * 			Bench GUI. This will be used to comprehensively test the Train 
+ * 			Controller separate from the rest of the system
  * 
  * 			NOTE: This file was originally taken from Oracle example code and modified.
  * 				  Oracle's license agreement is included below.
@@ -41,34 +40,64 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */ 
 
-package MTR.NorthShoreExtension.UI;
+package MTR.NorthShoreExtension.Tests;
 
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.text.NumberFormatter;
 
 import MTR.NorthShoreExtension.Backend.TrainControllerSrc.TrainController;
 import MTR.NorthShoreExtension.Backend.TrainControllerSrc.TrainControllerHelper;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.text.NumberFormat;
 import java.util.*;
 
-public class TrainControlUI {
+public class TrainControlTestBenchUI {
 	//Specify the look and feel to use.  Valid values:
     //null (use the default), "Metal", "System", "Motif", "GTK+"
     final static String LOOKANDFEEL = "System";
     
     private JPanel mainPane;
-    public static TrainControllerHelper tch;
+    private JButton dispatchTrainButton;
+    private JFormattedTextField trainIDTextField;
+    private static TrainControllerHelper tch;
     
-    public TrainControlUI() {
+    public TrainControlTestBenchUI() {
         mainPane = new JPanel();
-        mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.PAGE_AXIS));
+        mainPane.setLayout(new GridBagLayout()); 
         mainPane.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
         mainPane.add(Box.createRigidArea(new Dimension(0, 5)));
         
+        //Create the set speed field format for the text field.
+        NumberFormat nvNumberFormat = NumberFormat.getNumberInstance();
+        nvNumberFormat.setMaximumFractionDigits(0);
+        NumberFormatter nvFormatter = new NumberFormatter(nvNumberFormat);
+        nvFormatter.setAllowsInvalid(false);
+        nvFormatter.setCommitsOnValidEdit(false);
+        
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.VERTICAL;
+        c.insets = new Insets(0,0,0,50);
+        c.weightx = 0.5;
+        c.gridx = 0;
+        c.gridy = 0;
+        
+        dispatchTrainButton = new JButton("Dispatch a Train");
+        mainPane.add(dispatchTrainButton, c);
+        
+        c.gridx = 1;
+        mainPane.add(new JLabel("New Train ID: "));
+        
+        c.gridx = 2;
+        c.insets = new Insets(0,0,0,0);
+        trainIDTextField = new JFormattedTextField(nvFormatter);
+        trainIDTextField.setText("123");
+        mainPane.add(trainIDTextField, c);
+        
         for(TrainController tc : tch.getTrainControllerList()) {
-	        mainPane.add(new TrainControlPanel(tc));
+	        mainPane.add(new TrainControlTestBenchPanel(tc));
 	        mainPane.add(Box.createGlue());
         }
     }
@@ -127,7 +156,7 @@ public class TrainControlUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         //Create and set up the content pane.
-        TrainControlUI tcUI = new TrainControlUI();
+        TrainControlTestBenchUI tcUI = new TrainControlTestBenchUI();
         tcUI.mainPane.setOpaque(true); //content panes must be opaque
         frame.setContentPane(tcUI.mainPane);
 
@@ -139,14 +168,6 @@ public class TrainControlUI {
     public static void main(String[] args) {
     	//Create TrainControllerHelper - with sample test data to show different UI states
     	tch = new TrainControllerHelper();
-    	TrainController tc123 = tch.addNewTrainController(123); 
-    	tc123.TrainControl_setCommandedSpeedAuthority(65, 5);
-    	/*TrainController tc456 = tch.addNewTrain(456);
-    	tc456.brakeApplied = false;
-    	tc456.eBrakeApplied = false;
-    	tc456.leftDoorOpen = true;
-    	tc456.rightDoorOpen = true;
-    	tc456.lightsOn = true;*/
     	
         //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.

@@ -1,7 +1,7 @@
 /*
 * Filename: repairScheduler.java
 * Author: Matt Snyder
-* Last Edited: 10/26/2017
+* Last Edited: 11/7/2017
 * File Description: This contains the Repair Scheduler. 
 * 
 * 
@@ -27,7 +27,7 @@
 * SUCH DAMAGE.
 */
 
-//+package MTR.NorthShoreExtension.UI;
+package MTR.NorthShoreExtension.UI;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -37,10 +37,10 @@ public class repairSchedulerUI extends JFrame {
 	
 	private JFrame frame = new JFrame("Schedule A Repair");
 	private JTabbedPane tabbedPane = new JTabbedPane();
-	private JButton redLineBtn = new JButton("Red");
-	private JButton grnLineBtn = new JButton("Green");
-	private JButton closeBtn = new JButton("Close");
-	private JButton openBtn = new JButton("Open");
+	private JButton closeBtnRed = new JButton("Close");
+	private JButton closeBtnGrn = new JButton("Close");
+	private JButton openBtnRed = new JButton("Open");
+	private JButton openBtnGrn = new JButton("Open");
 	//for demo purposes only, full version will pull from database
 	private String[] greenLineBlocks = {"A1","B1","C1","D1","E1","F1","G1","H1","I1","J1","K1","L1","M1"};
 	private String[] redLineBlocks = {"A1","B1","C1","D1","E1","F1","G1","H1","I1","J1","K1"};
@@ -69,7 +69,6 @@ public class repairSchedulerUI extends JFrame {
 		gbcRed.gridy = 0;
 		gbcRed.insets = new Insets (0,0,5,0);
 		gbcRed.fill = GridBagConstraints.HORIZONTAL;
-		//gbcRed.gridwidth = 2;
 		gbcRed.gridwidth = 1;
 		redPanel.add(redRepairs, gbcRed);
 		
@@ -100,6 +99,15 @@ public class repairSchedulerUI extends JFrame {
 		gbcRed.gridy = 1;
 		redPanel.add(blockRed,gbcRed);
 		
+		gbcRed.gridx = 0;
+		gbcRed.gridy = 2;
+		redPanel.add(closeBtnRed,gbcRed);
+		
+		gbcRed.gridx = 1;
+		gbcRed.gridy = 2;
+		redPanel.add(openBtnRed,gbcRed);
+		//////////////////////////////////////////////
+		
 		JLabel blockChoiceG =  new JLabel("Choose a section: ");
 		gbcGrn.gridx = 0;
 		gbcGrn.gridy = 1;
@@ -109,6 +117,14 @@ public class repairSchedulerUI extends JFrame {
 		gbcGrn.gridx = 1;
 		gbcGrn.gridy = 1;
 		grnPanel.add(blockGrn,gbcGrn);
+		
+		gbcGrn.gridx = 0;
+		gbcGrn.gridy = 2;
+		grnPanel.add(closeBtnGrn,gbcGrn);
+		
+		gbcGrn.gridx = 1;
+		gbcGrn.gridy = 2;
+		grnPanel.add(openBtnGrn,gbcGrn);
 		
 		tabbedPane.addTab("Red Line",redPanel);
 		tabbedPane.addTab("Green Line", grnPanel);

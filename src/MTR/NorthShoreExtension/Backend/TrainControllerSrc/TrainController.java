@@ -173,6 +173,8 @@ public class TrainController {
 	public void TrainControl_setActualSpeed(double speed) {
 		actualSpeed = speed;
 		
+		//If speed = 0 + auto mode + on a station track - open doors
+		
 		updateUI(TrainControlPanel.VITAL);
 	}
 	
@@ -264,7 +266,7 @@ public class TrainController {
 	}
 	
 	/* Functions called by TrainControllerHelper */
-	public void setOperationMode(boolean manual) {
+	public void TrainControl_setOperationMode(boolean manual) {
 		manualMode = manual;
 	}
 	
