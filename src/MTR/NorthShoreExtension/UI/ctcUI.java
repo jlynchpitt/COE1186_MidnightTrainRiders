@@ -1,7 +1,7 @@
 /*
 * Filename: ctcUI.java
 * Author: Matt Snyder
-* Last Edited: 10/12/2017
+* Last Edited: 11/7/2017
 * File Description: This contains the main frame for the CTC GUI. 
 * 
 * 
@@ -36,7 +36,6 @@ import javax.swing.*;
 import javax.imageio.*;
 import java.io.*;
 import java.util.*;
-import java.time.*;
 import java.text.*;
 
 public class ctcUI {
@@ -61,7 +60,7 @@ public class ctcUI {
 		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 		String currentTime = sdf.format(cal.getTime());
 		
-		JButton schedTrain, schedRepair, reporting, trnInfo, trnCtrl, trkCtrl, timeMult;
+		JButton schedTrain, schedRepair, reporting, trnInfo, trnCtrl, trkCtrl, timeMult, switchTest;
 		JPanel runningMode, thrput, trainNum, ambientTemp, currTime, trkModel;
 		int tempF = 56;
 		int numTrains = 0;
@@ -80,7 +79,7 @@ public class ctcUI {
 		schedTrain.setActionCommand("schedTrain");
 		schedTrain.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFrame schedulerT = new trainSchedulerUI();
+				JFrame schedulerT = new TrainSchedulerUI();
 			}
 		});
 		gbc.weightx = 0.0; //sets the width of the segment
@@ -263,6 +262,13 @@ public class ctcUI {
 		gbc.gridheight = 3;
 		pane.add(trkModel, gbc);
 		//--------------
+		
+		switchTest = new JButton("Test Switches");
+		gbc.gridx = 4;
+		gbc.gridy = 4;
+		gbc.gridwidth = 1;
+		gbc.gridheight = 1;
+		pane.add(switchTest, gbc);
 		
 		pane.setSize(850, 500);
 	}
