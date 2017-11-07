@@ -342,7 +342,7 @@ public class TrainControlPanel extends JPanel
     
     /*
      * Adds units onto a value before being displayed in the UI
-     * Used for any label that displays a speed
+     * Used for any label that displays a double based speed
      */
     private void updateUIDoubleSpeed(JLabel label, double speed) {
     	if(label != null) {
@@ -352,7 +352,7 @@ public class TrainControlPanel extends JPanel
     
     /*
      * Adds units onto a value before being displayed in the UI
-     * Used for any label that displays a speed
+     * Used for any label that displays an integer based speed
      */
     private void updateUIIntSpeed(JLabel label, double speed) {
     	if(label != null) {
