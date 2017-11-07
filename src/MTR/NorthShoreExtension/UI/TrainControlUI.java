@@ -140,8 +140,7 @@ public class TrainControlUI {
     	//Create TrainControllerHelper - with sample test data to show different UI states
     	tch = new TrainControllerHelper();
     	TrainController tc123 = tch.addNewTrainController(123); 
-    	tc123.TrainControl_setAuthority(5);
-    	tc123.TrainControl_setCommandedSpeed(65);
+    	tc123.TrainControl_setCommandedSpeedAuthority(65, 5);
     	/*TrainController tc456 = tch.addNewTrain(456);
     	tc456.brakeApplied = false;
     	tc456.eBrakeApplied = false;
