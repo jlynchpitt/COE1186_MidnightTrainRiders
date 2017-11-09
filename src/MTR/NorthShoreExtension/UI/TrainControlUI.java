@@ -129,7 +129,8 @@ public class TrainControlUI {
         //Create and set up the content pane.
         TrainControlUI tcUI = new TrainControlUI();
         tcUI.mainPane.setOpaque(true); //content panes must be opaque
-        frame.setContentPane(tcUI.mainPane);
+        JScrollPane jsp = new JScrollPane(tcUI.mainPane);
+        frame.setContentPane(jsp);
 
         //Display the window.
         frame.pack();
@@ -147,6 +148,15 @@ public class TrainControlUI {
     	tc456.leftDoorOpen = true;
     	tc456.rightDoorOpen = true;
     	tc456.lightsOn = true;*/
+    	tch.addNewTrainController(123); 
+    	tch.addNewTrainController(123); 
+    	tch.addNewTrainController(123); 
+    	tch.addNewTrainController(123); 
+    	tch.addNewTrainController(123); 
+    	tch.addNewTrainController(123); 
+    	tch.addNewTrainController(123); 
+    	tch.addNewTrainController(123); 
+    	tch.addNewTrainController(123); 
     	
         //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.
