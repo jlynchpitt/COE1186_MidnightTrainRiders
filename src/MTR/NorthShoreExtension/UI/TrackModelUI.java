@@ -17,7 +17,10 @@ public class TrackModelUI extends JPanel implements MouseListener {
     int numTrack = 10;
     static LoadTrackModelUI loading = new LoadTrackModelUI();
     static DBHelper load;
- 
+   
+    public static DBHelper sendDB() {
+		return load;
+    }
     
     private static void initLookAndFeel() {
         String lookAndFeel = null;

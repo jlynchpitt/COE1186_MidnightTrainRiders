@@ -1,8 +1,8 @@
 /*
-* Filename: ctcUI.java
+* Filename: trainScheduler.java
 * Author: Matt Snyder
-* Last Edited: 10/12/2017
-* File Description: This contains the user interface for the Train Scheduler. 
+* Last Edited: 11/7/2017
+* File Description: This contains the Train Scheduler. 
 * 
 * 
 * 
@@ -35,161 +35,266 @@ import javax.swing.*;
 
 public class TrainSchedulerUI extends JFrame {
 	//create two arrays for demo purpose. actual will have the list imported from the database
-	String[] grnLineStops = {"Choose a stop...", "A1", "A2", "A3", "A4", "B1", "B2", "B3", "C1", "C2"};
-	String[] redLineStops = {"Choose a stop...", "A1", "A2", "A3", "B1", "B2", "B3", "B4", "B5", "C1"};
-	int x = 1; //number of stops
-	int auth[] = new int[99];
-	//double depart[] = new double[99];
+	String[] grnLineStops = {"A1", "A2", "A3", "A4", "B1", "B2", "B3", "C1", "C2"};
+	String[] redLineStops = {"A1", "A2", "A3", "B1", "B2", "B3", "B4", "B5", "C1"};
+	int xRed = 1; //number of grnStops
+	int xGrn = 1;
+	int authRed[] = new int[150];
+	int authGrn[] = new int[150];
+	//double depart[] = new double[150];
 	
 	private JFrame frame = new JFrame("Schedule A Train");
-	private JButton addStop = new JButton("Add A Stop");
-	private JButton schedTrain = new JButton("Schedule Train");
-	private JComboBox<String> stops = new JComboBox<String>(grnLineStops);
+	private JTabbedPane tabbedPane = new JTabbedPane();
+	private JButton addStopRed = new JButton("Add A Stop");
+	private JButton addStopGrn = new JButton("Add A Stop");
+	private JButton schedTrainRed = new JButton("Schedule Train");
+	private JButton schedTrainGrn = new JButton("Schedule Train");
+	private JButton nextTrainRed = new JButton("Schedule Another");
+	private JButton nextTrainGrn = new JButton("Schedule Another");
+	private JComboBox<String> grnStops = new JComboBox<String>(grnLineStops);
+	private JComboBox<String> redStops = new JComboBox<String>(redLineStops);
 	
 	public TrainSchedulerUI() {
 		render();
 	}
 	
 	public void render() {
-		auth[0] = 0;
-	
-		JPanel panel = new JPanel(new GridLayout(1,2));
-		panel.setBorder(BorderFactory.createLineBorder(Color.black,1));
-		//right panel
-		JPanel rightPanel = new JPanel(new GridLayout(5,1));
-		JPanel leftPanel = new JPanel();
-		JTextArea stopRoute = new JTextArea(50, 40);
-		//left panel
+		JPanel grnTrain = new JPanel();
+		JPanel redTrain = new JPanel();
+		JPanel schedule = new JPanel();
+		grnTrain.setLayout(new GridLayout(1,2));
+		redTrain.setLayout(new GridLayout(1,2));
 		
-		stopRoute.setText("Add a Stop....");
-		stopRoute.setEditable(false);
-		leftPanel.add(stopRoute);
+		JPanel grnLeft = new JPanel();
+		JPanel grnRght = new JPanel(new GridLayout(5,1));
+		JPanel redLeft = new JPanel();
+		JPanel redRght = new JPanel(new GridLayout(5,1));
+		
+		//Set up the Routing lists
+		JTextArea stopRouteRed = new JTextArea(50, 40);
+		stopRouteRed.setText("Add a Stop...");
+		stopRouteRed.setEditable(false);
+		redLeft.add(stopRouteRed);
+		
+		JTextArea stopRouteGrn = new JTextArea(50, 40);
+		stopRouteGrn.setText("Add a Stop...");
+		stopRouteGrn.setEditable(false);
+		grnLeft.add(stopRouteGrn);
+		
+		//Create the interactive scheduling portion
+		JPanel grnStopChoice = new JPanel(new GridLayout(2,1));
+		JLabel grnChoice = new JLabel("Choose a stop: ");
+		grnStopChoice.add(grnChoice);
+		grnStopChoice.add(grnStops);
+		grnRght.add(grnStopChoice);
+		
+		JPanel redStopChoice = new JPanel(new GridLayout(2,1));
+		JLabel redChoice = new JLabel("Choose a stop: ");
+		redStopChoice.add(redChoice);
+		redStopChoice.add(redStops);
+		redRght.add(redStopChoice);
+		
+		//Add departure time segment, Green Line
+		JPanel grnDepart = new JPanel(new GridBagLayout());
+		GridBagConstraints grnGBC = new GridBagConstraints();
+		JLabel grnDepartLabel = new JLabel("Departure Time: ");
+		grnGBC.gridx = 0;
+		grnGBC.gridy = 0;
+		grnGBC.fill = GridBagConstraints.HORIZONTAL;
+		grnGBC.gridwidth = 5;
+		grnDepart.add(grnDepartLabel, grnGBC);
+		
+		JTextField grnHour0 = new JTextField(1);
+		JTextField grnHour1 = new JTextField(1);
+		JTextField grnSpacer = new JTextField(3);
+		JTextField grnMins0 = new JTextField(1);
+		JTextField grnMins1 = new JTextField(1);
+		
+		grnHour0.setText("0");
+		grnHour1.setText("0");
+		grnSpacer.setText(" :");
+		grnSpacer.setEditable(false);
+		grnMins0.setText("0");
+		grnMins1.setText("0");
 				
-		panel.add(leftPanel);
+		grnGBC.gridwidth = 1;
+		grnGBC.gridx = 0;
+		grnGBC.gridy = 1;
+		grnDepart.add(grnHour1, grnGBC);
+		grnGBC.gridx = 1;
+		grnGBC.gridy = 1;
+		grnDepart.add(grnHour0, grnGBC);
+		grnGBC.gridx = 2;
+		grnGBC.gridy = 1;
+		grnDepart.add(grnSpacer, grnGBC);
+		grnGBC.gridx = 3;
+		grnGBC.gridy = 1;
+		grnDepart.add(grnMins1, grnGBC);
+		grnGBC.gridx = 4;
+		grnGBC.gridy = 1;
+		grnDepart.add(grnMins0, grnGBC);
+		grnRght.add(grnDepart);
 		
-		JPanel radioBtns = new JPanel();
-		JRadioButton green = new JRadioButton("Green Line");
-		JRadioButton red = new JRadioButton("Red Line");
-		ButtonGroup line = new ButtonGroup();
-		line.add(green);
-		line.add(red);
-		red.setBackground(Color.red);
-		green.setBackground(Color.green);
-		green.setSelected(true);
-		radioBtns.setBackground(Color.green);
+		grnRght.add(addStopGrn);
+		grnRght.add(schedTrainGrn);
+		grnRght.add(nextTrainGrn);
 		
-		green.setMnemonic(KeyEvent.VK_G);
-		green.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (green.isSelected()) {
-					radioBtns.setBackground(Color.green);
-					//stops.setModel(grnLineStops); //find out why I can't change the data
-				}
-			}
-		});
+		nextTrainGrn.setEnabled(false);
 		
-		red.setMnemonic(KeyEvent.VK_R);
-		red.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (red.isSelected()) {
-					radioBtns.setBackground(Color.red);
-				}
-			}
-		});
+		//Add departure time segment, Red Line
+		JPanel redDepart = new JPanel(new GridBagLayout());
+		GridBagConstraints redGBC = new GridBagConstraints();
+		JLabel redDepartLabel = new JLabel("Departure Time: ");
+		redGBC.gridx = 0;
+		redGBC.gridy = 0;
+		redGBC.fill = GridBagConstraints.HORIZONTAL;
+		redGBC.gridwidth = 5;
+		redDepart.add(redDepartLabel, redGBC);
 		
-		radioBtns.add(green);
-		radioBtns.add(red);
-		rightPanel.add(radioBtns);
-		rightPanel.setBorder(BorderFactory.createLineBorder(Color.black,2));
+		JTextField redHour0 = new JTextField(1);
+		JTextField redHour1 = new JTextField(1);
+		JTextField redSpacer = new JTextField(3);
+		JTextField redMins0 = new JTextField(1);
+		JTextField redMins1 = new JTextField(1);
 		
-		stops.setEditable(false);
-		rightPanel.add(stops);
+		redHour0.setText("0");
+		redHour1.setText("0");
+		redSpacer.setText(" : ");
+		redSpacer.setEditable(false);
+		redMins0.setText("0");
+		redMins1.setText("0");
 		
-		//JPanel departure = new JPanel(new GridLayout(1,5));
-		JPanel departure = new JPanel(new GridBagLayout());
-		GridBagConstraints gbc =  new GridBagConstraints();
-		JLabel label = new JLabel("Departure Time: ");
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.gridwidth = 5;
-		departure.add(label, gbc);
+		redGBC.gridwidth = 1;
+		redGBC.gridx = 0;
+		redGBC.gridy = 1;
+		redDepart.add(redHour1, redGBC);
+		redGBC.gridx = 1;
+		redGBC.gridy = 1;
+		redDepart.add(redHour0, redGBC);
+		redGBC.gridx = 2;
+		redGBC.gridy = 1;
+		redDepart.add(redSpacer, redGBC);
+		redGBC.gridx = 3;
+		redGBC.gridy = 1;
+		redDepart.add(redMins1, redGBC);
+		redGBC.gridx = 4;
+		redGBC.gridy = 1;
+		redDepart.add(redMins0, redGBC);
+		redRght.add(redDepart); 
 		
-		JTextField hour1 = new JTextField(1);
-		JTextField hour0 = new JTextField(1);
-		JTextField split = new JTextField(3);
-		JTextField mins1 = new JTextField(1);
-		JTextField mins0 = new JTextField(1);
-		hour1.setText("0");
-		hour0.setText("0");
-		split.setText(" : ");
-		split.setEditable(false);
-		mins1.setText("0");
-		mins0.setText("0");
+		nextTrainRed.setEnabled(false);
 		
-		gbc.gridwidth = 1;
-		gbc.gridx = 0;
-		gbc.gridy = 1;
-		departure.add(hour1, gbc);
-		gbc.gridx = 1;
-		gbc.gridy = 1;
-		departure.add(hour0, gbc);
-		gbc.gridx = 2;
-		gbc.gridy = 1;
-		departure.add(split, gbc);
-		gbc.gridx = 3;
-		gbc.gridy = 1;
-		departure.add(mins1, gbc);
-		gbc.gridx = 4;
-		gbc.gridy = 1;
-		departure.add(mins0, gbc);
-		rightPanel.add(departure);
+		redRght.add(addStopRed);
+		redRght.add(schedTrainRed);
+		redRght.add(nextTrainRed);
+
 		
-		rightPanel.add(addStop);
+		//-------------------------
+		redTrain.add(redLeft);
+		redTrain.add(redRght);
+		grnTrain.add(grnLeft);
+		grnTrain.add(grnRght);
 		
-		addStop.setMnemonic(KeyEvent.VK_A);
-		addStop.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String line = "";
-				if (green.isSelected()) {
-					line = "Green Line";
-				} else {
-					line = "Red Line";
-				}
-				int nextAuth = Math.abs(stops.getSelectedIndex() - auth[x-1]);
-				auth[x] = stops.getSelectedIndex();
-				String stop = stops.getSelectedItem().toString();
-				String depart = (hour1.getText() + hour0.getText() + ":" + mins1.getText() + mins0.getText());
-				String nextStop = "Stop " + x + ": \n " + line + ": " + stop + " \n Departure: " + depart + "\n Authority: " + nextAuth + " \n Suggested Speed: MAX";
-				String previous =  stopRoute.getText();
-				stopRoute.setText(previous + "\n\n" + nextStop);
-				x++;
-			}
-		});
+		tabbedPane.addTab("Red Line", redTrain);
+		tabbedPane.addTab("Green Line", grnTrain);
+		tabbedPane.addTab("Schedules", schedule);
 		
-		rightPanel.add(schedTrain);
-		schedTrain.setMnemonic(KeyEvent.VK_S);
-		schedTrain.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String writ = stopRoute.getText();
-				String toWrite = writ + "\n\n Scheduling Train...!";
-				stopRoute.setText(toWrite);
-				stops.setEnabled(false);
-				hour1.setEnabled(false);
-				hour0.setEnabled(false);
-				mins1.setEnabled(false);
-				mins0.setEnabled(false);
-				addStop.setEnabled(false);
-				schedTrain.setEnabled(false);
-			}
-		});
-		
-		panel.add(rightPanel);
-		
-		frame.add(panel);
-		frame.setSize(800, 700);
+		//add it all together and make it visible
+		frame.add(tabbedPane);
+		frame.setSize(800, 750);
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
+		
+		//add action Listeners for the buttons
+		addStopRed.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e ) {
+				String redLine = "";
+				int nextAuthRed = Math.abs(redStops.getSelectedIndex() - authRed[xRed-1]);
+				authRed[xRed] = redStops.getSelectedIndex();
+				String redStop = redStops.getSelectedItem().toString();
+				String redDepart = (redHour1.getText() + redHour0.getText() + ":" + redMins1.getText() + redMins0.getText());
+				String redNextStop = "Stop " + xRed + ": \n " + redLine + ": " + redStop + " \n Departure: " + redDepart + "\n Authority: " + nextAuthRed + "\n Suggested Speed: MAX";
+				String redPrevious = stopRouteRed.getText();
+				stopRouteRed.setText(redPrevious + "\n\n" + redNextStop);
+				xRed++;
+			}
+		});
+		
+		addStopGrn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String grnLine = "";
+				int nextAuthGrn = Math.abs(grnStops.getSelectedIndex() - authGrn[xGrn-1]);
+				authGrn[xGrn] = grnStops.getSelectedIndex();
+				String grnStop = grnStops.getSelectedItem().toString();
+				String grnDepart = (grnHour1.getText() + grnHour0.getText() + ":" + grnMins1.getText() + grnMins0.getText());
+				String grnNextStop = "Stop " + xGrn + ": \n " + grnLine + ": " + grnStop + " \n Departure: " + grnDepart + "\n Authority: " + nextAuthGrn + "\n Suggested Speed: MAX";
+				String grnPrevious = stopRouteGrn.getText();
+				stopRouteGrn.setText(grnPrevious + "\n\n" + grnNextStop);
+				xGrn++;
+			}
+		});
+		
+		schedTrainRed.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String redWrit = stopRouteRed.getText();
+				String redToWrite = redWrit + "\n\n Scheduling Train...!";
+				stopRouteRed.setText(redToWrite);
+				redStops.setEnabled(false);
+ 				redHour1.setEnabled(false);
+				redHour0.setEnabled(false);
+				redMins1.setEnabled(false);
+				redMins0.setEnabled(false);
+				addStopRed.setEnabled(false);
+				schedTrainRed.setEnabled(false);
+				nextTrainRed.setEnabled(true);
+			}
+		});
+		
+		schedTrainGrn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String grnWrit = stopRouteGrn.getText();
+				String grnToWrite = grnWrit + "\n\n Scheduling Train...!";
+				stopRouteGrn.setText(grnToWrite);
+				grnStops.setEnabled(false);
+ 				grnHour1.setEnabled(false);
+				grnHour0.setEnabled(false);
+				grnMins1.setEnabled(false);
+				grnMins0.setEnabled(false);
+				addStopGrn.setEnabled(false);
+				schedTrainGrn.setEnabled(false);
+				nextTrainGrn.setEnabled(true);
+			}
+		});
+		
+		nextTrainRed.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				redStops.setEnabled(true);
+ 				redHour1.setEnabled(true);
+				redHour0.setEnabled(true);
+				redMins1.setEnabled(true);
+				redMins0.setEnabled(true);
+				addStopRed.setEnabled(true);
+				schedTrainRed.setEnabled(true);
+				nextTrainRed.setEnabled(false);
+				stopRouteRed.setText("Add a Stop...");
+				xRed = 1;
+			}
+		});
+		
+		nextTrainGrn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				grnStops.setEnabled(true);
+ 				grnHour1.setEnabled(true);
+				grnHour0.setEnabled(true);
+				grnMins1.setEnabled(true);
+				grnMins0.setEnabled(true);
+				addStopGrn.setEnabled(true);
+				schedTrainGrn.setEnabled(true);
+				nextTrainGrn.setEnabled(false);
+				stopRouteGrn.setText("Add a Stop...");
+				xGrn = 1;
+			}
+		});
 	}
 	
 	

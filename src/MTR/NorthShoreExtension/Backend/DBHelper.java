@@ -167,6 +167,133 @@ public class DBHelper {
 		
 	}
 	
+	public String getInfrastructure(int trackid) {
+		String type = null;
+		Connection connection = null;
+		
+		try {
+			connection = connect();
+			
+			Statement statement = connection.createStatement();
+			statement.setQueryTimeout(30); //TODO: Is this needed?
+			
+		    ResultSet result = statement.executeQuery("SELECT * from TrackInfo WHERE trackID = '"+trackid+"'");   
+		    	type = result.getString("infrastructure");
+		}
+		catch(SQLException e){  
+			 System.err.println(e.getMessage()); 
+		 }       
+		 finally {         
+			 try {
+	               if(connection != null)
+	                  connection.close();
+		     }
+		     catch(SQLException e) {  // Use SQLException class instead.          
+		    	 System.err.println(e); 
+		     }
+		 }
+		return type;
+	}
+	
+	public int getTrackLength(int trackid) {
+		int length = 0;
+		Connection connection = null;
+		
+		try {
+			connection = connect();
+			
+			Statement statement = connection.createStatement();
+			statement.setQueryTimeout(30); //TODO: Is this needed?
+			
+		    ResultSet result = statement.executeQuery("SELECT * from TrackInfo WHERE trackID = '"+trackid+"'");   
+		    	length = result.getInt("length");
+		}
+		catch(SQLException e){  
+			 System.err.println(e.getMessage()); 
+		 }       
+		 finally {         
+			 try {
+	               if(connection != null)
+	                  connection.close();
+		     }
+		     catch(SQLException e) {  // Use SQLException class instead.          
+		    	 System.err.println(e); 
+		     }
+		 }
+		return length;
+	}
+	
+	public int getNextTrack(int trackid, String direction){
+		int nextTrack = 0;
+		Connection connection = null;
+		
+		try {
+			connection = connect();
+			
+			Statement statement = connection.createStatement();
+			statement.setQueryTimeout(30); //TODO: Is this needed?
+			
+			ResultSet track = statement.executeQuery("SELECT * from TrackInfo WHERE trackID = '"+trackid+"'");
+			if(direction.equals("forward")) {
+				if(track.getInt("switchPosition")==0) {
+					nextTrack = track.getInt("nextTrack");
+				}
+				else {
+					nextTrack = track.getInt("secondSwitch");
+				}
+			}
+			else if(direction.equals("backward")) {
+				if(track.getInt("switchPosition")==0) {
+					nextTrack = track.getInt("prevTrack");
+				}
+				else {
+					nextTrack = track.getInt("secondSwitch");
+				}
+			}
+
+		}
+		catch(SQLException e){  
+			 System.err.println(e.getMessage()); 
+		 }       
+		 finally {         
+			 try {
+	               if(connection != null)
+	                  connection.close();
+		     }
+		     catch(SQLException e) {  // Use SQLException class instead.          
+		    	 System.err.println(e); 
+		     }
+		 }
+
+		return nextTrack;
+	}
+	
+	public void setSwitch(int trackid, int position) {
+		Connection connection = null;
+		
+		try {
+			connection = connect();
+			
+			Statement statement = connection.createStatement();
+			statement.setQueryTimeout(30); //TODO: Is this needed?
+			
+		    statement.executeUpdate("UPDATE TrackInfo SET switchPosition = '"+position+"' WHERE trackID = '"+trackid+"'");   
+
+		}
+		catch(SQLException e){  
+			 System.err.println(e.getMessage()); 
+		 }       
+		 finally {         
+			 try {
+	               if(connection != null)
+	                  connection.close();
+		     }
+		     catch(SQLException e) {  // Use SQLException class instead.          
+		    	 System.err.println(e); 
+		     }
+		 }
+	}
+	
 	public String getColor(int rowID) {
 		Connection connection = null;
 		String color = null;
@@ -193,12 +320,10 @@ public class DBHelper {
 		    	 System.err.println(e); 
 		     }
 		 }
-		//TODO how to call for values in here
 		return color;
 	}
 	
 	public int[] getDrawingCoordinates(int rowID) {
-		//TODO: how to call for values here
 		Connection connection = null;
 		
 		try {
