@@ -151,20 +151,108 @@ public class DBHelper {
 		 }
 	}
 	
-	public void updateTrackStatus(String line, String section, int blockNum, String status) {
+	public void updateTrackStatus(int trackid, String status) {
+		Connection connection = null;
 		
+		try {
+			connection = connect();
+			
+			Statement statement = connection.createStatement();
+			statement.setQueryTimeout(30); //TODO: Is this needed?
+			
+		    statement.executeUpdate("UPDATE TrackInfo SET trackStatus = '"+status+"' WHERE trackID = '"+trackid+"'");   
+
+		}
+		catch(SQLException e){  
+			 System.err.println(e.getMessage()); 
+		 }       
+		 finally {         
+			 try {
+	               if(connection != null)
+	                  connection.close();
+		     }
+		     catch(SQLException e) {  // Use SQLException class instead.          
+		    	 System.err.println(e); 
+		     }
+		 }
 	}
 
-	public void updateHeater(String line, String section, int blockNum, String heaterStatus) {
+	public void updateHeater(int trackid, String heaterStatus) {
+		Connection connection = null;
 		
+		try {
+			connection = connect();
+			
+			Statement statement = connection.createStatement();
+			statement.setQueryTimeout(30); //TODO: Is this needed?
+			
+		    statement.executeUpdate("UPDATE TrackInfo SET heater = '"+heaterStatus+"' WHERE trackID = '"+trackid+"'");   
+
+		}
+		catch(SQLException e){  
+			 System.err.println(e.getMessage()); 
+		 }       
+		 finally {         
+			 try {
+	               if(connection != null)
+	                  connection.close();
+		     }
+		     catch(SQLException e) {  // Use SQLException class instead.          
+		    	 System.err.println(e); 
+		     }
+		 }
 	}
 
-	public void updateSpeedAuthority(String line, String section, int blockNum, int speed, int authority) {
+	public void updateSpeedAuthority(int trackid, int speed, int authority) {
+		Connection connection = null;
 		
+		try {
+			connection = connect();
+			
+			Statement statement = connection.createStatement();
+			statement.setQueryTimeout(30); //TODO: Is this needed?
+			
+		    statement.executeUpdate("UPDATE TrackInfo SET speed = '"+speed+"', authority = '"+authority+"' WHERE trackID = '"+trackid+"'");   
+
+		}
+		catch(SQLException e){  
+			 System.err.println(e.getMessage()); 
+		 }       
+		 finally {         
+			 try {
+	               if(connection != null)
+	                  connection.close();
+		     }
+		     catch(SQLException e) {  // Use SQLException class instead.          
+		    	 System.err.println(e); 
+		     }
+		 }
 	}
 
-	public void updateTrackOccupied(String line, String section, int blockNum, boolean isOccupied) {
+	public void updateTrackOccupied(int trackid, int isOccupied) {
+		Connection connection = null;
 		
+		try {
+			connection = connect();
+			
+			Statement statement = connection.createStatement();
+			statement.setQueryTimeout(30); //TODO: Is this needed?
+			
+		    statement.executeUpdate("UPDATE TrackInfo SET occupied = '"+isOccupied+"' WHERE trackID = '"+trackid+"'");   
+
+		}
+		catch(SQLException e){  
+			 System.err.println(e.getMessage()); 
+		 }       
+		 finally {         
+			 try {
+	               if(connection != null)
+	                  connection.close();
+		     }
+		     catch(SQLException e) {  // Use SQLException class instead.          
+		    	 System.err.println(e); 
+		     }
+		 }
 	}
 	
 	public String getInfrastructure(int trackid) {

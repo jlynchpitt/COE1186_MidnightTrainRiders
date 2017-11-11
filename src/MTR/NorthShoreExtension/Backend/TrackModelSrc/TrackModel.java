@@ -45,6 +45,7 @@ public class TrackModel {
 		int trackID;
 		int trackNext;
 		int beacon;
+		int trainOccupying;
 	}
 	
 	class TrainsOperating{
@@ -53,6 +54,8 @@ public class TrackModel {
 		int trackOccupying;
 		String direction;
 		int ticketsSold;
+		int speed;
+		int authority;
 	}
 	
 	public TrackModel(/*WaysideControllerHelper t*/) {
@@ -73,10 +76,13 @@ public class TrackModel {
 			trainList.put(trainNum, update);
 		}
 		else {
+			load.updateTrackOccupied(trackid, 0);
 			update.trackOccupying = load.getNextTrack(trackid, update.direction);
+			load.updateTrackOccupied(update.trackOccupying, 1);
 			trainList.put(trainNum, update);
 		}
 		sellTicket(update.trackOccupying);
+		sendBeacon(update.trackOccupying, update.trainID);
 	}
 	
 	public static void breakTrack(int id) {
@@ -90,6 +96,11 @@ public class TrackModel {
 		newTrain.distanceLeft = load.getTrackLength(trackid);
 		trainList.put(trainid, newTrain);
 		trackOccupency[(trackOccupency.length - 1)] = trackid;
+		updateTrack = trackList.get(trackid);
+		trackList.remove(trackid);
+		updateTrack.trainOccupying = trainid;
+		trackList.put(trackid, updateTrack);
+		load.updateTrackOccupied(trackid, 1);
 		//have wayside type and send the updated array of occupied tracks
 	}
 	
@@ -122,14 +133,27 @@ public class TrackModel {
 		updateTrack.authority = a;
 		updateTrack.speed = s;
 		trackList.put(trackid, updateTrack);
-		//train update speed and authority 
 		//convert authority to number of blocks
+		//send speed and authority to train
 	}
 	
-	public static void beacon() {
-		//if infrastructure = station
+	public static void sendBeacon(int trackid, int trainid) {
+		String type = load.getInfrastructure(trackid);
+		if(type.equals("STATION") || type.equals("STATION; PIONEER") || 
+				type.equals("STATION; EDGEBROOK") || type.equals("STATION; WHITED") || 
+				type.equals("STATION; SOUTH BANK") || type.equals("STATION; CENTRAL; UNDERDROUND") ||
+				type.equals("STATION; INGLEWOOD; UNDERGROUND") || type.equals("STATION; OVERBROOK; UNDERGROUND") ||
+				type.equals("STATION; GLENBURY") || type.equals("STATION; DORMONT") ||
+				type.equals("STATION; MT LEBANON") || type.equals("STATION; CASTLE SHANNON") ||
+				type.equals("STATION: SHADYSIDE") || type.equals("STATION: HERRON AVE") ||
+				type.equals("STATION; SWISSVILLE") || type.equals("STATION;    PENN STATION; UNDERGROUND") ||
+				type.equals("STATION; STEEL PLAZA; UNDERGROUND") || type.equals("STATION; FIRST AVE; UNDERGROUND") ||
+				type.equals("STATION; STATION SQUARE") || type.equals("STATION; SOUTH HILLS JUNCTION")) {
+		
+				//set beacon here
+		}
 		//if infrastructure = switch
-		//call Joji's beacon function
+		//call everyone's beacon function to send the beacons!!!!!
 	}
 
 }
