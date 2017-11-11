@@ -56,16 +56,14 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.NumberFormat;
-import java.util.*;
 
-public class TrainControlTestBenchUI {
+public class TrainControlTestBenchUI implements ActionListener {
 	//Specify the look and feel to use.  Valid values:
     //null (use the default), "Metal", "System", "Motif", "GTK+"
     final static String LOOKANDFEEL = "System";
     
+    private static JFrame frame;
     private JPanel mainPane;
     private JPanel buttonPane;
     private JPanel controllerPane;
@@ -75,6 +73,8 @@ public class TrainControlTestBenchUI {
     private JButton switchButton;
     private JFormattedTextField trainIDTextField;
     private static TrainControllerHelper tch;
+    
+    private int switchPosition = 1;
     
     public TrainControlTestBenchUI() {
         buttonPane = new JPanel();
@@ -91,6 +91,7 @@ public class TrainControlTestBenchUI {
         nvFormatter.setCommitsOnValidEdit(false);
         
         dispatchTrainButton = new JButton("Dispatch a Train");
+        dispatchTrainButton.addActionListener(this);
         buttonPane.add(dispatchTrainButton);
         
         buttonPane.add(Box.createRigidArea(new Dimension(25, 0)));
@@ -106,6 +107,7 @@ public class TrainControlTestBenchUI {
         buttonPane.add(Box.createRigidArea(new Dimension(100, 0)));
         
         switchButton = new JButton("Operate Switch");
+        switchButton.addActionListener(this);
         buttonPane.add(switchButton);
         
         controllerPane = new JPanel();
@@ -118,16 +120,9 @@ public class TrainControlTestBenchUI {
 	        controllerPane.add(Box.createGlue());
         }
         
-        BufferedImage image;
-		try {
-			image = ImageIO.read(new File("TrainControlTestTrack1.png"));
-		} catch (IOException ex) {
-			image = null;
-			System.out.println("image is null");
-		}
-		//JLabel picLabel = new JLabel(new ImageIcon(image), JLabel.CENTER);
-		JLabel picLabel = new JLabel(new ImageIcon(image.getScaledInstance(1450, 400, Image.SCALE_FAST)), JLabel.LEFT);
-
+        picLabel = new JLabel();
+        loadTrackImage(1);
+        
 		imagePane = new JPanel();
 		imagePane.setLayout(new BoxLayout(imagePane, BoxLayout.X_AXIS));
 		imagePane.setBorder(BorderFactory.createEmptyBorder(15,10,10,10));
@@ -191,7 +186,7 @@ public class TrainControlTestBenchUI {
         initLookAndFeel();
 
         //Create and set up the window.
-        JFrame frame = new JFrame("Train Controllers");
+        frame = new JFrame("Train Controller Test Bench");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         //Create and set up the content pane.
@@ -222,4 +217,38 @@ public class TrainControlTestBenchUI {
             }
         });
     }
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == dispatchTrainButton) {
+        	
+        }	
+        else if(e.getSource() == switchButton) {
+        	int newSwitchPosition = 2;
+        	
+        	if(switchPosition == 2) {
+        		newSwitchPosition = 1;
+        	}
+        	
+        	switchPosition = newSwitchPosition;
+        	loadTrackImage(switchPosition);    		
+        }	
+	}
+	
+	private void loadTrackImage(int imNum) {
+		String imageName = "TrainControlTestTrack1.png";
+		if(imNum == 2) {
+			imageName = "TrainControlTestTrack2.png";
+		}
+		
+		BufferedImage image;
+		try {
+			image = ImageIO.read(new File(imageName));
+		} catch (IOException ex) {
+			image = null;
+			System.out.println("image is null");
+		}
+		Icon icon = new ImageIcon(image.getScaledInstance(1450, 400, Image.SCALE_FAST));
+		picLabel.setIcon(icon);
+	}
 }
