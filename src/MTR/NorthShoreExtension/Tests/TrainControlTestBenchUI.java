@@ -42,15 +42,22 @@
 
 package MTR.NorthShoreExtension.Tests;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.text.NumberFormatter;
 
 import MTR.NorthShoreExtension.Backend.TrainControllerSrc.TrainController;
 import MTR.NorthShoreExtension.Backend.TrainControllerSrc.TrainControllerHelper;
+import MTR.NorthShoreExtension.UI.TrainControlPanel;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.NumberFormat;
 import java.util.*;
 
@@ -60,15 +67,21 @@ public class TrainControlTestBenchUI {
     final static String LOOKANDFEEL = "System";
     
     private JPanel mainPane;
+    private JPanel buttonPane;
+    private JPanel controllerPane;
+    private JPanel imagePane;
+    private JLabel picLabel = null;
     private JButton dispatchTrainButton;
+    private JButton switchButton;
     private JFormattedTextField trainIDTextField;
     private static TrainControllerHelper tch;
     
     public TrainControlTestBenchUI() {
-        mainPane = new JPanel();
-        mainPane.setLayout(new GridBagLayout()); 
-        mainPane.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
-        mainPane.add(Box.createRigidArea(new Dimension(0, 5)));
+        buttonPane = new JPanel();
+		//buttonPane.setLayout(new BoxLayout(buttonPane, BoxLayout.X_AXIS));
+		buttonPane.setLayout(new FlowLayout(FlowLayout.LEFT));
+        buttonPane.setBorder(BorderFactory.createEmptyBorder(15,10,25,5));
+        buttonPane.add(Box.createRigidArea(new Dimension(0, 5)));
         
         //Create the set speed field format for the text field.
         NumberFormat nvNumberFormat = NumberFormat.getNumberInstance();
@@ -77,29 +90,55 @@ public class TrainControlTestBenchUI {
         nvFormatter.setAllowsInvalid(false);
         nvFormatter.setCommitsOnValidEdit(false);
         
-        GridBagConstraints c = new GridBagConstraints();
-        c.fill = GridBagConstraints.VERTICAL;
-        c.insets = new Insets(0,0,0,50);
-        c.weightx = 0.5;
-        c.gridx = 0;
-        c.gridy = 0;
-        
         dispatchTrainButton = new JButton("Dispatch a Train");
-        mainPane.add(dispatchTrainButton, c);
+        buttonPane.add(dispatchTrainButton);
         
-        c.gridx = 1;
-        mainPane.add(new JLabel("New Train ID: "));
+        buttonPane.add(Box.createRigidArea(new Dimension(25, 0)));
+
+        buttonPane.add(new JLabel("New Train ID: "));
+        buttonPane.add(Box.createRigidArea(new Dimension(10, 0)));
         
-        c.gridx = 2;
-        c.insets = new Insets(0,0,0,0);
         trainIDTextField = new JFormattedTextField(nvFormatter);
         trainIDTextField.setText("123");
-        mainPane.add(trainIDTextField, c);
+        //trainIDTextField.setMaximumSize(new Dimension(400, 100));
+        trainIDTextField.setColumns(8);
+        buttonPane.add(trainIDTextField);
+        buttonPane.add(Box.createRigidArea(new Dimension(100, 0)));
         
+        switchButton = new JButton("Operate Switch");
+        buttonPane.add(switchButton);
+        
+        controllerPane = new JPanel();
+        controllerPane.setLayout(new BoxLayout(controllerPane, BoxLayout.PAGE_AXIS));
+        controllerPane.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+        controllerPane.add(Box.createRigidArea(new Dimension(0, 5)));
         for(TrainController tc : tch.getTrainControllerList()) {
-	        mainPane.add(new TrainControlTestBenchPanel(tc));
-	        mainPane.add(Box.createGlue());
+	        //controllerPane.add(new TrainControlTestBenchPanel(tc));
+	        controllerPane.add(new TrainControlPanel(tc));
+	        controllerPane.add(Box.createGlue());
         }
+        
+        BufferedImage image;
+		try {
+			image = ImageIO.read(new File("TrainControlTestTrack1.png"));
+		} catch (IOException ex) {
+			image = null;
+			System.out.println("image is null");
+		}
+		//JLabel picLabel = new JLabel(new ImageIcon(image), JLabel.CENTER);
+		JLabel picLabel = new JLabel(new ImageIcon(image.getScaledInstance(1450, 400, Image.SCALE_FAST)), JLabel.LEFT);
+
+		imagePane = new JPanel();
+		imagePane.setLayout(new BoxLayout(imagePane, BoxLayout.X_AXIS));
+		imagePane.setBorder(BorderFactory.createEmptyBorder(15,10,10,10));
+		imagePane.add(picLabel);
+        
+        //Add all panels into 1
+        mainPane = new JPanel();
+        mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.Y_AXIS));
+        mainPane.add(buttonPane);
+        mainPane.add(new JScrollPane(controllerPane));
+      	mainPane.add(imagePane);
     }
     
 	private static void initLookAndFeel() {
@@ -161,14 +200,20 @@ public class TrainControlTestBenchUI {
         frame.setContentPane(tcUI.mainPane);
 
         //Display the window.
-        frame.pack();
+        frame.setSize(1600, 1250);
+        //frame.pack();
         frame.setVisible(true);
     }
 
     public static void main(String[] args) {
     	//Create TrainControllerHelper - with sample test data to show different UI states
     	tch = new TrainControllerHelper();
-    	
+    	TrainController tc123 = tch.addNewTrainController(123); 
+    	TrainController tc124 = tch.addNewTrainController(124); 
+    	tch.addNewTrainController(124); 
+    	tch.addNewTrainController(124); 
+    	tch.addNewTrainController(124); 
+
         //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.
         javax.swing.SwingUtilities.invokeLater(new Runnable() {

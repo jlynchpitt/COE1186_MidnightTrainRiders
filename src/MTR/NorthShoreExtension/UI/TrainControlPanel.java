@@ -97,7 +97,7 @@ public class TrainControlPanel extends JPanel
     JButton openLDoor;
     JButton turnOnLights;
 
-    TrainControlPanel(TrainController tc) {
+    public TrainControlPanel(TrainController tc) {
         
     	//Save arguments in instance variables.
         trainController = tc;
