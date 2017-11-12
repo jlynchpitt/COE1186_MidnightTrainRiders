@@ -4,7 +4,7 @@
  * Date Created:10/27
  * File Description: Creates basic wayside UI and basic functionalities
  */
-package MTR.NorthShoreExtension.Backend.WaysideControllerSrc;
+package MTR.NorthShoreExtension.Backend.WaysideController;
 
 public class WaysideFunctionsHub 
 {
@@ -45,9 +45,10 @@ public class WaysideFunctionsHub
 				}
 		   
 	 }
-	public static void WaysideController_Switch(int SwitchID)   //CTC calls this to send me authority info
+	public static int WaysideController_Switch(int SwitchID)   //CTC calls this to send me authority info
 	 {
 		System.out.println("Switch ID: " + SwitchID);
+		return 0;
 		   //update switch
 	 }
 	   public static void WaysideController_Speed(int[] IncomingSpeedArray) //CTC calls this to send me speed info
