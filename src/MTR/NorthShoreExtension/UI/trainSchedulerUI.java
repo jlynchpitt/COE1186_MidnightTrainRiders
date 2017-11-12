@@ -33,7 +33,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class TrainSchedulerUI extends JFrame {
+public class trainSchedulerUI extends JFrame {
 	//create two arrays for demo purpose. actual will have the list imported from the database
 	String[] grnLineStops = {"A1", "A2", "A3", "A4", "B1", "B2", "B3", "C1", "C2"};
 	String[] redLineStops = {"A1", "A2", "A3", "B1", "B2", "B3", "B4", "B5", "C1"};
@@ -54,7 +54,7 @@ public class TrainSchedulerUI extends JFrame {
 	private JComboBox<String> grnStops = new JComboBox<String>(grnLineStops);
 	private JComboBox<String> redStops = new JComboBox<String>(redLineStops);
 	
-	public TrainSchedulerUI() {
+	public trainSchedulerUI() {
 		render();
 	}
 	
