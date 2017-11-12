@@ -30,12 +30,13 @@ public class TrainEngineerUI implements ActionListener {
     //null (use the default), "Metal", "System", "Motif", "GTK+"
     final static String LOOKANDFEEL = "System";
     
+    private static JFrame frame = null;
     private JPanel mainPane;
     private JFormattedTextField setKp;
     private JFormattedTextField setKi;
     private JButton submitButton;
     private TrainControllerHelper tch;
-    
+        
     public TrainEngineerUI(TrainControllerHelper tch) {
         this.tch = tch;
         
@@ -166,20 +167,22 @@ public class TrainEngineerUI implements ActionListener {
      * this method should be invoked from the
      * event-dispatching thread.
      */
-    private static void createAndShowTrainEngineerGUI(TrainControllerHelper tch) {
+    public static void createAndShowTrainEngineerGUI(TrainControllerHelper tch) {
         //Set the look and feel.
         initLookAndFeel();
 
         //Create and set up the window.
-        JFrame frame = new JFrame("Train Engineer UI");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        //Create and set up the content pane.
-        TrainEngineerUI tcUI = new TrainEngineerUI(tch);
-        //tcUI.mainPane.setOpaque(true); //content panes must be opaque
-        //frame.setContentPane(tcUI.mainPane);
-        tcUI.mainPane.setOpaque(true); //content panes must be opaque
-        frame.setContentPane(tcUI.mainPane);
+        if(frame == null) {
+	        frame = new JFrame("Train Engineer UI");
+	        frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+
+	        //Create and set up the content pane.
+	        TrainEngineerUI tcUI = new TrainEngineerUI(tch);
+	        //tcUI.mainPane.setOpaque(true); //content panes must be opaque
+	        //frame.setContentPane(tcUI.mainPane);
+	        tcUI.mainPane.setOpaque(true); //content panes must be opaque
+	        frame.setContentPane(tcUI.mainPane);
+        }
         
         //Display the window.
         frame.pack();

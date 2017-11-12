@@ -58,6 +58,7 @@ public class TrainControlUI {
     //null (use the default), "Metal", "System", "Motif", "GTK+"
     final static String LOOKANDFEEL = "System";
     
+    private static JFrame frame = null;
     private JPanel mainPane;
     public static TrainControllerHelper tch;
     
@@ -118,20 +119,23 @@ public class TrainControlUI {
      * this method should be invoked from the
      * event-dispatching thread.
      */
-    private static void createAndShowTrainControlGUI() {
+    public static void createAndShowTrainControlGUI(TrainControllerHelper t) {
+    	tch = t;
         //Set the look and feel.
         initLookAndFeel();
 
         //Create and set up the window.
-        JFrame frame = new JFrame("Train Controllers");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        if(frame == null) {
+	        frame = new JFrame("Train Controllers");
+	        frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+	        
+	        //Create and set up the content pane.
+	        TrainControlUI tcUI = new TrainControlUI();
+	        tcUI.mainPane.setOpaque(true); //content panes must be opaque
+	        JScrollPane jsp = new JScrollPane(tcUI.mainPane);
+	        frame.setContentPane(jsp);
+        }
         
-        //Create and set up the content pane.
-        TrainControlUI tcUI = new TrainControlUI();
-        tcUI.mainPane.setOpaque(true); //content panes must be opaque
-        JScrollPane jsp = new JScrollPane(tcUI.mainPane);
-        frame.setContentPane(jsp);
-
         //Display the window.
         frame.pack();
         frame.setVisible(true);
@@ -139,30 +143,30 @@ public class TrainControlUI {
 
     public static void main(String[] args) {
     	//Create TrainControllerHelper - with sample test data to show different UI states
-    	tch = new TrainControllerHelper();
-    	TrainController tc123 = tch.addNewTrainController(123); 
+    	TrainControllerHelper tcHelper = new TrainControllerHelper();
+    	TrainController tc123 = tcHelper.addNewTrainController(123); 
     	tc123.TrainControl_setCommandedSpeedAuthority(65, 5);
-    	/*TrainController tc456 = tch.addNewTrain(456);
+    	/*TrainController tc456 = tcHelper.addNewTrain(456);
     	tc456.brakeApplied = false;
     	tc456.eBrakeApplied = false;
     	tc456.leftDoorOpen = true;
     	tc456.rightDoorOpen = true;
     	tc456.lightsOn = true;*/
-    	tch.addNewTrainController(123); 
-    	tch.addNewTrainController(123); 
-    	tch.addNewTrainController(123); 
-    	tch.addNewTrainController(123); 
-    	tch.addNewTrainController(123); 
-    	tch.addNewTrainController(123); 
-    	tch.addNewTrainController(123); 
-    	tch.addNewTrainController(123); 
-    	tch.addNewTrainController(123); 
+    	tcHelper.addNewTrainController(123); 
+    	tcHelper.addNewTrainController(123); 
+    	tcHelper.addNewTrainController(123); 
+    	tcHelper.addNewTrainController(123); 
+    	tcHelper.addNewTrainController(123); 
+    	tcHelper.addNewTrainController(123); 
+    	tcHelper.addNewTrainController(123); 
+    	tcHelper.addNewTrainController(123); 
+    	tcHelper.addNewTrainController(123); 
     	
         //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                createAndShowTrainControlGUI();
+                createAndShowTrainControlGUI(tcHelper);
             }
         });
     }

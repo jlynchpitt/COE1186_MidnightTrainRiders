@@ -14,6 +14,7 @@ package MTR.NorthShoreExtension.Backend.TrainControllerSrc;
 import java.awt.event.ActionEvent;
 
 import MTR.NorthShoreExtension.Backend.TrainSrc.Train;
+import MTR.NorthShoreExtension.Tests.TrainControlTestBenchPanel;
 import MTR.NorthShoreExtension.UI.TrainControlPanel;
 
 public class TrainController {
@@ -21,7 +22,8 @@ public class TrainController {
 	
 	private int trainID = 0;
 	private Train trainModel = null;
-	private TrainControlPanel trainControlPanel;
+	private TrainControlPanel trainControlPanel = null;
+	private TrainControlTestBenchPanel testBenchPanel = null;
 	private boolean CONNECTEDTOTRAINMODEL = false; //This must be true when in the full system - for testing individual submodule
 	private boolean manualMode = true;
 	
@@ -76,6 +78,10 @@ public class TrainController {
 	
 	public void setTrainControlPanel(TrainControlPanel tcp) {
 		trainControlPanel = tcp;
+	}
+	
+	public void setTrainControlTestBenchPanel(TrainControlTestBenchPanel tctbp) {
+		testBenchPanel = tctbp;
 	}
 	
 	public void calculatePowerCommand() {
@@ -165,7 +171,7 @@ public class TrainController {
 		setTemp = temp;
 		
 		if(trainModel != null) {
-			//trainModel.TrainModel_setTemperature(open);
+			//trainModel.TrainModel_setTemperature(open); TODO: remove this not needed
 		}
 	}
 	
@@ -206,6 +212,10 @@ public class TrainController {
 		eBrakeApplied = true;
 		
 		updateUI(TrainControlPanel.BRAKES);
+	}
+	
+	public void TrainControl_moveToNextTrack() {
+		
 	}
 	
 	/* Functions called by UI to get Train Control info */

@@ -50,6 +50,8 @@ import javax.swing.text.NumberFormatter;
 import MTR.NorthShoreExtension.Backend.TrainControllerSrc.TrainController;
 import MTR.NorthShoreExtension.Backend.TrainControllerSrc.TrainControllerHelper;
 import MTR.NorthShoreExtension.UI.TrainControlPanel;
+import MTR.NorthShoreExtension.UI.TrainControlUI;
+import MTR.NorthShoreExtension.UI.TrainEngineerUI;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -71,6 +73,8 @@ public class TrainControlTestBenchUI implements ActionListener {
     private JLabel picLabel = null;
     private JButton dispatchTrainButton;
     private JButton switchButton;
+    private JButton trainEngineerUIButton;
+    private JButton trainControlsUIButton;
     private JFormattedTextField trainIDTextField;
     private static TrainControllerHelper tch;
     
@@ -110,13 +114,22 @@ public class TrainControlTestBenchUI implements ActionListener {
         switchButton.addActionListener(this);
         buttonPane.add(switchButton);
         
+        buttonPane.add(Box.createRigidArea(new Dimension(100, 0)));
+        
+        trainEngineerUIButton = new JButton("Train Engineer UI");
+        trainEngineerUIButton.addActionListener(this);
+        buttonPane.add(trainEngineerUIButton);
+        
+        trainControlsUIButton = new JButton("Train Controls UI");
+        trainControlsUIButton.addActionListener(this);
+        buttonPane.add(trainControlsUIButton);
+        
         controllerPane = new JPanel();
         controllerPane.setLayout(new BoxLayout(controllerPane, BoxLayout.PAGE_AXIS));
         controllerPane.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
         controllerPane.add(Box.createRigidArea(new Dimension(0, 5)));
         for(TrainController tc : tch.getTrainControllerList()) {
-	        //controllerPane.add(new TrainControlTestBenchPanel(tc));
-	        controllerPane.add(new TrainControlPanel(tc));
+	        controllerPane.add(new TrainControlTestBenchPanel(tc));
 	        controllerPane.add(Box.createGlue());
         }
         
@@ -233,6 +246,20 @@ public class TrainControlTestBenchUI implements ActionListener {
         	switchPosition = newSwitchPosition;
         	loadTrackImage(switchPosition);    		
         }	
+        else if(e.getSource() == trainEngineerUIButton) {
+        	javax.swing.SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    TrainEngineerUI.createAndShowTrainEngineerGUI(tch);
+                }
+            });
+        }
+        else if(e.getSource() == trainControlsUIButton) {
+        	javax.swing.SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    TrainControlUI.createAndShowTrainControlGUI(tch);
+                }
+            });
+        }
 	}
 	
 	private void loadTrackImage(int imNum) {
