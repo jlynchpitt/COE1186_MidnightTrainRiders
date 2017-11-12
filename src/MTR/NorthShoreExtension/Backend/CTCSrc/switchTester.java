@@ -12,12 +12,14 @@ import java.awt.TrayIcon.MessageType;
 import java.awt.event.*;
 import javax.swing.*;
 
+import MTR.NorthShoreExtension.Backend.WaysideController.WaysideFunctionsHub;
+
 public class switchTester {
 	//Test the switch that was selected from the UI
 		public static void testSwitch(int switchID) throws AWTException {
 			//call the function from the WaysideController. 1=Successfully switched, 0=busy
-			//int testResults = WaysideController.testSwitch(switchID);
-			int testResults = 0; //For testing, remove once integrated.
+			int testResults = WaysideFunctionsHub.WaysideController_Switch(switchID);
+			//int testResults = 0; //For testing, remove once integrated.
 			if (testResults == 1) {
 				//Switch successful, 
 			}
