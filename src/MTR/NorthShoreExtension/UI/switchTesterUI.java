@@ -12,7 +12,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-import MTR.NorthShoreExtension.Backend.switchTester;
+import MTR.NorthShoreExtension.Backend.CTCSrc.switchTester;
 
 public class switchTesterUI extends JFrame {
 	private JFrame frame = new JFrame("Switch Tester");
