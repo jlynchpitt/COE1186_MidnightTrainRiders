@@ -31,7 +31,7 @@ import javax.swing.SwingConstants;
 
 import MTR.NorthShoreExtension.Backend.TrainSrc.Train;
 
-public class TrainModelUI {
+public class TrainmodelUI {
 	private static Train[] tr;
 	private JLabel lblPassengers;
 	private JLabel lblNewLabel_5;
