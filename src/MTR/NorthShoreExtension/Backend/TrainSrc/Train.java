@@ -1,5 +1,6 @@
 package MTR.NorthShoreExtension.Backend.TrainSrc;
 
+import MTR.NorthShoreExtension.Backend.TrackModelSrc.TrackModel;
 import MTR.NorthShoreExtension.Backend.TrainControllerSrc.TrainController;
 
 public class Train {
@@ -12,16 +13,17 @@ public class Train {
 	private int cars; //static int variables
 	private int temperature, passengers, crewcount; //dynamic int variables
 	private boolean leftdoor, rightdoor, lightson;
-	private String trainID, authority;
+	private String authority;
 	private double maxacceleration, maxvelocity, maxdeceleration;
-	private int maxpassengers;
+	private int maxpassengers, trainID;
 	private boolean engineFailure, signalFailure, brakeFailure, passengerEBrake;
 	
+	private TrackModel tkm;
 	private TrainController tc;
 	private TrainMovement tm;
 	Passengers p;
 	
-	public Train(String t){
+	public Train(int t){
 		tm = new TrainMovement(this.getTotalMass());
 		p = new Passengers();
 		trainID=t;
@@ -31,6 +33,7 @@ public class Train {
 	public void TrainModel_setPower(double p){
 		tm.setMovement(p);										// calls the set power function in the TrainMovement Class
 		tc.TrainControl_setActualSpeed(tm.getVelocity());	// This line receives the velocity from the train movement class and sends it to the train controller
+		tkm.TrackModel_setDistance(trainID, tm.getDistance());
 	}
 	
 	public void TrainModel_turnLightsOn(boolean l) {
@@ -55,6 +58,10 @@ public class Train {
 	
 	public void TrainModel_setEBrake(boolean b) {
 		tm.seteBrake(b);
+	}
+	
+	public void TrainModel_moveToNextTrack() {
+		tc.TrainControl_moveToNextTrack();
 	}
 
 	
