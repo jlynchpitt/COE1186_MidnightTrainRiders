@@ -35,7 +35,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 
-public class ReportingMenuUI extends JFrame {
+public class reportingMenuUI extends JFrame {
 	private JFrame frame = new JFrame("Reporting");
 	private JButton powerGraph = new JButton("Speed/Power Graph");
 	private JButton passengerGraph = new JButton("Passenger Flow Graph");
@@ -43,7 +43,7 @@ public class ReportingMenuUI extends JFrame {
 	private JButton delayLog = new JButton("Delay Log");
 	private JButton incidentLog = new JButton("Incident Log");
 	
-	public ReportingMenuUI() {
+	public reportingMenuUI() {
 		render();
 	}
 	
