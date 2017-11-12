@@ -27,6 +27,7 @@ public class TrainControllerHelper {
 	private double pid_p = 0.4;
 	private double pid_i = 0.25; 
 	private Timer powerTimer = new Timer();
+	private List<Integer> idList = new ArrayList<>();
 	private List<TrainController> tcList = new ArrayList<TrainController>();
 	private boolean manualMode = true;
 	private int clockMultiplier = 1;
@@ -51,17 +52,27 @@ public class TrainControllerHelper {
 	}
 
 	public TrainController addNewTrainController(int trainID) {
-		TrainController tc = new TrainController(trainID, null, pid_p, pid_i);
-		
-		//Add tc to list of trianControllers
-		tcList.add(tc);
-		
-		return tc;
+		//Check if new train ID has been used
+		if(!idList.contains(trainID)) {
+			TrainController tc = new TrainController(trainID, null, pid_p, pid_i);
+			
+			//Add tc to list of trianControllers
+			tcList.add(tc);
+			idList.add(trainID);
+			return tc;
+		}
+		else {
+			return null;
+		}
 	}
 	
 	public List<TrainController> getTrainControllerList(){
 		//TODO: Sort by train ID
 		return new ArrayList<TrainController>(tcList);
+	}
+	
+	public List<Integer> getTrainIDList(){
+		return new ArrayList<Integer>(idList);
 	}
 	
 	public void setPIDParameters(double kp, double ki) {

@@ -188,7 +188,7 @@ public class TrainEngineerUI implements ActionListener {
         frame.pack();
         frame.setVisible(true);
     }
-
+    
     public static void main(String[] args) {
     	//Create TrainControllerHelper
     	TrainControllerHelper tch = new TrainControllerHelper();

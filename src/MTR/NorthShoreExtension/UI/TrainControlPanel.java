@@ -408,7 +408,6 @@ public class TrainControlPanel extends JPanel
         actualPower = new JLabel(new Double(trainController.getPower()).toString() + " horsepower");
         actualSpeed = new JLabel(new Double(trainController.getActualSpeed()).toString() + " MPH");
         
-        
         //Add all labels to layout
         vitalInfoPanel.add(new JLabel("Train Set Speed: "));
         vitalInfoPanel.add(trainSetSpeed);

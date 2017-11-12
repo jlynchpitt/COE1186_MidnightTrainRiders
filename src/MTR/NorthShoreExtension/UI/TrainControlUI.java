@@ -59,10 +59,15 @@ public class TrainControlUI {
     final static String LOOKANDFEEL = "System";
     
     private static JFrame frame = null;
+    private static TrainControlUI tcUI = null;
     private JPanel mainPane;
     public static TrainControllerHelper tch;
     
     public TrainControlUI() {
+    	createMainPanel();
+    }
+    
+    protected void createMainPanel() {
         mainPane = new JPanel();
         mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.PAGE_AXIS));
         mainPane.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
@@ -113,6 +118,16 @@ public class TrainControlUI {
             }
         }
     }
+	
+	public static void reloadGUI() {
+		if(frame != null && tcUI != null) {
+			tcUI.createMainPanel();
+			frame.setContentPane(tcUI.mainPane);
+			frame.pack();
+			frame.revalidate();
+			frame.repaint();
+		}
+	}
 
     /**
      * Create the GUI and show it.  For thread safety,
@@ -130,7 +145,7 @@ public class TrainControlUI {
 	        frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 	        
 	        //Create and set up the content pane.
-	        TrainControlUI tcUI = new TrainControlUI();
+	        tcUI = new TrainControlUI();
 	        tcUI.mainPane.setOpaque(true); //content panes must be opaque
 	        JScrollPane jsp = new JScrollPane(tcUI.mainPane);
 	        frame.setContentPane(jsp);

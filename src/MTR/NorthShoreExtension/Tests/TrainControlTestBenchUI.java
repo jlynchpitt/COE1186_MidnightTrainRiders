@@ -59,6 +59,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TrainControlTestBenchUI implements ActionListener {
 	//Specify the look and feel to use.  Valid values:
@@ -66,6 +68,7 @@ public class TrainControlTestBenchUI implements ActionListener {
     final static String LOOKANDFEEL = "System";
     
     private static JFrame frame;
+    private static TrainControlTestBenchUI tcUI;
     private JPanel mainPane;
     private JPanel buttonPane;
     private JPanel controllerPane;
@@ -81,6 +84,10 @@ public class TrainControlTestBenchUI implements ActionListener {
     private int switchPosition = 1;
     
     public TrainControlTestBenchUI() {
+    	createMainPanel();
+    }
+    
+    protected void createMainPanel() {
         buttonPane = new JPanel();
 		//buttonPane.setLayout(new BoxLayout(buttonPane, BoxLayout.X_AXIS));
 		buttonPane.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -188,6 +195,15 @@ public class TrainControlTestBenchUI implements ActionListener {
             }
         }
     }
+	
+	public static void reloadGUI() {
+		if(frame != null && tcUI != null) {
+			tcUI.createMainPanel();
+			frame.setContentPane(tcUI.mainPane);
+			frame.revalidate();
+			frame.repaint();
+		}
+	}
 
     /**
      * Create the GUI and show it.  For thread safety,
@@ -203,12 +219,12 @@ public class TrainControlTestBenchUI implements ActionListener {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         //Create and set up the content pane.
-        TrainControlTestBenchUI tcUI = new TrainControlTestBenchUI();
+        tcUI = new TrainControlTestBenchUI();
         tcUI.mainPane.setOpaque(true); //content panes must be opaque
         frame.setContentPane(tcUI.mainPane);
 
         //Display the window.
-        frame.setSize(1600, 1250);
+        frame.setSize(1600, 1250); //TODO: resize this smaller
         //frame.pack();
         frame.setVisible(true);
     }
@@ -216,11 +232,7 @@ public class TrainControlTestBenchUI implements ActionListener {
     public static void main(String[] args) {
     	//Create TrainControllerHelper - with sample test data to show different UI states
     	tch = new TrainControllerHelper();
-    	TrainController tc123 = tch.addNewTrainController(123); 
-    	TrainController tc124 = tch.addNewTrainController(124); 
-    	tch.addNewTrainController(124); 
-    	tch.addNewTrainController(124); 
-    	tch.addNewTrainController(124); 
+    	tch.addNewTrainController(123); 
 
         //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.
@@ -234,7 +246,11 @@ public class TrainControlTestBenchUI implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
         if(e.getSource() == dispatchTrainButton) {
-        	
+        	int id = Integer.parseInt(trainIDTextField.getText());
+        	if(null != tch.addNewTrainController(id)) {
+        		reloadGUI();
+        		TrainControlUI.reloadGUI();
+        	}
         }	
         else if(e.getSource() == switchButton) {
         	int newSwitchPosition = 2;
