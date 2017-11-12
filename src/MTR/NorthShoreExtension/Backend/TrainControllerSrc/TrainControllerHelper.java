@@ -61,7 +61,7 @@ public class TrainControllerHelper {
 	
 	public List<TrainController> getTrainControllerList(){
 		//TODO: Sort by train ID
-		return tcList;
+		return new ArrayList<TrainController>(tcList);
 	}
 	
 	public void setPIDParameters(double kp, double ki) {
