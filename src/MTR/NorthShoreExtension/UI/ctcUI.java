@@ -79,7 +79,7 @@ public class ctcUI {
 		schedTrain.setActionCommand("schedTrain");
 		schedTrain.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFrame schedulerT = new TrainSchedulerUI();
+				JFrame schedulerT = new trainSchedulerUI();
 			}
 		});
 		gbc.weightx = 0.0; //sets the width of the segment
@@ -110,7 +110,7 @@ public class ctcUI {
 		reporting.setMnemonic(KeyEvent.VK_R);
 		reporting.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFrame reportingWindow = new ReportingMenuUI();
+				JFrame reportingWindow = new reportingMenuUI();
 			}
 		});
 		gbc.fill = GridBagConstraints.HORIZONTAL;
