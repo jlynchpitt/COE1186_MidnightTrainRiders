@@ -4,6 +4,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import MTR.NorthShoreExtension.Backend.TrainSrc.Train;
+
 import java.awt.Color;
 import java.awt.GridBagLayout;
 import javax.swing.JComboBox;
@@ -13,10 +16,18 @@ import java.awt.Insets;
 import java.awt.Font;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
+import javax.swing.JTextField;
+import javax.swing.JSlider;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class TrainModelTestUI extends JFrame {
 
 	private JPanel contentPane;
+	private JTextField textField;
+	private Train tr;
+	private double p;
 
 	/**
 	 * Launch the application.
@@ -32,6 +43,7 @@ public class TrainModelTestUI extends JFrame {
 				}
 			}
 		});
+		
 	}
 
 	/**
@@ -46,10 +58,10 @@ public class TrainModelTestUI extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
-		gbl_contentPane.columnWidths = new int[]{0, 200, 0, 100, 100, 100, 100, 100, 100, 100, 100, 0};
-		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0};
-		gbl_contentPane.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPane.columnWidths = new int[]{0, 200, 90, 100, 100, 100, 100, 100, 100, 100, 100, 0};
+		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_contentPane.columnWeights = new double[]{0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		contentPane.setLayout(gbl_contentPane);
 		
 		JLabel lblSelectTrain = new JLabel("Select Train:");
@@ -65,18 +77,18 @@ public class TrainModelTestUI extends JFrame {
 		separator.setForeground(Color.GRAY);
 		separator.setOrientation(SwingConstants.VERTICAL);
 		GridBagConstraints gbc_separator = new GridBagConstraints();
-		gbc_separator.fill = GridBagConstraints.BOTH;
+		gbc_separator.insets = new Insets(0, 0, 5, 5);
+		gbc_separator.fill = GridBagConstraints.VERTICAL;
 		gbc_separator.ipady = 2;
 		gbc_separator.ipadx = 2;
 		gbc_separator.gridheight = 6;
-		gbc_separator.insets = new Insets(0, 0, 0, 5);
 		gbc_separator.gridx = 2;
 		gbc_separator.gridy = 1;
 		contentPane.add(separator, gbc_separator);
 		
 		JLabel lblNewLabel = new JLabel("Constants:");
 		lblNewLabel.setBackground(new Color(34, 139, 34));
-		lblNewLabel.setForeground(new Color(255, 255, 255));
+		lblNewLabel.setForeground(new Color(0, 0, 128));
 		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 18));
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 		gbc_lblNewLabel.gridwidth = 2;
@@ -260,10 +272,31 @@ public class TrainModelTestUI extends JFrame {
 		lblCars.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		GridBagConstraints gbc_lblCars = new GridBagConstraints();
 		gbc_lblCars.anchor = GridBagConstraints.EAST;
-		gbc_lblCars.insets = new Insets(0, 0, 0, 5);
+		gbc_lblCars.insets = new Insets(0, 0, 5, 5);
 		gbc_lblCars.gridx = 3;
 		gbc_lblCars.gridy = 6;
 		contentPane.add(lblCars, gbc_lblCars);
+		
+		textField = new JTextField();
+		GridBagConstraints gbc_textField = new GridBagConstraints();
+		gbc_textField.insets = new Insets(0, 0, 0, 5);
+		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textField.gridx = 1;
+		gbc_textField.gridy = 13;
+		contentPane.add(textField, gbc_textField);
+		textField.setColumns(10);
+		
+		JButton btnEnter = new JButton("Enter");
+		btnEnter.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				p=Double.parseDouble(textField.getText());
+			}
+		});
+		GridBagConstraints gbc_btnEnter = new GridBagConstraints();
+		gbc_btnEnter.insets = new Insets(0, 0, 0, 5);
+		gbc_btnEnter.gridx = 2;
+		gbc_btnEnter.gridy = 13;
+		contentPane.add(btnEnter, gbc_btnEnter);
 	}
 
 }
