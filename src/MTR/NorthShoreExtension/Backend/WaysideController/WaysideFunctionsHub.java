@@ -45,9 +45,10 @@ public class WaysideFunctionsHub
 				}
 		   
 	 }
-	public static void WaysideController_Switch(int SwitchID)   //CTC calls this to send me authority info
+	public static int WaysideController_Switch(int SwitchID)   //CTC calls this to send me authority info
 	 {
 		System.out.println("Switch ID: " + SwitchID);
+		return 1;
 		   //update switch
 	 }
 	   public static void WaysideController_Speed(int[] IncomingSpeedArray) //CTC calls this to send me speed info
