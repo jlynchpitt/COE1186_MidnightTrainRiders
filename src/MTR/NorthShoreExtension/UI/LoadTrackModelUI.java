@@ -107,9 +107,10 @@ public class LoadTrackModelUI extends JPanel
 						}else {
 							curveEndFinal = -1;
 						}
-						load.addTrack(row, Integer.parseInt(trackInfo[0].replaceAll("[^0-9]", "")), trackInfo[1], trackInfo[2], Integer.parseInt(trackInfo[3].replaceAll("[^0-9]", "")), Integer.parseInt(trackInfo[4].replaceAll("[^0-9]", "")), Double.parseDouble(trackInfo[5]), Integer.parseInt(trackInfo[6].replaceAll("[^0-9]", "")), trackInfo[7], Double.parseDouble(trackInfo[8]), Double.parseDouble(trackInfo[9]), Integer.parseInt(trackInfo[10].replaceAll("[^0-9]", "")), Integer.parseInt(trackInfo[11].replaceAll("[^0-9]", "")), Integer.parseInt(trackInfo[12].replaceAll("[^0-9]", "")), Integer.parseInt(trackInfo[13].replaceAll("[^0-9]", "")), curveStartFinal, curveEndFinal, trackInfo[16], Integer.parseInt(trackInfo[17].replaceAll("[^0-9]", "")));
+						load.addTrack(row, Integer.parseInt(trackInfo[0].replaceAll("[^0-9]", "")), trackInfo[1], trackInfo[2], Integer.parseInt(trackInfo[3].replaceAll("[^0-9]", "")), Integer.parseInt(trackInfo[4].replaceAll("[^0-9]", "")), Double.parseDouble(trackInfo[5]), Integer.parseInt(trackInfo[6].replaceAll("[^0-9]", "")), trackInfo[7], Double.parseDouble(trackInfo[8]), Double.parseDouble(trackInfo[9]), Integer.parseInt(trackInfo[10].replaceAll("[^0-9]", "")), Integer.parseInt(trackInfo[11].replaceAll("[^0-9]", "")), Integer.parseInt(trackInfo[12].replaceAll("[^0-9]", "")), Integer.parseInt(trackInfo[13].replaceAll("[^0-9]", "")), curveStartFinal, curveEndFinal, trackInfo[16], Integer.parseInt(trackInfo[17].replaceAll("[^0-9]", "")),Integer.parseInt(trackInfo[18].replaceAll("[^0-9]", "")),Integer.parseInt(trackInfo[19].replaceAll("[^0-9]", "")),Integer.parseInt(trackInfo[17].replaceAll("[^0-9]", "")));
 						row++;
 					}
+					load.showTrackTest();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -132,7 +133,12 @@ public class LoadTrackModelUI extends JPanel
             }
             log.setCaretPosition(log.getDocument().getLength());
             String[] args = null;
-			TrackModelUI.main(args);
+			try {
+				TrackModelUI.main(args);
+			} catch (ClassNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
         //Handle save button action.
         } else if (e.getSource() == saveButton) {
             int returnVal = fc.showSaveDialog(LoadTrackModelUI.this);
@@ -156,6 +162,10 @@ public class LoadTrackModelUI extends JPanel
             System.err.println("Couldn't find file: " + path);
             return null;
         }
+    }
+    
+    public static DBHelper sendDB() {
+    		return load;
     }
  
     /**

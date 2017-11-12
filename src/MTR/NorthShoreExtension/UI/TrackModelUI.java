@@ -14,9 +14,13 @@ public class TrackModelUI extends JPanel implements MouseListener {
     //null (use the default), "Metal", "System", "Motif", "GTK+"
     final static String LOOKANDFEEL = null;
     TrackModel trackFunctions = new TrackModel();
-    int numTrack = 250;
-    DBHelper load;
- 
+    int numTrack = 10;
+    static LoadTrackModelUI loading = new LoadTrackModelUI();
+    static DBHelper load;
+   
+    public static DBHelper sendDB() {
+		return load;
+    }
     
     private static void initLookAndFeel() {
         String lookAndFeel = null;
@@ -60,7 +64,7 @@ public class TrackModelUI extends JPanel implements MouseListener {
     
     public class TrackGraphic extends JPanel{
     		private static final long serialVersionUID = 1L;
-    		int[] drawArray = new int[5];
+    		int[] drawArray = new int[6];
     		String color;
     		TrackGraphic(){
     			setPreferredSize(new Dimension(1000,600));
@@ -71,6 +75,7 @@ public class TrackModelUI extends JPanel implements MouseListener {
     			g.setColor(Color.white);
     			g.fillRoundRect(10,10,975,400,15,15);
     			for(int i=0;i<numTrack;i++) {
+    				System.out.println("rowid:"+i);
     				color = load.getColor(i);
     				if(color.equals("green")) {
     					g.setColor(Color.green);
@@ -115,9 +120,10 @@ public class TrackModelUI extends JPanel implements MouseListener {
         frame.setVisible(true);
     }
  
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ClassNotFoundException {
         //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.
+    		load = loading.sendDB();
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 createAndShowGUI();

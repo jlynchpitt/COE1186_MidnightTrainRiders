@@ -4,7 +4,7 @@
  * Date Created:10/27
  * File Description: Creates basic wayside UI and basic functionalities
  */
-package MTR.NorthShoreExtension.UI;
+package MTR.NorthShoreExtension.Backend.WaysideControllerSrc;
 
 public class WaysideFunctionsHub 
 {
@@ -20,7 +20,11 @@ public class WaysideFunctionsHub
 	{
 		System.out.println("placeholder");
 		// TODO Auto-generated method stub
-		obj.CTC_getOccupancy(AuthorArray);
+		WaysideFunctions.CTC_getOccupancy(AuthorArray);
+		WaysideFunctions.CTC_getBrokenTrack(AuthorArray);
+		WaysideFunctions.TrackModel_setSpeed(AuthorArray);
+		WaysideFunctions.TrackModel_setAuthority(AuthorArray);
+		
 		/*
 		AuthorityArray = obj.WaysideController_Authority();
 		  
@@ -34,24 +38,48 @@ public class WaysideFunctionsHub
 	 {
 		   
 				AuthorityArray = IncomingAuthorityArray;
+				WaysideFunctions.TrackModel_setAuthority(AuthorityArray);
+				for (int x = 0; x < AuthorityArray.length; x++)
+				{
+					System.out.println("WayAuthority: " + AuthorityArray[x]);
+				}
 		   
 	 }
-	   
+	public static void WaysideController_Switch(int SwitchID)   //CTC calls this to send me authority info
+	 {
+		System.out.println("Switch ID: " + SwitchID);
+		   //update switch
+	 }
 	   public static void WaysideController_Speed(int[] IncomingSpeedArray) //CTC calls this to send me speed info
 	   {
 
 				SpeedArray = IncomingSpeedArray;
-		   
+				WaysideFunctions.TrackModel_setSpeed(SpeedArray);
+				for (int x = 0; x < SpeedArray.length; x++)
+				{
+					System.out.println("WayAuthority: " + SpeedArray[x]);
+				}
 	   }
 	   
 	   public static void WaysideController_TrackOccupancy(int[] IncomingTrackOccupancyArray)  //TM calls this to send me occupancy info
 	   {
 		   TrackOccupancyArray = IncomingTrackOccupancyArray;
+		   WaysideFunctions.CTC_getOccupancy(TrackOccupancyArray);
+			for (int x = 0; x < TrackOccupancyArray.length; x++)
+			{
+				System.out.println("WayOccupied: " + TrackOccupancyArray[x]);
+			}
 	   }
 	   
 	   public static void WaysideController_BrokenTrack(int[] IncomingBrokenTrackArray)  //TM calls this to send me broken track info
 	   {
+		   
 		   BrokenTrackArray = IncomingBrokenTrackArray;
+			//WaysideFunctions.CTC_getBrokenTrack(BrokenTrackArray);
+		   for (int x = 0; x < BrokenTrackArray.length; x++)
+			{
+				System.out.println("WayBroken: " + BrokenTrackArray[x]);
+			}
 	   }
    
 
