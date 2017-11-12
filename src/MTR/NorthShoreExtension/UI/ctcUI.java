@@ -110,7 +110,7 @@ public class ctcUI {
 		reporting.setMnemonic(KeyEvent.VK_R);
 		reporting.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFrame reportingWindow = new reportingMenuUI();
+				JFrame reportingWindow = new ReportingMenuUI();
 			}
 		});
 		gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -243,14 +243,17 @@ public class ctcUI {
 		//trackModel Panel
 		trkModel = new JPanel();
 		trkModel.setBorder(BorderFactory.createLineBorder(Color.black,1));
-		BufferedImage image;
+		BufferedImage image = null;
 		try {
-			image = ImageIO.read(new File("images/TrackLayout.png"));
+			image = ImageIO.read(new File("TrackLayout.png"));
 		} catch (IOException ex) {
 			image = null;
 		}
-		JLabel picLabel = new JLabel(new ImageIcon(image));
-		trkModel.add(picLabel);
+		
+		if(image != null) {
+			JLabel picLabel = new JLabel(new ImageIcon(image));
+			trkModel.add(picLabel);
+		}
 		
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.ipady = 20;
@@ -306,7 +309,7 @@ public class ctcUI {
 			}
 		}
 		
-		private static void formAndRenderGUI() {
+		public static void formAndRenderGUI() {
 			initLookAndFeel();
 			
 			//setup the window

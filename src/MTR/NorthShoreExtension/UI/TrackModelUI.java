@@ -103,7 +103,8 @@ public class TrackModelUI extends JPanel implements MouseListener {
      * this method should be invoked from the
      * event-dispatching thread.
      */
-    private static void createAndShowGUI() {
+    public static void createAndShowGUI() {
+    	load = loading.sendDB();
         TrackModelUI instance = new TrackModelUI();
     		//Set the look and feel.
         initLookAndFeel();
@@ -120,10 +121,9 @@ public class TrackModelUI extends JPanel implements MouseListener {
         frame.setVisible(true);
     }
  
-    public static void main(String[] args) throws ClassNotFoundException {
+    public static void main(String[] args) {
         //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.
-    		load = loading.sendDB();
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 createAndShowGUI();

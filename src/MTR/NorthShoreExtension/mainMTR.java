@@ -3,18 +3,37 @@
  */
 package MTR.NorthShoreExtension;
 
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+
+import MTR.NorthShoreExtension.Backend.DBHelper;
+import MTR.NorthShoreExtension.Backend.TrainControllerSrc.TrainControllerHelper;
+import MTR.NorthShoreExtension.UI.LoadTrackModelUI;
+
 /**
  * @author Joe Lynch
  * 
  *
  */
-public class mainMTR {
-
+public class MainMTR {
+	public static TrainControllerHelper tcHelper;
+	public static boolean fullUI = false;
+	
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		fullUI = true;
+		
+		tcHelper = new TrainControllerHelper();
+		
+		SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                //Turn off metal's use of bold fonts
+                UIManager.put("swing.boldMetal", Boolean.FALSE); 
+                LoadTrackModelUI.createAndShowGUI();
+            }
+        });
 
 	}
 

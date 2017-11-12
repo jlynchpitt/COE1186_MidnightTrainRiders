@@ -41,12 +41,13 @@ public class DBHelper {
 	private static final String PASSENGER_COLUMNS = "trainID INTEGER, station STRING, scheduleArrivalTime INTEGER, "
 			+ "actualArrivalTime INTEGER, numPassengersOn INTEGER, numPassengersOff INTEGER";
 		
-	public DBHelper() throws ClassNotFoundException {
+	public DBHelper() {
 		// load the sqlite-JDBC driver using the current class loader
-		Class.forName("org.sqlite.JDBC");
 		Connection connection = null;
 		try
 		{
+			Class.forName("org.sqlite.JDBC");
+
 		    // create a database connection
 		    connection = connect();
 	
@@ -68,6 +69,9 @@ public class DBHelper {
 		 catch(SQLException e){  
 			 System.err.println(e.getMessage()); 
 		 }       
+		 catch(ClassNotFoundException e) {
+			 System.err.println(e.getMessage());
+		 }
 		 finally {         
 			 try {
 	               if(connection != null)
