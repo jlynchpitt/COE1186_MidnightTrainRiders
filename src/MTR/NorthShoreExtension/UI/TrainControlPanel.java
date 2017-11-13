@@ -405,8 +405,10 @@ public class TrainControlPanel extends JPanel
         commandedAuthority = new JLabel(new Integer(trainController.getAuthority()).toString() + " blocks");
         commandedSetSpeed = new JLabel(new Integer(trainController.getCTCCommandedSetSpeed()).toString() + " MPH");
         trainSetSpeed = new JLabel(new Integer(trainController.getTrainSetSpeed()).toString() + " MPH");
-        actualPower = new JLabel(new Double(trainController.getPower()).toString() + " horsepower");
-        actualSpeed = new JLabel(new Double(trainController.getActualSpeed()).toString() + " MPH");
+        actualPower = new JLabel();
+        updateUIPower(actualPower, trainController.getPower());
+        actualSpeed = new JLabel();
+        updateUIDoubleSpeed(actualSpeed, trainController.getActualSpeed());
         
         //Add all labels to layout
         vitalInfoPanel.add(new JLabel("Train Set Speed: "));
