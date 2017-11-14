@@ -306,7 +306,7 @@ public class ctcUI {
 			}
 		}
 		
-		private static void formAndRenderGUI() {
+		static void formAndRenderGUI() {
 			initLookAndFeel();
 			
 			//setup the window
