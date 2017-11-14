@@ -18,21 +18,19 @@ public class WaysideFunctionsHub
 	
 	public static void main(String[] args) 
 	{
-		System.out.println("placeholder");
+
 		// TODO Auto-generated method stub
 		WaysideFunctions.CTC_getOccupancy(AuthorArray);
 		WaysideFunctions.CTC_getBrokenTrack(AuthorArray);
 		WaysideFunctions.TrackModel_setSpeed(AuthorArray);
 		WaysideFunctions.TrackModel_setAuthority(AuthorArray);
 		
-		/*
-		AuthorityArray = obj.WaysideController_Authority();
-		  
-		  SpeedArray = obj.WaysideController_Speed();
-		  TrackOccupancyArray = obj.WaysideController_TrackOccupancy();
-		  BrokenTrackArray = obj.WaysideController_BrokenTrack();
-		  */
 
+
+	}
+	public static void TestFunction()
+	{
+		
 	}
 	public static void WaysideController_Authority(int[] IncomingAuthorityArray)   //CTC calls this to send me authority info
 	 {
