@@ -259,6 +259,26 @@ public class DBHelper {
 		 }
 	}
 	
+	//added a method for getting information on track status (for Repair Scheduling) - Matt
+	public String getTrackStatus(int trackid) {
+		String status = null;
+		Connection connection = null;
+		
+		try {
+			connection = connect();
+			
+			Statement statement = connection.createStatement();
+			statement.setQueryTimeout(30);
+			
+			ResultSet result = statement.executeQuery("SELECT * from  TrackInfo WHERE trackID = '" + trackid + "'");
+			status = result.getString("trackStatus");
+		} catch(SQLException e) {
+			System.err.println(e);
+		}
+		
+		return status;
+	}
+	
 	public String getInfrastructure(int trackid) {
 		String type = null;
 		Connection connection = null;
