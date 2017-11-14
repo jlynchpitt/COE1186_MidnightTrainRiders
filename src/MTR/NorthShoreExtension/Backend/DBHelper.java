@@ -41,12 +41,13 @@ public class DBHelper {
 	private static final String PASSENGER_COLUMNS = "trainID INTEGER, station STRING, scheduleArrivalTime INTEGER, "
 			+ "actualArrivalTime INTEGER, numPassengersOn INTEGER, numPassengersOff INTEGER";
 		
-	public DBHelper() throws ClassNotFoundException {
+	public DBHelper() {
 		// load the sqlite-JDBC driver using the current class loader
-		Class.forName("org.sqlite.JDBC");
 		Connection connection = null;
 		try
 		{
+			Class.forName("org.sqlite.JDBC");
+
 		    // create a database connection
 		    connection = connect();
 	
@@ -68,6 +69,9 @@ public class DBHelper {
 		 catch(SQLException e){  
 			 System.err.println(e.getMessage()); 
 		 }       
+		 catch(ClassNotFoundException e) {
+			 System.err.println(e.getMessage());
+		 }
 		 finally {         
 			 try {
 	               if(connection != null)
@@ -253,6 +257,26 @@ public class DBHelper {
 		    	 System.err.println(e); 
 		     }
 		 }
+	}
+	
+	//added a method for getting information on track status (for Repair Scheduling) - Matt
+	public String getTrackStatus(int trackid) {
+		String status = null;
+		Connection connection = null;
+		
+		try {
+			connection = connect();
+			
+			Statement statement = connection.createStatement();
+			statement.setQueryTimeout(30);
+			
+			ResultSet result = statement.executeQuery("SELECT * from  TrackInfo WHERE trackID = '" + trackid + "'");
+			status = result.getString("trackStatus");
+		} catch(SQLException e) {
+			System.err.println(e);
+		}
+		
+		return status;
 	}
 	
 	public String getInfrastructure(int trackid) {

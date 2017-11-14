@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.filechooser.*;
 
+import MTR.NorthShoreExtension.MainMTR;
 import MTR.NorthShoreExtension.Backend.DBHelper;
 
 import javax.swing.SwingUtilities;
@@ -35,6 +36,7 @@ public class LoadTrackModelUI extends JPanel
  
     public LoadTrackModelUI() {
         super(new BorderLayout());
+		load = new DBHelper();
  
         //Create the log first, because the action listeners
         //need to refer to it.
@@ -132,13 +134,22 @@ public class LoadTrackModelUI extends JPanel
                 log.append("Open command cancelled by user." + newline);
             }
             log.setCaretPosition(log.getDocument().getLength());
-            String[] args = null;
-			try {
-				TrackModelUI.main(args);
-			} catch (ClassNotFoundException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+            
+            //Start the Track model UI
+            javax.swing.SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					TrackModelUI.createAndShowGUI();;
+				}
+			});
+           
+			//Start CTC UI only if this is the full program
+            if(MainMTR.fullUI) {
+				javax.swing.SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						ctcUI.formAndRenderGUI();
+					}
+				});
+            }
         //Handle save button action.
         } else if (e.getSource() == saveButton) {
             int returnVal = fc.showSaveDialog(LoadTrackModelUI.this);
@@ -172,8 +183,9 @@ public class LoadTrackModelUI extends JPanel
      * Create the GUI and show it.  For thread safety,
      * this method should be invoked from the
      * event dispatch thread.
+     * @throws  
      */
-    private static void createAndShowGUI() {
+    public static void createAndShowGUI() {
         //Create and set up the window.
         JFrame frame = new JFrame("Load Track");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -189,7 +201,6 @@ public class LoadTrackModelUI extends JPanel
     public static void main(String[] args) throws ClassNotFoundException {
         //Schedule a job for the event dispatch thread:
         //creating and showing this application's GUI.
-    		load = new DBHelper();
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 //Turn off metal's use of bold fonts
