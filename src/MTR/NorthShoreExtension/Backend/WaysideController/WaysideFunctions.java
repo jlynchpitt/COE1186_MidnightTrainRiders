@@ -24,16 +24,13 @@ import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
-import java.util.Timer;
-import java.util.TimerTask;
+
 
 
 public class WaysideFunctions
 {
-	//train scheduler
+	
 	public static int[] ProtoArray = {0,1,2,3,4,5,6};
-	public static int[] ProtoArray2 = {00,11,22,33,44,55,66};
-	public static int[] ProtoArray3 = {000,111,222,333,444,555,666};
 	public static int[] IncomingArray;
 	public static WaysideFunctionsHub obj = new WaysideFunctionsHub();
 	
@@ -45,47 +42,9 @@ public class WaysideFunctions
 		WaysideFunctionsHub.WaysideController_TrackOccupancy(ProtoArray);
 		WaysideFunctionsHub.WaysideController_BrokenTrack(ProtoArray);
 	}
-	int counter = 0;
-	Timer trimer = new Timer();
-	TimerTask task = new TimerTask()
-	{
-		public void run()
-		{
-				//System.out.println("Second passed");
-				//System.out.println("Second passed" + counter);
-				if (counter ==0)
-				{
-					WaysideFunctionsHub.WaysideController_Authority(ProtoArray);
-					counter++;
-				}
-				else if (counter == 1)
-				{
-					WaysideFunctionsHub.WaysideController_Authority(ProtoArray2);
-					counter++;
-				}
-				else if (counter == 2)
-				{
-					WaysideFunctionsHub.WaysideController_Authority(ProtoArray3);
-					counter = 0;
-				}
-				
-		}
-		
-	};
-	public void start()
-	{
-		trimer.scheduleAtFixedRate(task, 1000, 1000);
-	}
-	public static void Timer()
-	{
-		//System.out.println("PLACEHOLDER");
-		WaysideFunctions CountUp = new WaysideFunctions();
-		CountUp.start();
-	}
 	
    //---------------------------------------------------------------------------------
-   //not necessary below
-	public static void CTC_getOccupancy(int[] IncomingTrackOccupancyArray)  //call this from the CTC to send the CTC info 
+   public static void CTC_getOccupancy(int[] IncomingTrackOccupancyArray)  //call this from the CTC to send the CTC info 
    {
 	   //int[] OccupancyArray = new int[4];  
 	   IncomingArray = IncomingTrackOccupancyArray;
