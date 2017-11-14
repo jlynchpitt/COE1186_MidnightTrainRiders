@@ -4,16 +4,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 import MTR.NorthShoreExtension.Backend.DBHelper;
+import MTR.NorthShoreExtension.Backend.TrainSrc.Train;
+import MTR.NorthShoreExtension.Backend.WaysideController.WaysideFunctionsHub;
 import MTR.NorthShoreExtension.UI.TrackModelUI;
 import java.util.Random;
 
 public class TrackModel {
-	//private WaysideControllerHelper wayside;
+	static WaysideFunctionsHub wayside;
 	static Map<Integer, Track> trackList = new HashMap<Integer, Track>();
 	static Track updateTrack;
 	static int trackOccupency[] = new int[300];
 	static int brokenTrack[] = new int[300];
 	static Map<Integer, TrainsOperating> trainList = new HashMap<Integer, TrainsOperating>();
+	static Map<Integer, Train> officalTrains = new HashMap<Integer, Train>();
 	static TrainsOperating newTrain;
 	static TrainsOperating update;
 	static double difference;
@@ -22,6 +25,8 @@ public class TrackModel {
 	static DBHelper load = helper.sendDB();
 	static Random rand = new Random();
 	static int soldTicket = 0;
+	static Train train;
+	static Train updateTrains;
 		
 	class Track{
 		String line;
@@ -58,8 +63,8 @@ public class TrackModel {
 		int authority;
 	}
 	
-	public TrackModel(/*WaysideControllerHelper t*/) {
-		
+	public void TrackModel_wayside(WaysideFunctionsHub t) {
+		wayside = t;
 	}
 	
 	public static void TrackModel_setSwitch(int trackid, int position) {
@@ -87,7 +92,7 @@ public class TrackModel {
 	
 	public static void breakTrack(int id) {
 		brokenTrack[(brokenTrack.length -1)] = id;
-		//have wayside type and send the updated array of broken tracks
+		wayside.WaysideController_BrokenTrack(brokenTrack);
 	}
 	
 	public static void TrackModel_addTrain(int trackid, int trainid) {
@@ -101,7 +106,9 @@ public class TrackModel {
 		updateTrack.trainOccupying = trainid;
 		trackList.put(trackid, updateTrack);
 		load.updateTrackOccupied(trackid, 1);
-		//have wayside type and send the updated array of occupied tracks
+		train = new Train(trainid);
+		officalTrains.put(trainid, train);
+		wayside.WaysideController_TrackOccupancy(trackOccupency);
 	}
 	
 	public static void sellTicket(int trackid) {
@@ -127,14 +134,17 @@ public class TrackModel {
 		return soldTicket;
 	}
 	
-	public static void TrackModel_setSpeedAuthority(int trackid, int s, int a) {
+	public static void TrackModel_setSpeedAuthority(int trackid, int s, int[] a) {
 		updateTrack = trackList.get(trackid);
 		trackList.remove(trackid);
-		updateTrack.authority = a;
+		updateTrack.authority = a.length;
 		updateTrack.speed = s;
+		if(updateTrack.occupied)
+		{
+			updateTrains = officalTrains.get(updateTrack.trainOccupying);
+			//updateTrains.TrainModel_setSpeedandAuthorty(s, a.length);
+		}
 		trackList.put(trackid, updateTrack);
-		//convert authority to number of blocks
-		//send speed and authority to train
 	}
 	
 	public static void sendBeacon(int trackid, int trainid) {
