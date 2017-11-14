@@ -10,7 +10,7 @@ import MTR.NorthShoreExtension.UI.TrackModelUI;
 import java.util.Random;
 
 public class TrackModel {
-	private WaysideFunctionsHub wayside;
+	static WaysideFunctionsHub wayside;
 	static Map<Integer, Track> trackList = new HashMap<Integer, Track>();
 	static Track updateTrack;
 	static int trackOccupency[] = new int[300];
@@ -92,7 +92,7 @@ public class TrackModel {
 	
 	public static void breakTrack(int id) {
 		brokenTrack[(brokenTrack.length -1)] = id;
-		//have wayside type and send the updated array of broken tracks
+		wayside.WaysideController_BrokenTrack(brokenTrack);
 	}
 	
 	public static void TrackModel_addTrain(int trackid, int trainid) {
@@ -108,7 +108,7 @@ public class TrackModel {
 		load.updateTrackOccupied(trackid, 1);
 		train = new Train(trainid);
 		officalTrains.put(trainid, train);
-		//have wayside type and send the updated array of occupied tracks
+		wayside.WaysideController_TrackOccupancy(trackOccupency);
 	}
 	
 	public static void sellTicket(int trackid) {
@@ -145,7 +145,6 @@ public class TrackModel {
 			//updateTrains.TrainModel_setSpeedandAuthorty(s, a.length);
 		}
 		trackList.put(trackid, updateTrack);
-		//send to train
 	}
 	
 	public static void sendBeacon(int trackid, int trainid) {
