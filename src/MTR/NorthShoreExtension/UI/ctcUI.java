@@ -38,6 +38,8 @@ import java.io.*;
 import java.util.*;
 import java.text.*;
 
+import MTR.NorthShoreExtension.UI.*;
+
 public class ctcUI {
 	
 	//Specify the look and feel to use. Valid values: null (default), "Metal", "System",
