@@ -168,7 +168,7 @@ public class TrainControlTestBenchPanel extends JPanel
     	String newButtonText = "";
     	boolean setButtonActivated = false;
     	
-        /*if(e.getSource() == brake) {
+        /*if(e.getSource() == engineFailureButton) {
         	if(brake.getBackground() == Color.RED) {
         		//button originally activated
         		newButtonText = "Apply Brake";
@@ -184,7 +184,7 @@ public class TrainControlTestBenchPanel extends JPanel
         		
         	setControlButtonState(brake, newButtonText, setButtonActivated);
         }
-        else if(e.getSource() == eBrake) {
+        else if(e.getSource() == signalPickupFailureButton) {
         	if(eBrake.getBackground() == Color.RED) {
         		//button originally activated
         		newButtonText = "Apply E-Brake";
@@ -200,7 +200,7 @@ public class TrainControlTestBenchPanel extends JPanel
         		
         	setControlButtonState(eBrake, newButtonText, setButtonActivated);
         }
-        else if(e.getSource() == openRDoor) {
+        else if(e.getSource() == brakeFailureButton) {
         	if(openRDoor.getBackground() == Color.RED) {
         		//button originally activated
         		newButtonText = "Open R Door";
@@ -216,7 +216,7 @@ public class TrainControlTestBenchPanel extends JPanel
 
         	setControlButtonState(openRDoor, newButtonText, setButtonActivated);
         }
-        else if(e.getSource() == openLDoor) {
+        else if(e.getSource() == moveToNextTrack) {
         	if(openLDoor.getBackground() == Color.RED) {
         		//button originally activated
         		newButtonText = "Open L Door";
@@ -231,71 +231,12 @@ public class TrainControlTestBenchPanel extends JPanel
         	trainController.operateLeftDoor(setButtonActivated);
 
         	setControlButtonState(openLDoor, newButtonText, setButtonActivated);
+        }*/
+        if(e.getSource() == passEBrake) {        		
+        	trainController.TrainControl_setPassengerEBrake();
+
+        	setControlButtonState(passEBrake, "Pull Passenger Emergency Brake", true);
         }
-        else if(e.getSource() == turnOnLights) {
-        	if(turnOnLights.getBackground() == Color.RED) {
-        		//button originally activated
-        		newButtonText = "Turn On Lights";
-        		setButtonActivated = false;
-        	}
-        	else {
-        		
-        		newButtonText = "Turn Off Lights";
-        		setButtonActivated = true;
-        	}
-        		
-        	trainController.operateLights(setButtonActivated);
-
-        	setControlButtonState(turnOnLights, newButtonText, setButtonActivated);
-        }
-        else if(e.getSource() == trainController) {
-        	//backend info updated - update it in the UI
-        	/*switch(e.getActionCommand()) {
-        	case VITAL:
-        		updateUIIntSpeed(trainSetSpeed, trainController.getTrainSetSpeed());
-        		updateUIPower(actualPower, trainController.getPower());
-        		updateUIDoubleSpeed(actualSpeed, trainController.getActualSpeed());
-
-        		//commanded authority
-        		updateUIAuthority(commandedAuthority, trainController.getAuthority());
-        		updateUIIntSpeed(commandedSetSpeed, trainController.getCTCCommandedSetSpeed());
-        		break;
-        	case TRACK_INFO:
-        		break;
-        	case TEMPERATURE:
-        		internalTemp.setText(Double.toString(trainController.getInternalTemp()));
-        		break;
-        	case DOORS:
-        		boolean rOpen = trainController.isRightDoorOpen();
-        		String rButtonText = rOpen == true ? "Close R Door" : "Open R Door";
-        		setControlButtonState(openRDoor, rButtonText, rOpen);
-
-        		boolean lOpen = trainController.isLeftDoorOpen();
-        		String lButtonText = lOpen == true ? "Close L Door" : "Open L Door";
-        		setControlButtonState(openLDoor, lButtonText, lOpen);
-        		break;
-        	case LIGHTS:
-        		boolean lightsOn = trainController.areLightsOn();
-        		String lightText = lightsOn == true ? "Turn Off Lights" : "Turn On Lights";
-        		setControlButtonState(openLDoor, lightText, lightsOn);
-        		break;
-        	case BRAKES:
-        		boolean brakeApplied = trainController.isBrakeApplied();
-        		String brakeText = brakeApplied == true ? "Release Brake" : "Apply Brake";
-        		setControlButtonState(brake, brakeText, brakeApplied);
-
-        		boolean eBrakeApplied = trainController.isEBrakeApplied();
-        		String eBrakeText = eBrakeApplied == true ? "Release E-Brake" : "Apply E-Brake";
-        		setControlButtonState(eBrake, eBrakeText, eBrakeApplied);
-        		break;
-        	case ANNOUNCEMENT:
-        		announcements.setText(trainController.getAnnouncements());
-        		break;
-        	case FAULT:
-        		faults.setText(trainController.getTrainFaults());
-        		break;
-        	}*/
-        //}
     }
 
     /**
