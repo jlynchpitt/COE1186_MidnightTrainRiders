@@ -41,6 +41,9 @@ public class TrainController {
 	private int authority = 0; //# of tracks/blocks
 	private boolean brakeApplied = true; //default to brakes applied
 	private boolean eBrakeApplied = true; //emergency brake - default to brakes applied
+	private boolean signalPickupFailed = false;
+	private boolean engineFailed = false;
+	private boolean brakesFailed = false;
 	
 	/* Non-Vital Train Info */
 	private String trainFaults = "none"; //TODO: Possibly change to enumerated type
@@ -175,6 +178,8 @@ public class TrainController {
 		}
 	}
 	
+	
+	
 	/* Functions for receiving inputs from the train model */
 	public void TrainControl_setActualSpeed(double speed) {
 		actualSpeed = speed;
@@ -197,8 +202,20 @@ public class TrainController {
 		//translate beacon - TODO: 
 	}
 	
-	public void TrainControl_setFaultStatus(int status) {
-		//TODO: Define status as enumerated type
+	public void TrainControl_setFaultStatus(int status, boolean faultActive) {
+		switch(status) {
+		case TrainControllerHelper.BRAKE_FAILURE:
+			brakesFailed = faultActive;
+			break;
+		case TrainControllerHelper.ENGINE_FAILURE:
+			engineFailed = faultActive;
+			break;
+		case TrainControllerHelper.SIGNAL_PICKUP_FAILURE:
+			signalPickupFailed = faultActive;
+			break;				
+		}
+		
+		updateUI(TrainControlPanel.FAULT);
 	}
 	
 	public void TrainControl_setActualTemp(double temp) {
@@ -249,6 +266,33 @@ public class TrainController {
 	
 	public String getTrainFaults() {
 		return trainFaults;
+	}
+	
+	public String getEngineStatus(){
+		if(engineFailed) {
+			return "FAILED";
+		}
+		else {
+			return "Operational";
+		}
+	}
+	
+	public String getBrakeStatus(){
+		if(brakesFailed) {
+			return "FAILED";
+		}
+		else {
+			return "Operational";
+		}
+	}
+	
+	public String getSignalPickupStatus(){
+		if(signalPickupFailed) {
+			return "FAILED";
+		}
+		else {
+			return "Operational";
+		}
 	}
 	
 	public double getInternalTemp() {
