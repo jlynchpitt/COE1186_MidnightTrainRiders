@@ -95,7 +95,7 @@ public class WaysideFunctionsHub
 		   }
 		   //System.out.println("");
 
-		   WaysideControllerUI.OccupiedTrack(multi);
+		   WaysideControllerUI.OccupiedTrackTableUpdater(multi);
 	   }
 	   
 	   public static void WaysideController_BrokenTrack(int[] IncomingBrokenTrackArray)  //TM calls this to send me broken track info

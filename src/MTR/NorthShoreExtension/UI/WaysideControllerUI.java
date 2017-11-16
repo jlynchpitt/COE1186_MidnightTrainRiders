@@ -26,6 +26,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
 import MTR.NorthShoreExtension.Backend.WaysideController.WaysideFunctions;
+import MTR.NorthShoreExtension.Backend.WaysideController.WaysideFunctionsHub;
 
 
 
@@ -53,6 +54,8 @@ public class WaysideControllerUI
 	public static DefaultTableModel am = new DefaultTableModel();
 	public static DefaultTableModel dm1 = new DefaultTableModel();
 	public static JTable table1;
+	public static JScrollPane scroll1;
+	public static int Scroll1Height = 75;
 	
     
 	  
@@ -72,6 +75,7 @@ public class WaysideControllerUI
       f.setSize(width, height);
 	  f.getContentPane().add(plc);
       f.setVisible(true);
+      //OccupiedTrackTableUpdater();
 	  
 	  
 	  
@@ -150,45 +154,49 @@ public class WaysideControllerUI
 		
 
    }
-   public static void SwitchSwitcher(int x)  //switch based on locatio in the chart
+   public static void SwitchSwitcher(int x)  //switch based on location in the chart
    {
 	   //System.out.println(dm.getRowCount());
 	   Object placeholder = dm.getValueAt(x, 4);
 	   dm.setValueAt(dm.getValueAt(x, 3), x,4);
 	   dm.setValueAt(placeholder, x,3);
    }
-   public static void OccupiedTrack(Object[][] ObjectArray)
+
+   public static void OccupiedTrackTableUpdater(Object[][] ObjectArray)
    {
-
-	   for (int x = 0; x < 10; x++)
+	   for (int x = 0; x < ObjectArray.length; x++)
 	   {
+		   //dm1.addRow(ObjectArray[x]);
 		   
-		   //int ceiling = 5;//dm1.getRowCount();
-
-		   if (x == 5);
+		   for (int y = 0; y < ObjectArray[x].length; y++)
 		   {
-			   System.out.println(x);
+			   if (x > dm1.getRowCount()-1)
+			   {
+				   dm1.addRow(ObjectArray[x]);
+			   }
+			   else
+			   {
+				   dm1.setValueAt(ObjectArray[x][y], x, y);
+			   }
+			   scroll1.setPreferredSize(new Dimension(500, dm1.getRowCount()*(20)));
 		   }
-
+		   
+		   
+			   //System.out.println(x);
 	   }
-
    }
    public static void SwitchChartUpdater(int ID)  //update with actual information
    {
-	   //determine position based on number
-	   if (ID == 2002)
+	   String BlockNumber =  Integer.toString(ID).substring(1,4);
+
+	   //LineColor = DB.getColor(IncomingTrackOccupancyArray[x]);
+	   for (int x = 0; x < dm.getRowCount(); x++)
 	   {
-		   SwitchSwitcher(0);
+		   if (Integer.parseInt(BlockNumber) == Integer.parseInt((String)(dm.getValueAt(x,1))))
+		   {
+			   SwitchSwitcher(x);
+		   }
 	   }
-	   if (ID == 2003)
-	   {
-		   SwitchSwitcher(1);
-	   }
-	   if (ID == 2004)
-	   {
-		   SwitchSwitcher(2);
-	   }
-	 //dm.setValueAt("666", 2,2);
    }
    //register all panels
    public static void ComponentAdder()
@@ -206,15 +214,25 @@ public class WaysideControllerUI
 	   ActionAdder();
 	   
 	   
-		dm.setDataVector(new Object[][] { { "Green", "2", "A1", "C2", "C5" },
-			{ "Green", "3", "A2", "A1", "B2" },
-			{ "Green", "4", "A3", "B2", "D6" }		}, new Object[] { "Line", "Block", "Track", "Dest Track", "Alt Track" });
-		
+	   dm.setDataVector(new Object[][] { { "Red", "09", "C3", "Yard", "D1" },
+			{ "Red", "15", "A2", "A1", "B2" },
+			{ "Red", "27", "E3", "F1", "A1" },
+			{ "Red", "32", "H8", "T1", "H9" },
+			{ "Red", "38", "H15", "Q1", "H16" },
+			{ "Red", "43", "H20", "H21", "O1" },
+			{ "Red", "52", "J4", "N1", "J5" },
+			{ "Green", "12", "C6", "D4", "A1" },
+			{ "Green", "29", "G1", "F8", "Z1" },
+			{ "Green", "58", "J1", "K1", "Yard" },
+			{ "Green", "62", "J5", "I22", "Yard" },
+			{ "Green", "76", "M3", "R1", "N1" },
+			{ "Green", "86", "O1", "N9", "Q3" }		}, new Object[] { "Line", "Block", "Track", "Dest Track", "Alt Track" });
+
 		//dm.setValueAt("666", 2,2);
 
 		JTable table = new JTable(dm);
 		JScrollPane scroll = new JScrollPane(table);
-		scroll.setPreferredSize(new Dimension(500,75));
+		scroll.setPreferredSize(new Dimension(500,260));
 		//-----------------------------------------------------------------------------
 	    dm1.setDataVector(new Object[][] { { "Green", "C5", "Swtch", "20 mi" },
 	        { "Red", "D7", "T4", "12mi" } }, new Object[] { "Line", "Occupied Track", "Dest Track", "Athrty" });
@@ -228,9 +246,9 @@ public class WaysideControllerUI
 	        { "Red", "A2" } }, new Object[] { "Xing", "Line"});
 
 	    JTable lighttable = new JTable(am);
-	    JScrollPane scroll1 = new JScrollPane(table1);
+	    scroll1 = new JScrollPane(table1);
 		JScrollPane scroll2 = new JScrollPane(lighttable);
-		scroll1.setPreferredSize(new Dimension(500,75));
+		scroll1.setPreferredSize(new Dimension(500,Scroll1Height));
 		scroll2.setPreferredSize(new Dimension(100,75));
 		//------------------------------------------
 		TestPanel.add(scroll, BorderLayout.WEST);
@@ -282,9 +300,19 @@ public class WaysideControllerUI
 		ActionAdder();
 		
 	   //DefaultTableModel dm = new DefaultTableModel();
-		dm.setDataVector(new Object[][] { { "Green", "2", "A1", "C2", "C5" },
-			{ "Green", "3", "A2", "A1", "B2" },
-			{ "Green", "4", "A3", "B2", "D6" }		}, new Object[] { "Line", "Block", "Track", "Dest Track", "Alt Track" });
+		dm.setDataVector(new Object[][] { { "Red", "09", "C3", "Yard", "D1" },
+			{ "Red", "15", "A2", "A1", "B2" },
+			{ "Red", "27", "E3", "F1", "A1" },
+			{ "Red", "32", "H8", "T1", "H9" },
+			{ "Red", "38", "H15", "Q1", "H16" },
+			{ "Red", "43", "H20", "H21", "O1" },
+			{ "Red", "52", "J4", "N1", "J5" },
+			{ "Green", "12", "C6", "D4", "A1" },
+			{ "Green", "29", "G1", "F8", "Z1" },
+			{ "Green", "58", "J1", "K1", "Yard" },
+			{ "Green", "62", "J5", "I22", "Yard" },
+			{ "Green", "76", "M3", "R1", "N1" },
+			{ "Green", "86", "O1", "N9", "Q3" }		}, new Object[] { "Line", "Block", "Track", "Dest Track", "Alt Track" });
 
 		JTable table = new JTable(dm);
 		JScrollPane scroll = new JScrollPane(table);
@@ -320,7 +348,7 @@ public class WaysideControllerUI
     om.setDataVector(new Object[][] { { "Green", "C5", "Swtch", "20 mi" },
         { "Red", "D7", "T4", "12mi" } }, new Object[] { "Line", "Occupied Track", "Dest Track", "Athrty" });
 
-    JTable table = new JTable(dm);
+    table1 = new JTable(dm);
 
 
 //---------------------------------------------------------------------		
@@ -328,11 +356,11 @@ public class WaysideControllerUI
         { "Red", "A2" } }, new Object[] { "Xing", "Line"});
 
     JTable lighttable = new JTable(am);
-    JScrollPane scroll = new JScrollPane(table);
+    scroll1 = new JScrollPane(table1);
 	JScrollPane scroll2 = new JScrollPane(lighttable);
-	scroll.setPreferredSize(new Dimension(500,75));
+	scroll1.setPreferredSize(new Dimension(500,Scroll1Height));
 	scroll2.setPreferredSize(new Dimension(100,75));
-	TI.add(scroll, BorderLayout.WEST);
+	TI.add(scroll1, BorderLayout.WEST);
 	TI.add(scroll2, BorderLayout.EAST);
 	
 	

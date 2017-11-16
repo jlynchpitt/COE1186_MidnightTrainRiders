@@ -75,17 +75,17 @@ public class WaysideFunctions
 	{
 		if (counter ==0)
 		{	
-			WaysideFunctionsHub.WaysideController_Switch(2002);
+			WaysideFunctionsHub.WaysideController_Switch(1027);
 			counter++;
 		}
 		else if (counter == 1)
 		{
-			WaysideFunctionsHub.WaysideController_Switch(2003);
+			WaysideFunctionsHub.WaysideController_Switch(1038);
 			counter++;
 		}
 		else if (counter == 2)
 		{
-			WaysideFunctionsHub.WaysideController_Switch(2004);
+			WaysideFunctionsHub.WaysideController_Switch(2062);
 			counter = 0;
 		}
 		
