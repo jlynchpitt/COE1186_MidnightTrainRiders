@@ -50,6 +50,7 @@ import javax.swing.text.NumberFormatter;
 import java.beans.*; //property change stuff
 import MTR.NorthShoreExtension.Backend.*;
 import MTR.NorthShoreExtension.Backend.TrainControllerSrc.TrainController;
+import MTR.NorthShoreExtension.Backend.TrainControllerSrc.TrainControllerHelper;
 
 public class TrainControlTestBenchPanel extends JPanel
                              implements ActionListener,
@@ -168,71 +169,58 @@ public class TrainControlTestBenchPanel extends JPanel
     	String newButtonText = "";
     	boolean setButtonActivated = false;
     	
-        /*if(e.getSource() == engineFailureButton) {
-        	if(brake.getBackground() == Color.RED) {
+        if(e.getSource() == engineFailureButton) {
+        	if(engineFailureButton.getBackground() == Color.RED) {
         		//button originally activated
-        		newButtonText = "Apply Brake";
+        		newButtonText = "Fail Engine";
         		setButtonActivated = false;
         	}
         	else {
         		
-        		newButtonText = "Release Brake";
+        		newButtonText = "Repair Engine";
         		setButtonActivated = true;
         	}
         	
-        	trainController.operateBrake(setButtonActivated);
+        	trainController.TrainControl_setFaultStatus(TrainControllerHelper.ENGINE_FAILURE, setButtonActivated);
         		
-        	setControlButtonState(brake, newButtonText, setButtonActivated);
+        	setControlButtonState(engineFailureButton, newButtonText, setButtonActivated);
         }
         else if(e.getSource() == signalPickupFailureButton) {
-        	if(eBrake.getBackground() == Color.RED) {
+        	if(signalPickupFailureButton.getBackground() == Color.RED) {
         		//button originally activated
-        		newButtonText = "Apply E-Brake";
+        		newButtonText = "Fail Signal Pickup";
         		setButtonActivated = false;
         	}
         	else {
         		
-        		newButtonText = "Release E-Brake";
+        		newButtonText = "Repair Signal Pickup";
         		setButtonActivated = true;
         	}
         	
-        	trainController.operateEmergencyBrake(setButtonActivated);
+        	trainController.TrainControl_setFaultStatus(TrainControllerHelper.SIGNAL_PICKUP_FAILURE, setButtonActivated);
         		
-        	setControlButtonState(eBrake, newButtonText, setButtonActivated);
+        	setControlButtonState(signalPickupFailureButton, newButtonText, setButtonActivated);
         }
         else if(e.getSource() == brakeFailureButton) {
-        	if(openRDoor.getBackground() == Color.RED) {
+        	if(brakeFailureButton.getBackground() == Color.RED) {
         		//button originally activated
-        		newButtonText = "Open R Door";
+        		newButtonText = "Fail Brakes";
         		setButtonActivated = false;
         	}
         	else {
         		
-        		newButtonText = "Close R Door";
+        		newButtonText = "Repair Brakes";
         		setButtonActivated = true;
         	}
+        	
+        	trainController.TrainControl_setFaultStatus(TrainControllerHelper.BRAKE_FAILURE, setButtonActivated);
         		
-        	trainController.operateRightDoor(setButtonActivated);
-
-        	setControlButtonState(openRDoor, newButtonText, setButtonActivated);
+        	setControlButtonState(brakeFailureButton, newButtonText, setButtonActivated);
         }
         else if(e.getSource() == moveToNextTrack) {
-        	if(openLDoor.getBackground() == Color.RED) {
-        		//button originally activated
-        		newButtonText = "Open L Door";
-        		setButtonActivated = false;
-        	}
-        	else {
-        		
-        		newButtonText = "Close L Door";
-        		setButtonActivated = true;
-        	}
-        		
-        	trainController.operateLeftDoor(setButtonActivated);
-
-        	setControlButtonState(openLDoor, newButtonText, setButtonActivated);
-        }*/
-        if(e.getSource() == passEBrake) {        		
+        	trainController.TrainControl_moveToNextTrack();
+        }
+        else if(e.getSource() == passEBrake) {        		
         	trainController.TrainControl_setPassengerEBrake();
 
         	setControlButtonState(passEBrake, "Pull Passenger Emergency Brake", true);
@@ -374,12 +362,12 @@ public class TrainControlTestBenchPanel extends JPanel
 
         brakeFailureButton = new JButton();
         brakeFailureButton.addActionListener(this);
-        setControlButtonState(brakeFailureButton, "Fail brakes", false);
+        setControlButtonState(brakeFailureButton, "Fail Brakes", false);
         
         //Add all buttons to layout
         failureButtonPanel.add(engineFailureButton);
-        failureButtonPanel.add(signalPickupFailureButton);       
         failureButtonPanel.add(brakeFailureButton);       
+        failureButtonPanel.add(signalPickupFailureButton);       
         
         failureButtonPanel.setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createTitledBorder("Failure Controls"),
@@ -464,7 +452,7 @@ public class TrainControlTestBenchPanel extends JPanel
         trainStatusPanel.add(leftDoor);
         trainStatusPanel.add(new JLabel("Lights: "));
         trainStatusPanel.add(lights);
-        trainStatusPanel.add(new JLabel("Announcments: "));
+        trainStatusPanel.add(new JLabel("Announcements: "));
         trainStatusPanel.add(announcements);
         
     	trainStatusPanel.setBorder(BorderFactory.createCompoundBorder(

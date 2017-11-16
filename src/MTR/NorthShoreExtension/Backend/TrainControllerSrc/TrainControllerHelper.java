@@ -24,6 +24,10 @@ import java.util.TimerTask;
  * 		
  */
 public class TrainControllerHelper {
+	public static final int ENGINE_FAILURE = 1;
+	public static final int SIGNAL_PICKUP_FAILURE = 2;
+	public static final int BRAKE_FAILURE = 3;
+	
 	private double pid_p = 0.4;
 	private double pid_i = 0.25; 
 	private Timer powerTimer = new Timer();
