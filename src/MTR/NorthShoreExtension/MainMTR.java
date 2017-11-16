@@ -18,6 +18,7 @@ import MTR.NorthShoreExtension.UI.LoadTrackModelUI;
 public class MainMTR {
 	public static TrainControllerHelper tcHelper;
 	public static boolean fullUI = false;
+	private static DBHelper dbHelper = null;
 	
 	/**
 	 * @param args
@@ -35,6 +36,16 @@ public class MainMTR {
             }
         });
 
+	}
+	
+	public static DBHelper getDBHelper() {
+		if(dbHelper != null) {
+			return dbHelper;
+		}
+		else {
+			dbHelper = new DBHelper();
+			return dbHelper;
+		}
 	}
 
 }
