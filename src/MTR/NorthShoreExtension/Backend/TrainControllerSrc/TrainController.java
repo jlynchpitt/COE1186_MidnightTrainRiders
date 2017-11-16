@@ -23,7 +23,7 @@ public class TrainController {
 	private int trainID = 0;
 	private Train trainModel = null;
 	private TrainControlPanel trainControlPanel = null;
-	private TrainControlTestBenchPanel testBenchPanel = null;
+	private TrainControlTestBenchPanel testBench = null;
 	private boolean CONNECTEDTOTRAINMODEL = false; //This must be true when in the full system - for testing individual submodule
 	private boolean manualMode = true;
 	
@@ -84,7 +84,7 @@ public class TrainController {
 	}
 	
 	public void setTrainControlTestBenchPanel(TrainControlTestBenchPanel tctbp) {
-		testBenchPanel = tctbp;
+		testBench = tctbp;
 	}
 	
 	public void calculatePowerCommand() {
@@ -118,12 +118,16 @@ public class TrainController {
 			spdPID2.reset();
 			spdPID3.reset();
 		}
-				
-		if(CONNECTEDTOTRAINMODEL == false) {
-			actualSpeed = calculateBasicSpeed();
-		}
 		
 		updateUI(TrainControlPanel.VITAL);
+		
+		//Send to train model and test bench
+		if(trainModel != null) {
+			trainModel.TrainModel_setPower(powerCommand);
+		}
+		if(testBench != null) {
+			testBench.TrainModel_setPower(powerCommand);
+		}
 	}
 
 	/* Functions for UI to call to set vital user inputs */
@@ -135,13 +139,23 @@ public class TrainController {
 	
 	public void operateBrake(boolean applied) {
 		brakeApplied = applied;
+		
+		if(trainModel != null) {
+			trainModel.TrainModel_setBrake(applied);
+		}
+		if(testBench != null) {
+			testBench.TrainModel_setBrake(applied);
+		}
 	}
 	
 	public void operateEmergencyBrake(boolean applied) {
 		eBrakeApplied = applied;
 		
 		if(trainModel != null) {
-			//trainModel.TrainModel_operateBrake(applied);
+			trainModel.TrainModel_setEBrake(applied);
+		}
+		if(testBench != null) {
+			testBench.TrainModel_setEBrake(applied);
 		}
 	}
 	
@@ -150,7 +164,10 @@ public class TrainController {
 		rightDoorOpen = open;
 		
 		if(trainModel != null) {
-			//trainModel.TrainModel_openRightDoor(open);
+			trainModel.TrainModel_openRightDoor(open);
+		}
+		if(testBench != null) {
+			testBench.TrainModel_openRightDoor(open);
 		}
 	}
 	
@@ -158,7 +175,10 @@ public class TrainController {
 		leftDoorOpen = open;
 		
 		if(trainModel != null) {
-			//trainModel.TrainModel_openLeftDoor(open);
+			trainModel.TrainModel_openLeftDoor(open);
+		}
+		if(testBench != null) {
+			testBench.TrainModel_openLeftDoor(open);
 		}
 	}
 	
@@ -166,16 +186,17 @@ public class TrainController {
 		lightsOn = on;
 		
 		if(trainModel != null) {
-			//trainModel.TrainModel_TurnLightsOn(open);
+			trainModel.TrainModel_turnLightsOn(on);
+		}
+		if(testBench != null) {
+			testBench.TrainModel_turnLightsOn(on);
 		}
 	}
 	
 	public void setInsideTemperature(int temp) {
 		setTemp = temp;
-		
-		if(trainModel != null) {
-			//trainModel.TrainModel_setTemperature(open); TODO: remove this not needed
-		}
+
+		//TODO: perform calculations of actual temperature
 	}
 	
 	

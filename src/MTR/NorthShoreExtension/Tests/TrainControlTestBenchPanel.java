@@ -68,8 +68,8 @@ public class TrainControlTestBenchPanel extends JPanel
     /* Speed Authority Components*/
     JFormattedTextField commandedSpeed;
     JFormattedTextField commandedAuthority;
-    JLabel powerCommand;
-    JLabel actualSpeed;
+    JLabel powerCommandLabel;
+    JLabel actualSpeedLabel;
     
     /* Failure Button Components */
     JButton engineFailureButton;
@@ -87,6 +87,12 @@ public class TrainControlTestBenchPanel extends JPanel
     JLabel leftDoor;
     JLabel lights;
     JLabel announcements;
+    
+    /* Internal status/state variables */
+    private double powerCommand = 0;
+    private double actualSpeed = 0;
+    private boolean brakeApplied = false;
+    private boolean eBrakeApplied = false;
 
     public TrainControlTestBenchPanel(TrainController tc) {
         
@@ -138,18 +144,42 @@ public class TrainControlTestBenchPanel extends JPanel
                              getPreferredSize().height);
     }
 
-    /**
-     * Returns the multiplier (units/meter) for the currently
-     * selected unit of measurement.
-     */
-    public double getMultiplier() {
-        return 0.25; //sliderModel.getMultiplier();
+    /** Train model commands  */
+    public void TrainModel_setPower(double powerCmd) {
+    	powerCommand = powerCmd;
+    	
+    	powerCommandLabel.setText(Double.toString(powerCommand));
     }
-
-    public double getValue() {
-        return 0.35; //sliderModel.getDoubleValue();
+    
+    public void TrainModel_setBrake(boolean applied) {
+    	brakeApplied = applied;
+    	
+    	brakeStatus.setText(applied == true ? "Applied" : "Released");
     }
-
+    
+    public void TrainModel_setEBrake(boolean applied) {
+    	eBrakeApplied = applied;
+    	
+    	eBrakeStatus.setText(applied == true ? "Applied" : "Released");
+    }
+    
+    public void TrainModel_openRightDoor(boolean open) {
+    	rightDoor.setText(open == true ? "Open" : "Closed");
+    }
+    
+    public void TrainModel_openLeftDoor(boolean open) {
+    	leftDoor.setText(open == true ? "Open" : "Closed");
+    }
+    
+    public void TrainModel_turnLightsOn(boolean lightsOn) {
+    	if(lightsOn) {
+    		lights.setText("On");
+    	}
+    	else {
+    		lights.setText("Off");
+    	}
+    }
+    
     /** Updates the text field when the main data model is updated. */
     public void stateChanged(ChangeEvent e) {
         int min = 0; //sliderModel.getMinimum();
@@ -322,10 +352,10 @@ public class TrainControlTestBenchPanel extends JPanel
         commandedAuthority = new JFormattedTextField(formatter);
         commandedAuthority.setText("0");
         
-        powerCommand = new JLabel();
-        updateUIPower(powerCommand, 0); //TODO: Should this get the current power command from the Train Controller?
-        actualSpeed = new JLabel();
-        updateUIDoubleSpeed(actualSpeed, trainController.getActualSpeed());
+        powerCommandLabel = new JLabel();
+        updateUIPower(powerCommandLabel, 0); //TODO: Should this get the current power command from the Train Controller?
+        actualSpeedLabel = new JLabel();
+        updateUIDoubleSpeed(actualSpeedLabel, trainController.getActualSpeed());
         
         //Add all labels to layout
         speedAuthorityPanel.add(new JLabel("Speed (MPH): "));
@@ -335,14 +365,13 @@ public class TrainControlTestBenchPanel extends JPanel
         speedAuthorityPanel.add(new JLabel(""));
         speedAuthorityPanel.add(new JLabel(""));
         speedAuthorityPanel.add(new JLabel("Power Command: "));
-        speedAuthorityPanel.add(powerCommand);
+        speedAuthorityPanel.add(powerCommandLabel);
         speedAuthorityPanel.add(new JLabel("Actual Speed: "));
-        speedAuthorityPanel.add(actualSpeed);
+        speedAuthorityPanel.add(actualSpeedLabel);
        
     	speedAuthorityPanel.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createTitledBorder("Vital Info"),
                 BorderFactory.createEmptyBorder(5,5,5,5)));
-        
     }
     
     private void createFailureButtonPanel() {
