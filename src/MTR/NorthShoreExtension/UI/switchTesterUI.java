@@ -489,7 +489,7 @@ public class switchTesterUI extends JFrame {
 		tabbedPane.add("Green Line",grnPanel);
 		
 		frame.add(tabbedPane);
-		frame.setSize(800, 550);
+		frame.setSize(700, 500);
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
 	}}
