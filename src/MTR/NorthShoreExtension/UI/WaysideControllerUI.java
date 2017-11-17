@@ -54,7 +54,10 @@ public class WaysideControllerUI
 	public static DefaultTableModel am = new DefaultTableModel();
 	public static DefaultTableModel dm1 = new DefaultTableModel();
 	public static JTable table1;
+	public static JTable table;
 	public static JScrollPane scroll1;
+	public static JScrollPane scroll;
+	public static JScrollPane scroll2;
 	public static int Scroll1Height = 75;
 	
     
@@ -178,7 +181,9 @@ public class WaysideControllerUI
 			   {
 				   dm1.setValueAt(ObjectArray[x][y], x, y);
 			   }
-			   scroll1.setPreferredSize(new Dimension(500, dm1.getRowCount()*(20)));
+			   Scroll1Height = dm1.getRowCount()*(20); 
+			   scroll1.setPreferredSize(new Dimension(500, Scroll1Height));
+			   //System.out.println(Scroll1Height);
 		   }
 		   
 		   
@@ -206,14 +211,9 @@ public class WaysideControllerUI
 	   SwitchSetup();
    }
    public static void TestSetup()
-   {
-	   
-	   
-	   ButtonAdder();
-	   
-	   ActionAdder();
-	   
-	   
+   {   
+	   ButtonAdder();  
+	   ActionAdder(); 
 	   dm.setDataVector(new Object[][] { { "Red", "09", "C3", "Yard", "D1" },
 			{ "Red", "15", "A2", "A1", "B2" },
 			{ "Red", "27", "E3", "F1", "A1" },
@@ -228,26 +228,23 @@ public class WaysideControllerUI
 			{ "Green", "76", "M3", "R1", "N1" },
 			{ "Green", "86", "O1", "N9", "Q3" }		}, new Object[] { "Line", "Block", "Track", "Dest Track", "Alt Track" });
 
-		//dm.setValueAt("666", 2,2);
-
-		JTable table = new JTable(dm);
-		JScrollPane scroll = new JScrollPane(table);
+		table = new JTable(dm);
+		scroll = new JScrollPane(table);
 		scroll.setPreferredSize(new Dimension(500,260));
 		//-----------------------------------------------------------------------------
-	    dm1.setDataVector(new Object[][] { { "Green", "C5", "Swtch", "20 mi" },
-	        { "Red", "D7", "T4", "12mi" } }, new Object[] { "Line", "Occupied Track", "Dest Track", "Athrty" });
+	    dm1.setDataVector(new Object[][] { { "Green", "C5", "Swtch", "20 mi" }}, new Object[] { "Line", "Occupied Track", "Dest Track", "Athrty" });
 
 	    table1 = new JTable(dm1);
 
 
 	//---------------------------------------------------------------------		
 		DefaultTableModel am = new DefaultTableModel();
-	    am.setDataVector(new Object[][] { { "Green", "C5" },
-	        { "Red", "A2" } }, new Object[] { "Xing", "Line"});
+	    am.setDataVector(new Object[][] { { "Green", "E3" },
+	        { "Red", "I2" } }, new Object[] { "Xing", "Line"});
 
 	    JTable lighttable = new JTable(am);
 	    scroll1 = new JScrollPane(table1);
-		JScrollPane scroll2 = new JScrollPane(lighttable);
+		scroll2 = new JScrollPane(lighttable);
 		scroll1.setPreferredSize(new Dimension(500,Scroll1Height));
 		scroll2.setPreferredSize(new Dimension(100,75));
 		//------------------------------------------
@@ -314,8 +311,10 @@ public class WaysideControllerUI
 			{ "Green", "76", "M3", "R1", "N1" },
 			{ "Green", "86", "O1", "N9", "Q3" }		}, new Object[] { "Line", "Block", "Track", "Dest Track", "Alt Track" });
 
-		JTable table = new JTable(dm);
-		JScrollPane scroll = new JScrollPane(table);
+		table = new JTable(dm);
+		
+		scroll = new JScrollPane(table);
+		
 		SC.add(scroll, BorderLayout.WEST);
 		
 		
@@ -342,24 +341,26 @@ public class WaysideControllerUI
    
    public static void TrackInfoSetup()
    {
-	   ButtonAdder();
-		
-		ActionAdder();
-    om.setDataVector(new Object[][] { { "Green", "C5", "Swtch", "20 mi" },
-        { "Red", "D7", "T4", "12mi" } }, new Object[] { "Line", "Occupied Track", "Dest Track", "Athrty" });
+	   ButtonAdder();  
+	   ActionAdder(); 
+		//-----------------------------------------------------------------------------
+	    dm1.setDataVector(new Object[][] { { "Green", "C5", "Swtch", "20 mi" }}, new Object[] { "Line", "Occupied Track", "Dest Track", "Athrty" });
 
-    table1 = new JTable(dm);
+	    table1 = new JTable(dm1);
 
 
-//---------------------------------------------------------------------		
-    am.setDataVector(new Object[][] { { "Green", "C5" },
-        { "Red", "A2" } }, new Object[] { "Xing", "Line"});
+	//---------------------------------------------------------------------		
+		DefaultTableModel am = new DefaultTableModel();
+	    am.setDataVector(new Object[][] { { "Green", "E3" },
+	        { "Red", "I2" } }, new Object[] { "Xing", "Line"});
 
-    JTable lighttable = new JTable(am);
-    scroll1 = new JScrollPane(table1);
-	JScrollPane scroll2 = new JScrollPane(lighttable);
-	scroll1.setPreferredSize(new Dimension(500,Scroll1Height));
-	scroll2.setPreferredSize(new Dimension(100,75));
+	    JTable lighttable = new JTable(am);
+	    scroll1 = new JScrollPane(table1);
+		scroll2 = new JScrollPane(lighttable);
+		//scroll1.setPreferredSize(new Dimension(500,Scroll1Height));
+		scroll2.setPreferredSize(new Dimension(100,75));
+
+
 	TI.add(scroll1, BorderLayout.WEST);
 	TI.add(scroll2, BorderLayout.EAST);
 	

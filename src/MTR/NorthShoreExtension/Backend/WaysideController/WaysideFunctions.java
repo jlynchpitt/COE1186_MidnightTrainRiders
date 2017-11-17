@@ -27,9 +27,11 @@ import javax.swing.table.TableCellRenderer;
 import java.util.Timer;
 import java.util.TimerTask;
 import MTR.NorthShoreExtension.Backend.DBHelper;
+import java.util.Random; 
 
 public class WaysideFunctions
 {
+	public static Random rand = new Random();
 	//train scheduler
 	public static int[] ProtoArray = {0,1,2,3,4,5,6};
 	public static int[] ProtoArray2 = {00,11,22,33,44,55,66};
@@ -40,6 +42,8 @@ public class WaysideFunctions
 	public static int[] OccupiedTrack4 = {2065, 2015, 2145, 1057, 1026, 1005};
 	public static int[] OccupiedTrack5 = {2066, 2016, 2146, 1058, 1027, 1006};
 	public static int[] OccupiedTrack6 = {2067, 2017, 2147, 1059, 1028, 1007};
+	
+	
 	public static int[] IncomingArray;
 	public static WaysideFunctionsHub obj = new WaysideFunctionsHub();
 	
@@ -157,10 +161,13 @@ public class WaysideFunctions
    {
 	   //int[] OccupancyArray = new int[4];  
 	   IncomingArray = IncomingTrackOccupancyArray;
+	   
 	   for (int x = 0; x < IncomingArray.length; x++)
 	   {
+		   //WaysideFunctionsHub.OccupiedSpeedAuthority(IncomingArray[x], rand.nextInt(31) + 30, rand.nextInt(51) + 30);
 		   System.out.println("Occupancy: " + IncomingArray[x]);
 	   }
+	   System.out.println("");
 	   
    }
    

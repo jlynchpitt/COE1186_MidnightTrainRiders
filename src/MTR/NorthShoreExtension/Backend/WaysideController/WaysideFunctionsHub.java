@@ -63,6 +63,7 @@ public class WaysideFunctionsHub
 	   
 	   public static void WaysideController_TrackOccupancy(int[] IncomingTrackOccupancyArray)  //TM calls this to send me occupancy info
 	   {
+		   WaysideFunctions.CTC_getOccupancy(IncomingTrackOccupancyArray);
 		   //WaysideFunctions.CTC_getOccupancy(IncomingTrackOccupancyArray);
 		   DBHelper DB = new DBHelper();
 		   int ArrayLength = IncomingTrackOccupancyArray.length;
@@ -102,11 +103,13 @@ public class WaysideFunctionsHub
 	   {
 		   
 		   BrokenTrackArray = IncomingBrokenTrackArray;
-			//WaysideFunctions.CTC_getBrokenTrack(BrokenTrackArray);
+			WaysideFunctions.CTC_getBrokenTrack(BrokenTrackArray);
+			/*
 		   for (int x = 0; x < BrokenTrackArray.length; x++)
 			{
 				System.out.println("WayBroken: " + BrokenTrackArray[x]);
 			}
+			*/
 	   }
    
 
