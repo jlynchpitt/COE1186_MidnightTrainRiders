@@ -280,6 +280,10 @@ public class TrainControlTestBenchPanel extends JPanel
     }
     
     private double calculateBasicSpeed() {
+    	double speed = 0;
+    	double powerSpeed = 0;
+    	boolean brake = true;
+    	
 		//for testing purposes when not attached to train model
 		//simple velocity calculation for demonstration of adjusting power command
 		
@@ -287,9 +291,39 @@ public class TrainControlTestBenchPanel extends JPanel
 		//TrainForce = mass * acceleration = 51.43 tons * 0.5 m/s2 (train 2/3 loaded) = 46656.511 kg * 0.5 m/s2
 		//Velocity = Power/Train Force			
 		//NOTE: 1.34102 converts horsepower back to kWatts
-		double msSpeed = (powerCommand * 1000 / 1.34102)/((46656.511/9.8) * 0.5);
-		double speed = msSpeed * 2.23694;
+    	if(powerCommand > 0) {
+			double msSpeed = (powerCommand * 1000 / 1.34102)/((46656.511/9.8) * 0.5);
+			powerSpeed = msSpeed * 2.23694;
+			
+			if(powerSpeed > speed)
+			{
+				speed = powerSpeed;
+				brake = false;
+			}
+    	}
+    	
+    	if(brake) {
+    		//not accelerating - decrease speed to simulate breaking
+    		double frictionBrakeRate = 0.5;
+    		int standardBrakeRate = 1;
+    		int emergencyBrakeRate = 2;
+    		
+    		if(eBrakeApplied) {
+    			speed = actualSpeed - emergencyBrakeRate;
+    		}
+    		else if(brakeApplied) {
+    			speed = actualSpeed - standardBrakeRate;
+    		}
+    		else {
+    			//brake due to friction
+    			speed = actualSpeed - frictionBrakeRate;
+    		}
+    	}
 		
+		if (speed < 0) {
+			speed = 0;
+		}
+
 		return speed;
 	}
 	

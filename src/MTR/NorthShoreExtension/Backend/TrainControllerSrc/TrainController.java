@@ -24,7 +24,6 @@ public class TrainController {
 	private Train trainModel = null;
 	private TrainControlPanel trainControlPanel = null;
 	private TrainControlTestBenchPanel testBench = null;
-	private boolean CONNECTEDTOTRAINMODEL = false; //This must be true when in the full system - for testing individual submodule
 	private boolean manualMode = true;
 	
 	//PID controllers
@@ -44,6 +43,8 @@ public class TrainController {
 	private boolean signalPickupFailed = false;
 	private boolean engineFailed = false;
 	private boolean brakesFailed = false;
+	private double Kp = 0;
+	private double Ki = 0;
 	
 	/* Non-Vital Train Info */
 	private String trainFaults = "none"; //TODO: Possibly change to enumerated type
@@ -64,6 +65,9 @@ public class TrainController {
 	public TrainController(int id, Train t, double pid_p, double pid_i){
 		trainID = id;
 		trainModel = t;
+		
+		Kp = pid_p;
+		Ki = pid_i;
 		
 		//Initialize pid controllers
 		spdPID1 = new MiniPID(pid_p, pid_i, 0);
@@ -105,7 +109,18 @@ public class TrainController {
 			
 			Double tempPC = powerOutputSelector(tempPC1, tempPC2, tempPC3);
 			if(tempPC != null /* && validatePowerCommand(tempPC)*/) {
-				powerCommand = tempPC;
+				//Limit amount power command can increase in 1 second
+				int safePowerCommandJump = 10;
+				
+				if(tempPC - powerCommand > safePowerCommandJump) {
+					powerCommand = powerCommand + safePowerCommandJump;
+				}
+				else if(powerCommand - tempPC > safePowerCommandJump) {
+					powerCommand = powerCommand - safePowerCommandJump;
+				}
+				else {
+					powerCommand = tempPC;					
+				}
 			}
 			else {
 				//power command validation failed - set power to 0
@@ -257,6 +272,14 @@ public class TrainController {
 	}
 	
 	/* Functions called by UI to get Train Control info */
+	public double getKp() {
+		return Kp;
+	}
+	
+	public double getKi() {
+		return Ki;
+	}
+	
 	public int getAuthority() {
 		return authority;
 	}

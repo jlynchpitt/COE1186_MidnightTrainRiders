@@ -108,8 +108,10 @@ public class TrainControlPanel extends JPanel
         trainController = tc;
         trainController.setTrainControlPanel(this);
         
+        String title = "Train ID: " + new Integer(trainController.getTrainID()).toString()
+        		+ "   Kp: " + trainController.getKp() + " Ki: " + trainController.getKi();
         setBorder(BorderFactory.createCompoundBorder(
-                        BorderFactory.createTitledBorder("Train ID: " + new Integer(trainController.getTrainID()).toString()),
+                        BorderFactory.createTitledBorder(title),
                         BorderFactory.createEmptyBorder(5,5,5,5)));        
         
         createNonVitalInfoPanel(); //Top panel

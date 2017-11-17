@@ -61,6 +61,7 @@ public class TrainControlUI {
     private static JFrame frame = null;
     private static TrainControlUI tcUI = null;
     private JPanel mainPane;
+    private JButton graphButton;
     public static TrainControllerHelper tch;
     
     public TrainControlUI() {
@@ -69,9 +70,18 @@ public class TrainControlUI {
     
     protected void createMainPanel() {
         mainPane = new JPanel();
-        mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.PAGE_AXIS));
+        mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.Y_AXIS));
         mainPane.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
         mainPane.add(Box.createRigidArea(new Dimension(0, 5)));
+        
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(0,0,10,0));
+        buttonPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+        
+        graphButton = new JButton("Open Train Graph");
+        buttonPanel.add(graphButton);
+        mainPane.add(buttonPanel);
         
         for(TrainController tc : tch.getTrainControllerList()) {
 	        mainPane.add(new TrainControlPanel(tc));
