@@ -64,7 +64,9 @@ public class TrackModelUI extends JPanel implements MouseListener {
     
     public class TrackGraphic extends JPanel{
     		private static final long serialVersionUID = 1L;
-    		int[] drawArray = new int[6];
+    		int[] drawArray = new int[8];
+    		int trackNumber = 0;
+    		int occupied = 0;
     		String color;
     		TrackGraphic(){
     			setPreferredSize(new Dimension(1000,600));
@@ -87,14 +89,22 @@ public class TrackModelUI extends JPanel implements MouseListener {
     					g.setColor(Color.black);
     				}
     				drawArray = load.getDrawingCoordinates(i);
+    				trackNumber = drawArray[6];
+    				occupied = drawArray[7];
     				if(drawArray[4]==-1) {
-    					g.drawArc(drawArray[0], drawArray[2], (drawArray[2]-drawArray[0]), (drawArray[3]-drawArray[1]), drawArray[4], drawArray[5]);
+    					g.drawArc(drawArray[0], drawArray[2], (drawArray[2]-drawArray[0]), (drawArray[3]-drawArray[1]), 
+    							drawArray[4], drawArray[5]);
+    					/*if(occupied!=0) {
+    						g.fillRect((drawArray[0]+10), (drawArray[2]+10), 30, 15);
+    					}*/
     				}
     				else {
     					g.drawLine(drawArray[0], drawArray[1], drawArray[2], drawArray[3]);
+    					if(occupied!=0) {
+    						g.fillRect((drawArray[2]-drawArray[0])/2, (drawArray[3]-drawArray[1])/2, 30, 15);
+    					}
     				}
     			}
-    			//call to database to set x and y values for lines and arcs
     		}
     }
  
