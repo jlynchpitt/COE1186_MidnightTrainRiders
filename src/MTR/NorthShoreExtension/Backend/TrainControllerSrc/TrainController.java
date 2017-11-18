@@ -269,7 +269,6 @@ public class TrainController {
 				operateBrake(false);
 				//TODO: Should e-brake also fail?
 				//operateEmergencyBrake(false);
-				updateUI(TrainControlPanel.BRAKES);
 			}
 			break;
 		case TrainControllerHelper.ENGINE_FAILURE:
@@ -311,13 +310,13 @@ public class TrainController {
 	
 	public void TrainControl_setPassengerEBrake() {
 		//NOTE: Emergency brake can only be set from train model - it cannot be released
-		eBrakeApplied = true;
-		
-		updateUI(TrainControlPanel.BRAKES);
+		operateEmergencyBrake(true);
 	}
 	
 	public void TrainControl_moveToNextTrack() {
-		
+		if(!signalPickupFailed) {
+			
+		}
 	}
 	
 	/* Functions called by UI to get Train Control info */

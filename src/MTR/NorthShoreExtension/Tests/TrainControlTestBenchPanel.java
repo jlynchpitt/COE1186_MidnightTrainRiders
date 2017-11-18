@@ -251,8 +251,6 @@ public class TrainControlTestBenchPanel extends JPanel
         }
         else if(e.getSource() == passEBrake) {        		
         	trainController.TrainControl_setPassengerEBrake();
-
-        	setControlButtonState(passEBrake, "Pull Passenger Emergency Brake", true);
         }
     }
 
