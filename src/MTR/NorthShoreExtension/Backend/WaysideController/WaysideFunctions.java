@@ -42,6 +42,7 @@ public class WaysideFunctions
 	public static int[] OccupiedTrack4 = {2065, 2015, 2145, 1057, 1026, 1005};
 	public static int[] OccupiedTrack5 = {2066, 2016, 2146, 1058, 1027, 1006};
 	public static int[] OccupiedTrack6 = {2067, 2017, 2147, 1059, 1028, 1007};
+	public static int[][]  ScheduleArray = {OccupiedTrack1,OccupiedTrack2, OccupiedTrack3, OccupiedTrack4, OccupiedTrack5, OccupiedTrack6}; 
 	
 	
 	public static int[] IncomingArray;
