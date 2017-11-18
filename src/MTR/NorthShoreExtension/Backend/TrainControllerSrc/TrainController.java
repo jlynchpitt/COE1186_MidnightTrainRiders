@@ -169,6 +169,9 @@ public class TrainController {
 			testBench.TrainModel_setBrake(brakeApplied);
 		}
 		
+		//NOTE: Redundant if UI calling this but more convenient when backend operates brakes
+		updateUI(TrainControlPanel.BRAKES);
+		
 		return brakesSuccess;
 	}
 	
@@ -181,6 +184,9 @@ public class TrainController {
 		if(testBench != null) {
 			testBench.TrainModel_setEBrake(applied);
 		}
+		
+		//NOTE: Redundant if UI calling this but more convenient when backend operates brakes
+		updateUI(TrainControlPanel.BRAKES);
 	}
 	
 	/* Functions for non-vital user inputs */
@@ -268,6 +274,10 @@ public class TrainController {
 			break;
 		case TrainControllerHelper.ENGINE_FAILURE:
 			engineFailed = faultActive;
+			
+			if(engineFailed) {
+				operateEmergencyBrake(true);
+			}
 			break;
 		case TrainControllerHelper.SIGNAL_PICKUP_FAILURE:
 			signalPickupFailed = faultActive;
@@ -276,6 +286,8 @@ public class TrainController {
 				//Can't get speed or authority commands from the track so set them to 0
 				TrainControl_setCommandedSpeedAuthority(0, 0);
 				//TODO: Clear track status to defaults
+
+				operateEmergencyBrake(true);
 			}
 			else {
 				if(trainModel != null) {
