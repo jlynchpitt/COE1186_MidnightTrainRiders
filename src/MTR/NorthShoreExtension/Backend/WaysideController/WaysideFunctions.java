@@ -165,8 +165,38 @@ public class WaysideFunctions
 	   
 	   for (int x = 0; x < IncomingArray.length; x++)
 	   {
+		   int TrackNumber = IncomingTrackOccupancyArray[x];
+		   int NextTrack = 0;
+		   int LateralPosition = 0;
+		   int XPosition = 0;
+		   for (int y = 0; y < ScheduleArray.length; y++)
+		   {
+			   for (int z = 0; z < ScheduleArray[y].length; z++)
+			   {
+				   if (TrackNumber == ScheduleArray[y][z] && y !=ScheduleArray.length-1)
+				   {
+					   NextTrack = ScheduleArray[y+1][z];
+					   LateralPosition = y;
+					   XPosition = z;
+				   }
+				   else if (TrackNumber == ScheduleArray[y][z] && y == ScheduleArray.length-1)
+				   {
+					   NextTrack = ScheduleArray[0][z];
+					   LateralPosition = y;
+					   XPosition = z;
+				   }
+			   }
+		   }
 		   //WaysideFunctionsHub.OccupiedSpeedAuthority(IncomingArray[x], rand.nextInt(31) + 30, rand.nextInt(51) + 30);
-		   System.out.println("Occupancy: " + IncomingArray[x]);
+		   System.out.println("Current Track: " + IncomingArray[x] + "\tNext Track: " + NextTrack);
+		   int[] AuthorityArray = new int[ScheduleArray.length - LateralPosition];
+		   for (int a = LateralPosition; a < ScheduleArray.length; a++)
+		   {
+			   AuthorityArray[a - LateralPosition] = ScheduleArray[a][XPosition];
+			   //System.out.println(AuthorityArray[a - LateralPosition]);
+			   //System.out.println(a);
+		   }
+		   WaysideFunctionsHub.OccupiedSpeedAuthority(IncomingArray[x], rand.nextInt(31) + 30, AuthorityArray);
 	   }
 	   System.out.println("");
 	   

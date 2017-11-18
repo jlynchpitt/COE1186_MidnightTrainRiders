@@ -6,6 +6,7 @@
  */
 package MTR.NorthShoreExtension.Backend.WaysideController;
 
+import MTR.NorthShoreExtension.MainMTR;
 import MTR.NorthShoreExtension.Backend.DBHelper;
 import MTR.NorthShoreExtension.UI.WaysideControllerUI;
 
@@ -49,7 +50,10 @@ public class WaysideFunctionsHub
 	 }
 	public static void OccupiedSpeedAuthority(int TrackID, int Speed, int[] Authority) // CTC calls this to send me info
 	{
-		
+		for (int x = 0; x < Authority.length; x++)
+		{
+			System.out.println(Authority[x]);
+		}
 	}
 	public static int WaysideController_Switch(int SwitchID)   //CTC calls this to send me authority info
 	 {
@@ -77,7 +81,10 @@ public class WaysideFunctionsHub
 			   int firstDigit = Character.getNumericValue(IncomingNumber.charAt(0));
 			   String BlockNumber =  IncomingNumber.substring(1,4);
 			   WaysideFunctionsHub track = new WaysideFunctionsHub();
-			   //LineColor = DB.getColor(IncomingTrackOccupancyArray[x]);
+			   LineColor = DB.getColor(IncomingTrackOccupancyArray[x]);
+			   
+			   System.out.println("AAAAAAAAAAAAAAAHHHHHHHHHHHHHH: " + DB.getColor(1));
+			   /*
 			   if (firstDigit == 1)
 			   {
 				   LineColor = "Red";
@@ -86,7 +93,7 @@ public class WaysideFunctionsHub
 			   {
 				   LineColor = "Green";
 			   }
-	
+			*/
 				multi[x][0] = LineColor;
 				multi[x][1] = BlockNumber;
 				multi[x][2] = "Placeholder";
