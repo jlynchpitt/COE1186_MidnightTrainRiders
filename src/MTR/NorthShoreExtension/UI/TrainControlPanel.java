@@ -71,6 +71,7 @@ public class TrainControlPanel extends JPanel
     /* Panels */
     JPanel nonVitalInfoPanel;
     JPanel trainFaultsInfoPanel;
+    JPanel trackInfoPanel;
     JPanel vitalInfoPanel;
     JPanel speedControlPanel;
     JPanel nonVitalControlPanel;
@@ -90,6 +91,14 @@ public class TrainControlPanel extends JPanel
     JLabel engineFaultLabel;
     JLabel brakeFaultLabel;
     JLabel signalPickupFaultLabel;
+    
+    /* Track Info Components */
+    JLabel currentSpeedLimitLabel;
+    JLabel nextSpeedLimitLabel;
+    JLabel currentTrackLengthLabel;
+    JLabel nextTrackLengthLabel;
+    JLabel infrastructureLabel;
+    JLabel lineLabel;
     
     /* Vital Controls Components */
     JFormattedTextField driverSetSpeed;
@@ -116,7 +125,9 @@ public class TrainControlPanel extends JPanel
         
         createNonVitalInfoPanel(); //Top panel
         
-    	createTrainFaultsInfoPanel(); //Middle panel
+    	createTrainFaultsInfoPanel(); //top-middle panel
+
+    	createTrackInfoPanel(); //bottom-middle panel
 
         /* Bottom control panel */
         JPanel bottomControlPanel = new JPanel();
@@ -147,6 +158,8 @@ public class TrainControlPanel extends JPanel
         c.gridy = 1;
     	add(trainFaultsInfoPanel, c);
     	c.gridy = 2;
+    	add(trackInfoPanel, c);
+    	c.gridy = 3;
     	add(bottomControlPanel, c);
     }
 
@@ -441,6 +454,39 @@ public class TrainControlPanel extends JPanel
                 BorderFactory.createTitledBorder("Vital Info"),
                 BorderFactory.createEmptyBorder(5,5,5,5)));
         
+    }
+    
+    private void createTrackInfoPanel() {
+    	/* Middle panel for displaying info about the current and assumed next track */
+        trackInfoPanel = new JPanel();
+        GridLayout panelLayout = new GridLayout(0,6);
+        trackInfoPanel.setLayout(panelLayout);
+        
+        //Dynamic text labels
+        currentSpeedLimitLabel = new JLabel();
+        nextSpeedLimitLabel = new JLabel();
+        currentTrackLengthLabel = new JLabel();
+        nextTrackLengthLabel = new JLabel();
+        infrastructureLabel = new JLabel();
+        lineLabel = new JLabel();
+        
+        //Add all labels to layout
+        trackInfoPanel.add(new JLabel("Line: "));
+        trackInfoPanel.add(lineLabel);
+        trackInfoPanel.add(new JLabel("Current Speed Limit: "));
+        trackInfoPanel.add(currentSpeedLimitLabel);       
+        trackInfoPanel.add(new JLabel("Next Speed Limit: "));
+        trackInfoPanel.add(nextSpeedLimitLabel);       
+        trackInfoPanel.add(new JLabel("Infrastructure: "));
+        trackInfoPanel.add(infrastructureLabel);      
+        trackInfoPanel.add(new JLabel("Current Length: "));
+        trackInfoPanel.add(currentTrackLengthLabel);       
+        trackInfoPanel.add(new JLabel("Next Length: "));
+        trackInfoPanel.add(nextTrackLengthLabel);       
+        
+        trackInfoPanel.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createTitledBorder("Track Info"),
+                        BorderFactory.createEmptyBorder(5,5,5,5)));
     }
     
     private void createTrainFaultsInfoPanel() {
