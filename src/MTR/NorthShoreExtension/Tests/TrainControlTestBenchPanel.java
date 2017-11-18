@@ -184,6 +184,12 @@ public class TrainControlTestBenchPanel extends JPanel
     		lights.setText("Off");
     	}
     }
+    
+    public void TrainModel_resendSpeedAuthority() {
+    	int newSetSpeed = Integer.parseInt(commandedSpeed.getText());
+		int newAuthority = Integer.parseInt(commandedAuthority.getText());
+		trainController.TrainControl_setCommandedSpeedAuthority(newSetSpeed, newAuthority);
+	}
 
     /**
      * Responds to the user choosing a new unit from the combo box.

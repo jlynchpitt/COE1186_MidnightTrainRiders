@@ -92,7 +92,7 @@ public class TrainController {
 	}
 	
 	public void calculatePowerCommand() {
-		if(!eBrakeApplied && !brakeApplied && authority > 0) {
+		if(!eBrakeApplied && !brakeApplied && authority > 0 && !engineFailed) {
 			//Simple check against speed limit TODO: Move these checks into setters
 			if(driverCommandedSetSpeed > ctcCommandedSetSpeed) {
 				trainSetSpeed = ctcCommandedSetSpeed;
@@ -114,9 +114,6 @@ public class TrainController {
 				
 				if(tempPC - powerCommand > safePowerCommandJump) {
 					powerCommand = powerCommand + safePowerCommandJump;
-				}
-				else if(powerCommand - tempPC > safePowerCommandJump) {
-					powerCommand = powerCommand - safePowerCommandJump;
 				}
 				else {
 					powerCommand = tempPC;					
@@ -152,15 +149,27 @@ public class TrainController {
 		updateTrainSetSpeed();
 	}
 	
-	public void operateBrake(boolean applied) {
-		brakeApplied = applied;
-		
+	/* Return true if brakes successfully set 
+	 * 		- false if brakes failed and cannot be applied */
+	public boolean operateBrake(boolean applied) {
+		boolean brakesSuccess = false;
+		if(brakesFailed) {
+			brakeApplied = false;
+			brakesSuccess = false;
+		}
+		else {
+			brakeApplied = applied;			
+			brakesSuccess = true;
+		}
+
 		if(trainModel != null) {
-			trainModel.TrainModel_setBrake(applied);
+			trainModel.TrainModel_setBrake(brakeApplied);
 		}
 		if(testBench != null) {
-			testBench.TrainModel_setBrake(applied);
+			testBench.TrainModel_setBrake(brakeApplied);
 		}
+		
+		return brakesSuccess;
 	}
 	
 	public void operateEmergencyBrake(boolean applied) {
@@ -226,8 +235,14 @@ public class TrainController {
 	}
 	
 	public void TrainControl_setCommandedSpeedAuthority(int speed, int auth) {
-		ctcCommandedSetSpeed = speed;
-		authority = auth;
+		if(signalPickupFailed) {
+			ctcCommandedSetSpeed = 0;
+			authority = 0;
+		}
+		else {
+			ctcCommandedSetSpeed = speed;
+			authority = auth;
+		}
 		
 		updateTrainSetSpeed();
 		
@@ -242,12 +257,34 @@ public class TrainController {
 		switch(status) {
 		case TrainControllerHelper.BRAKE_FAILURE:
 			brakesFailed = faultActive;
+			
+			//Release all brakes if failing them
+			if(brakesFailed) {
+				operateBrake(false);
+				//TODO: Should e-brake also fail?
+				//operateEmergencyBrake(false);
+				updateUI(TrainControlPanel.BRAKES);
+			}
 			break;
 		case TrainControllerHelper.ENGINE_FAILURE:
 			engineFailed = faultActive;
 			break;
 		case TrainControllerHelper.SIGNAL_PICKUP_FAILURE:
 			signalPickupFailed = faultActive;
+			
+			if(signalPickupFailed) {
+				//Can't get speed or authority commands from the track so set them to 0
+				TrainControl_setCommandedSpeedAuthority(0, 0);
+				//TODO: Clear track status to defaults
+			}
+			else {
+				if(trainModel != null) {
+					//trainModel.TrainModel_resendSpeedAuthority();
+				}
+				if(testBench != null) {
+					testBench.TrainModel_resendSpeedAuthority();
+				}
+			}
 			break;				
 		}
 		

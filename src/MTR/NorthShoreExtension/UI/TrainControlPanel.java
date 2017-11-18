@@ -201,9 +201,9 @@ public class TrainControlPanel extends JPanel
         		setButtonActivated = true;
         	}
         	
-        	trainController.operateBrake(setButtonActivated);
-        		
-        	setControlButtonState(brake, newButtonText, setButtonActivated);
+        	if(trainController.operateBrake(setButtonActivated)) {
+        		setControlButtonState(brake, newButtonText, setButtonActivated);
+        	}
         }
         else if(e.getSource() == eBrake) {
         	if(eBrake.getBackground() == Color.RED) {
