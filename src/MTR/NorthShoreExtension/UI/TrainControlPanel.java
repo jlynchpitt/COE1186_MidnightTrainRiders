@@ -86,6 +86,8 @@ public class TrainControlPanel extends JPanel
     /* Non Vital Info Components */
     JLabel announcements;
     JLabel internalTemp;
+    JRadioButton autoModeButton;
+    JRadioButton manualModeButton;
     
     /* Train Faults Info Components */
     JLabel engineFaultLabel;
@@ -110,6 +112,8 @@ public class TrainControlPanel extends JPanel
     JButton openRDoor;
     JButton openLDoor;
     JButton turnOnLights;
+    
+    boolean manualMode = true;
 
     public TrainControlPanel(TrainController tc) {
         
@@ -332,6 +336,12 @@ public class TrainControlPanel extends JPanel
         		break;
         	}
         }
+        else if(e.getSource() == autoModeButton) {
+        	setMode(false);
+        }
+        else if(e.getSource() == manualModeButton) {
+        	setMode(true);
+        }
     }
 
     /**
@@ -519,15 +529,25 @@ public class TrainControlPanel extends JPanel
         GridLayout panelLayout = new GridLayout(0,6);
         nonVitalInfoPanel.setLayout(panelLayout);
         
-        //Dynamic text labels
+        //Dynamic text labels + radio buttons for mode
         announcements = new JLabel(trainController.getAnnouncements());
         internalTemp = new JLabel(new Double(trainController.getInternalTemp()).toString() + " deg F");
+        autoModeButton = new JRadioButton("Auto Mode");
+        autoModeButton.addActionListener(this);
+        manualModeButton = new JRadioButton("Manual Mode", true);
+        manualModeButton.addActionListener(this);
         
-        //Add all labels to layout
+        ButtonGroup modeGroup = new ButtonGroup();
+        modeGroup.add(autoModeButton);
+        modeGroup.add(manualModeButton);
+        
+        //Add all components to layout
         nonVitalInfoPanel.add(new JLabel("Inside Temp: "));
         nonVitalInfoPanel.add(internalTemp);    
         nonVitalInfoPanel.add(new JLabel("Announcements: "));
-        nonVitalInfoPanel.add(announcements);   
+        nonVitalInfoPanel.add(announcements); 
+        nonVitalInfoPanel.add(manualModeButton); 
+        nonVitalInfoPanel.add(autoModeButton);
         
         nonVitalInfoPanel.setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createTitledBorder("Non-Vital Info"),
@@ -673,5 +693,17 @@ public class TrainControlPanel extends JPanel
     	nonVitalControlPanel.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createTitledBorder("Non-Vital Controls"),
                 BorderFactory.createEmptyBorder(5,5,5,5)));    	
+    }
+    
+    private void setMode(boolean manual) {
+    	manualMode = manual;
+
+    	driverSetSpeed.setEnabled(manualMode);
+        brake.setEnabled(manualMode);
+        eBrake.setEnabled(manualMode);
+        setTemp.setEnabled(manualMode);
+        openRDoor.setEnabled(manualMode);
+        openLDoor.setEnabled(manualMode);
+        turnOnLights.setEnabled(manualMode);
     }
 }
