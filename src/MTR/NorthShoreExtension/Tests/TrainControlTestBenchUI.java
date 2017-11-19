@@ -224,7 +224,13 @@ public class TrainControlTestBenchUI implements ActionListener {
         frame.setContentPane(tcUI.mainPane);
 
         //Display the window.
-        frame.setSize(1600, 1250); //TODO: resize this smaller
+        if(tch != null && tch.getTrainIDList().size() > 1) {
+            frame.setSize(1600, 1250);
+        }
+        else {
+            frame.setSize(1600, 1000); //TODO: resize this smaller
+        }
+        //frame.setMinimumSize(new Dimension(1600, 1000));
         //frame.pack();
         frame.setVisible(true);
     }
@@ -232,7 +238,7 @@ public class TrainControlTestBenchUI implements ActionListener {
     public static void main(String[] args) {
     	//Create TrainControllerHelper - with sample test data to show different UI states
     	tch = new TrainControllerHelper();
-    	tch.addNewTrainController(123); 
+    	tch.addNewTrainController(123);
 
         //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.

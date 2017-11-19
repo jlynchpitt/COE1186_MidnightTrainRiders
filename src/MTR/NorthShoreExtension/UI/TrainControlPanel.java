@@ -85,7 +85,6 @@ public class TrainControlPanel extends JPanel
     
     /* Non Vital Info Components */
     JLabel announcements;
-    JLabel faults;
     JLabel internalTemp;
     
     /* Train Faults Info Components */
@@ -118,8 +117,10 @@ public class TrainControlPanel extends JPanel
         trainController = tc;
         trainController.setTrainControlPanel(this);
         
+        String title = "Train ID: " + new Integer(trainController.getTrainID()).toString()
+        		+ "   Kp: " + trainController.getKp() + " Ki: " + trainController.getKi();
         setBorder(BorderFactory.createCompoundBorder(
-                        BorderFactory.createTitledBorder("Train ID: " + new Integer(trainController.getTrainID()).toString()),
+                        BorderFactory.createTitledBorder(title),
                         BorderFactory.createEmptyBorder(5,5,5,5)));        
         
         createNonVitalInfoPanel(); //Top panel
@@ -138,7 +139,7 @@ public class TrainControlPanel extends JPanel
     	createVitalInfoPanel();
     	
     	createNonVitalControlsPanel();
-    	
+    	    	
     	//Combine all panels
     	bottomControlPanel.add(speedControlPanel);
     	bottomControlPanel.add(vitalInfoPanel);
@@ -325,7 +326,9 @@ public class TrainControlPanel extends JPanel
         		announcements.setText(trainController.getAnnouncements());
         		break;
         	case FAULT:
-        		faults.setText(trainController.getTrainFaults());
+        		engineFaultLabel.setText(trainController.getEngineStatus());
+        		brakeFaultLabel.setText(trainController.getBrakeStatus());
+        		signalPickupFaultLabel.setText(trainController.getSignalPickupStatus());
         		break;
         	}
         }
@@ -518,16 +521,13 @@ public class TrainControlPanel extends JPanel
         
         //Dynamic text labels
         announcements = new JLabel(trainController.getAnnouncements());
-        faults = new JLabel(trainController.getTrainFaults());
         internalTemp = new JLabel(new Double(trainController.getInternalTemp()).toString() + " deg F");
         
         //Add all labels to layout
-        nonVitalInfoPanel.add(new JLabel("Announcements: "));
-        nonVitalInfoPanel.add(announcements);
-        nonVitalInfoPanel.add(new JLabel("Train Faults: "));
-        nonVitalInfoPanel.add(faults);       
         nonVitalInfoPanel.add(new JLabel("Inside Temp: "));
-        nonVitalInfoPanel.add(internalTemp);       
+        nonVitalInfoPanel.add(internalTemp);    
+        nonVitalInfoPanel.add(new JLabel("Announcements: "));
+        nonVitalInfoPanel.add(announcements);   
         
         nonVitalInfoPanel.setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createTitledBorder("Non-Vital Info"),
