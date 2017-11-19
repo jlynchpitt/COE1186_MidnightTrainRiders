@@ -38,8 +38,6 @@ import java.io.*;
 import java.util.*;
 import java.text.*;
 
-import MTR.NorthShoreExtension.UI.*;
-
 public class ctcUI {
 	
 	//Specify the look and feel to use. Valid values: null (default), "Metal", "System",
@@ -247,7 +245,7 @@ public class ctcUI {
 		trkModel.setBorder(BorderFactory.createLineBorder(Color.black,1));
 		BufferedImage image;
 		try {
-			image = ImageIO.read(new File("TrackLayout.png"));
+			image = ImageIO.read(new File("images/TrackLayout.png"));
 		} catch (IOException ex) {
 			image = null;
 		}
@@ -268,21 +266,8 @@ public class ctcUI {
 		switchTest = new JButton("Test Switches");
 		gbc.gridx = 4;
 		gbc.gridy = 4;
-		gbc.ipadx = 0;
-		gbc.ipady = 0;
 		gbc.gridwidth = 1;
 		gbc.gridheight = 1;
-		switchTest.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					JFrame tester = new switchTesterUI();
-				} catch (AWTException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-		});
-		
 		pane.add(switchTest, gbc);
 		
 		pane.setSize(850, 500);

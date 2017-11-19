@@ -50,10 +50,10 @@ import javax.swing.text.NumberFormatter;
 import java.beans.*; //property change stuff
 import MTR.NorthShoreExtension.Backend.*;
 import MTR.NorthShoreExtension.Backend.TrainControllerSrc.TrainController;
-import MTR.NorthShoreExtension.Backend.TrainControllerSrc.TrainControllerHelper;
 
 public class TrainControlTestBenchPanel extends JPanel
                              implements ActionListener,
+                                        ChangeListener,
                                         PropertyChangeListener {    
 	TrainController trainController;
     NumberFormat numberFormat;
@@ -67,8 +67,8 @@ public class TrainControlTestBenchPanel extends JPanel
     /* Speed Authority Components*/
     JFormattedTextField commandedSpeed;
     JFormattedTextField commandedAuthority;
-    JLabel powerCommandLabel;
-    JLabel actualSpeedLabel;
+    JLabel powerCommand;
+    JLabel actualSpeed;
     
     /* Failure Button Components */
     JButton engineFailureButton;
@@ -86,12 +86,6 @@ public class TrainControlTestBenchPanel extends JPanel
     JLabel leftDoor;
     JLabel lights;
     JLabel announcements;
-    
-    /* Internal status/state variables */
-    private double powerCommand = 0;
-    private double actualSpeed = 0;
-    private boolean brakeApplied = false;
-    private boolean eBrakeApplied = false;
 
     public TrainControlTestBenchPanel(TrainController tc) {
         
@@ -143,46 +137,28 @@ public class TrainControlTestBenchPanel extends JPanel
                              getPreferredSize().height);
     }
 
-    /** Train model commands  */
-    public void TrainModel_setPower(double powerCmd) {
-    	powerCommand = powerCmd;
-    	
-    	updateUIPower(powerCommandLabel, powerCommand);
-    	
-    	//Simulate train model's speed calculation
-    	actualSpeed = calculateBasicSpeed();
-    	updateUIDoubleSpeed(actualSpeedLabel, actualSpeed);
-    	
-    	trainController.TrainControl_setActualSpeed(actualSpeed);
+    /**
+     * Returns the multiplier (units/meter) for the currently
+     * selected unit of measurement.
+     */
+    public double getMultiplier() {
+        return 0.25; //sliderModel.getMultiplier();
     }
-    
-    public void TrainModel_setBrake(boolean applied) {
-    	brakeApplied = applied;
-    	
-    	brakeStatus.setText(applied == true ? "Applied" : "Released");
+
+    public double getValue() {
+        return 0.35; //sliderModel.getDoubleValue();
     }
-    
-    public void TrainModel_setEBrake(boolean applied) {
-    	eBrakeApplied = applied;
-    	
-    	eBrakeStatus.setText(applied == true ? "Applied" : "Released");
-    }
-    
-    public void TrainModel_openRightDoor(boolean open) {
-    	rightDoor.setText(open == true ? "Open" : "Closed");
-    }
-    
-    public void TrainModel_openLeftDoor(boolean open) {
-    	leftDoor.setText(open == true ? "Open" : "Closed");
-    }
-    
-    public void TrainModel_turnLightsOn(boolean lightsOn) {
-    	if(lightsOn) {
-    		lights.setText("On");
-    	}
-    	else {
-    		lights.setText("Off");
-    	}
+
+    /** Updates the text field when the main data model is updated. */
+    public void stateChanged(ChangeEvent e) {
+        int min = 0; //sliderModel.getMinimum();
+        int max = 250; //sliderModel.getMaximum();
+        double value = 7.25; //sliderModel.getDoubleValue();
+        //NumberFormatter formatter = (NumberFormatter)textField.getFormatter();
+
+        //formatter.setMinimum(new Double(min));
+        //formatter.setMaximum(new Double(max));
+        //textField.setValue(new Double(value));
     }
     
     public void TrainModel_resendSpeedAuthority() {
@@ -198,60 +174,139 @@ public class TrainControlTestBenchPanel extends JPanel
     	String newButtonText = "";
     	boolean setButtonActivated = false;
     	
-        if(e.getSource() == engineFailureButton) {
-        	if(engineFailureButton.getBackground() == Color.RED) {
+        /*if(e.getSource() == brake) {
+        	if(brake.getBackground() == Color.RED) {
         		//button originally activated
-        		newButtonText = "Fail Engine";
+        		newButtonText = "Apply Brake";
         		setButtonActivated = false;
         	}
         	else {
         		
-        		newButtonText = "Repair Engine";
+        		newButtonText = "Release Brake";
         		setButtonActivated = true;
         	}
         	
-        	trainController.TrainControl_setFaultStatus(TrainControllerHelper.ENGINE_FAILURE, setButtonActivated);
+        	trainController.operateBrake(setButtonActivated);
         		
-        	setControlButtonState(engineFailureButton, newButtonText, setButtonActivated);
+        	setControlButtonState(brake, newButtonText, setButtonActivated);
         }
-        else if(e.getSource() == signalPickupFailureButton) {
-        	if(signalPickupFailureButton.getBackground() == Color.RED) {
+        else if(e.getSource() == eBrake) {
+        	if(eBrake.getBackground() == Color.RED) {
         		//button originally activated
-        		newButtonText = "Fail Signal Pickup";
+        		newButtonText = "Apply E-Brake";
         		setButtonActivated = false;
         	}
         	else {
         		
-        		newButtonText = "Repair Signal Pickup";
+        		newButtonText = "Release E-Brake";
         		setButtonActivated = true;
         	}
         	
-        	trainController.TrainControl_setFaultStatus(TrainControllerHelper.SIGNAL_PICKUP_FAILURE, setButtonActivated);
+        	trainController.operateEmergencyBrake(setButtonActivated);
         		
-        	setControlButtonState(signalPickupFailureButton, newButtonText, setButtonActivated);
+        	setControlButtonState(eBrake, newButtonText, setButtonActivated);
         }
-        else if(e.getSource() == brakeFailureButton) {
-        	if(brakeFailureButton.getBackground() == Color.RED) {
+        else if(e.getSource() == openRDoor) {
+        	if(openRDoor.getBackground() == Color.RED) {
         		//button originally activated
-        		newButtonText = "Fail Brakes";
+        		newButtonText = "Open R Door";
         		setButtonActivated = false;
         	}
         	else {
         		
-        		newButtonText = "Repair Brakes";
+        		newButtonText = "Close R Door";
         		setButtonActivated = true;
         	}
-        	
-        	trainController.TrainControl_setFaultStatus(TrainControllerHelper.BRAKE_FAILURE, setButtonActivated);
         		
-        	setControlButtonState(brakeFailureButton, newButtonText, setButtonActivated);
+        	trainController.operateRightDoor(setButtonActivated);
+
+        	setControlButtonState(openRDoor, newButtonText, setButtonActivated);
         }
-        else if(e.getSource() == moveToNextTrack) {
-        	trainController.TrainControl_moveToNextTrack();
+        else if(e.getSource() == openLDoor) {
+        	if(openLDoor.getBackground() == Color.RED) {
+        		//button originally activated
+        		newButtonText = "Open L Door";
+        		setButtonActivated = false;
+        	}
+        	else {
+        		
+        		newButtonText = "Close L Door";
+        		setButtonActivated = true;
+        	}
+        		
+        	trainController.operateLeftDoor(setButtonActivated);
+
+        	setControlButtonState(openLDoor, newButtonText, setButtonActivated);
         }
+<<<<<<< HEAD
         else if(e.getSource() == passEBrake) {        		
         	trainController.TrainControl_setPassengerEBrake();
+=======
+        else if(e.getSource() == turnOnLights) {
+        	if(turnOnLights.getBackground() == Color.RED) {
+        		//button originally activated
+        		newButtonText = "Turn On Lights";
+        		setButtonActivated = false;
+        	}
+        	else {
+        		
+        		newButtonText = "Turn Off Lights";
+        		setButtonActivated = true;
+        	}
+        		
+        	trainController.operateLights(setButtonActivated);
+
+        	setControlButtonState(turnOnLights, newButtonText, setButtonActivated);
+>>>>>>> 56627dfa6a28f0e2b3d2c5b06e54a6c5e5a74196
         }
+        else if(e.getSource() == trainController) {
+        	//backend info updated - update it in the UI
+        	/*switch(e.getActionCommand()) {
+        	case VITAL:
+        		updateUIIntSpeed(trainSetSpeed, trainController.getTrainSetSpeed());
+        		updateUIPower(actualPower, trainController.getPower());
+        		updateUIDoubleSpeed(actualSpeed, trainController.getActualSpeed());
+
+        		//commanded authority
+        		updateUIAuthority(commandedAuthority, trainController.getAuthority());
+        		updateUIIntSpeed(commandedSetSpeed, trainController.getCTCCommandedSetSpeed());
+        		break;
+        	case TRACK_INFO:
+        		break;
+        	case TEMPERATURE:
+        		internalTemp.setText(Double.toString(trainController.getInternalTemp()));
+        		break;
+        	case DOORS:
+        		boolean rOpen = trainController.isRightDoorOpen();
+        		String rButtonText = rOpen == true ? "Close R Door" : "Open R Door";
+        		setControlButtonState(openRDoor, rButtonText, rOpen);
+
+        		boolean lOpen = trainController.isLeftDoorOpen();
+        		String lButtonText = lOpen == true ? "Close L Door" : "Open L Door";
+        		setControlButtonState(openLDoor, lButtonText, lOpen);
+        		break;
+        	case LIGHTS:
+        		boolean lightsOn = trainController.areLightsOn();
+        		String lightText = lightsOn == true ? "Turn Off Lights" : "Turn On Lights";
+        		setControlButtonState(openLDoor, lightText, lightsOn);
+        		break;
+        	case BRAKES:
+        		boolean brakeApplied = trainController.isBrakeApplied();
+        		String brakeText = brakeApplied == true ? "Release Brake" : "Apply Brake";
+        		setControlButtonState(brake, brakeText, brakeApplied);
+
+        		boolean eBrakeApplied = trainController.isEBrakeApplied();
+        		String eBrakeText = eBrakeApplied == true ? "Release E-Brake" : "Apply E-Brake";
+        		setControlButtonState(eBrake, eBrakeText, eBrakeApplied);
+        		break;
+        	case ANNOUNCEMENT:
+        		announcements.setText(trainController.getAnnouncements());
+        		break;
+        	case FAULT:
+        		faults.setText(trainController.getTrainFaults());
+        		break;
+        	}*/
+        //}
     }
 
     /**
@@ -259,12 +314,15 @@ public class TrainControlTestBenchPanel extends JPanel
      * number as you'd get from getText) changes.
      */
     public void propertyChange(PropertyChangeEvent e) {
-    	if(e.getSource().equals(commandedSpeed) || e.getSource().equals(commandedAuthority)) {
+        /*if ("value".equals(e.getPropertyName())) {
+            Number value = (Number)e.getNewValue();
+            //sliderModel.setDoubleValue(value.doubleValue());
+        }*/
+/*    	if(e.getSource().equals(driverSetSpeed)) {
     		//TODO: Handle speeds > 1000 - issue with , in 1,000
-    		int newSetSpeed = Integer.parseInt(commandedSpeed.getText());
-    		int newAuthority = Integer.parseInt(commandedAuthority.getText());
-    		trainController.TrainControl_setCommandedSpeedAuthority(newSetSpeed, newAuthority);
-    	}
+    		int newSetSpeed = Integer.parseInt(((JFormattedTextField)e.getSource()).getText());
+    		trainController.setDriverCommandedSetSpeed(newSetSpeed);
+    	}*/
     }
     
     private void setControlButtonState(JButton button, String newText, boolean activated) {
@@ -283,54 +341,6 @@ public class TrainControlTestBenchPanel extends JPanel
     	}
     }
     
-    private double calculateBasicSpeed() {
-    	double speed = 0;
-    	double powerSpeed = 0;
-    	boolean brake = true;
-    	
-		//for testing purposes when not attached to train model
-		//simple velocity calculation for demonstration of adjusting power command
-		
-		//Power (W) = Force (kg * m/s2) * Velocity (m/s)
-		//TrainForce = mass * acceleration = 51.43 tons * 0.5 m/s2 (train 2/3 loaded) = 46656.511 kg * 0.5 m/s2
-		//Velocity = Power/Train Force			
-		//NOTE: 1.34102 converts horsepower back to kWatts
-    	if(powerCommand > 0) {
-			double msSpeed = (powerCommand * 1000 / 1.34102)/((46656.511/9.8) * 0.5);
-			powerSpeed = msSpeed * 2.23694;
-			
-			if(powerSpeed > speed)
-			{
-				speed = powerSpeed;
-				brake = false;
-			}
-    	}
-    	
-    	if(brake) {
-    		//not accelerating - decrease speed to simulate breaking
-    		double frictionBrakeRate = 0.5;
-    		int standardBrakeRate = 1;
-    		int emergencyBrakeRate = 2;
-    		
-    		if(eBrakeApplied) {
-    			speed = actualSpeed - emergencyBrakeRate;
-    		}
-    		else if(brakeApplied) {
-    			speed = actualSpeed - standardBrakeRate;
-    		}
-    		else {
-    			//brake due to friction
-    			speed = actualSpeed - frictionBrakeRate;
-    		}
-    	}
-		
-		if (speed < 0) {
-			speed = 0;
-		}
-
-		return speed;
-	}
-	
     /*
      * Adds units onto a value before being displayed in the UI
      * Used for any label that displays a double based speed
@@ -391,16 +401,13 @@ public class TrainControlTestBenchPanel extends JPanel
         //Dynamic text labels + text fields
         commandedSpeed = new JFormattedTextField(formatter);
         commandedSpeed.setText("0");
-        commandedSpeed.addPropertyChangeListener(this); //TODO: Handle listeners
-
         commandedAuthority = new JFormattedTextField(formatter);
         commandedAuthority.setText("0");
-        commandedAuthority.addPropertyChangeListener(this); //TODO: Handle listeners
         
-        powerCommandLabel = new JLabel();
-        updateUIPower(powerCommandLabel, 0); //TODO: Should this get the current power command from the Train Controller?
-        actualSpeedLabel = new JLabel();
-        updateUIDoubleSpeed(actualSpeedLabel, trainController.getActualSpeed());
+        powerCommand = new JLabel();
+        updateUIPower(powerCommand, 0); //TODO: Should this get the current power command from the Train Controller?
+        actualSpeed = new JLabel();
+        updateUIDoubleSpeed(actualSpeed, trainController.getActualSpeed());
         
         //Add all labels to layout
         speedAuthorityPanel.add(new JLabel("Speed (MPH): "));
@@ -410,13 +417,14 @@ public class TrainControlTestBenchPanel extends JPanel
         speedAuthorityPanel.add(new JLabel(""));
         speedAuthorityPanel.add(new JLabel(""));
         speedAuthorityPanel.add(new JLabel("Power Command: "));
-        speedAuthorityPanel.add(powerCommandLabel);
+        speedAuthorityPanel.add(powerCommand);
         speedAuthorityPanel.add(new JLabel("Actual Speed: "));
-        speedAuthorityPanel.add(actualSpeedLabel);
+        speedAuthorityPanel.add(actualSpeed);
        
     	speedAuthorityPanel.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createTitledBorder("Vital Info"),
                 BorderFactory.createEmptyBorder(5,5,5,5)));
+        
     }
     
     private void createFailureButtonPanel() {
@@ -436,12 +444,12 @@ public class TrainControlTestBenchPanel extends JPanel
 
         brakeFailureButton = new JButton();
         brakeFailureButton.addActionListener(this);
-        setControlButtonState(brakeFailureButton, "Fail Brakes", false);
+        setControlButtonState(brakeFailureButton, "Fail brakes", false);
         
         //Add all buttons to layout
         failureButtonPanel.add(engineFailureButton);
-        failureButtonPanel.add(brakeFailureButton);       
         failureButtonPanel.add(signalPickupFailureButton);       
+        failureButtonPanel.add(brakeFailureButton);       
         
         failureButtonPanel.setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createTitledBorder("Failure Controls"),
@@ -526,7 +534,7 @@ public class TrainControlTestBenchPanel extends JPanel
         trainStatusPanel.add(leftDoor);
         trainStatusPanel.add(new JLabel("Lights: "));
         trainStatusPanel.add(lights);
-        trainStatusPanel.add(new JLabel("Announcements: "));
+        trainStatusPanel.add(new JLabel("Announcments: "));
         trainStatusPanel.add(announcements);
         
     	trainStatusPanel.setBorder(BorderFactory.createCompoundBorder(

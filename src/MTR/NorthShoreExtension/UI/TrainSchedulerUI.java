@@ -295,4 +295,5 @@ public class TrainSchedulerUI extends JFrame {
 				xGrn = 1;
 			}
 		});
-	}}
+	}
+}
