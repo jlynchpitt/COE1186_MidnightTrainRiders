@@ -50,7 +50,7 @@ public class WaysideFunctions
 	
 	public static void main(String[] args) 
 	{
-		WaysideFunctionsHub.WaysideController_Authority(ProtoArray);
+
 		WaysideFunctionsHub.WaysideController_Switch(5);
 		WaysideFunctionsHub.WaysideController_TrackOccupancy(ProtoArray);
 		WaysideFunctionsHub.WaysideController_BrokenTrack(ProtoArray);
@@ -58,24 +58,7 @@ public class WaysideFunctions
 	static int counter = 0;
 	static int counter2 = 0;
 	Timer trimer = new Timer();
-	public static void AuthorityTester()
-	{
-		if (counter ==0)
-		{
-			WaysideFunctionsHub.WaysideController_Authority(ProtoArray);
-			counter++;
-		}
-		else if (counter == 1)
-		{
-			WaysideFunctionsHub.WaysideController_Authority(ProtoArray2);
-			counter++;
-		}
-		else if (counter == 2)
-		{
-			WaysideFunctionsHub.WaysideController_Authority(ProtoArray3);
-			counter = 0;
-		}
-	}
+
 	public static void SwitchTester()
 	{
 		if (counter ==0)
@@ -128,7 +111,7 @@ public class WaysideFunctions
 			WaysideFunctionsHub.WaysideController_TrackOccupancy(OccupiedTrack6);
 			counter2 = 0;
 		}
-		
+		System.out.println("");
 	}
 	
 	
@@ -163,8 +146,14 @@ public class WaysideFunctions
 	   //int[] OccupancyArray = new int[4];  
 	   IncomingArray = IncomingTrackOccupancyArray;
 	   
-	   for (int x = 0; x < IncomingArray.length; x++)
+	   for (int x = 0; x < IncomingTrackOccupancyArray.length; x++)
 	   {
+		   System.out.println("CTC_getOccupancy: " + IncomingTrackOccupancyArray[x]);
+	   }
+	   
+	   for (int x = 0; x < IncomingTrackOccupancyArray.length; x++)
+	   {
+		   //System.out.println("CTC_getOccupancy: " + IncomingTrackOccupancyArray[x]);
 		   int TrackNumber = IncomingTrackOccupancyArray[x];
 		   int NextTrack = 0;
 		   int LateralPosition = 0;
@@ -188,7 +177,7 @@ public class WaysideFunctions
 			   }
 		   }
 		   //WaysideFunctionsHub.OccupiedSpeedAuthority(IncomingArray[x], rand.nextInt(31) + 30, rand.nextInt(51) + 30);
-		   System.out.println("Current Track: " + IncomingArray[x] + "\tNext Track: " + NextTrack);
+		   //System.out.println("Current Track: " + IncomingArray[x] + "\tNext Track: " + NextTrack);
 		   int[] AuthorityArray = new int[ScheduleArray.length - LateralPosition];
 		   for (int a = LateralPosition; a < ScheduleArray.length; a++)
 		   {
@@ -196,9 +185,8 @@ public class WaysideFunctions
 			   //System.out.println(AuthorityArray[a - LateralPosition]);
 			   //System.out.println(a);
 		   }
-		   WaysideFunctionsHub.OccupiedSpeedAuthority(IncomingArray[x], rand.nextInt(31) + 30, AuthorityArray);
+		   WaysideFunctionsHub.OccupiedSpeedAuthority(IncomingTrackOccupancyArray[x], NextTrack, rand.nextInt(31) + 30, AuthorityArray);
 	   }
-	   System.out.println("");
 	   
    }
    
@@ -214,21 +202,25 @@ public class WaysideFunctions
    
    public static void TrackModel_setSpeedAuthority(int TrackID, int Speed, int[] Authority) //call this from the TrackModel to send the TM info 
    {
-	   System.out.println(TrackID);;
-	   System.out.println(Speed);
+	   //System.out.println(TrackID);;
+	   //System.out.println(Speed);
+	   /*
 	   for (int x = 0; x <  Authority.length; x++)
 	   {
 		   System.out.println(Authority[x]);
 	   }
+	   */
    }
    
 	public static void TrackModel_setAuthority(int[] IncomingAuthorityArray) //call this from the TM to send the TM info 
    {
 		IncomingArray = IncomingAuthorityArray;
+		/*
 	   for (int x = 0; x < IncomingArray.length; x++)
 	   {
 		   System.out.println("Authority: " + IncomingArray[x]);
-	   }   
+	   }  
+	   */ 
 
    }
    
