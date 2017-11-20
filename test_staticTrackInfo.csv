@@ -1,1 +1,11 @@
-TrackID,Line,Section,Block Number,Block Length (m),Block Grade (%),Speed Limit (Km/Hr),Infrastructure,Primary Next Track,Secondary Next Track,Primary Prev Track,Secondary Prev Track,BiDirectional,Station ID,Station Name,StationSide,Underground,First Track,Last Track,ELEVATION (M),CUMALTIVE ELEVATION (M)
+TrackID,Line,Section,Block Number,Block Length (m),Block Grade (%),Speed Limit (Km/Hr),Primary Next Track,Secondary Next Track,Primary Prev Track,Secondary Prev Track,BiDirectional,Station ID,Station Name,StationSide,Underground,First Track,Last Track,ELEVATION (M),CUMALTIVE ELEVATION (M)
+2001,Green,A,1,50,0,40,2002,,-1,,1,,,,0,1,1,0,20
+2002,Green,A,2,75,0,45,2003,,2001,,1,,,,0,0,0,0,20
+2003,Green,A,3,50,0,50,2004,2010,2002,,1,1,Steel Plaza,L,0,0,0,0,20
+2004,Green,A,4,100,1,55,2005,,2003,,1,,,,1,0,0,100,120
+2005,Green,A,5,60,0.5,60,2006,,2004,,1,,,,1,0,0,30,150
+2006,Green,A,6,50,0,65,2007,,2005,,1,2,North Side,R,1,0,0,0,150
+2007,Green,A,7,100,0,70,2008,,2006,,1,,,,1,0,0,0,150
+2008,Green,A,8,500,0,75,2009,,2007,,1,,,,1,0,0,0,150
+2009,Green,A,9,50,-0.5,70,2010,,2008,,1,,,,1,0,0,-30,120
+2010,Green,A,10,80,-1,65,2003,,2009,,1,,,,0,0,0,-100,20
