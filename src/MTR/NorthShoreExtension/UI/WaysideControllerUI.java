@@ -31,7 +31,7 @@ import MTR.NorthShoreExtension.Backend.WaysideController.WaysideFunctionsHub;
 
 
 
-public class WaysideControllerUI
+public class WaysideControllerUI  //the purpose of this class is to simply display all the information
 {
 	//imports all packages
 	public static String SampleCode = "Int total = 0;\n Public static void main (String [] args)\n{\n    If (traindist <= 100)\n    {\n        Do\n        {\n            Close gate\n            Signal light\n        }\n    }\n    Public boolean distmeas(int trackcount)\n    {\n        For (int x = 0; x < trackcount; x++)\n        {\n            Total += x; \n        }\n        If (total <= standarddist)\n        {\n            Return true;\n        }\n        Else\n        {\n            Return false;\n        ]\n    }\n}";
@@ -197,6 +197,7 @@ public class WaysideControllerUI
    
    public static void OccupiedTrackAuthoritySpeedUpdater(int TrackID, int NextTrack, int Speed, int AuthorityDist)
    {
+	   /*
 	   for (int x = 0; x < dm1.getRowCount(); x++)
 	   {
 		   System.out.print("Current Chart: ");
@@ -206,6 +207,7 @@ public class WaysideControllerUI
 		   }
 		   System.out.println("");
 	   }
+	   */
 	   
 		   //dm1.addRow(ObjectArray[x]);
 		   

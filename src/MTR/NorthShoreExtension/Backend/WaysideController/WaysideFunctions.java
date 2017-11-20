@@ -29,7 +29,7 @@ import java.util.TimerTask;
 import MTR.NorthShoreExtension.Backend.DBHelper;
 import java.util.Random; 
 
-public class WaysideFunctions
+public class WaysideFunctions  //this is a test class designed to function as a dummy CTC and TrackModel sending information
 {
 	public static Random rand = new Random();
 	//train scheduler
@@ -145,12 +145,12 @@ public class WaysideFunctions
    {
 	   //int[] OccupancyArray = new int[4];  
 	   IncomingArray = IncomingTrackOccupancyArray;
-	   
+	   /*
 	   for (int x = 0; x < IncomingTrackOccupancyArray.length; x++)
 	   {
 		   System.out.println("CTC_getOccupancy: " + IncomingTrackOccupancyArray[x]);
 	   }
-	   
+	   */
 	   for (int x = 0; x < IncomingTrackOccupancyArray.length; x++)
 	   {
 		   //System.out.println("CTC_getOccupancy: " + IncomingTrackOccupancyArray[x]);
@@ -193,14 +193,16 @@ public class WaysideFunctions
    public static void CTC_getBrokenTrack(int[] IncomingBrokenTrackArray) //call this from the CTC to send the CTC info 
    {
 	   IncomingArray = IncomingBrokenTrackArray;
+	   /*
 	   for (int x = 0; x < IncomingArray.length; x++)
 	   {
 		   System.out.println("Broken: " + IncomingArray[x]);
 	   }
+	   */
 	   
    }
    
-   public static void TrackModel_setSpeedAuthority(int TrackID, int Speed, int[] Authority) //call this from the TrackModel to send the TM info 
+   public static void TrackModel_setSpeedAuthority(int TrackID, int Speed, int Authority) //call this from the TrackModel to send the TM info 
    {
 	   //System.out.println(TrackID);;
 	   //System.out.println(Speed);
