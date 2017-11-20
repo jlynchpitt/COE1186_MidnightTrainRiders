@@ -24,6 +24,10 @@ import java.util.TimerTask;
  * 		
  */
 public class TrainControllerHelper {
+	public static final int ENGINE_FAILURE = 1;
+	public static final int SIGNAL_PICKUP_FAILURE = 2;
+	public static final int BRAKE_FAILURE = 3;
+	
 	private double pid_p = 0.4;
 	private double pid_i = 0.25; 
 	private Timer powerTimer = new Timer();
@@ -87,14 +91,6 @@ public class TrainControllerHelper {
 
 	public double getPIDParameter_i() {
 		return pid_i;
-	}
-	
-	public void TrainControlHelper_setOperationMode(boolean manMode) {
-		manualMode = manMode;
-		
-		for(TrainController tc : tcList ){
-			tc.TrainControl_setOperationMode(manMode);
-		}
 	}
 	
 	public void TrainControlHelper_setTimeMultiplier(int mult) {

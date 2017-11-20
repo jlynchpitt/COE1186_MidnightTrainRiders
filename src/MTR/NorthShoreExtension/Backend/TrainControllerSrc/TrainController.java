@@ -23,8 +23,7 @@ public class TrainController {
 	private int trainID = 0;
 	private Train trainModel = null;
 	private TrainControlPanel trainControlPanel = null;
-	private TrainControlTestBenchPanel testBenchPanel = null;
-	private boolean CONNECTEDTOTRAINMODEL = false; //This must be true when in the full system - for testing individual submodule
+	private TrainControlTestBenchPanel testBench = null;
 	private boolean manualMode = true;
 	
 	//PID controllers
@@ -41,6 +40,11 @@ public class TrainController {
 	private int authority = 0; //# of tracks/blocks
 	private boolean brakeApplied = true; //default to brakes applied
 	private boolean eBrakeApplied = true; //emergency brake - default to brakes applied
+	private boolean signalPickupFailed = false;
+	private boolean engineFailed = false;
+	private boolean brakesFailed = false;
+	private double Kp = 0;
+	private double Ki = 0;
 	
 	/* Non-Vital Train Info */
 	private String trainFaults = "none"; //TODO: Possibly change to enumerated type
@@ -62,6 +66,9 @@ public class TrainController {
 		trainID = id;
 		trainModel = t;
 		
+		Kp = pid_p;
+		Ki = pid_i;
+		
 		//Initialize pid controllers
 		spdPID1 = new MiniPID(pid_p, pid_i, 0);
 		spdPID2 = new MiniPID(pid_p, pid_i, 0);
@@ -81,11 +88,11 @@ public class TrainController {
 	}
 	
 	public void setTrainControlTestBenchPanel(TrainControlTestBenchPanel tctbp) {
-		testBenchPanel = tctbp;
+		testBench = tctbp;
 	}
 	
 	public void calculatePowerCommand() {
-		if(!eBrakeApplied && !brakeApplied && authority > 0) {
+		if(!eBrakeApplied && !brakeApplied && authority > 0 && !engineFailed) {
 			//Simple check against speed limit TODO: Move these checks into setters
 			if(driverCommandedSetSpeed > ctcCommandedSetSpeed) {
 				trainSetSpeed = ctcCommandedSetSpeed;
@@ -102,7 +109,15 @@ public class TrainController {
 			
 			Double tempPC = powerOutputSelector(tempPC1, tempPC2, tempPC3);
 			if(tempPC != null /* && validatePowerCommand(tempPC)*/) {
-				powerCommand = tempPC;
+				//Limit amount power command can increase in 1 second
+				int safePowerCommandJump = 10;
+				
+				if(tempPC - powerCommand > safePowerCommandJump) {
+					powerCommand = powerCommand + safePowerCommandJump;
+				}
+				else {
+					powerCommand = tempPC;					
+				}
 			}
 			else {
 				//power command validation failed - set power to 0
@@ -115,12 +130,16 @@ public class TrainController {
 			spdPID2.reset();
 			spdPID3.reset();
 		}
-				
-		if(CONNECTEDTOTRAINMODEL == false) {
-			actualSpeed = calculateBasicSpeed();
-		}
 		
 		updateUI(TrainControlPanel.VITAL);
+		
+		//Send to train model and test bench
+		if(trainModel != null) {
+			trainModel.TrainModel_setPower(powerCommand);
+		}
+		if(testBench != null) {
+			testBench.TrainModel_setPower(powerCommand);
+		}
 	}
 
 	/* Functions for UI to call to set vital user inputs */
@@ -130,16 +149,44 @@ public class TrainController {
 		updateTrainSetSpeed();
 	}
 	
-	public void operateBrake(boolean applied) {
-		brakeApplied = applied;
+	/* Return true if brakes successfully set 
+	 * 		- false if brakes failed and cannot be applied */
+	public boolean operateBrake(boolean applied) {
+		boolean brakesSuccess = false;
+		if(brakesFailed) {
+			brakeApplied = false;
+			brakesSuccess = false;
+		}
+		else {
+			brakeApplied = applied;			
+			brakesSuccess = true;
+		}
+
+		if(trainModel != null) {
+			trainModel.TrainModel_setBrake(brakeApplied);
+		}
+		if(testBench != null) {
+			testBench.TrainModel_setBrake(brakeApplied);
+		}
+		
+		//NOTE: Redundant if UI calling this but more convenient when backend operates brakes
+		updateUI(TrainControlPanel.BRAKES);
+		
+		return brakesSuccess;
 	}
 	
 	public void operateEmergencyBrake(boolean applied) {
 		eBrakeApplied = applied;
 		
 		if(trainModel != null) {
-			//trainModel.TrainModel_operateBrake(applied);
+			trainModel.TrainModel_setEBrake(applied);
 		}
+		if(testBench != null) {
+			testBench.TrainModel_setEBrake(applied);
+		}
+		
+		//NOTE: Redundant if UI calling this but more convenient when backend operates brakes
+		updateUI(TrainControlPanel.BRAKES);
 	}
 	
 	/* Functions for non-vital user inputs */
@@ -147,7 +194,10 @@ public class TrainController {
 		rightDoorOpen = open;
 		
 		if(trainModel != null) {
-			//trainModel.TrainModel_openRightDoor(open);
+			trainModel.TrainModel_openRightDoor(open);
+		}
+		if(testBench != null) {
+			testBench.TrainModel_openRightDoor(open);
 		}
 	}
 	
@@ -155,7 +205,10 @@ public class TrainController {
 		leftDoorOpen = open;
 		
 		if(trainModel != null) {
-			//trainModel.TrainModel_openLeftDoor(open);
+			trainModel.TrainModel_openLeftDoor(open);
+		}
+		if(testBench != null) {
+			testBench.TrainModel_openLeftDoor(open);
 		}
 	}
 	
@@ -163,16 +216,21 @@ public class TrainController {
 		lightsOn = on;
 		
 		if(trainModel != null) {
-			//trainModel.TrainModel_TurnLightsOn(open);
+			trainModel.TrainModel_turnLightsOn(on);
+		}
+		if(testBench != null) {
+			testBench.TrainModel_turnLightsOn(on);
 		}
 	}
 	
 	public void setInsideTemperature(int temp) {
 		setTemp = temp;
-		
-		if(trainModel != null) {
-			//trainModel.TrainModel_setTemperature(open); TODO: remove this not needed
-		}
+
+		//TODO: perform calculations of actual temperature
+	}
+	
+	public void setOperationMode(boolean manual) {
+		manualMode = manual;
 	}
 	
 	/* Functions for receiving inputs from the train model */
@@ -185,8 +243,14 @@ public class TrainController {
 	}
 	
 	public void TrainControl_setCommandedSpeedAuthority(int speed, int auth) {
-		ctcCommandedSetSpeed = speed;
-		authority = auth;
+		if(signalPickupFailed) {
+			ctcCommandedSetSpeed = 0;
+			authority = 0;
+		}
+		else {
+			ctcCommandedSetSpeed = speed;
+			authority = auth;
+		}
 		
 		updateTrainSetSpeed();
 		
@@ -197,8 +261,47 @@ public class TrainController {
 		//translate beacon - TODO: 
 	}
 	
-	public void TrainControl_setFaultStatus(int status) {
-		//TODO: Define status as enumerated type
+	public void TrainControl_setFaultStatus(int status, boolean faultActive) {
+		switch(status) {
+		case TrainControllerHelper.BRAKE_FAILURE:
+			brakesFailed = faultActive;
+			
+			//Release all brakes if failing them
+			if(brakesFailed) {
+				operateBrake(false);
+				//TODO: Should e-brake also fail?
+				//operateEmergencyBrake(false);
+			}
+			break;
+		case TrainControllerHelper.ENGINE_FAILURE:
+			engineFailed = faultActive;
+			
+			if(engineFailed) {
+				operateEmergencyBrake(true);
+			}
+			break;
+		case TrainControllerHelper.SIGNAL_PICKUP_FAILURE:
+			signalPickupFailed = faultActive;
+			
+			if(signalPickupFailed) {
+				//Can't get speed or authority commands from the track so set them to 0
+				TrainControl_setCommandedSpeedAuthority(0, 0);
+				//TODO: Clear track status to defaults
+
+				operateEmergencyBrake(true);
+			}
+			else {
+				if(trainModel != null) {
+					//trainModel.TrainModel_resendSpeedAuthority();
+				}
+				if(testBench != null) {
+					testBench.TrainModel_resendSpeedAuthority();
+				}
+			}
+			break;				
+		}
+		
+		updateUI(TrainControlPanel.FAULT);
 	}
 	
 	public void TrainControl_setActualTemp(double temp) {
@@ -209,16 +312,24 @@ public class TrainController {
 	
 	public void TrainControl_setPassengerEBrake() {
 		//NOTE: Emergency brake can only be set from train model - it cannot be released
-		eBrakeApplied = true;
-		
-		updateUI(TrainControlPanel.BRAKES);
+		operateEmergencyBrake(true);
 	}
 	
 	public void TrainControl_moveToNextTrack() {
-		
+		if(!signalPickupFailed) {
+			
+		}
 	}
 	
 	/* Functions called by UI to get Train Control info */
+	public double getKp() {
+		return Kp;
+	}
+	
+	public double getKi() {
+		return Ki;
+	}
+	
 	public int getAuthority() {
 		return authority;
 	}
@@ -251,6 +362,33 @@ public class TrainController {
 		return trainFaults;
 	}
 	
+	public String getEngineStatus(){
+		if(engineFailed) {
+			return "FAILED";
+		}
+		else {
+			return "Operational";
+		}
+	}
+	
+	public String getBrakeStatus(){
+		if(brakesFailed) {
+			return "FAILED";
+		}
+		else {
+			return "Operational";
+		}
+	}
+	
+	public String getSignalPickupStatus(){
+		if(signalPickupFailed) {
+			return "FAILED";
+		}
+		else {
+			return "Operational";
+		}
+	}
+	
 	public double getInternalTemp() {
 		return internalTemp;
 	}
@@ -273,11 +411,6 @@ public class TrainController {
 	
 	public boolean areLightsOn() {
 		return lightsOn;
-	}
-	
-	/* Functions called by TrainControllerHelper */
-	public void TrainControl_setOperationMode(boolean manual) {
-		manualMode = manual;
 	}
 	
 	/* Private helper functions*/
@@ -325,7 +458,7 @@ public class TrainController {
 	}
 	
 	private void updateTrainSetSpeed() {
-		if(driverCommandedSetSpeed <= ctcCommandedSetSpeed && driverCommandedSetSpeed < speedLimit) {
+		if(manualMode && driverCommandedSetSpeed <= ctcCommandedSetSpeed && driverCommandedSetSpeed < speedLimit) {
 			trainSetSpeed = driverCommandedSetSpeed;
 		}
 		else if(ctcCommandedSetSpeed <= speedLimit) {
@@ -343,4 +476,13 @@ public class TrainController {
 		}
 	}
 
+	/*
+	 * Check speed + speed limit + set speeds to determine safe operations
+	 * Apply standard brake or emergency brake if speed deemed unsafe
+	 * 
+	 * Behavior is different in manual and automatic modes
+	 */
+	private void ensureSafeOperations() {
+		
+	}
 }
