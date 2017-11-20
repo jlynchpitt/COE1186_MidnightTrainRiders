@@ -229,7 +229,9 @@ public class TrainController {
 		//TODO: perform calculations of actual temperature
 	}
 	
-	
+	public void setOperationMode(boolean manual) {
+		manualMode = manual;
+	}
 	
 	/* Functions for receiving inputs from the train model */
 	public void TrainControl_setActualSpeed(double speed) {
@@ -411,11 +413,6 @@ public class TrainController {
 		return lightsOn;
 	}
 	
-	/* Functions called by TrainControllerHelper */
-	public void TrainControl_setOperationMode(boolean manual) {
-		manualMode = manual;
-	}
-	
 	/* Private helper functions*/
 	private double calculateBasicSpeed() {
 		//for testing purposes when not attached to train model
@@ -461,7 +458,7 @@ public class TrainController {
 	}
 	
 	private void updateTrainSetSpeed() {
-		if(driverCommandedSetSpeed <= ctcCommandedSetSpeed && driverCommandedSetSpeed < speedLimit) {
+		if(manualMode && driverCommandedSetSpeed <= ctcCommandedSetSpeed && driverCommandedSetSpeed < speedLimit) {
 			trainSetSpeed = driverCommandedSetSpeed;
 		}
 		else if(ctcCommandedSetSpeed <= speedLimit) {
@@ -479,4 +476,13 @@ public class TrainController {
 		}
 	}
 
+	/*
+	 * Check speed + speed limit + set speeds to determine safe operations
+	 * Apply standard brake or emergency brake if speed deemed unsafe
+	 * 
+	 * Behavior is different in manual and automatic modes
+	 */
+	private void ensureSafeOperations() {
+		
+	}
 }

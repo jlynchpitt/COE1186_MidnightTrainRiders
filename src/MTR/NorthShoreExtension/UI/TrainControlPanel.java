@@ -165,6 +165,8 @@ public class TrainControlPanel extends JPanel
     	add(trackInfoPanel, c);
     	c.gridy = 3;
     	add(bottomControlPanel, c);
+    	
+    	setMode(true);
     }
 
     //Don't allow this panel to get taller than its preferred size.
@@ -697,6 +699,8 @@ public class TrainControlPanel extends JPanel
     
     private void setMode(boolean manual) {
     	manualMode = manual;
+    	
+    	trainController.setOperationMode(manualMode);
 
     	driverSetSpeed.setEnabled(manualMode);
         brake.setEnabled(manualMode);
