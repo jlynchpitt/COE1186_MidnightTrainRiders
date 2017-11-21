@@ -24,6 +24,7 @@ public class TrainSchedulePanel extends JPanel {
 	TrainSchedule trainSchedule;
 	
 	public TrainSchedulePanel(TrainSchedule ts) {
+		overall = new JPanel();
 		trainSchedule = ts;
 		int id = ts.getTrainID();
 		String first = ts.getFirstStop();

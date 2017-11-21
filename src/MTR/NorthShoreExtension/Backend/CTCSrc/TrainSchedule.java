@@ -16,17 +16,18 @@ import MTR.NorthShoreExtension.Backend.CTCSrc.trainScheduler;
 
 public class TrainSchedule {
 	
-	
+	String trackLine = "";
 	static int[] stops = new int[99];
 	int[] authority = new int [199];
 	int[] departures = new int [99];
 	static int trainID = 0;
 	
-	public TrainSchedule(int line, int id, int[] listOfStops, int[] departureTimes) {
+	
+	public TrainSchedule(String line, int id, int[] listOfStops, int[] departureTimes) {
 		trainID = id;
 		stops = listOfStops;
-		trainScheduler.calcAuthority(listOfStops);
-		
+		authority = trainScheduler.calcAuthority(listOfStops);
+		trackLine = line;
 	}
 	
 	public int getTrainID() {
@@ -39,10 +40,6 @@ public class TrainSchedule {
 	}
 	
 	public String getLine() {
-		if (stops[0] < 2000) {
-			return ("Red");
-		} else {
-			return ("Green");
-		}
+		return trackLine;
 	}
 };

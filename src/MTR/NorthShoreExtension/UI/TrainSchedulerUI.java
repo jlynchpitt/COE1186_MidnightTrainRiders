@@ -313,4 +313,5 @@ public class TrainSchedulerUI extends JFrame {
 				departGrn = new int[150];
 			}
 		});
-	}}
+	}
+}

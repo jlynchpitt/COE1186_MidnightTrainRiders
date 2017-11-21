@@ -42,9 +42,8 @@ public class trainScheduler {
 	}
 	
 	public static void addTrainSchedule(String line, int trainID, int[] stops, int[] departures) {
-		int trainLine = Integer.parseInt(line);
 		//int id = Integer.parseInt(trainID);
-		TrainSchedule ts = new TrainSchedule(trainLine, trainID, stops, departures);
+		TrainSchedule ts = new TrainSchedule(line, trainID, stops, departures);
 		//return ts;
 		TrainSchedulePanel tsp = new TrainSchedulePanel(ts);
 		tsl.add(ts);
