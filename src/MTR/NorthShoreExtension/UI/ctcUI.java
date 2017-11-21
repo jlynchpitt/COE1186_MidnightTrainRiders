@@ -283,7 +283,7 @@ public class ctcUI {
 			}
 		});
 		pane.add(switchTest, gbc);
-		
+	
 		schedules = new JButton("Train Schedules");
 		gbc.gridx = 1;
 		gbc.gridy = 5;
