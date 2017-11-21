@@ -6,56 +6,37 @@
  */
 package MTR.NorthShoreExtension.Backend.WaysideController;
 
-<<<<<<< HEAD
-public class WaysideFunctionsHub 
-=======
 import MTR.NorthShoreExtension.MainMTR;
 import MTR.NorthShoreExtension.Backend.DBHelper;
+import MTR.NorthShoreExtension.Backend.TrackModelSrc.TrackModel;
 import MTR.NorthShoreExtension.UI.TrackModelUI;
 import MTR.NorthShoreExtension.UI.WaysideControllerUI;
 
 public class WaysideFunctionsHub //the purpose of this class is to receive and organize the information
->>>>>>> parent of 3fc3e00... Basic Logic unit up
 {
+	
+	/*
+	 *Information received: All occupied tracks, authority of trains on those tracks, the speed, broken tracks
+	 */
 	public static int[] AuthorityArray;
 	public static int[] SpeedArray;
 	public static int[] TrackOccupancyArray;
 	public static int[] BrokenTrackArray;
 	public static int[] AuthorArray = {2130,2131,2141,2145,2165,2146,2147};
 	public static WaysideFunctions obj = new WaysideFunctions();
-	
+	public static WaysideControllerUI obj2 = new WaysideControllerUI();
+	static WaysideControllerUI helper = new WaysideControllerUI();
+	//static DBHelper load = helper.sendDB();
 	
 	public static void main(String[] args) 
 	{
-		System.out.println("placeholder");
+
 		// TODO Auto-generated method stub
+		/*
 		WaysideFunctions.CTC_getOccupancy(AuthorArray);
 		WaysideFunctions.CTC_getBrokenTrack(AuthorArray);
-		WaysideFunctions.TrackModel_setSpeed(AuthorArray);
+		WaysideFunctions.TrackModel_setSpeedAuthority(2002, 65, AuthorArray);
 		WaysideFunctions.TrackModel_setAuthority(AuthorArray);
-<<<<<<< HEAD
-		
-		/*
-		AuthorityArray = obj.WaysideController_Authority();
-		  
-		  SpeedArray = obj.WaysideController_Speed();
-		  TrackOccupancyArray = obj.WaysideController_TrackOccupancy();
-		  BrokenTrackArray = obj.WaysideController_BrokenTrack();
-		  */
-
-	}
-	public static void WaysideController_Authority(int[] IncomingAuthorityArray)   //CTC calls this to send me authority info
-	 {
-		   
-				AuthorityArray = IncomingAuthorityArray;
-				WaysideFunctions.TrackModel_setAuthority(AuthorityArray);
-				for (int x = 0; x < AuthorityArray.length; x++)
-				{
-					System.out.println("WayAuthority: " + AuthorityArray[x]);
-				}
-		   
-	 }
-=======
 		*/
 		//DBHelper DB = new DBHelper();
 		//System.out.println("AAAAAAAAAAAAAAAHHHHHHHHHHHHHH: " + load.getTrackLength(1026));
@@ -64,7 +45,14 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 	}
 
 
-	public static void OccupiedSpeedAuthority(int TrackID, int NextTrack, int Speed, int[] Authority) // CTC calls this to send me info
+	//CTC calls this to send me information
+	//calls this multiple times
+	//trackID of track currently occupied
+	//the next track downt he line
+	//the speed
+	//authority
+	//not sure if correct
+	public static void OccupiedSpeedAuthority(int TrackID, int Speed, int[] Authority) // CTC calls this to send me info
 	{
 		/*
 		for (int x = 0; x < Authority.length; x++)
@@ -73,6 +61,7 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 		   }
 		   */
 		WaysideFunctions.TrackModel_setSpeedAuthority(TrackID, Speed, Authority.length);
+		TrackModel.TrackModel_setSpeedAuthority(TrackID, Speed, Authority.length);
 		int TotalLength = 0;
 		for (int x = 0; x < Authority.length; x++)
 		{
@@ -81,26 +70,36 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 			//System.out.println(Authority[x]);
 		}
 		//System.out.println(TrackID + " =SPEED: " + Speed);
-		WaysideControllerUI.OccupiedTrackAuthoritySpeedUpdater(TrackID, NextTrack, Speed, TotalLength);
+		if (Authority.length > 1)
+		{
+			WaysideControllerUI.OccupiedTrackAuthoritySpeedUpdater(TrackID, Authority[1], TotalLength);
+		}
+		else
+		{
+			WaysideControllerUI.OccupiedTrackAuthoritySpeedUpdater(TrackID, 0, TotalLength);
+		}
+		
 		
 	}
->>>>>>> parent of 3fc3e00... Basic Logic unit up
+	
+
 	public static int WaysideController_Switch(int SwitchID)   //CTC calls this to send me authority info
 	 {
-		System.out.println("Switch ID: " + SwitchID);
+		//System.out.println("Switch ID: " + SwitchID);
+		//check to see if conditions are safe
+		WaysideControllerUI.SwitchChartUpdater(SwitchID);
 		return 0;
 		   //update switch
 	 }
-<<<<<<< HEAD
-	   public static void WaysideController_Speed(int[] IncomingSpeedArray) //CTC calls this to send me speed info
-	   {
-=======
 	
 	   //TM calls this to send me list of tracks that are occupied
-		//input: array of ocupied tracks
-	//output: 
+		//sends the occupied tracks to the CTC for further information
+		//puts the data on the UI
 	   public static void WaysideController_TrackOccupancy(int[] IncomingTrackOccupancyArray)  //TM calls this to send me occupancy info
 	   {
+		   //WaysideController TrackUpdate = new WaysideController();
+		   WaysideController.UpdateOccupiedTracks(IncomingTrackOccupancyArray);
+		   //send the CTC HERE-------------------------------
 		   /*
 		   for (int x = 0; x < IncomingTrackOccupancyArray.length; x++)
 		   {
@@ -144,40 +143,23 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 				//System.out.println(LineColor +" =DDDDDD: " + BlockNumber);
 		   }
 		   //System.out.println("");
->>>>>>> parent of 3fc3e00... Basic Logic unit up
 
-				SpeedArray = IncomingSpeedArray;
-				WaysideFunctions.TrackModel_setSpeed(SpeedArray);
-				for (int x = 0; x < SpeedArray.length; x++)
-				{
-					System.out.println("WayAuthority: " + SpeedArray[x]);
-				}
-	   }
-	   
-	   public static void WaysideController_TrackOccupancy(int[] IncomingTrackOccupancyArray)  //TM calls this to send me occupancy info
-	   {
-		   TrackOccupancyArray = IncomingTrackOccupancyArray;
-		   WaysideFunctions.CTC_getOccupancy(TrackOccupancyArray);
-			for (int x = 0; x < TrackOccupancyArray.length; x++)
-			{
-				System.out.println("WayOccupied: " + TrackOccupancyArray[x]);
-			}
+		   WaysideControllerUI.OccupiedTrackTableUpdater(multi);
+		   WaysideFunctions.CTC_getOccupancy(IncomingTrackOccupancyArray);
 	   }
 	   
 	   public static void WaysideController_BrokenTrack(int[] IncomingBrokenTrackArray)  //TM calls this to send me broken track info
 	   {
 		   
 		   BrokenTrackArray = IncomingBrokenTrackArray;
-<<<<<<< HEAD
-			//WaysideFunctions.CTC_getBrokenTrack(BrokenTrackArray);
-=======
 			WaysideFunctions.CTC_getBrokenTrack(BrokenTrackArray);
+			//Send teh ctc HERE ----------------------------------------------
 			/*
->>>>>>> parent of 3fc3e00... Basic Logic unit up
 		   for (int x = 0; x < BrokenTrackArray.length; x++)
 			{
 				System.out.println("WayBroken: " + BrokenTrackArray[x]);
 			}
+			*/
 	   }
    
 
