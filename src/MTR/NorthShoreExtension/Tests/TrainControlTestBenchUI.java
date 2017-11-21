@@ -47,6 +47,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.text.NumberFormatter;
 
+import MTR.NorthShoreExtension.MainMTR;
 import MTR.NorthShoreExtension.Backend.TrainControllerSrc.TrainController;
 import MTR.NorthShoreExtension.Backend.TrainControllerSrc.TrainControllerHelper;
 import MTR.NorthShoreExtension.UI.TrainControlPanel;
@@ -239,6 +240,9 @@ public class TrainControlTestBenchUI implements ActionListener {
     	//Create TrainControllerHelper - with sample test data to show different UI states
     	tch = new TrainControllerHelper();
     	tch.addNewTrainController(123);
+    	
+    	//Load up database
+    	MainMTR.getStaticTrackDBHelper();
 
         //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.

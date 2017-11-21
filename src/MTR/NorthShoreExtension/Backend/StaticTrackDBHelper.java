@@ -10,6 +10,10 @@
 
 package MTR.NorthShoreExtension.Backend;
 
+import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -22,7 +26,7 @@ public class StaticTrackDBHelper {
 	
 	private static final String TRACK_INFO_TABLENAME = "TrackInfo";
 	private static final String TRACK_INFO_COLUMNS = "trackID INTEGER, line STRING, section STRING, blockNum INTEGER, "
-			+ "length INTEGER, grade REAL, speedLimit INTEGER, primaryNext INTEGER, secondaryNext INTEGER, primaryPrev INTEGER, "
+			+ "length REAL, grade REAL, speedLimit INTEGER, primaryNext INTEGER, secondaryNext INTEGER, primaryPrev INTEGER, "
 			+ "secondaryPrev INTEGER, biDirectional INTEGER, station INTEGER, underground INTEGER, firstTrack INTEGER, "
 			+ "lastTrack INTEGER, elevation REAL, cumulativeElevation REAL";
 	
@@ -79,7 +83,7 @@ public class StaticTrackDBHelper {
 		 }
 	}
 	
-	public void addTrack(int trackID, String line, String section, int blockNum, int blockLength, double blockGrade, 
+	public void addTrack(int trackID, String line, String section, int blockNum, double blockLength, double blockGrade, 
 			int speedLimit, int primaryNext, int secondaryNext, int primaryPrev, int secondaryPrev, int biDirectional,
 			int station, int underground, int firstTrack, int lastTrack, double elevation, double cumulativeElevation) {
 		Connection connection = null;
@@ -89,10 +93,12 @@ public class StaticTrackDBHelper {
 			Statement statement = connection.createStatement();
 			statement.setQueryTimeout(30); //TODO: Is this needed?
 			
-		    statement.executeUpdate("INSERT INTO " + TRACK_INFO_TABLENAME + " values(' "+trackID+"', '"+line+"', '"+section+"', '"
+			String queryUpdateStatement = "INSERT INTO " + TRACK_INFO_TABLENAME + " values(' "+trackID+"', '"+line+"', '"+section+"', '"
 		    +blockNum+"', '"+blockLength+"', '"+blockGrade+"', '"+speedLimit+"', '"+primaryNext+"', '"+secondaryNext+"', '"+primaryPrev+"', '"
 		    		+secondaryPrev+"', '"+biDirectional+"', '"+station+"', '"+underground+"', '"+firstTrack+"', '"+lastTrack
-		    		+" '"+elevation+"', '"+cumulativeElevation+"')");   
+		    		+"', '"+elevation+"', '"+cumulativeElevation+"')";
+		    
+			statement.executeUpdate(queryUpdateStatement);   
 		    
 		    connection.close();
 		}
@@ -111,6 +117,67 @@ public class StaticTrackDBHelper {
 	    //default trainStatus = ""
 	    //default speed, authority, occupied = 0
 	    //default switchPosition = 0
+	}
+
+	public void loadFileIntoDB(String filename) {
+		File file = new File(filename);
+		BufferedReader br = null;
+        String line;
+		try {
+			br = new BufferedReader(new FileReader(file));
+			br.readLine(); //Read in column headers
+			while((line = br.readLine())!=null) {
+				String[] trackInfo = line.split(",");
+				int trackID = loadCSVInt(trackInfo[0]);
+				String lineColor = trackInfo[1]; 
+				String section = trackInfo[2];
+				int blockNum = loadCSVInt(trackInfo[3]);
+				double blockLength = loadCSVDouble(trackInfo[4]);
+				double blockGrade = loadCSVDouble(trackInfo[5]);
+				int speedLimit = loadCSVInt(trackInfo[6]);
+				int primaryNext = loadCSVInt(trackInfo[7]);
+				int secondaryNext = loadCSVInt(trackInfo[8]);
+				int primaryPrev = loadCSVInt(trackInfo[9]);
+				int secondaryPrev = loadCSVInt(trackInfo[10]);
+				int biDirectional = loadCSVInt(trackInfo[11]);
+				int stationID = loadCSVInt(trackInfo[12]);
+				String stationName = trackInfo[13];
+				String stationSide = trackInfo[14];
+				int underground = loadCSVInt(trackInfo[15]);
+				int firstTrack = loadCSVInt(trackInfo[16]);
+				int lastTrack = loadCSVInt(trackInfo[17]);
+				double elevation = loadCSVDouble(trackInfo[18]);
+				double cumulativeElevation = loadCSVDouble(trackInfo[19]);
+				
+				int station = 0;
+				if(stationID > 0) {
+					station = 1;
+					addStation(trackID, stationID, stationName, stationSide);
+				}
+				
+				addTrack(trackID, lineColor, section, blockNum, blockLength, blockGrade, speedLimit, primaryNext, secondaryNext, primaryPrev, secondaryPrev, biDirectional, station, underground, firstTrack, lastTrack, elevation, cumulativeElevation);
+			}
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (NumberFormatException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
+	
+	private double loadCSVDouble(String d) {
+		if(d == null || d.equals(""))
+			return 0;
+		else
+			return Double.parseDouble(d);
+	}
+	
+	private int loadCSVInt(String i) {
+		if(i == null || i.equals(""))
+			return 0;
+		else
+			return Integer.parseInt(i);
 	}
 	
 	public void addStation(int trackID, int stationID, String stationName, String stationSide) {
