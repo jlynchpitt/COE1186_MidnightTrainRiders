@@ -6,7 +6,16 @@
  */
 package MTR.NorthShoreExtension.Backend.WaysideController;
 
+<<<<<<< HEAD
 public class WaysideFunctionsHub 
+=======
+import MTR.NorthShoreExtension.MainMTR;
+import MTR.NorthShoreExtension.Backend.DBHelper;
+import MTR.NorthShoreExtension.UI.TrackModelUI;
+import MTR.NorthShoreExtension.UI.WaysideControllerUI;
+
+public class WaysideFunctionsHub //the purpose of this class is to receive and organize the information
+>>>>>>> parent of 3fc3e00... Basic Logic unit up
 {
 	public static int[] AuthorityArray;
 	public static int[] SpeedArray;
@@ -24,6 +33,7 @@ public class WaysideFunctionsHub
 		WaysideFunctions.CTC_getBrokenTrack(AuthorArray);
 		WaysideFunctions.TrackModel_setSpeed(AuthorArray);
 		WaysideFunctions.TrackModel_setAuthority(AuthorArray);
+<<<<<<< HEAD
 		
 		/*
 		AuthorityArray = obj.WaysideController_Authority();
@@ -45,14 +55,96 @@ public class WaysideFunctionsHub
 				}
 		   
 	 }
+=======
+		*/
+		//DBHelper DB = new DBHelper();
+		//System.out.println("AAAAAAAAAAAAAAAHHHHHHHHHHHHHH: " + load.getTrackLength(1026));
+
+
+	}
+
+
+	public static void OccupiedSpeedAuthority(int TrackID, int NextTrack, int Speed, int[] Authority) // CTC calls this to send me info
+	{
+		/*
+		for (int x = 0; x < Authority.length; x++)
+		   {
+			   System.out.println(TrackID + " OccupiedSpeedAuthority: " + Authority[x]);
+		   }
+		   */
+		WaysideFunctions.TrackModel_setSpeedAuthority(TrackID, Speed, Authority.length);
+		int TotalLength = 0;
+		for (int x = 0; x < Authority.length; x++)
+		{
+			TotalLength += 50;
+			//TotalLength += load.getTrackLength(Authority[x]);
+			//System.out.println(Authority[x]);
+		}
+		//System.out.println(TrackID + " =SPEED: " + Speed);
+		WaysideControllerUI.OccupiedTrackAuthoritySpeedUpdater(TrackID, NextTrack, Speed, TotalLength);
+		
+	}
+>>>>>>> parent of 3fc3e00... Basic Logic unit up
 	public static int WaysideController_Switch(int SwitchID)   //CTC calls this to send me authority info
 	 {
 		System.out.println("Switch ID: " + SwitchID);
 		return 0;
 		   //update switch
 	 }
+<<<<<<< HEAD
 	   public static void WaysideController_Speed(int[] IncomingSpeedArray) //CTC calls this to send me speed info
 	   {
+=======
+	
+	   //TM calls this to send me list of tracks that are occupied
+		//input: array of ocupied tracks
+	//output: 
+	   public static void WaysideController_TrackOccupancy(int[] IncomingTrackOccupancyArray)  //TM calls this to send me occupancy info
+	   {
+		   /*
+		   for (int x = 0; x < IncomingTrackOccupancyArray.length; x++)
+		   {
+			   System.out.println("WaysideController_TrackOccupancy: " + IncomingTrackOccupancyArray[x]);
+		   }
+		   */
+		   
+		   
+		   //WaysideFunctions.CTC_getOccupancy(IncomingTrackOccupancyArray);
+		   DBHelper DB = new DBHelper();
+		   int ArrayLength = IncomingTrackOccupancyArray.length;
+		   Object[][] multi = new Object[ArrayLength][4];
+		   for (int x = 0; x < IncomingTrackOccupancyArray.length; x++)
+		   {
+			   //System.out.println("WaysideController_TrackOccupancy: " + IncomingTrackOccupancyArray[x]);
+			   //System.out.print(IncomingTrackOccupancyArray[x] + " ");
+			   String IncomingNumber = Integer.toString(IncomingTrackOccupancyArray[x]);
+			   String LineColor = null;
+			   
+			   int firstDigit = Character.getNumericValue(IncomingNumber.charAt(0));
+			   String BlockNumber =  IncomingNumber.substring(1,4);
+			   WaysideFunctionsHub track = new WaysideFunctionsHub();
+			   //LineColor = load.getColor(IncomingTrackOccupancyArray[x]);
+			   
+			   //System.out.println("AAAAAAAAAAAAAAAHHHHHHHHHHHHHH: " + load.getColor(1));
+			   
+			   if (firstDigit == 1)
+			   {
+				   LineColor = "Red";
+			   }
+			   if (firstDigit == 2)
+			   {
+				   LineColor = "Green";
+			   }
+			
+				multi[x][0] = LineColor;
+				multi[x][1] = BlockNumber;
+				multi[x][2] = "Placeholder";
+				multi[x][3] = "Placeholder";
+				//"Line", "Occupied Track", "Dest Track", "Athrty"
+				//System.out.println(LineColor +" =DDDDDD: " + BlockNumber);
+		   }
+		   //System.out.println("");
+>>>>>>> parent of 3fc3e00... Basic Logic unit up
 
 				SpeedArray = IncomingSpeedArray;
 				WaysideFunctions.TrackModel_setSpeed(SpeedArray);
@@ -76,7 +168,12 @@ public class WaysideFunctionsHub
 	   {
 		   
 		   BrokenTrackArray = IncomingBrokenTrackArray;
+<<<<<<< HEAD
 			//WaysideFunctions.CTC_getBrokenTrack(BrokenTrackArray);
+=======
+			WaysideFunctions.CTC_getBrokenTrack(BrokenTrackArray);
+			/*
+>>>>>>> parent of 3fc3e00... Basic Logic unit up
 		   for (int x = 0; x < BrokenTrackArray.length; x++)
 			{
 				System.out.println("WayBroken: " + BrokenTrackArray[x]);

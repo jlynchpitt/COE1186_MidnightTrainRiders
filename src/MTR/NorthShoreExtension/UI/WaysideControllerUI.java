@@ -129,6 +129,68 @@ public class WaysideControllerUI
 
    }
    
+<<<<<<< HEAD
+=======
+   public static void OccupiedTrackAuthoritySpeedUpdater(int TrackID, int NextTrack, int Speed, int AuthorityDist)
+   {
+	   /*
+	   for (int x = 0; x < dm1.getRowCount(); x++)
+	   {
+		   System.out.print("Current Chart: ");
+		   for (int y = 0; y < dm1.getColumnCount(); y++)
+		   {
+			   System.out.print("||" + dm1.getValueAt(x, y));
+		   }
+		   System.out.println("");
+	   }
+	   */
+	   
+		   //dm1.addRow(ObjectArray[x]);
+		   
+		   String LineColor = null;
+	   String BlockNumber =  Integer.toString(TrackID).substring(1,4);
+	   int firstDigit = Character.getNumericValue(Integer.toString(TrackID).charAt(0));
+	   if (firstDigit == 1)
+	   {
+		   LineColor = "Red";
+	   }
+	   if (firstDigit == 2)
+	   {
+		   LineColor = "Green";
+	   }
+	   for (int x = 0; x < dm1.getRowCount(); x++)
+	   {
+		   if (dm1.getValueAt(x, 0).equals(LineColor))
+		   {
+			   //System.out.println("PAIN TRAIN: " + dm1.getValueAt(x, 0));
+			   //System.out.println(dm1.getValueAt(x, 1) + "-----" + BlockNumber + "----------" + TrackID);
+			   if (dm1.getValueAt(x, 1).equals(BlockNumber))
+			   {
+				   dm1.setValueAt(NextTrack, x, 2);
+				   dm1.setValueAt(AuthorityDist, x, 3);
+			   }
+			   
+		   }
+		   
+	   }
+	   
+	   
+	   
+   }
+   public static void SwitchChartUpdater(int ID)  //update with actual information
+   {
+	   String BlockNumber =  Integer.toString(ID).substring(1,4);
+
+	   //LineColor = DB.getColor(IncomingTrackOccupancyArray[x]);
+	   for (int x = 0; x < dm.getRowCount(); x++)
+	   {
+		   if (Integer.parseInt(BlockNumber) == Integer.parseInt((String)(dm.getValueAt(x,1))))
+		   {
+			   SwitchSwitcher(x);
+		   }
+	   }
+   }
+>>>>>>> parent of 3fc3e00... Basic Logic unit up
    //register all panels
    public static void ComponentAdder()
    {
