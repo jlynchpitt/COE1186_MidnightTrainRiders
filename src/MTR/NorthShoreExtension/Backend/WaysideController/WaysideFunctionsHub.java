@@ -11,8 +11,12 @@ import MTR.NorthShoreExtension.Backend.DBHelper;
 import MTR.NorthShoreExtension.UI.TrackModelUI;
 import MTR.NorthShoreExtension.UI.WaysideControllerUI;
 
-public class WaysideFunctionsHub 
+public class WaysideFunctionsHub //the purpose of this class is to receive and organize the information
 {
+	
+	/*
+	 *Information received: All occupied tracks, authority of trains on those tracks, the speed, broken tracks
+	 */
 	public static int[] AuthorityArray;
 	public static int[] SpeedArray;
 	public static int[] TrackOccupancyArray;
@@ -21,7 +25,7 @@ public class WaysideFunctionsHub
 	public static WaysideFunctions obj = new WaysideFunctions();
 	public static WaysideControllerUI obj2 = new WaysideControllerUI();
 	static WaysideControllerUI helper = new WaysideControllerUI();
-	static DBHelper load = helper.sendDB();
+	//static DBHelper load = helper.sendDB();
 	
 	public static void main(String[] args) 
 	{
@@ -33,7 +37,7 @@ public class WaysideFunctionsHub
 		WaysideFunctions.TrackModel_setSpeedAuthority(2002, 65, AuthorArray);
 		WaysideFunctions.TrackModel_setAuthority(AuthorArray);
 		*/
-		DBHelper DB = new DBHelper();
+		//DBHelper DB = new DBHelper();
 		//System.out.println("AAAAAAAAAAAAAAAHHHHHHHHHHHHHH: " + load.getTrackLength(1026));
 
 
@@ -42,11 +46,13 @@ public class WaysideFunctionsHub
 
 	public static void OccupiedSpeedAuthority(int TrackID, int NextTrack, int Speed, int[] Authority) // CTC calls this to send me info
 	{
+		/*
 		for (int x = 0; x < Authority.length; x++)
 		   {
 			   System.out.println(TrackID + " OccupiedSpeedAuthority: " + Authority[x]);
 		   }
-		WaysideFunctions.TrackModel_setSpeedAuthority(TrackID, Speed, Authority);
+		   */
+		WaysideFunctions.TrackModel_setSpeedAuthority(TrackID, Speed, Authority.length);
 		int TotalLength = 0;
 		for (int x = 0; x < Authority.length; x++)
 		{
@@ -54,7 +60,7 @@ public class WaysideFunctionsHub
 			//TotalLength += load.getTrackLength(Authority[x]);
 			//System.out.println(Authority[x]);
 		}
-		System.out.println(TrackID + " =SPEED: " + Speed);
+		//System.out.println(TrackID + " =SPEED: " + Speed);
 		WaysideControllerUI.OccupiedTrackAuthoritySpeedUpdater(TrackID, NextTrack, Speed, TotalLength);
 		
 	}
@@ -72,12 +78,12 @@ public class WaysideFunctionsHub
 	//output: 
 	   public static void WaysideController_TrackOccupancy(int[] IncomingTrackOccupancyArray)  //TM calls this to send me occupancy info
 	   {
-		   
+		   /*
 		   for (int x = 0; x < IncomingTrackOccupancyArray.length; x++)
 		   {
 			   System.out.println("WaysideController_TrackOccupancy: " + IncomingTrackOccupancyArray[x]);
 		   }
-		   
+		   */
 		   
 		   
 		   //WaysideFunctions.CTC_getOccupancy(IncomingTrackOccupancyArray);
@@ -112,7 +118,7 @@ public class WaysideFunctionsHub
 				multi[x][2] = "Placeholder";
 				multi[x][3] = "Placeholder";
 				//"Line", "Occupied Track", "Dest Track", "Athrty"
-				System.out.println(LineColor +" =DDDDDD: " + BlockNumber);
+				//System.out.println(LineColor +" =DDDDDD: " + BlockNumber);
 		   }
 		   //System.out.println("");
 
