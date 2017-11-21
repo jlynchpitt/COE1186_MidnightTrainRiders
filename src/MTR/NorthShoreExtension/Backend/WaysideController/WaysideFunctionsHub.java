@@ -8,6 +8,7 @@ package MTR.NorthShoreExtension.Backend.WaysideController;
 
 import MTR.NorthShoreExtension.MainMTR;
 import MTR.NorthShoreExtension.Backend.DBHelper;
+import MTR.NorthShoreExtension.Backend.TrackModelSrc.TrackModel;
 import MTR.NorthShoreExtension.UI.TrackModelUI;
 import MTR.NorthShoreExtension.UI.WaysideControllerUI;
 
@@ -44,7 +45,14 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 	}
 
 
-	public static void OccupiedSpeedAuthority(int TrackID, int NextTrack, int Speed, int[] Authority) // CTC calls this to send me info
+	//CTC calls this to send me information
+	//calls this multiple times
+	//trackID of track currently occupied
+	//the next track downt he line
+	//the speed
+	//authority
+	//not sure if correct
+	public static void OccupiedSpeedAuthority(int TrackID, int Speed, int[] Authority) // CTC calls this to send me info
 	{
 		/*
 		for (int x = 0; x < Authority.length; x++)
@@ -53,6 +61,7 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 		   }
 		   */
 		WaysideFunctions.TrackModel_setSpeedAuthority(TrackID, Speed, Authority.length);
+		TrackModel.TrackModel_setSpeedAuthority(TrackID, Speed, Authority.length);
 		int TotalLength = 0;
 		for (int x = 0; x < Authority.length; x++)
 		{
@@ -61,9 +70,19 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 			//System.out.println(Authority[x]);
 		}
 		//System.out.println(TrackID + " =SPEED: " + Speed);
-		WaysideControllerUI.OccupiedTrackAuthoritySpeedUpdater(TrackID, NextTrack, Speed, TotalLength);
+		if (Authority.length > 1)
+		{
+			WaysideControllerUI.OccupiedTrackAuthoritySpeedUpdater(TrackID, Authority[1], TotalLength);
+		}
+		else
+		{
+			WaysideControllerUI.OccupiedTrackAuthoritySpeedUpdater(TrackID, 0, TotalLength);
+		}
+		
 		
 	}
+	
+
 	public static int WaysideController_Switch(int SwitchID)   //CTC calls this to send me authority info
 	 {
 		//System.out.println("Switch ID: " + SwitchID);
@@ -74,10 +93,13 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 	 }
 	
 	   //TM calls this to send me list of tracks that are occupied
-		//input: array of ocupied tracks
-	//output: 
+		//sends the occupied tracks to the CTC for further information
+		//puts the data on the UI
 	   public static void WaysideController_TrackOccupancy(int[] IncomingTrackOccupancyArray)  //TM calls this to send me occupancy info
 	   {
+		   //WaysideController TrackUpdate = new WaysideController();
+		   WaysideController.UpdateOccupiedTracks(IncomingTrackOccupancyArray);
+		   //send the CTC HERE-------------------------------
 		   /*
 		   for (int x = 0; x < IncomingTrackOccupancyArray.length; x++)
 		   {
@@ -131,6 +153,7 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 		   
 		   BrokenTrackArray = IncomingBrokenTrackArray;
 			WaysideFunctions.CTC_getBrokenTrack(BrokenTrackArray);
+			//Send teh ctc HERE ----------------------------------------------
 			/*
 		   for (int x = 0; x < BrokenTrackArray.length; x++)
 			{
