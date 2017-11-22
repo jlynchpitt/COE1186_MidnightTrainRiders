@@ -38,6 +38,8 @@ import java.io.*;
 import java.util.*;
 import java.text.*;
 
+import MTR.NorthShoreExtension.UI.*;
+
 public class ctcUI {
 	
 	//Specify the look and feel to use. Valid values: null (default), "Metal", "System",
@@ -245,7 +247,7 @@ public class ctcUI {
 		trkModel.setBorder(BorderFactory.createLineBorder(Color.black,1));
 		BufferedImage image;
 		try {
-			image = ImageIO.read(new File("images/TrackLayout.png"));
+			image = ImageIO.read(new File("TrackLayout.png"));
 		} catch (IOException ex) {
 			image = null;
 		}
@@ -280,7 +282,6 @@ public class ctcUI {
 				}
 			}
 		});
-
 		pane.add(switchTest, gbc);
 	
 		schedules = new JButton("Train Schedules");
