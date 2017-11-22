@@ -3,6 +3,7 @@ package MTR.NorthShoreExtension.Backend;
 public class UnitConverter {
 	private static final double MPH_per_MPS = 2.23694;
 	private static final double METERS_PER_MILE = 1609.34;
+	private static final double KILOMETERS_PER_MILE = 1.60934;
 	private static final double FEET_PER_METER = 3.28084;
 	
 	/**
@@ -63,5 +64,25 @@ public class UnitConverter {
 	 */
 	public static double metersToFeet(double distance) {
 		return distance*FEET_PER_METER;
+	}
+	
+	/**
+	 * Convert kilometers to miles
+	 * 
+	 * @param speed
+	 * @return
+	 */
+	public static double kilometersToMiles(double distance) {
+		return distance/KILOMETERS_PER_MILE;
+	}
+	
+	/**
+	 * Convert miles to kilometers
+	 * 
+	 * @param speed
+	 * @return
+	 */
+	public static double milesToKilometers(double distance) {
+		return distance*KILOMETERS_PER_MILE;
 	}
 }

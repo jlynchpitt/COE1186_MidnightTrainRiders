@@ -33,10 +33,10 @@ public class TrainController {
 	
 	//Vital train controls/info
 	private double powerCommand = 0; //kilowatts
-	private double actualSpeed = 0; //MPH
-	private int ctcCommandedSetSpeed = 0; //MPH
-	private int driverCommandedSetSpeed = 0; //MPH
-	private int trainSetSpeed = 0; //MPH - the actual speed the train is set to
+	private double actualSpeed = 0; //km/h
+	private int ctcCommandedSetSpeed = 0; //km/h
+	private int driverCommandedSetSpeed = 0; //km/h
+	private int trainSetSpeed = 0; //km/h - the actual speed the train is set to
 	private int authority = 0; //# of tracks/blocks
 	private boolean brakeApplied = true; //default to brakes applied
 	private boolean eBrakeApplied = true; //emergency brake - default to brakes applied
@@ -58,8 +58,8 @@ public class TrainController {
 	private double internalTemp = 73; //TODO: Change actual temp to outside temp to start
 	
 	//Track Info
-	private int speedLimit = 0; //MPH
-	private int length = 0; //feet
+	private int speedLimit = 0; //km/h
+	private int length = 0; //m
 	
 	//TODO: Pass in train model object
 	public TrainController(int id, Train t, double pid_p, double pid_i){

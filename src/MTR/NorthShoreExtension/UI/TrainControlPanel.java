@@ -53,7 +53,6 @@ import MTR.NorthShoreExtension.Backend.TrainControllerSrc.TrainController;
 
 public class TrainControlPanel extends JPanel
                              implements ActionListener,
-                                        ChangeListener,
                                         PropertyChangeListener {
 	//Action Performed commands from backend
 	public static final String VITAL = "vitalInfo";
@@ -168,39 +167,7 @@ public class TrainControlPanel extends JPanel
     	
     	setMode(true);
     }
-
-    //Don't allow this panel to get taller than its preferred size.
-    //BoxLayout pays attention to maximum size, though most layout
-    //managers don't.
-    public Dimension getMaximumSize() {
-        return new Dimension(Integer.MAX_VALUE,
-                             getPreferredSize().height);
-    }
-
-    /**
-     * Returns the multiplier (units/meter) for the currently
-     * selected unit of measurement.
-     */
-    public double getMultiplier() {
-        return 0.25; //sliderModel.getMultiplier();
-    }
-
-    public double getValue() {
-        return 0.35; //sliderModel.getDoubleValue();
-    }
-
-    /** Updates the text field when the main data model is updated. */
-    public void stateChanged(ChangeEvent e) {
-        int min = 0; //sliderModel.getMinimum();
-        int max = 250; //sliderModel.getMaximum();
-        double value = 7.25; //sliderModel.getDoubleValue();
-        //NumberFormatter formatter = (NumberFormatter)textField.getFormatter();
-
-        //formatter.setMinimum(new Double(min));
-        //formatter.setMaximum(new Double(max));
-        //textField.setValue(new Double(value));
-    }
-
+    
     /**
      * Responds to the user choosing a new unit from the combo box.
      */
@@ -292,13 +259,13 @@ public class TrainControlPanel extends JPanel
         	//backend info updated - update it in the UI
         	switch(e.getActionCommand()) {
         	case VITAL:
-        		updateUIIntSpeed(trainSetSpeed, trainController.getTrainSetSpeed());
+        		updateUIIntSpeed_convert(trainSetSpeed, trainController.getTrainSetSpeed());
         		updateUIPower(actualPower, trainController.getPower());
-        		updateUIDoubleSpeed(actualSpeed, trainController.getActualSpeed());
+        		updateUIDoubleSpeed_convert(actualSpeed, trainController.getActualSpeed());
 
         		//commanded authority
         		updateUIAuthority(commandedAuthority, trainController.getAuthority());
-        		updateUIIntSpeed(commandedSetSpeed, trainController.getCTCCommandedSetSpeed());
+        		updateUIIntSpeed_convert(commandedSetSpeed, trainController.getCTCCommandedSetSpeed());
         		break;
         	case TRACK_INFO:
         		break;
@@ -357,8 +324,11 @@ public class TrainControlPanel extends JPanel
         }*/
     	if(e.getSource().equals(driverSetSpeed)) {
     		//TODO: Handle speeds > 1000 - issue with , in 1,000
-    		int newSetSpeed = Integer.parseInt(((JFormattedTextField)e.getSource()).getText());
-    		trainController.setDriverCommandedSetSpeed(newSetSpeed);
+    		int newSetSpeed_mph = Integer.parseInt(((JFormattedTextField)e.getSource()).getText());
+    		
+    		//TODO: Handle set speed as double? posisble loss of precision with conversions
+    		int newSetSpeed_kmh = (int) UnitConverter.milesToKilometers(newSetSpeed_mph);
+    		trainController.setDriverCommandedSetSpeed(newSetSpeed_kmh);
     	}
     }
     
@@ -379,6 +349,16 @@ public class TrainControlPanel extends JPanel
     }
     
     /*
+     * Converts speed from km/h to mph before being displayed in the UI
+     * Used for any label that displays a double based speed
+     */
+    private void updateUIDoubleSpeed_convert(JLabel label, double speed) {
+    	double speed_mph = UnitConverter.kilometersToMiles(speed);
+    	
+    	updateUIDoubleSpeed(label, speed_mph);
+    }
+    
+    /*
      * Adds units onto a value before being displayed in the UI
      * Used for any label that displays a double based speed
      */
@@ -386,6 +366,16 @@ public class TrainControlPanel extends JPanel
     	if(label != null) {
     		label.setText(String.format("%.2f MPH", speed));
     	}
+    }
+    
+    /*
+     * Converts speed from km/h to mph before being displayed in the UI
+     * Used for any label that displays an integer based speed
+     */
+    private void updateUIIntSpeed_convert(JLabel label, double speed) {
+    	double speed_mph = UnitConverter.kilometersToMiles(speed);
+    	
+    	updateUIIntSpeed(label, speed_mph);
     }
     
     /*
@@ -414,7 +404,7 @@ public class TrainControlPanel extends JPanel
      */
     private void updateUIPower(JLabel label, double power) {
     	if(label != null) {
-    		label.setText(String.format("%.2f horsepower", power));
+    		label.setText(String.format("%.2f kWatts", power));
     	}
     }
     
@@ -446,7 +436,7 @@ public class TrainControlPanel extends JPanel
         actualPower = new JLabel();
         updateUIPower(actualPower, trainController.getPower());
         actualSpeed = new JLabel();
-        updateUIDoubleSpeed(actualSpeed, trainController.getActualSpeed());
+        updateUIDoubleSpeed_convert(actualSpeed, trainController.getActualSpeed());
         
         //Add all labels to layout
         vitalInfoPanel.add(new JLabel("Train Set Speed: "));

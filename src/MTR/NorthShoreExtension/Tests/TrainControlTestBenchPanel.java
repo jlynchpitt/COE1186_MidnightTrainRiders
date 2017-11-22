@@ -88,8 +88,8 @@ public class TrainControlTestBenchPanel extends JPanel
     JLabel announcements;
     
     /* Internal status/state variables */
-    private double powerCommand = 0;
-    private double actualSpeed = 0;
+    private double powerCommand = 0; //kWatts
+    private double actualSpeed = 0; //mph
     private boolean brakeApplied = false;
     private boolean eBrakeApplied = false;
 
@@ -135,14 +135,6 @@ public class TrainControlTestBenchPanel extends JPanel
     	add(bottomControlPanel, c);
     }
 
-    //Don't allow this panel to get taller than its preferred size.
-    //BoxLayout pays attention to maximum size, though most layout
-    //managers don't.
-    public Dimension getMaximumSize() {
-        return new Dimension(Integer.MAX_VALUE,
-                             getPreferredSize().height);
-    }
-
     /** Train model commands  */
     public void TrainModel_setPower(double powerCmd) {
     	powerCommand = powerCmd;
@@ -151,7 +143,8 @@ public class TrainControlTestBenchPanel extends JPanel
     	
     	//Simulate train model's speed calculation
     	actualSpeed = calculateBasicSpeed();
-    	updateUIDoubleSpeed(actualSpeedLabel, actualSpeed);
+    	//Note: Since actual speed calculations being done in this module the units are already MPH so no need to convert
+    	updateUIDoubleSpeed(actualSpeedLabel, actualSpeed); 
     	
     	trainController.TrainControl_setActualSpeed(actualSpeed);
     }
@@ -186,9 +179,10 @@ public class TrainControlTestBenchPanel extends JPanel
     }
     
     public void TrainModel_resendSpeedAuthority() {
-    	int newSetSpeed = Integer.parseInt(commandedSpeed.getText());
+    	int newSetSpeed_mph = Integer.parseInt(commandedSpeed.getText());
+    	int newSetSpeed_kmh = (int) UnitConverter.milesToKilometers(newSetSpeed_mph);
 		int newAuthority = Integer.parseInt(commandedAuthority.getText());
-		trainController.TrainControl_setCommandedSpeedAuthority(newSetSpeed, newAuthority);
+		trainController.TrainControl_setCommandedSpeedAuthority(newSetSpeed_kmh, newAuthority);
 	}
 
     /**
@@ -261,9 +255,10 @@ public class TrainControlTestBenchPanel extends JPanel
     public void propertyChange(PropertyChangeEvent e) {
     	if(e.getSource().equals(commandedSpeed) || e.getSource().equals(commandedAuthority)) {
     		//TODO: Handle speeds > 1000 - issue with , in 1,000
-    		int newSetSpeed = Integer.parseInt(commandedSpeed.getText());
+    		int newSetSpeed_mph = Integer.parseInt(commandedSpeed.getText());
+        	int newSetSpeed_kmh = (int) UnitConverter.milesToKilometers(newSetSpeed_mph);
     		int newAuthority = Integer.parseInt(commandedAuthority.getText());
-    		trainController.TrainControl_setCommandedSpeedAuthority(newSetSpeed, newAuthority);
+    		trainController.TrainControl_setCommandedSpeedAuthority(newSetSpeed_kmh, newAuthority);
     	}
     }
     
@@ -291,6 +286,7 @@ public class TrainControlTestBenchPanel extends JPanel
 		//for testing purposes when not attached to train model
 		//simple velocity calculation for demonstration of adjusting power command
 		
+    	//TODO: Redo units for this
 		//Power (W) = Force (kg * m/s2) * Velocity (m/s)
 		//TrainForce = mass * acceleration = 51.43 tons * 0.5 m/s2 (train 2/3 loaded) = 46656.511 kg * 0.5 m/s2
 		//Velocity = Power/Train Force			
@@ -332,6 +328,16 @@ public class TrainControlTestBenchPanel extends JPanel
 	}
 	
     /*
+     * Converts speed from km/h to mph before being displayed in the UI
+     * Used for any label that displays a double based speed
+     */
+    private void updateUIDoubleSpeed_convert(JLabel label, double speed) {
+    	double speed_mph = UnitConverter.kilometersToMiles(speed);
+    	
+    	updateUIDoubleSpeed(label, speed_mph);
+    }
+    
+    /*
      * Adds units onto a value before being displayed in the UI
      * Used for any label that displays a double based speed
      */
@@ -367,7 +373,7 @@ public class TrainControlTestBenchPanel extends JPanel
      */
     private void updateUIPower(JLabel label, double power) {
     	if(label != null) {
-    		label.setText(String.format("%.2f horsepower", power));
+    		label.setText(String.format("%.2f kWatts", power));
     	}
     }
     
@@ -400,7 +406,7 @@ public class TrainControlTestBenchPanel extends JPanel
         powerCommandLabel = new JLabel();
         updateUIPower(powerCommandLabel, 0); //TODO: Should this get the current power command from the Train Controller?
         actualSpeedLabel = new JLabel();
-        updateUIDoubleSpeed(actualSpeedLabel, trainController.getActualSpeed());
+        updateUIDoubleSpeed_convert(actualSpeedLabel, trainController.getActualSpeed());
         
         //Add all labels to layout
         speedAuthorityPanel.add(new JLabel("Speed (MPH): "));
