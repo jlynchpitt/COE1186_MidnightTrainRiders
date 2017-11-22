@@ -21,15 +21,23 @@ public class switchTester {
 			int testResults = WaysideFunctionsHub.WaysideController_Switch(switchID);
 			//int testResults = 0; //For testing, remove once integrated.
 			if (testResults == 1) {
+				SystemTray tray = SystemTray.getSystemTray();
+				Image image = Toolkit.getDefaultToolkit().createImage("icon.png");
+				TrayIcon trayIcon = new TrayIcon(image, "Switch Tester");
+				trayIcon.setImageAutoSize(true);
+				trayIcon.setToolTip("Testing of Switch ID: " + switchID);
+				tray.add(trayIcon);
+				trayIcon.displayMessage("Switch Success","Switch Test of " + switchID + " was Successful!", MessageType.INFO);
+				
 				//Switch successful, 
 			}
 			else if (testResults == 0) {
 				//Switch failed, notify that that the switch is busy
 				SystemTray tray = SystemTray.getSystemTray();
 				Image image = Toolkit.getDefaultToolkit().createImage("icon.png");
-				TrayIcon trayIcon = new TrayIcon(image, "Tray Demo");
+				TrayIcon trayIcon = new TrayIcon(image, "Switch Tester");
 				trayIcon.setImageAutoSize(true);
-				trayIcon.setToolTip("System tray icon demo");
+				trayIcon.setToolTip("Testing of Switch ID: " + switchID);
 				tray.add(trayIcon);
 				trayIcon.displayMessage("Switch Busy", "Switch " + switchID + " is busy. \nPlease try again later.", MessageType.INFO);
 			}
