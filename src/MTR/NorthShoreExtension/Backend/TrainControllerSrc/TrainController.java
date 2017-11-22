@@ -24,7 +24,6 @@ public class TrainController {
 	private Train trainModel = null;
 	private TrainControlPanel trainControlPanel = null;
 	private TrainControlTestBenchPanel testBench = null;
-	private boolean CONNECTEDTOTRAINMODEL = false; //This must be true when in the full system - for testing individual submodule
 	private boolean manualMode = true;
 	
 	//PID controllers
@@ -44,6 +43,8 @@ public class TrainController {
 	private boolean signalPickupFailed = false;
 	private boolean engineFailed = false;
 	private boolean brakesFailed = false;
+	private double Kp = 0;
+	private double Ki = 0;
 	
 	/* Non-Vital Train Info */
 	private String trainFaults = "none"; //TODO: Possibly change to enumerated type
@@ -64,6 +65,9 @@ public class TrainController {
 	public TrainController(int id, Train t, double pid_p, double pid_i){
 		trainID = id;
 		trainModel = t;
+		
+		Kp = pid_p;
+		Ki = pid_i;
 		
 		//Initialize pid controllers
 		spdPID1 = new MiniPID(pid_p, pid_i, 0);
@@ -88,7 +92,7 @@ public class TrainController {
 	}
 	
 	public void calculatePowerCommand() {
-		if(!eBrakeApplied && !brakeApplied && authority > 0) {
+		if(!eBrakeApplied && !brakeApplied && authority > 0 && !engineFailed) {
 			//Simple check against speed limit TODO: Move these checks into setters
 			if(driverCommandedSetSpeed > ctcCommandedSetSpeed) {
 				trainSetSpeed = ctcCommandedSetSpeed;
@@ -105,7 +109,15 @@ public class TrainController {
 			
 			Double tempPC = powerOutputSelector(tempPC1, tempPC2, tempPC3);
 			if(tempPC != null /* && validatePowerCommand(tempPC)*/) {
-				powerCommand = tempPC;
+				//Limit amount power command can increase in 1 second
+				int safePowerCommandJump = 10;
+				
+				if(tempPC - powerCommand > safePowerCommandJump) {
+					powerCommand = powerCommand + safePowerCommandJump;
+				}
+				else {
+					powerCommand = tempPC;					
+				}
 			}
 			else {
 				//power command validation failed - set power to 0
@@ -137,15 +149,30 @@ public class TrainController {
 		updateTrainSetSpeed();
 	}
 	
-	public void operateBrake(boolean applied) {
-		brakeApplied = applied;
-		
+	/* Return true if brakes successfully set 
+	 * 		- false if brakes failed and cannot be applied */
+	public boolean operateBrake(boolean applied) {
+		boolean brakesSuccess = false;
+		if(brakesFailed) {
+			brakeApplied = false;
+			brakesSuccess = false;
+		}
+		else {
+			brakeApplied = applied;			
+			brakesSuccess = true;
+		}
+
 		if(trainModel != null) {
-			trainModel.TrainModel_setBrake(applied);
+			trainModel.TrainModel_setBrake(brakeApplied);
 		}
 		if(testBench != null) {
-			testBench.TrainModel_setBrake(applied);
+			testBench.TrainModel_setBrake(brakeApplied);
 		}
+		
+		//NOTE: Redundant if UI calling this but more convenient when backend operates brakes
+		updateUI(TrainControlPanel.BRAKES);
+		
+		return brakesSuccess;
 	}
 	
 	public void operateEmergencyBrake(boolean applied) {
@@ -157,6 +184,9 @@ public class TrainController {
 		if(testBench != null) {
 			testBench.TrainModel_setEBrake(applied);
 		}
+		
+		//NOTE: Redundant if UI calling this but more convenient when backend operates brakes
+		updateUI(TrainControlPanel.BRAKES);
 	}
 	
 	/* Functions for non-vital user inputs */
@@ -199,7 +229,9 @@ public class TrainController {
 		//TODO: perform calculations of actual temperature
 	}
 	
-	
+	public void setOperationMode(boolean manual) {
+		manualMode = manual;
+	}
 	
 	/* Functions for receiving inputs from the train model */
 	public void TrainControl_setActualSpeed(double speed) {
@@ -211,8 +243,14 @@ public class TrainController {
 	}
 	
 	public void TrainControl_setCommandedSpeedAuthority(int speed, int auth) {
-		ctcCommandedSetSpeed = speed;
-		authority = auth;
+		if(signalPickupFailed) {
+			ctcCommandedSetSpeed = 0;
+			authority = 0;
+		}
+		else {
+			ctcCommandedSetSpeed = speed;
+			authority = auth;
+		}
 		
 		updateTrainSetSpeed();
 		
@@ -227,12 +265,39 @@ public class TrainController {
 		switch(status) {
 		case TrainControllerHelper.BRAKE_FAILURE:
 			brakesFailed = faultActive;
+			
+			//Release all brakes if failing them
+			if(brakesFailed) {
+				operateBrake(false);
+				//TODO: Should e-brake also fail?
+				//operateEmergencyBrake(false);
+			}
 			break;
 		case TrainControllerHelper.ENGINE_FAILURE:
 			engineFailed = faultActive;
+			
+			if(engineFailed) {
+				operateEmergencyBrake(true);
+			}
 			break;
 		case TrainControllerHelper.SIGNAL_PICKUP_FAILURE:
 			signalPickupFailed = faultActive;
+			
+			if(signalPickupFailed) {
+				//Can't get speed or authority commands from the track so set them to 0
+				TrainControl_setCommandedSpeedAuthority(0, 0);
+				//TODO: Clear track status to defaults
+
+				operateEmergencyBrake(true);
+			}
+			else {
+				if(trainModel != null) {
+					//trainModel.TrainModel_resendSpeedAuthority();
+				}
+				if(testBench != null) {
+					testBench.TrainModel_resendSpeedAuthority();
+				}
+			}
 			break;				
 		}
 		
@@ -247,16 +312,24 @@ public class TrainController {
 	
 	public void TrainControl_setPassengerEBrake() {
 		//NOTE: Emergency brake can only be set from train model - it cannot be released
-		eBrakeApplied = true;
-		
-		updateUI(TrainControlPanel.BRAKES);
+		operateEmergencyBrake(true);
 	}
 	
 	public void TrainControl_moveToNextTrack() {
-		
+		if(!signalPickupFailed) {
+			
+		}
 	}
 	
 	/* Functions called by UI to get Train Control info */
+	public double getKp() {
+		return Kp;
+	}
+	
+	public double getKi() {
+		return Ki;
+	}
+	
 	public int getAuthority() {
 		return authority;
 	}
@@ -340,11 +413,6 @@ public class TrainController {
 		return lightsOn;
 	}
 	
-	/* Functions called by TrainControllerHelper */
-	public void TrainControl_setOperationMode(boolean manual) {
-		manualMode = manual;
-	}
-	
 	/* Private helper functions*/
 	private double calculateBasicSpeed() {
 		//for testing purposes when not attached to train model
@@ -390,7 +458,7 @@ public class TrainController {
 	}
 	
 	private void updateTrainSetSpeed() {
-		if(driverCommandedSetSpeed <= ctcCommandedSetSpeed && driverCommandedSetSpeed < speedLimit) {
+		if(manualMode && driverCommandedSetSpeed <= ctcCommandedSetSpeed && driverCommandedSetSpeed < speedLimit) {
 			trainSetSpeed = driverCommandedSetSpeed;
 		}
 		else if(ctcCommandedSetSpeed <= speedLimit) {
@@ -408,4 +476,13 @@ public class TrainController {
 		}
 	}
 
+	/*
+	 * Check speed + speed limit + set speeds to determine safe operations
+	 * Apply standard brake or emergency brake if speed deemed unsafe
+	 * 
+	 * Behavior is different in manual and automatic modes
+	 */
+	private void ensureSafeOperations() {
+		
+	}
 }

@@ -33,19 +33,15 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-import MTR.NorthShoreExtension.Backend.CTCSrc.*;
-
 public class TrainSchedulerUI extends JFrame {
 	//create two arrays for demo purpose. actual will have the list imported from the database
-	String[] grnLineStops = {"A1", "A2", "A3", "A4", "B5", "B6", "B7", "C8", "C9"};
-	String[] redLineStops = {"A1", "A2", "A3", "B4", "B5", "B6", "B7", "B8", "C9"};
+	String[] grnLineStops = {"A1", "A2", "A3", "A4", "B1", "B2", "B3", "C1", "C2"};
+	String[] redLineStops = {"A1", "A2", "A3", "B1", "B2", "B3", "B4", "B5", "C1"};
 	int xRed = 1; //number of grnStops
 	int xGrn = 1;
 	int authRed[] = new int[150];
 	int authGrn[] = new int[150];
-	int trainID = 0;
-	int departRed[] = new int[150];
-	int departGrn[] = new int[150];
+	//double depart[] = new double[150];
 	
 	private JFrame frame = new JFrame("Schedule A Train");
 	private JTabbedPane tabbedPane = new JTabbedPane();
@@ -201,7 +197,7 @@ public class TrainSchedulerUI extends JFrame {
 		
 		tabbedPane.addTab("Red Line", redTrain);
 		tabbedPane.addTab("Green Line", grnTrain);
-		//tabbedPane.addTab("Schedules", schedule);
+		tabbedPane.addTab("Schedules", schedule);
 		
 		//add it all together and make it visible
 		frame.add(tabbedPane);
@@ -220,8 +216,6 @@ public class TrainSchedulerUI extends JFrame {
 				String redNextStop = "Stop " + xRed + ": \n " + redLine + ": " + redStop + " \n Departure: " + redDepart + "\n Authority: " + nextAuthRed + "\n Suggested Speed: MAX";
 				String redPrevious = stopRouteRed.getText();
 				stopRouteRed.setText(redPrevious + "\n\n" + redNextStop);
-				int departureRed = Integer.parseInt(redHour1.getText())*1000 + Integer.parseInt(redHour0.getText())*100 + Integer.parseInt(redMins1.getText())*10 + Integer.parseInt(redMins0.getText());
-				departRed[xRed - 1] = departureRed;
 				xRed++;
 			}
 		});
@@ -236,8 +230,6 @@ public class TrainSchedulerUI extends JFrame {
 				String grnNextStop = "Stop " + xGrn + ": \n " + grnLine + ": " + grnStop + " \n Departure: " + grnDepart + "\n Authority: " + nextAuthGrn + "\n Suggested Speed: MAX";
 				String grnPrevious = stopRouteGrn.getText();
 				stopRouteGrn.setText(grnPrevious + "\n\n" + grnNextStop);
-				int departureGrn = Integer.parseInt(grnHour1.getText())*1000 + Integer.parseInt(grnHour0.getText())*100 + Integer.parseInt(grnMins1.getText())*10 + Integer.parseInt(grnMins0.getText());
-				departGrn[xGrn - 1] = departureGrn;
 				xGrn++;
 			}
 		});
@@ -255,9 +247,6 @@ public class TrainSchedulerUI extends JFrame {
 				addStopRed.setEnabled(false);
 				schedTrainRed.setEnabled(false);
 				nextTrainRed.setEnabled(true);
-				
-				trainScheduler.addTrainSchedule("Red", trainID, authRed, departRed);
-				trainID++;
 			}
 		});
 		
@@ -274,9 +263,6 @@ public class TrainSchedulerUI extends JFrame {
 				addStopGrn.setEnabled(false);
 				schedTrainGrn.setEnabled(false);
 				nextTrainGrn.setEnabled(true);
-				
-				trainScheduler.addTrainSchedule("Green", trainID, authGrn, departGrn);
-				trainID++;
 			}
 		});
 		
@@ -292,8 +278,6 @@ public class TrainSchedulerUI extends JFrame {
 				nextTrainRed.setEnabled(false);
 				stopRouteRed.setText("Add a Stop...");
 				xRed = 1;
-				authRed = new int[150];
-				departRed = new int[150];
 			}
 		});
 		
@@ -309,8 +293,6 @@ public class TrainSchedulerUI extends JFrame {
 				nextTrainGrn.setEnabled(false);
 				stopRouteGrn.setText("Add a Stop...");
 				xGrn = 1;
-				authGrn = new int[150];
-				departGrn = new int[150];
 			}
 		});
 	}

@@ -195,7 +195,7 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 	   }
    }
    
-   public static void OccupiedTrackAuthoritySpeedUpdater(int TrackID, int NextTrack, int AuthorityDist)
+   public static void OccupiedTrackAuthoritySpeedUpdater(int TrackID, int NextTrack, int Speed, int AuthorityDist)
    {
 	   /*
 	   for (int x = 0; x < dm1.getRowCount(); x++)
@@ -438,5 +438,6 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 
 
 
+   
    
 }

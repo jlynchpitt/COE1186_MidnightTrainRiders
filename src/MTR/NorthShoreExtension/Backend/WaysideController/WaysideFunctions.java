@@ -185,7 +185,7 @@ public class WaysideFunctions  //this is a test class designed to function as a 
 			   //System.out.println(AuthorityArray[a - LateralPosition]);
 			   //System.out.println(a);
 		   }
-		   WaysideFunctionsHub.OccupiedSpeedAuthority(IncomingTrackOccupancyArray[x], rand.nextInt(31) + 30, AuthorityArray);
+		   WaysideFunctionsHub.OccupiedSpeedAuthority(IncomingTrackOccupancyArray[x], NextTrack, rand.nextInt(31) + 30, AuthorityArray);
 	   }
 	   
    }

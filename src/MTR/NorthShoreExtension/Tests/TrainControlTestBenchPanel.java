@@ -54,7 +54,6 @@ import MTR.NorthShoreExtension.Backend.TrainControllerSrc.TrainControllerHelper;
 
 public class TrainControlTestBenchPanel extends JPanel
                              implements ActionListener,
-                                        ChangeListener,
                                         PropertyChangeListener {    
 	TrainController trainController;
     NumberFormat numberFormat;
@@ -148,7 +147,13 @@ public class TrainControlTestBenchPanel extends JPanel
     public void TrainModel_setPower(double powerCmd) {
     	powerCommand = powerCmd;
     	
-    	powerCommandLabel.setText(Double.toString(powerCommand));
+    	updateUIPower(powerCommandLabel, powerCommand);
+    	
+    	//Simulate train model's speed calculation
+    	actualSpeed = calculateBasicSpeed();
+    	updateUIDoubleSpeed(actualSpeedLabel, actualSpeed);
+    	
+    	trainController.TrainControl_setActualSpeed(actualSpeed);
     }
     
     public void TrainModel_setBrake(boolean applied) {
@@ -180,17 +185,11 @@ public class TrainControlTestBenchPanel extends JPanel
     	}
     }
     
-    /** Updates the text field when the main data model is updated. */
-    public void stateChanged(ChangeEvent e) {
-        int min = 0; //sliderModel.getMinimum();
-        int max = 250; //sliderModel.getMaximum();
-        double value = 7.25; //sliderModel.getDoubleValue();
-        //NumberFormatter formatter = (NumberFormatter)textField.getFormatter();
-
-        //formatter.setMinimum(new Double(min));
-        //formatter.setMaximum(new Double(max));
-        //textField.setValue(new Double(value));
-    }
+    public void TrainModel_resendSpeedAuthority() {
+    	int newSetSpeed = Integer.parseInt(commandedSpeed.getText());
+		int newAuthority = Integer.parseInt(commandedAuthority.getText());
+		trainController.TrainControl_setCommandedSpeedAuthority(newSetSpeed, newAuthority);
+	}
 
     /**
      * Responds to the user choosing a new unit from the combo box.
@@ -252,8 +251,6 @@ public class TrainControlTestBenchPanel extends JPanel
         }
         else if(e.getSource() == passEBrake) {        		
         	trainController.TrainControl_setPassengerEBrake();
-
-        	setControlButtonState(passEBrake, "Pull Passenger Emergency Brake", true);
         }
     }
 
@@ -262,15 +259,12 @@ public class TrainControlTestBenchPanel extends JPanel
      * number as you'd get from getText) changes.
      */
     public void propertyChange(PropertyChangeEvent e) {
-        /*if ("value".equals(e.getPropertyName())) {
-            Number value = (Number)e.getNewValue();
-            //sliderModel.setDoubleValue(value.doubleValue());
-        }*/
-/*    	if(e.getSource().equals(driverSetSpeed)) {
+    	if(e.getSource().equals(commandedSpeed) || e.getSource().equals(commandedAuthority)) {
     		//TODO: Handle speeds > 1000 - issue with , in 1,000
-    		int newSetSpeed = Integer.parseInt(((JFormattedTextField)e.getSource()).getText());
-    		trainController.setDriverCommandedSetSpeed(newSetSpeed);
-    	}*/
+    		int newSetSpeed = Integer.parseInt(commandedSpeed.getText());
+    		int newAuthority = Integer.parseInt(commandedAuthority.getText());
+    		trainController.TrainControl_setCommandedSpeedAuthority(newSetSpeed, newAuthority);
+    	}
     }
     
     private void setControlButtonState(JButton button, String newText, boolean activated) {
@@ -289,6 +283,54 @@ public class TrainControlTestBenchPanel extends JPanel
     	}
     }
     
+    private double calculateBasicSpeed() {
+    	double speed = 0;
+    	double powerSpeed = 0;
+    	boolean brake = true;
+    	
+		//for testing purposes when not attached to train model
+		//simple velocity calculation for demonstration of adjusting power command
+		
+		//Power (W) = Force (kg * m/s2) * Velocity (m/s)
+		//TrainForce = mass * acceleration = 51.43 tons * 0.5 m/s2 (train 2/3 loaded) = 46656.511 kg * 0.5 m/s2
+		//Velocity = Power/Train Force			
+		//NOTE: 1.34102 converts horsepower back to kWatts
+    	if(powerCommand > 0) {
+			double msSpeed = (powerCommand * 1000 / 1.34102)/((46656.511/9.8) * 0.5);
+			powerSpeed = msSpeed * 2.23694;
+			
+			if(powerSpeed > speed)
+			{
+				speed = powerSpeed;
+				brake = false;
+			}
+    	}
+    	
+    	if(brake) {
+    		//not accelerating - decrease speed to simulate breaking
+    		double frictionBrakeRate = 0.5;
+    		int standardBrakeRate = 1;
+    		int emergencyBrakeRate = 2;
+    		
+    		if(eBrakeApplied) {
+    			speed = actualSpeed - emergencyBrakeRate;
+    		}
+    		else if(brakeApplied) {
+    			speed = actualSpeed - standardBrakeRate;
+    		}
+    		else {
+    			//brake due to friction
+    			speed = actualSpeed - frictionBrakeRate;
+    		}
+    	}
+		
+		if (speed < 0) {
+			speed = 0;
+		}
+
+		return speed;
+	}
+	
     /*
      * Adds units onto a value before being displayed in the UI
      * Used for any label that displays a double based speed
@@ -349,8 +391,11 @@ public class TrainControlTestBenchPanel extends JPanel
         //Dynamic text labels + text fields
         commandedSpeed = new JFormattedTextField(formatter);
         commandedSpeed.setText("0");
+        commandedSpeed.addPropertyChangeListener(this); //TODO: Handle listeners
+
         commandedAuthority = new JFormattedTextField(formatter);
         commandedAuthority.setText("0");
+        commandedAuthority.addPropertyChangeListener(this); //TODO: Handle listeners
         
         powerCommandLabel = new JLabel();
         updateUIPower(powerCommandLabel, 0); //TODO: Should this get the current power command from the Train Controller?

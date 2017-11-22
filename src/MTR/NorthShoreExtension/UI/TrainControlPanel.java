@@ -71,6 +71,7 @@ public class TrainControlPanel extends JPanel
     /* Panels */
     JPanel nonVitalInfoPanel;
     JPanel trainFaultsInfoPanel;
+    JPanel trackInfoPanel;
     JPanel vitalInfoPanel;
     JPanel speedControlPanel;
     JPanel nonVitalControlPanel;
@@ -85,11 +86,21 @@ public class TrainControlPanel extends JPanel
     /* Non Vital Info Components */
     JLabel announcements;
     JLabel internalTemp;
+    JRadioButton autoModeButton;
+    JRadioButton manualModeButton;
     
     /* Train Faults Info Components */
     JLabel engineFaultLabel;
     JLabel brakeFaultLabel;
     JLabel signalPickupFaultLabel;
+    
+    /* Track Info Components */
+    JLabel currentSpeedLimitLabel;
+    JLabel nextSpeedLimitLabel;
+    JLabel currentTrackLengthLabel;
+    JLabel nextTrackLengthLabel;
+    JLabel infrastructureLabel;
+    JLabel lineLabel;
     
     /* Vital Controls Components */
     JFormattedTextField driverSetSpeed;
@@ -101,6 +112,8 @@ public class TrainControlPanel extends JPanel
     JButton openRDoor;
     JButton openLDoor;
     JButton turnOnLights;
+    
+    boolean manualMode = true;
 
     public TrainControlPanel(TrainController tc) {
         
@@ -108,13 +121,17 @@ public class TrainControlPanel extends JPanel
         trainController = tc;
         trainController.setTrainControlPanel(this);
         
+        String title = "Train ID: " + new Integer(trainController.getTrainID()).toString()
+        		+ "   Kp: " + trainController.getKp() + " Ki: " + trainController.getKi();
         setBorder(BorderFactory.createCompoundBorder(
-                        BorderFactory.createTitledBorder("Train ID: " + new Integer(trainController.getTrainID()).toString()),
+                        BorderFactory.createTitledBorder(title),
                         BorderFactory.createEmptyBorder(5,5,5,5)));        
         
         createNonVitalInfoPanel(); //Top panel
         
-    	createTrainFaultsInfoPanel(); //Middle panel
+    	createTrainFaultsInfoPanel(); //top-middle panel
+
+    	createTrackInfoPanel(); //bottom-middle panel
 
         /* Bottom control panel */
         JPanel bottomControlPanel = new JPanel();
@@ -145,7 +162,11 @@ public class TrainControlPanel extends JPanel
         c.gridy = 1;
     	add(trainFaultsInfoPanel, c);
     	c.gridy = 2;
+    	add(trackInfoPanel, c);
+    	c.gridy = 3;
     	add(bottomControlPanel, c);
+    	
+    	setMode(true);
     }
 
     //Don't allow this panel to get taller than its preferred size.
@@ -199,9 +220,9 @@ public class TrainControlPanel extends JPanel
         		setButtonActivated = true;
         	}
         	
-        	trainController.operateBrake(setButtonActivated);
-        		
-        	setControlButtonState(brake, newButtonText, setButtonActivated);
+        	if(trainController.operateBrake(setButtonActivated)) {
+        		setControlButtonState(brake, newButtonText, setButtonActivated);
+        	}
         }
         else if(e.getSource() == eBrake) {
         	if(eBrake.getBackground() == Color.RED) {
@@ -316,6 +337,12 @@ public class TrainControlPanel extends JPanel
         		signalPickupFaultLabel.setText(trainController.getSignalPickupStatus());
         		break;
         	}
+        }
+        else if(e.getSource() == autoModeButton) {
+        	setMode(false);
+        }
+        else if(e.getSource() == manualModeButton) {
+        	setMode(true);
         }
     }
 
@@ -441,6 +468,39 @@ public class TrainControlPanel extends JPanel
         
     }
     
+    private void createTrackInfoPanel() {
+    	/* Middle panel for displaying info about the current and assumed next track */
+        trackInfoPanel = new JPanel();
+        GridLayout panelLayout = new GridLayout(0,6);
+        trackInfoPanel.setLayout(panelLayout);
+        
+        //Dynamic text labels
+        currentSpeedLimitLabel = new JLabel();
+        nextSpeedLimitLabel = new JLabel();
+        currentTrackLengthLabel = new JLabel();
+        nextTrackLengthLabel = new JLabel();
+        infrastructureLabel = new JLabel();
+        lineLabel = new JLabel();
+        
+        //Add all labels to layout
+        trackInfoPanel.add(new JLabel("Line: "));
+        trackInfoPanel.add(lineLabel);
+        trackInfoPanel.add(new JLabel("Current Speed Limit: "));
+        trackInfoPanel.add(currentSpeedLimitLabel);       
+        trackInfoPanel.add(new JLabel("Next Speed Limit: "));
+        trackInfoPanel.add(nextSpeedLimitLabel);       
+        trackInfoPanel.add(new JLabel("Infrastructure: "));
+        trackInfoPanel.add(infrastructureLabel);      
+        trackInfoPanel.add(new JLabel("Current Length: "));
+        trackInfoPanel.add(currentTrackLengthLabel);       
+        trackInfoPanel.add(new JLabel("Next Length: "));
+        trackInfoPanel.add(nextTrackLengthLabel);       
+        
+        trackInfoPanel.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createTitledBorder("Track Info"),
+                        BorderFactory.createEmptyBorder(5,5,5,5)));
+    }
+    
     private void createTrainFaultsInfoPanel() {
     	/* Middle panel for displaying info about the train failures */
         trainFaultsInfoPanel = new JPanel();
@@ -471,15 +531,25 @@ public class TrainControlPanel extends JPanel
         GridLayout panelLayout = new GridLayout(0,6);
         nonVitalInfoPanel.setLayout(panelLayout);
         
-        //Dynamic text labels
+        //Dynamic text labels + radio buttons for mode
         announcements = new JLabel(trainController.getAnnouncements());
         internalTemp = new JLabel(new Double(trainController.getInternalTemp()).toString() + " deg F");
+        autoModeButton = new JRadioButton("Auto Mode");
+        autoModeButton.addActionListener(this);
+        manualModeButton = new JRadioButton("Manual Mode", true);
+        manualModeButton.addActionListener(this);
         
-        //Add all labels to layout
+        ButtonGroup modeGroup = new ButtonGroup();
+        modeGroup.add(autoModeButton);
+        modeGroup.add(manualModeButton);
+        
+        //Add all components to layout
         nonVitalInfoPanel.add(new JLabel("Inside Temp: "));
         nonVitalInfoPanel.add(internalTemp);    
         nonVitalInfoPanel.add(new JLabel("Announcements: "));
-        nonVitalInfoPanel.add(announcements);   
+        nonVitalInfoPanel.add(announcements); 
+        nonVitalInfoPanel.add(manualModeButton); 
+        nonVitalInfoPanel.add(autoModeButton);
         
         nonVitalInfoPanel.setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createTitledBorder("Non-Vital Info"),
@@ -625,5 +695,19 @@ public class TrainControlPanel extends JPanel
     	nonVitalControlPanel.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createTitledBorder("Non-Vital Controls"),
                 BorderFactory.createEmptyBorder(5,5,5,5)));    	
+    }
+    
+    private void setMode(boolean manual) {
+    	manualMode = manual;
+    	
+    	trainController.setOperationMode(manualMode);
+
+    	driverSetSpeed.setEnabled(manualMode);
+        brake.setEnabled(manualMode);
+        eBrake.setEnabled(manualMode);
+        setTemp.setEnabled(manualMode);
+        openRDoor.setEnabled(manualMode);
+        openLDoor.setEnabled(manualMode);
+        turnOnLights.setEnabled(manualMode);
     }
 }

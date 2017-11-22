@@ -38,8 +38,6 @@ import java.io.*;
 import java.util.*;
 import java.text.*;
 
-import MTR.NorthShoreExtension.UI.*;
-
 public class ctcUI {
 	
 	//Specify the look and feel to use. Valid values: null (default), "Metal", "System",
@@ -62,7 +60,7 @@ public class ctcUI {
 		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 		String currentTime = sdf.format(cal.getTime());
 		
-		JButton schedTrain, schedRepair, reporting, trnInfo, trnCtrl, trkCtrl, timeMult, switchTest, schedules, engineerCtrls;
+		JButton schedTrain, schedRepair, reporting, trnInfo, trnCtrl, trkCtrl, timeMult, switchTest;
 		JPanel runningMode, thrput, trainNum, ambientTemp, currTime, trkModel;
 		int tempF = 56;
 		int numTrains = 0;
@@ -87,8 +85,8 @@ public class ctcUI {
 		gbc.weightx = 0.0; //sets the width of the segment
 		gbc.weighty = 0.0;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.gridx = 0; //sets the location in the GridBag with 0,0 being the upper left-hand corner
-		gbc.gridy = 5;
+		gbc.gridx = 4; //sets the location in the GridBag with 0,0 being the upper left-hand corner
+		gbc.gridy = 1;
 		gbc.gridwidth = 1;  //1 column wide
 		pane.add(schedTrain, gbc);
 		
@@ -103,8 +101,8 @@ public class ctcUI {
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.weightx = 0.0;
 		gbc.weighty = 0.0;
-		gbc.gridx = 2;
-		gbc.gridy = 5;
+		gbc.gridx = 4;
+		gbc.gridy = 2;
 		pane.add(schedRepair, gbc);
 		
 		reporting = new JButton("Reporting");
@@ -120,7 +118,7 @@ public class ctcUI {
 		gbc.weighty = 0.0;
 		
 		gbc.gridx = 4;
-		gbc.gridy = 5;
+		gbc.gridy = 3;
 		pane.add(reporting, gbc);		
 		
 		//create the section for the Run Mode selection
@@ -217,28 +215,28 @@ public class ctcUI {
 		
 		timeMult = new JButton("Time Mult.: 10x");
 		gbc.gridx = 0;
-		gbc.gridy = 1;
+		gbc.gridy = 4;
 		pane.add(timeMult, gbc);
 		
-		trnInfo = new JButton("Train Model");
+		trnInfo = new JButton("Train Info");
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.gridwidth = 1; 
 		gbc.gridx = 1;
-		gbc.gridy = 1; // 5th row
+		gbc.gridy = 4; // 5th row
 		pane.add(trnInfo, gbc);
 		
 		trnCtrl = new JButton("Train Controls");
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.gridwidth = 1;
-		gbc.gridx = 2;
-		gbc.gridy = 1;
+		gbc.gridx = 3;
+		gbc.gridy = 4;
 		pane.add(trnCtrl,  gbc);
 		
-		trkCtrl = new JButton("Wayside Controls");
+		trkCtrl = new JButton("Track Controls");
 		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.gridx = 3; 
-		gbc.gridwidth = 1; 
-		gbc.gridy = 1; //fifth row
+		gbc.gridx = 2; 
+		gbc.gridwidth = 1; //2 columns wide
+		gbc.gridy = 4; //fifth row
 		
 		pane.add(trkCtrl, gbc);
 		
@@ -247,7 +245,7 @@ public class ctcUI {
 		trkModel.setBorder(BorderFactory.createLineBorder(Color.black,1));
 		BufferedImage image;
 		try {
-			image = ImageIO.read(new File("TrackLayout.png"));
+			image = ImageIO.read(new File("images/TrackLayout.png"));
 		} catch (IOException ex) {
 			image = null;
 		}
@@ -259,46 +257,18 @@ public class ctcUI {
 		gbc.ipadx = 20;
 		
 		gbc.gridx = 0;
-		gbc.gridy = 2;
-		gbc.gridwidth = 5;
+		gbc.gridy = 1;
+		gbc.gridwidth = 4;
 		gbc.gridheight = 3;
 		pane.add(trkModel, gbc);
 		//--------------
 		
 		switchTest = new JButton("Test Switches");
-		gbc.gridx = 3;
-		gbc.gridy = 5;
-		gbc.ipadx = 0;
-		gbc.ipady = 0;
+		gbc.gridx = 4;
+		gbc.gridy = 4;
 		gbc.gridwidth = 1;
 		gbc.gridheight = 1;
-		switchTest.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					JFrame tester = new switchTesterUI();
-				} catch (AWTException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-		});
 		pane.add(switchTest, gbc);
-	
-		schedules = new JButton("Train Schedules");
-		gbc.gridx = 1;
-		gbc.gridy = 5;
-		schedules.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JFrame schedule = new TrainSchedulesUI();
-			}
-		});
-		pane.add(schedules,gbc);
-		
-		engineerCtrls = new JButton("Engineer Controls");
-		gbc.gridx = 4;
-		gbc.gridy = 1;
-		//engineerCtrls.addActionListener()...
-		pane.add(engineerCtrls,gbc);
 		
 		pane.setSize(850, 500);
 	}

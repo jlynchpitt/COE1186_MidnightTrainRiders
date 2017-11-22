@@ -93,14 +93,6 @@ public class TrainControllerHelper {
 		return pid_i;
 	}
 	
-	public void TrainControlHelper_setOperationMode(boolean manMode) {
-		manualMode = manMode;
-		
-		for(TrainController tc : tcList ){
-			tc.TrainControl_setOperationMode(manMode);
-		}
-	}
-	
 	public void TrainControlHelper_setTimeMultiplier(int mult) {
 		clockMultiplier = mult;
 		

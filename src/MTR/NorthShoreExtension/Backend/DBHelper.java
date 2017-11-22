@@ -451,8 +451,6 @@ public class DBHelper {
 		    returnArray[3] = resultSet.getInt("endY");
 		    returnArray[4] = resultSet.getInt("curveStart");
 		    returnArray[5] = resultSet.getInt("curveEnd");
-		    returnArray[6] = resultSet.getInt("trackID");
-		    returnArray[7] = resultSet.getInt("occupied");
 		}
 		catch(SQLException e){  
 			 System.err.println(e.getMessage()); 
