@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 
+import MTR.NorthShoreExtension.MainMTR;
 import MTR.NorthShoreExtension.Backend.DBHelper;
 import MTR.NorthShoreExtension.Backend.TrackModelSrc.*;
  
@@ -14,10 +15,14 @@ public class TrackModelUI extends JPanel implements MouseListener {
     //null (use the default), "Metal", "System", "Motif", "GTK+"
     final static String LOOKANDFEEL = null;
     TrackModel trackFunctions = new TrackModel();
-    int numTrack = 10;
+    int numTrack = 8;
     static LoadTrackModelUI loading = new LoadTrackModelUI();
     static DBHelper load;
    
+    public static void getDB(DBHelper db) {
+    		load = db;
+    }
+    
     public static DBHelper sendDB() {
 		return load;
     }
@@ -74,9 +79,11 @@ public class TrackModelUI extends JPanel implements MouseListener {
     		TrackGraphic(){
     			setPreferredSize(new Dimension(1000,600));
     		}
+
     		@Override
     		public void paintComponent(Graphics g) {
     			super.paintComponent(g);
+    			//draw yard
     			g.setColor(Color.white);
     			g.fillRoundRect(10,10,975,400,15,15);
     			for(int i=0;i<numTrack;i++) {
@@ -97,20 +104,24 @@ public class TrackModelUI extends JPanel implements MouseListener {
     				drawArray = load.getDrawingCoordinates(i);
     				trackNumber = drawArray[6];
     				occupied = drawArray[7];
-    				if(drawArray[4]==-1) {
+    				if(drawArray[4]!=0) {
     					g.drawArc(drawArray[0], drawArray[2], (drawArray[2]-drawArray[0]), (drawArray[3]-drawArray[1]), 
     							drawArray[4], drawArray[5]);
-    					/*if(occupied!=0) {
+    					if(occupied!=0) {
     						g.fillRect((drawArray[0]+10), (drawArray[2]+10), 30, 15);
-    					}*/
+    					}
     				}
     				else {
     					g.drawLine(drawArray[0], drawArray[1], drawArray[2], drawArray[3]);
-    					//make light green
+    					g.setColor(Color.green);
+    					g.fillOval((drawArray[2]-10), (drawArray[3]-10), 8, 8);
+    			
     					if(occupied!=0) {
     						g.fillRect((drawArray[2]-drawArray[0])/2, (drawArray[3]-drawArray[1])/2, 30, 15);
-    						//make light red
+    						g.setColor(Color.red);
+    						g.fillOval((drawArray[2]-10), (drawArray[3]-10), 8, 8);
     					}
+    					
     					if(inf.equals("STATION") || inf.equals("STATION; PIONEER") || 
     							inf.equals("STATION; EDGEBROOK") || inf.equals("STATION; WHITED") || 
     							inf.equals("STATION; SOUTH BANK") || inf.equals("STATION; CENTRAL; UNDERDROUND") ||
@@ -141,7 +152,7 @@ public class TrackModelUI extends JPanel implements MouseListener {
      * event-dispatching thread.
      */
     public static void createAndShowGUI() {
-    	load = loading.sendDB();
+     	load = MainMTR.getDBHelper();
         TrackModelUI instance = new TrackModelUI();
     		//Set the look and feel.
         initLookAndFeel();

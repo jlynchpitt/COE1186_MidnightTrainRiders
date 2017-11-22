@@ -36,7 +36,7 @@ public class LoadTrackModelUI extends JPanel
  
     public LoadTrackModelUI() {
         super(new BorderLayout());
-		load = new DBHelper();
+		load = MainMTR.getDBHelper();
  
         //Create the log first, because the action listeners
         //need to refer to it.
@@ -95,21 +95,24 @@ public class LoadTrackModelUI extends JPanel
 					int row = 0;
 					while((line = br.readLine())!=null) {
 						String[] trackInfo = line.split(",");
-						String curveStart = trackInfo[14];
-						int curveStartFinal;
-						String curveEnd = trackInfo[15];
-						int curveEndFinal;
-						if(curveStart!=null) {
-							curveStartFinal = Integer.parseInt(trackInfo[14]);
-						}else {
-							curveStartFinal = -1;
-						}
-						if(curveEnd!=null) {
-							curveEndFinal = Integer.parseInt(trackInfo[15]);
-						}else {
-							curveEndFinal = -1;
-						}
-						load.addTrack(row, Integer.parseInt(trackInfo[0].replaceAll("[^0-9]", "")), trackInfo[1], trackInfo[2], Integer.parseInt(trackInfo[3].replaceAll("[^0-9]", "")), Integer.parseInt(trackInfo[4].replaceAll("[^0-9]", "")), Double.parseDouble(trackInfo[5]), Integer.parseInt(trackInfo[6].replaceAll("[^0-9]", "")), trackInfo[7], Double.parseDouble(trackInfo[8]), Double.parseDouble(trackInfo[9]), Integer.parseInt(trackInfo[10].replaceAll("[^0-9]", "")), Integer.parseInt(trackInfo[11].replaceAll("[^0-9]", "")), Integer.parseInt(trackInfo[12].replaceAll("[^0-9]", "")), Integer.parseInt(trackInfo[13].replaceAll("[^0-9]", "")), curveStartFinal, curveEndFinal, trackInfo[16], Integer.parseInt(trackInfo[17].replaceAll("[^0-9]", "")),Integer.parseInt(trackInfo[18].replaceAll("[^0-9]", "")),Integer.parseInt(trackInfo[19].replaceAll("[^0-9]", "")),Integer.parseInt(trackInfo[17].replaceAll("[^0-9]", "")));
+						load.addTrack(row, Integer.parseInt(trackInfo[0].replaceAll("[^0-9]", "")), trackInfo[1], 
+								trackInfo[2], Integer.parseInt(trackInfo[3].replaceAll("[^0-9]", "")), 
+								Integer.parseInt(trackInfo[4].replaceAll("[^0-9]", "")), Double.parseDouble(trackInfo[5]), 
+								Integer.parseInt(trackInfo[6].replaceAll("[^0-9]", "")), trackInfo[7], 
+								Double.parseDouble(trackInfo[8]), Double.parseDouble(trackInfo[9]), 
+								Integer.parseInt(trackInfo[10].replaceAll("[^0-9]", "")), 
+								Integer.parseInt(trackInfo[11].replaceAll("[^0-9]", "")), 
+								Integer.parseInt(trackInfo[12].replaceAll("[^0-9]", "")), 
+								Integer.parseInt(trackInfo[13].replaceAll("[^0-9]", "")), 
+								Integer.parseInt(trackInfo[14].replaceAll("[^0-9]", "")), 
+								Integer.parseInt(trackInfo[15].replaceAll("[^0-9]", "")), trackInfo[16], trackInfo[17], 
+								Integer.parseInt(trackInfo[18].replaceAll("[^0-9]", "")), 
+								Integer.parseInt(trackInfo[19].replaceAll("[^0-9]", "")), 
+								Integer.parseInt(trackInfo[20].replaceAll("[^0-9]", "")),
+								Integer.parseInt(trackInfo[21].replaceAll("[^0-9]", "")), 
+								Integer.parseInt(trackInfo[22].replaceAll("[^0-9]", "")), 
+								Integer.parseInt(trackInfo[23].replaceAll("[^0-9]", "")), 
+								Integer.parseInt(trackInfo[24].replaceAll("[^0-9]", "")));
 						row++;
 					}
 					load.showTrackTest();

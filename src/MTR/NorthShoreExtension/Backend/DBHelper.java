@@ -17,16 +17,16 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DBHelper {
-	int[] returnArray = new int[7]; 
+	int[] returnArray = new int[8]; 
 	//Table names
 	private static final String DBName = "jdbc:sqlite:MTRDatabase.db";
 	
 	private static final String TRACK_INFO_TABLENAME = "TrackInfo";
-	private static final String TRACK_INFO_COLUMNS = "rowID INTEGER, trackID INTEGER, line STRING, section STRING, number INTEGER, "
-			+ "length INTEGER, grade REAL, speedLimit INTEGER, infrastructure STRING, switchPosition INTEGER, elevation REAL, "
+	private static final String TRACK_INFO_COLUMNS = "rowID INTEGER, trackID INTEGER, line STRING, section STRING, number INTEGER,"
+			+ "length INTEGER, grade REAL, speedLimit INTEGER, infrastructure STRING, elevation REAL, "
 			+ "cumElevation REAL, startX INTEGER, startY INTEGER, endX INTEGER, endY INTEGER, curveStart INTEGER, "
 			+ "curveEnd INTEGER, trackStatus STRING, heater STRING, speed INTEGER, authority INTEGER, occupied INTEGER,"
-			+ "nextTrack INTEGER" + "prevTrack INTEGER" + "secondSwitch INTEGER" + "switchPosition INTEGER";
+			+ "nextTrack INTEGER, prevTrack INTEGER, secondSwitch INTEGER, switchPosition INTEGER";
 	
 	//NOTE: All times are integers as # of seconds since 1970
 	private static final String TRAIN_CONTROLS_TABLENAME = "TrainControls";
@@ -85,17 +85,18 @@ public class DBHelper {
 	
 	public void addTrack(int rowID, int trackID, String line, String section, int blockNum, int blockLength, double blockGrade, 
 			int speedLimit, String infrastructure, double elevation, double cumulativeElevation, int startX, int startY, 
-			int endX, int endY, int curveStart, int curveEnd, String heater, int nextTrack, int prevTrack, int secondSwitch, 
-			int switchPosition) throws SQLException {
+			int endX, int endY, int curveStart, int curveEnd, String status, String heater, int speed, int authority,int occupied,
+			int nextTrack, int prevTrack, int secondSwitch, int switchPosition) throws SQLException {
 		Connection connection = connect();
 		
 		Statement statement = connection.createStatement();
 		statement.setQueryTimeout(30); //TODO: Is this needed?
 		
 	    statement.executeUpdate("INSERT INTO " + TRACK_INFO_TABLENAME + " values(' "+rowID+"' , ' "+trackID+"', '"+line+"', '"+section+"', '"
-	    +blockNum+"', '"+blockLength+"', '"+blockGrade+"', '"+speedLimit+"', '"+infrastructure+"', '0', '"+elevation+"', '"
+	    +blockNum+"', '"+blockLength+"', '"+blockGrade+"', '"+speedLimit+"', '"+infrastructure+"', '"+elevation+"', '"
 	    		+cumulativeElevation+"', '"+startX+"', '"+startY+"', '"+endX+"', '"+endY+"', '"+curveStart+"', '"+curveEnd+
-	    		"', '', '"+heater+"', '0', '0', '0', '"+nextTrack+"','"+prevTrack+"','"+secondSwitch+"','"+switchPosition+"')");   
+	    		"', '"+status+"', '"+heater+"', '"+speed+"', '"+authority+"', '"+occupied+"', '"+nextTrack+"','"+prevTrack+
+	    		"','"+secondSwitch+"','"+switchPosition+"')");   
 	    
 	    connection.close();
 	    //default trainStatus = ""
@@ -507,6 +508,8 @@ public class DBHelper {
 		    returnArray[3] = resultSet.getInt("endY");
 		    returnArray[4] = resultSet.getInt("curveStart");
 		    returnArray[5] = resultSet.getInt("curveEnd");
+		    returnArray[6] = resultSet.getInt("trackID");
+		    returnArray[7] = resultSet.getInt("occupied");
 		}
 		catch(SQLException e){  
 			 System.err.println(e.getMessage()); 
