@@ -87,7 +87,7 @@ public class TrackModelUI extends JPanel implements MouseListener {
     			g.setColor(Color.white);
     			g.fillRoundRect(10,10,975,400,15,15);
     			for(int i=0;i<numTrack;i++) {
-    				System.out.println("rowid:"+i);
+    				//System.out.println("rowid:"+i);
     				color = load.getColor(i);
     				if(color.equals("green")) {
     					g.setColor(Color.green);

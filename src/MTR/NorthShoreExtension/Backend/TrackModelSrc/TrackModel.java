@@ -3,6 +3,7 @@ package MTR.NorthShoreExtension.Backend.TrackModelSrc;
 import java.util.HashMap;
 import java.util.Map;
 
+import MTR.NorthShoreExtension.MainMTR;
 import MTR.NorthShoreExtension.Backend.DBHelper;
 import MTR.NorthShoreExtension.Backend.TrainSrc.Train;
 import MTR.NorthShoreExtension.Backend.WaysideController.WaysideFunctionsHub;
@@ -22,7 +23,7 @@ public class TrackModel {
 	static double difference;
 	static int speed, authority;
 	static TrackModelUI helper = new TrackModelUI();
-	static DBHelper load = helper.sendDB();
+	static DBHelper load = MainMTR.getDBHelper();
 	static Random rand = new Random();
 	static int soldTicket = 0;
 	static Train train;

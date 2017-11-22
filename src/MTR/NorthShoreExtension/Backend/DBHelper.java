@@ -475,7 +475,7 @@ public class DBHelper {
 			
 		    ResultSet resultSet = statement.executeQuery("SELECT * from TrackInfo where rowID = '"+rowID+"'");   
 		    color = resultSet.getString("line");
-		    System.out.println("color = " + color);
+		    //System.out.println("color = " + color);
 		}
 		catch(SQLException e){  
 			 System.err.println(e.getMessage()); 

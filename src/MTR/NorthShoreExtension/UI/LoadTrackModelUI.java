@@ -115,7 +115,7 @@ public class LoadTrackModelUI extends JPanel
 								Integer.parseInt(trackInfo[24].replaceAll("[^0-9]", "")));
 						row++;
 					}
-					load.showTrackTest();
+					//load.showTrackTest();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
