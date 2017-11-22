@@ -17,7 +17,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DBHelper {
-	int[] returnArray = new int[6]; 
+	int[] returnArray = new int[7]; 
 	//Table names
 	private static final String DBName = "jdbc:sqlite:MTRDatabase.db";
 	
@@ -404,6 +404,62 @@ public class DBHelper {
 		    	 System.err.println(e); 
 		     }
 		 }
+	}
+	
+	public int getSwitch(int trackid) {
+		Connection connection = null;
+		int position = 0;
+		try {
+			connection = connect();
+			
+			Statement statement = connection.createStatement();
+			statement.setQueryTimeout(30); //TODO: Is this needed?
+			
+			ResultSet track = statement.executeQuery("SELECT * from TrackInfo WHERE trackID = '"+trackid+"'"); 
+		    position = track.getInt("switchPosition");
+
+		}
+		catch(SQLException e){  
+			 System.err.println(e.getMessage()); 
+		 }       
+		 finally {         
+			 try {
+	               if(connection != null)
+	                  connection.close();
+		     }
+		     catch(SQLException e) {  // Use SQLException class instead.          
+		    	 System.err.println(e); 
+		     }
+		 }
+		return position;
+	}
+	
+	public int getTrackID(int rowid) {
+		Connection connection = null;
+		int id = 0;
+		try {
+			connection = connect();
+			
+			Statement statement = connection.createStatement();
+			statement.setQueryTimeout(30); //TODO: Is this needed?
+			
+			ResultSet track = statement.executeQuery("SELECT * from TrackInfo WHERE rowID = '"+rowid+"'"); 
+		    id = track.getInt("trackID");
+
+		}
+		catch(SQLException e){  
+			 System.err.println(e.getMessage()); 
+		 }       
+		 finally {         
+			 try {
+	               if(connection != null)
+	                  connection.close();
+		     }
+		     catch(SQLException e) {  // Use SQLException class instead.          
+		    	 System.err.println(e); 
+		     }
+		 }
+		return id;
 	}
 	
 	public String getColor(int rowID) {

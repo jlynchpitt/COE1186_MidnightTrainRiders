@@ -64,8 +64,13 @@ public class TrackModelUI extends JPanel implements MouseListener {
     
     public class TrackGraphic extends JPanel{
     		private static final long serialVersionUID = 1L;
-    		int[] drawArray = new int[6];
+    		int[] drawArray = new int[9];
+    		int trackNumber = 0;
+    		int occupied = 0;
+    		int position = 0;
+    		int trackid = 0;
     		String color;
+    		String inf;
     		TrackGraphic(){
     			setPreferredSize(new Dimension(1000,600));
     		}
@@ -86,15 +91,47 @@ public class TrackModelUI extends JPanel implements MouseListener {
     				else {
     					g.setColor(Color.black);
     				}
+    				trackid = load.getTrackID(i);
+    				inf = load.getInfrastructure(trackid);
+    				position = load.getSwitch(trackid);
     				drawArray = load.getDrawingCoordinates(i);
+    				trackNumber = drawArray[6];
+    				occupied = drawArray[7];
     				if(drawArray[4]==-1) {
-    					g.drawArc(drawArray[0], drawArray[2], (drawArray[2]-drawArray[0]), (drawArray[3]-drawArray[1]), drawArray[4], drawArray[5]);
+    					g.drawArc(drawArray[0], drawArray[2], (drawArray[2]-drawArray[0]), (drawArray[3]-drawArray[1]), 
+    							drawArray[4], drawArray[5]);
+    					/*if(occupied!=0) {
+    						g.fillRect((drawArray[0]+10), (drawArray[2]+10), 30, 15);
+    					}*/
     				}
     				else {
     					g.drawLine(drawArray[0], drawArray[1], drawArray[2], drawArray[3]);
+    					//make light green
+    					if(occupied!=0) {
+    						g.fillRect((drawArray[2]-drawArray[0])/2, (drawArray[3]-drawArray[1])/2, 30, 15);
+    						//make light red
+    					}
+    					if(inf.equals("STATION") || inf.equals("STATION; PIONEER") || 
+    							inf.equals("STATION; EDGEBROOK") || inf.equals("STATION; WHITED") || 
+    							inf.equals("STATION; SOUTH BANK") || inf.equals("STATION; CENTRAL; UNDERDROUND") ||
+    							inf.equals("STATION; INGLEWOOD; UNDERGROUND") || inf.equals("STATION; OVERBROOK; UNDERGROUND") ||
+    							inf.equals("STATION; GLENBURY") || inf.equals("STATION; DORMONT") ||
+    							inf.equals("STATION; MT LEBANON") || inf.equals("STATION; CASTLE SHANNON") ||
+    							inf.equals("STATION: SHADYSIDE") || inf.equals("STATION: HERRON AVE") ||
+    							inf.equals("STATION; SWISSVILLE") || inf.equals("STATION;    PENN STATION; UNDERGROUND") ||
+    							inf.equals("STATION; STEEL PLAZA; UNDERGROUND") || inf.equals("STATION; FIRST AVE; UNDERGROUND") ||
+    							inf.equals("STATION; STATION SQUARE") || inf.equals("STATION; SOUTH HILLS JUNCTION")) {
+    						//draw station
+    					}
+    					if(inf.equals("SWITCH TO/FROM YARD") || inf.equals("SWITCH") || inf.equals("SWITCH; UNDERGROUND") ||
+    							inf.equals("SWITCH TO YARD") || inf.equals("SWITCH FROM YARD")) {
+    						//draw switch
+    					}
+    					if(inf.equals("RAILWAY CROSSING")) {
+    						//draw railway crossing
+    					}
     				}
     			}
-    			//call to database to set x and y values for lines and arcs
     		}
     }
  
