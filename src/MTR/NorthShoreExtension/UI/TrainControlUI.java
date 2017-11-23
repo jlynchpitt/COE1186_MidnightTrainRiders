@@ -46,6 +46,7 @@ package MTR.NorthShoreExtension.UI;
 import javax.swing.*;
 import javax.swing.event.*;
 
+import MTR.NorthShoreExtension.MainMTR;
 import MTR.NorthShoreExtension.Backend.TrainControllerSrc.TrainController;
 import MTR.NorthShoreExtension.Backend.TrainControllerSrc.TrainControllerHelper;
 
@@ -145,7 +146,13 @@ public class TrainControlUI {
      * event-dispatching thread.
      */
     public static void createAndShowTrainControlGUI(TrainControllerHelper t) {
-    	tch = t;
+    	if(t == null) {
+    		tch = MainMTR.getTrainControllerHelper();
+    	}
+    	else {
+    		tch = t;
+    	}
+
         //Set the look and feel.
         initLookAndFeel();
 

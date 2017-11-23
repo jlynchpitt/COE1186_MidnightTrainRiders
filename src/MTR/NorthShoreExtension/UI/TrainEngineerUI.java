@@ -14,6 +14,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.text.NumberFormatter;
 
+import MTR.NorthShoreExtension.MainMTR;
 import MTR.NorthShoreExtension.Backend.TrainControllerSrc.TrainController;
 import MTR.NorthShoreExtension.Backend.TrainControllerSrc.TrainControllerHelper;
 
@@ -168,6 +169,10 @@ public class TrainEngineerUI implements ActionListener {
      * event-dispatching thread.
      */
     public static void createAndShowTrainEngineerGUI(TrainControllerHelper tch) {
+    	if(tch == null) {
+    		tch = MainMTR.getTrainControllerHelper();
+    	}
+    	
         //Set the look and feel.
         initLookAndFeel();
 

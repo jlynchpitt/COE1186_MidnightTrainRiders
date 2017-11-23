@@ -232,6 +232,11 @@ public class ctcUI {
 		gbc.gridwidth = 1;
 		gbc.gridx = 2;
 		gbc.gridy = 1;
+		trnCtrl.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TrainControlUI.createAndShowTrainControlGUI(null);
+			}
+		});
 		pane.add(trnCtrl,  gbc);
 		
 		trkCtrl = new JButton("Wayside Controls");
@@ -297,7 +302,11 @@ public class ctcUI {
 		engineerCtrls = new JButton("Engineer Controls");
 		gbc.gridx = 4;
 		gbc.gridy = 1;
-		//engineerCtrls.addActionListener()...
+		engineerCtrls.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TrainEngineerUI.createAndShowTrainEngineerGUI(null);
+			}
+		});
 		pane.add(engineerCtrls,gbc);
 		
 		pane.setSize(850, 500);
