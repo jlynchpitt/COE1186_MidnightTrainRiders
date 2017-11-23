@@ -22,7 +22,7 @@ import MTR.NorthShoreExtension.UI.LoadTrackModelUI;
  *
  */
 public class MainMTR {
-	public static TrainControllerHelper tcHelper;
+	public static TrainControllerHelper tcHelper = null;
 	public static boolean fullUI = false;
 	private static DBHelper dbHelper = null;
 	private static StaticTrackDBHelper staticDBHelper = null;
@@ -52,6 +52,16 @@ public class MainMTR {
 		else {
 			dbHelper = new DBHelper();
 			return dbHelper;
+		}
+	}
+	
+	public static TrainControllerHelper getTrainControllerHelper() {
+		if(tcHelper != null) {
+			return tcHelper;
+		}
+		else {
+			tcHelper = new TrainControllerHelper();
+			return tcHelper;
 		}
 	}
 	
