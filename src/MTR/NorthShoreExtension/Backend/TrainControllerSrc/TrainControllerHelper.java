@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import MTR.NorthShoreExtension.UI.ctcUI;
+
 
 /*
  * author: Joseph Lynch
@@ -37,6 +39,7 @@ public class TrainControllerHelper {
 	private int clockMultiplier = 1;
 	private TimerTask powerTimerTask;
 	private long simulatedClockTime = System.currentTimeMillis();
+	private ctcUI ctc_ui = null;
 	
 	public TrainControllerHelper(){
 		//Initialize Timer - Timer controls updating the commanded power every second
@@ -49,6 +52,10 @@ public class TrainControllerHelper {
 				
 				//Update simulated clock time - assume every running of timer task is 1 second in the "real world"
 				simulatedClockTime += 1000;
+				
+				/*if(ctc_ui != null) {
+					ctc_ui.setTime(simulatedClockTime);
+				}*/
 			}
 		};
 		
@@ -97,6 +104,10 @@ public class TrainControllerHelper {
 		clockMultiplier = mult;
 		
 		rescheduleTimer();
+	}
+	
+	public void TrainControlHelper_setctcUI(ctcUI ctc_ui) {
+		this.ctc_ui = ctc_ui;
 	}
 	
 	private void rescheduleTimer() {
