@@ -208,7 +208,7 @@ public class BeaconCreater implements ActionListener, PropertyChangeListener {
         initLookAndFeel();
 
         //Create and set up the window.
-        frame = new JFrame("Train Controller Test Bench");
+        frame = new JFrame("Beacon Creater");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         //Create and set up the content pane.
@@ -283,7 +283,7 @@ public class BeaconCreater implements ActionListener, PropertyChangeListener {
 		
 		int secondaryNextStationID = Integer.parseInt(sNextStationID.getText());
 		if(secondaryNextStationID > 0 && ((greenLine.isSelected() && secondaryNextStationID <= 13) || (redLine.isSelected() && secondaryNextStationID <= 8))) {
-			secondaryNextStationID = (secondaryNextStationID & 0x0F) << 17;
+			secondaryNextStationID = (secondaryNextStationID & 0x0F) << 13;
 			beacon = beacon | secondaryNextStationID;
 		}
 		else {
