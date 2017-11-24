@@ -41,6 +41,7 @@ import java.text.*;
 import MTR.NorthShoreExtension.UI.*;
 import MTR.NorthShoreExtension.MainMTR;
 import MTR.NorthShoreExtension.Backend.TrainControllerSrc.*;
+import MTR.NorthShoreExtension.Backend.CTCSrc.*;
 
 public class ctcUI {
 	
@@ -62,6 +63,7 @@ public class ctcUI {
 	int tempF = 0;
 	int numTrains = 0;
 	int throughput = 0;
+	public static TrainScheduleHelper tsh;
 	
 	public int getTemp( ) {
 		return tempF;
@@ -108,6 +110,7 @@ public class ctcUI {
 		numTrains = 0;
 		throughput = 0;
 		timeMultiplier = 1;
+		tsh = new TrainScheduleHelper();
 		tch = MainMTR.getTrainControllerHelper();
 		
 		pane.setLayout(new GridBagLayout());
@@ -354,7 +357,7 @@ public class ctcUI {
 		gbc.gridy = 5;
 		schedules.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFrame schedule = new TrainSchedulesUI();
+				TrainSchedulesUI.createAndShowGUI();
 			}
 		});
 		pane.add(schedules,gbc);

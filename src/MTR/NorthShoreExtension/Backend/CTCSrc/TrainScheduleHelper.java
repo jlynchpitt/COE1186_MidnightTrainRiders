@@ -24,12 +24,15 @@ public class TrainScheduleHelper {
 	
 	public void addNewTrainSchedule(String line, int id, int[] stops, int[] departures) {
 		TrainSchedule ts = new TrainSchedule(line, id, stops, departures);
+		System.out.println("\n Line: " + line + " id: " + id + "First stop: " + stops[0]);
+		System.out.println("\n Line: " + ts.getLine() + "id: " + ts.getTrainID() + " First stop: " + ts.getFirstStop());
 		tsl.add(ts);
 	}
 	
 	public List<TrainSchedule> getTrainScheduleList() {	
 		for (int i = 0; i < tsl.size(); i++) {
-			System.out.print(tsl.get(i).getTrainID());
+			System.out.println(i);
+			System.out.print("Stop: " + tsl.get(i).getFirstStop());
 		}
 		return tsl;
 	}

@@ -25,7 +25,7 @@ public class trainScheduler {
 	int[] redLine = new int[99];
 	int[] grnLine = new int[199];
 	//import database info for greenline and red line
-	static List<TrainSchedule> tsl = new ArrayList<TrainSchedule>();
+	//static List<TrainSchedule> tsl = new ArrayList<TrainSchedule>();
 	
 	public static int[] calcAuthority(int[] listOfStops) {
 		
@@ -41,17 +41,17 @@ public class trainScheduler {
 		return authority;
 	}
 	
-	public static void addTrainSchedule(String line, int trainID, int[] stops, int[] departures) {
+	/*public static void addTrainSchedule(String line, int trainID, int[] stops, int[] departures) {
 		//int id = Integer.parseInt(trainID);
 		TrainSchedule ts = new TrainSchedule(line, trainID, stops, departures);
 		//return ts;
 		TrainSchedulePanel tsp = new TrainSchedulePanel(ts);
 		tsl.add(ts);
-	}
+	}*/
 	
-	public List<TrainSchedule> getTrainScheduleList() {
+	/*public List<TrainSchedule> getTrainScheduleList() {
 		return tsl;
-	}
+	}*/
 	/*Scheduling helpers CTC_getBrokenTrack(int[] brokenTracks) {	
 	
 		}

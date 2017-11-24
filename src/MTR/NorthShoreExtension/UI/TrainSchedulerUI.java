@@ -43,6 +43,8 @@ public class TrainSchedulerUI extends JFrame {
 	int xGrn = 1;
 	int authRed[] = new int[150];
 	int authGrn[] = new int[150];
+	int schedStopsRed[] = new int[150];
+	int schedStopsGrn[] = new int[150];
 	int trainID = 0;
 	int departRed[] = new int[150];
 	int departGrn[] = new int[150];
@@ -215,6 +217,10 @@ public class TrainSchedulerUI extends JFrame {
 				String redLine = "";
 				int nextAuthRed = Math.abs(redStops.getSelectedIndex() - authRed[xRed-1]);
 				authRed[xRed] = redStops.getSelectedIndex();
+				String stop = (String) redStops.getSelectedItem();
+				stop = stop.substring(1);
+				int stopAsInt = Integer.parseInt(stop) + 1000;
+				schedStopsRed[xRed-1] = stopAsInt;
 				String redStop = redStops.getSelectedItem().toString();
 				String redDepart = (redHour1.getText() + redHour0.getText() + ":" + redMins1.getText() + redMins0.getText());
 				String redNextStop = "Stop " + xRed + ": \n " + redLine + ": " + redStop + " \n Departure: " + redDepart + "\n Authority: " + nextAuthRed + "\n Suggested Speed: MAX";
@@ -231,6 +237,11 @@ public class TrainSchedulerUI extends JFrame {
 				String grnLine = "";
 				int nextAuthGrn = Math.abs(grnStops.getSelectedIndex() - authGrn[xGrn-1]);
 				authGrn[xGrn] = grnStops.getSelectedIndex();
+				String stop = (String) grnStops.getSelectedItem();
+				stop = stop.substring(1);
+				int stopAsInt = Integer.parseInt(stop) + 2000;
+				System.out.println(stopAsInt); //remove after finished testing
+				schedStopsGrn[xGrn-1] = stopAsInt;
 				String grnStop = grnStops.getSelectedItem().toString();
 				String grnDepart = (grnHour1.getText() + grnHour0.getText() + ":" + grnMins1.getText() + grnMins0.getText());
 				String grnNextStop = "Stop " + xGrn + ": \n " + grnLine + ": " + grnStop + " \n Departure: " + grnDepart + "\n Authority: " + nextAuthGrn + "\n Suggested Speed: MAX";
@@ -256,7 +267,7 @@ public class TrainSchedulerUI extends JFrame {
 				schedTrainRed.setEnabled(false);
 				nextTrainRed.setEnabled(true);
 				
-				trainScheduler.addTrainSchedule("Red", trainID, authRed, departRed);
+				ctcUI.tsh.addNewTrainSchedule("Red", trainID, schedStopsRed, departRed);
 				trainID++;
 			}
 		});
@@ -275,7 +286,7 @@ public class TrainSchedulerUI extends JFrame {
 				schedTrainGrn.setEnabled(false);
 				nextTrainGrn.setEnabled(true);
 				
-				trainScheduler.addTrainSchedule("Green", trainID, authGrn, departGrn);
+				ctcUI.tsh.addNewTrainSchedule("Green", trainID, schedStopsGrn, departGrn);
 				trainID++;
 			}
 		});
