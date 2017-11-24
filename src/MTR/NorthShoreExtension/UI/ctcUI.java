@@ -56,6 +56,41 @@ public class ctcUI {
 	
 	int timeMultiplier;
 	TrainControllerHelper tch;
+	public long timeAsLong = 0;
+	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+	String simulationTime = sdf.format(timeAsLong);
+	int tempF = 0;
+	int numTrains = 0;
+	int throughput = 0;
+	
+	public int getTemp( ) {
+		return tempF;
+	}
+	
+	public void setTemp(int temp) {
+		tempF = temp;
+	}
+	
+	public int getNumTrains() {
+		return numTrains;
+	}
+	
+	public void setNumTrains(int trains) {
+		numTrains = trains;
+	}
+	
+	public int getThroughput() {
+		return throughput;
+	}
+	
+	public void setThroughput(int through) {
+		throughput = through;
+	}
+	
+	public void setTime(long time) {
+		timeAsLong = time;
+		simulationTime = sdf.format(timeAsLong);
+	}
 	
 	//public static void ctcUI(Container pane) {
 	  public ctcUI() {
@@ -63,15 +98,15 @@ public class ctcUI {
 		if (RIGHT_TO_LEFT) {
 			pane.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
 		}
-		Calendar cal = Calendar.getInstance();
+		/*Calendar cal = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-		String currentTime = sdf.format(cal.getTime());
+		String currentTime = sdf.format(cal.getTime());*/
 		
 		JButton schedTrain, schedRepair, reporting, trnInfo, trnCtrl, trkCtrl, timeMult, switchTest, schedules, engineerCtrls;
 		JPanel runningMode, thrput, trainNum, ambientTemp, currTime, trkModel;
-		int tempF = 56;
-		int numTrains = 0;
-		int throughput = 0;
+		tempF = 56;
+		numTrains = 0;
+		throughput = 0;
 		timeMultiplier = 1;
 		tch = MainMTR.getTrainControllerHelper();
 		
@@ -192,7 +227,7 @@ public class ctcUI {
 		currTime.setBorder(BorderFactory.createLineBorder(Color.black));
 		JTextArea time = new JTextArea(1,12);
 		time.setEditable(false);
-		time.setText(currentTime);
+		time.setText(simulationTime);
 		currTime.add(time);
 		
 		gbc.gridx = 3;
@@ -335,6 +370,8 @@ public class ctcUI {
 		pane.add(engineerCtrls,gbc);
 		
 		pane.setSize(850, 500);
+		
+		System.out.println("Results: " + getTemp() + getNumTrains() + getThroughput());
 	}
 		
 	private static void initLookAndFeel() {
