@@ -132,11 +132,13 @@ public class TrackModelUI extends JPanel implements MouseListener {
     							inf.equals("STATION; SWISSVILLE") || inf.equals("STATION;    PENN STATION; UNDERGROUND") ||
     							inf.equals("STATION; STEEL PLAZA; UNDERGROUND") || inf.equals("STATION; FIRST AVE; UNDERGROUND") ||
     							inf.equals("STATION; STATION SQUARE") || inf.equals("STATION; SOUTH HILLS JUNCTION")) {
-    						//draw station
+    						  g.setColor(Color.gray);
+    					      g.fillOval((drawArray[2]+5), (drawArray[3]+5), 25, 15);
     					}
     					if(inf.equals("SWITCH TO/FROM YARD") || inf.equals("SWITCH") || inf.equals("SWITCH; UNDERGROUND") ||
     							inf.equals("SWITCH TO YARD") || inf.equals("SWITCH FROM YARD")) {
-    						//draw switch
+    						g.setColor(Color.green);
+        					g.fillRect((drawArray[0]+5), (drawArray[1]+5), 10, 10);
     					}
     					if(inf.equals("RAILWAY CROSSING")) {
     						//draw railway crossing
