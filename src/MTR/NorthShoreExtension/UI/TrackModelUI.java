@@ -5,12 +5,15 @@ import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseEvent;
 
 import MTR.NorthShoreExtension.MainMTR;
 import MTR.NorthShoreExtension.Backend.DBHelper;
 import MTR.NorthShoreExtension.Backend.TrackModelSrc.*;
+import MTR.NorthShoreExtension.ProofOfConcept.Testing;
  
-public class TrackModelUI extends JPanel implements MouseListener {
+public class TrackModelUI extends JPanel /*implements MouseListener*/ {
 	//Specify the look and feel to use.  Valid values:
     //null (use the default), "Metal", "System", "Motif", "GTK+"
     final static String LOOKANDFEEL = null;
@@ -18,7 +21,22 @@ public class TrackModelUI extends JPanel implements MouseListener {
     int numTrack = 8;
     static LoadTrackModelUI loading = new LoadTrackModelUI();
     static DBHelper load;
-   
+    String[] returnString = new String[15];
+    String showLine = " ";
+	String showStatus = " ";
+	String showAuth = " ";
+	String showSpeed = " ";
+	String showSect = " ";
+	String showBlock = " ";
+	String showLength = " ";
+	String showGrade = " ";
+	String showLimit = " ";
+	String showInf = " ";
+	String showEl = " ";
+	String showCEl = " ";
+	String showBroken = " ";
+	String showHeater = " ";
+	
     public static void getDB(DBHelper db) {
     		load = db;
     }
@@ -67,7 +85,7 @@ public class TrackModelUI extends JPanel implements MouseListener {
         }
     }
     
-    public class TrackGraphic extends JPanel{
+    public class TrackGraphic extends JPanel implements MouseListener{
     		private static final long serialVersionUID = 1L;
     		int[] drawArray = new int[9];
     		int trackNumber = 0;
@@ -76,6 +94,9 @@ public class TrackModelUI extends JPanel implements MouseListener {
     		int trackid = 0;
     		String color;
     		String inf;
+    		String stat;
+    		
+
     		TrackGraphic(){
     			setPreferredSize(new Dimension(1000,600));
     		}
@@ -85,7 +106,39 @@ public class TrackModelUI extends JPanel implements MouseListener {
     			super.paintComponent(g);
     			//draw yard
     			g.setColor(Color.white);
-    			g.fillRoundRect(10,10,975,400,15,15);
+    			g.fillRoundRect(250,10,735,575,15,15);
+    			//"Line/Status","Speed/Authority","Section","Block","Length (m)", 
+    			//"Grade(%)", "Speed Limit (km/hr)","Infrastructre", "Elevation(m)",
+    			//"Cumlative Elevation", "Track Status", "Heater"
+    			g.setColor(Color.black);
+    			g.drawString("Line:", 10, 20);
+    			g.drawString("Occupied:", 10, 50);
+    			g.drawString("Speed:", 10, 80);
+    			g.drawString("Authority:", 10, 110);
+    			g.drawString("Section:", 10, 140);
+    			g.drawString("Block:", 10, 170);
+    			g.drawString("Length(m):", 10, 200);
+    			g.drawString("Grade(%):", 10, 230);
+    			g.drawString("Speed Lm.(km/hr):", 10, 260);
+    			g.drawString("Infrastructre:", 10, 290);
+    			g.drawString("Elevation(m):", 10, 320);
+    			g.drawString("Tot. El.:", 10, 350);
+    			g.drawString("Status:", 10, 380);
+    			g.drawString("Heater:", 10, 410);
+    			g.drawString(showLine, 150, 20);
+    			g.drawString(showStatus, 150, 50);
+    			g.drawString(showSpeed, 150, 80);
+    			g.drawString(showAuth, 150, 110);
+    			g.drawString(showSect, 150, 140);
+    			g.drawString(showBlock, 150, 170);
+    			g.drawString(showLength, 150, 200);
+    			g.drawString(showGrade, 150, 230);
+    			g.drawString(showLimit, 150, 260);
+    			g.drawString(showInf, 150, 290);
+    			g.drawString(showEl, 150, 320);
+    			g.drawString(showCEl, 150, 350);
+    			g.drawString(showBroken, 150, 380);
+    			g.drawString(showHeater, 150, 410);
     			for(int i=0;i<numTrack;i++) {
     				//System.out.println("rowid:"+i);
     				color = load.getColor(i);
@@ -102,6 +155,7 @@ public class TrackModelUI extends JPanel implements MouseListener {
     				inf = load.getInfrastructure(trackid);
     				position = load.getSwitch(trackid);
     				drawArray = load.getDrawingCoordinates(i);
+    				stat = load.getTrackStatus(trackid);
     				trackNumber = drawArray[6];
     				occupied = drawArray[7];
     				if(drawArray[4]!=0) {
@@ -143,9 +197,63 @@ public class TrackModelUI extends JPanel implements MouseListener {
     					if(inf.equals("RAILWAY CROSSING")) {
     						//draw railway crossing
     					}
+    					if(stat.equals("Broken - Power Failure") || stat.equals("Broken - Broken Rail") || stat.equals("Broken - Track Circuit Failure")) {
+    						//draw x
+    					}
     				}
+    				}
+    			addMouseListener(this);
     			}
-    		}
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				int x=e.getX();
+		        int y=e.getY();
+		        System.out.println("recognized! x: " +x+"y: "+y);
+		        int displayTrack = 0;
+		        displayTrack = load.findCoordinates(x, y);
+		        returnString = load.getDisplayInfo(displayTrack);
+		        showLine = returnString[0];
+				showStatus = returnString[1];
+				showAuth = returnString[2];
+				showSpeed = returnString[3];
+				showSect = returnString[4];
+				showBlock = returnString[5];
+				showLength = returnString[6];
+				showGrade = returnString[7];
+				showLimit = returnString[8];
+				showInf = returnString[9];
+				showEl = returnString[10];
+				showCEl = returnString[11];
+				showBroken = returnString[12];
+				showHeater = returnString[13];
+				repaint();
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
     }
  
     /**
@@ -165,7 +273,7 @@ public class TrackModelUI extends JPanel implements MouseListener {
         JPanel panel = new JPanel();
         panel.add(instance.new TrackGraphic());
         frame.add(panel);
-
+	    
         //Display the window.
         frame.pack();
         frame.setVisible(true);
@@ -180,11 +288,35 @@ public class TrackModelUI extends JPanel implements MouseListener {
             }
         });
     }
-    
-    public void mousePressed(MouseEvent e) {}
-    public void mouseReleased(MouseEvent e) {}
-    public void mouseEntered(MouseEvent e) {}
-    public void mouseExited(MouseEvent e) {}
-    public void mouseClicked(MouseEvent e) {}
+
+	/*@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}*/
     
 }

@@ -18,6 +18,7 @@ import java.sql.Statement;
 
 public class DBHelper {
 	int[] returnArray = new int[8]; 
+	String[] returnString = new String[15];
 	//Table names
 	private static final String DBName = "jdbc:sqlite:MTRDatabase.db";
 	
@@ -103,6 +104,46 @@ public class DBHelper {
 	    //default speed, authority, occupied = 0
 	    //default switchPosition = 0
 	}
+	public int findCoordinates(int x, int y) {
+		Connection connection = null;
+		int trackid = 0;
+		int startX = 0;
+		int startY = 0;
+		int endX = 0;
+		int endY = 0;
+		try {
+			connection = connect();
+			
+			Statement statement = connection.createStatement();
+			statement.setQueryTimeout(30); //TODO: Is this needed?
+			
+			ResultSet resultSet = statement.executeQuery("SELECT * from TrackInfo");  
+			 while(resultSet.next())
+		        {
+		           startX = resultSet.getInt("startX");
+		           startY = resultSet.getInt("startY");
+		           endX = resultSet.getInt("endX");
+		           endY = resultSet.getInt("endY");
+		           if((x >= (startX-15) && x <= (endX+15)) && (y >= (startY-15) && y <= (endY+15))) {
+		        	   		trackid = resultSet.getInt("trackID");
+		           }
+		        }
+		}
+		catch(SQLException e){  
+			 System.err.println(e.getMessage()); 
+		 }       
+		 finally {         
+			 try {
+	               if(connection != null)
+	                  connection.close();
+		     }
+		     catch(SQLException e) {  // Use SQLException class instead.          
+		    	 System.err.println(e); 
+		     }
+		 }
+		return trackid;
+	}
+	
 	public void showTrackTest() {
 		Connection connection = null;
 		
@@ -306,6 +347,68 @@ public class DBHelper {
 		     }
 		 }
 		return type;
+	}
+	//"Line/Status","Speed/Authority","Section","Block","Length (m)", 
+	//"Grade(%)", "Speed Limit (km/hr)","Infrastructre", "Elevation(m)",
+	//"Cumlative Elevation", "Track Status", "Heater"
+	public String[] getDisplayInfo(int trackid) {
+		Connection connection = null;
+		
+		try {
+			connection = connect();
+			
+			Statement statement = connection.createStatement();
+			statement.setQueryTimeout(30); //TODO: Is this needed?
+			
+		    ResultSet result = statement.executeQuery("SELECT * from TrackInfo WHERE trackID = '"+trackid+"'"); 
+		    if(result != null) {
+		    	System.out.println("found track, checking");
+			    	returnString[0] = result.getString("line");
+			    	returnString[1] = result.getString("occupied");
+			    	returnString[2] = result.getString("speed");
+			    	returnString[3] = result.getString("authority");
+			    	returnString[4] = result.getString("section");
+			    	returnString[5] = result.getString("number");
+			    	returnString[6] = result.getString("length");
+			    	returnString[7] = result.getString("grade");
+			    	returnString[8] = result.getString("speedLimit");
+			    	returnString[9] = result.getString("infrastructure");
+			    	returnString[10] = result.getString("elevation");
+			    	returnString[11] = result.getString("cumElevation");
+			    	returnString[12] = result.getString("trackStatus");
+			    	returnString[13] = result.getString("heater");
+		    }
+		    else {
+			    	returnString[0] = " ";
+			    	returnString[1] = " ";
+			    	returnString[2] = " ";
+			    	returnString[3] = " ";
+			    	returnString[4] = " ";
+			    	returnString[5] = " ";
+			    	returnString[6] = " ";
+			    	returnString[7] = " ";
+			    	returnString[8] = " ";
+			    	returnString[9] = " ";
+			    	returnString[10] = " ";
+			    	returnString[11] = " ";
+			    	returnString[12] = " ";
+			    	returnString[13] = " ";
+		    }
+		  
+		}
+		catch(SQLException e){  
+			 System.err.println(e.getMessage()); 
+		 }       
+		 finally {         
+			 try {
+	               if(connection != null)
+	                  connection.close();
+		     }
+		     catch(SQLException e) {  // Use SQLException class instead.          
+		    	 System.err.println(e); 
+		     }
+		 }
+		return returnString;
 	}
 	
 	public int getTrackLength(int trackid) {
