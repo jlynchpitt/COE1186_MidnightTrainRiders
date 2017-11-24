@@ -43,4 +43,8 @@ public class TrainSchedule {
 	public String getLine() {
 		return trackLine;
 	}
+	
+	public int[] getListOfStops() {
+		return stops;
+	}
 };

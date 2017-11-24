@@ -12,7 +12,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 
+import MTR.NorthShoreExtension.MainMTR;
+import MTR.NorthShoreExtension.Backend.*;
 import MTR.NorthShoreExtension.Backend.CTCSrc.*;
+import MTR.NorthShoreExtension.Backend.WaysideController.*;
 
 public class TrainSchedulePanel extends JPanel {
 	//JPanel trainLine;
@@ -21,6 +24,7 @@ public class TrainSchedulePanel extends JPanel {
 	//JPanel trainID;
 	JButton dispatch;
 	JButton delete;
+	static DBHelper database = MainMTR.getDBHelper();
 	
 	TrainSchedule trainSchedule;
 	
@@ -36,23 +40,36 @@ public class TrainSchedulePanel extends JPanel {
 		setBorder(BorderFactory.createTitledBorder("Train: " + id));
 		//overall.setLayout(new GridLayout(5,1));
 		//trainID = new JPanel();
-		JLabel tID = new JLabel(Integer.toString(id));
+		JLabel tID = new JLabel("TrainID: " + Integer.toString(id));
+		tID.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 		add(tID);
 		//trainID.add(tID);
 		//overall.add(tID);
 		
 		//trainLine = new JPanel();
-		JLabel tLine = new JLabel(line);
+		JLabel tLine = new JLabel("Line: " + line);
+		tLine.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 		add(tLine);
 		//trainLine.add(tLine);
 		//overall.add(tLine);
 		
 		//firstStop = new JPanel();
-		JLabel tFirst = new JLabel(first);
+		JLabel tFirst = new JLabel("First Stop: " + first);
+		tFirst.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 		add(tFirst);
 		//overall.add(tFirst);
 		
 		dispatch = new JButton("Dispatch");
+		
+		dispatch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int[] authority = trainScheduler.calcAuthority(ts.getListOfStops());
+				int speed = database.getSpeedLimit(Integer.parseInt(ts.getFirstStop()));
+				int trackID = Integer.parseInt(ts.getFirstStop());
+				
+				WaysideFunctionsHub.OccupiedSpeedAuthority(trackID, speed, authority);
+			}
+		});
 		add(dispatch);
 		//overall.add(dispatch);
 		

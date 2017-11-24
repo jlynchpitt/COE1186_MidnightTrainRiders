@@ -22,6 +22,7 @@ public class TrainSchedulesUI extends JFrame {
 	private static TrainSchedulesUI tsui = null;
 	private JPanel mainPanel = null;
 	public static trainScheduler ts;
+	static TrainScheduleHelper tsh;
 	JButton button;
 	
 	public TrainSchedulesUI() {
@@ -56,8 +57,8 @@ public class TrainSchedulesUI extends JFrame {
 		}
 	}
 	
-	public static void createAndShowGUI() {
-
+	public static void createAndShowGUI(TrainScheduleHelper t) {
+		tsh = t;
 		if (frame == null) {
 			System.out.println("creating schedulesUI");
 			frame = new JFrame("Train Schedules");
@@ -69,6 +70,8 @@ public class TrainSchedulesUI extends JFrame {
 			tsui.mainPanel.setOpaque(true);
 			JScrollPane scroll = new JScrollPane(tsui.mainPanel);
 			frame.setContentPane(scroll);
+		} else {
+			repaintGUI();
 		}
 		
 		frame.setSize(800,400);

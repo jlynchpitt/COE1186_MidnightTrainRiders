@@ -65,6 +65,10 @@ public class ctcUI {
 	int throughput = 0;
 	public static TrainScheduleHelper tsh;
 	
+	public static TrainScheduleHelper getTrainScheduleHelper() {
+		return tsh;
+	}
+	
 	public int getTemp( ) {
 		return tempF;
 	}
@@ -357,7 +361,7 @@ public class ctcUI {
 		gbc.gridy = 5;
 		schedules.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				TrainSchedulesUI.createAndShowGUI();
+				TrainSchedulesUI.createAndShowGUI(tsh);
 			}
 		});
 		pane.add(schedules,gbc);
