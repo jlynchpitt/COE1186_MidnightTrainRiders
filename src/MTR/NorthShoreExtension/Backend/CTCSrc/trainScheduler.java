@@ -17,6 +17,7 @@ import java.util.*;
 import MTR.NorthShoreExtension.Backend.DBHelper;
 import MTR.NorthShoreExtension.Backend.CTCSrc.TrainSchedule;
 import MTR.NorthShoreExtension.UI.TrainSchedulePanel;
+import MTR.NorthShoreExtension.UI.ctcUI;
 
 
 public class trainScheduler {
@@ -25,33 +26,34 @@ public class trainScheduler {
 	int[] redLine = new int[99];
 	int[] grnLine = new int[199];
 	//import database info for greenline and red line
-	static List<TrainSchedule> tsl = new ArrayList<TrainSchedule>();
+	//static List<TrainSchedule> tsl = new ArrayList<TrainSchedule>();
 	
 	public static int[] calcAuthority(int[] listOfStops) {
 		
 		int[] authority = new int[199];
+		System.out.println("trainScheduler: first stop is " + listOfStops[0]);
 		if (listOfStops[0] < 1100 && listOfStops[0] >= 1000) {
 			//use red line
 			authority[0] = 1001; //leaves the yard and goes to the first section of track
 		} else if (listOfStops[0] >= 2000 && listOfStops[0] <= 2151) {
 			//use green line
-			authority[0] = 2001;
+			authority[0] = 2001; //first section of green line
 		}
 		
 		return authority;
 	}
 	
-	public static void addTrainSchedule(String line, int trainID, int[] stops, int[] departures) {
+	/*public static void addTrainSchedule(String line, int trainID, int[] stops, int[] departures) {
 		//int id = Integer.parseInt(trainID);
-		TrainSchedule ts = new TrainSchedule(line, trainID, stops, departures);
 		//return ts;
-		TrainSchedulePanel tsp = new TrainSchedulePanel(ts);
-		tsl.add(ts);
-	}
+		ctcUI.tsh.addNewTrainSchedule(line, trainID, stops, departures);
+		//TrainSchedulePanel tsp = new TrainSchedulePanel(ts);
+	}*/
 	
-	public List<TrainSchedule> getTrainScheduleList() {
+	/*public List<TrainSchedule> getTrainScheduleList() {
+		System.out.println(tsl);
 		return tsl;
-	}
+	}*/
 	/*Scheduling helpers CTC_getBrokenTrack(int[] brokenTracks) {	
 	
 		}

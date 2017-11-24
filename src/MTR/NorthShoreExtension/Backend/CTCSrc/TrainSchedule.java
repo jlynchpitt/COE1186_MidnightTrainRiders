@@ -31,11 +31,13 @@ public class TrainSchedule {
 	}
 	
 	public int getTrainID() {
+		System.out.println("Get Train ID " + trainID);
 		return trainID;
 	}
 	
 	public String getFirstStop() {
 		String first = Integer.toString(stops[0]);
+		System.out.println("Get First Stop: " + first);
 		return first;
 	}
 	

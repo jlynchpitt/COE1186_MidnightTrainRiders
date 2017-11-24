@@ -29,6 +29,7 @@ public class TrainSchedulePanel extends JPanel {
 		int id = ts.getTrainID();
 		String first = ts.getFirstStop();
 		String line = ts.getLine();
+		System.out.println(line);
 		
 		overall.setLayout(new GridLayout(5,1));
 		//trainID = new JPanel();

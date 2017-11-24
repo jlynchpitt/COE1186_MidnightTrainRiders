@@ -1,6 +1,6 @@
 /* Filename: TrainScheduler.java
 *  Author: Matthew Snyder
-*  Last Edited: 11/18/17
+*  Last Edited: 11/22/17
 *  File Description: This is the UI component of the CTC that displays the list of scheduled trains. It will show the user the train ID, which
 *  line it runs on, and what its first stop will be. It will give the user the option to dispatch or delete the train. It uses TrainSchedulePanel
 *  for each train that is scheduled.
@@ -12,14 +12,13 @@ import java.awt.*;
 import java.awt.event.*;
 
 import MTR.NorthShoreExtension.Backend.CTCSrc.*;
-import MTR.NorthShoreExtension.UI.TrainSchedulePanel;
+import MTR.NorthShoreExtension.UI.*;
 
 public class TrainSchedulesUI extends JFrame {
 	
 	private static JFrame frame = null;
 	private static TrainSchedulesUI tsui = null;
 	private JPanel mainPanel = null;
-	public static trainScheduler ts;
 	
 	public TrainSchedulesUI() {
 		render();
@@ -31,7 +30,7 @@ public class TrainSchedulesUI extends JFrame {
 		mainPanel.add(Box.createRigidArea(new Dimension(0,5)));
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 		
-		for (TrainSchedule ts : ts.getTrainScheduleList()) {
+		for (TrainSchedule ts : ctcUI.tsh.getTrainScheduleList()) {
 			mainPanel.add(new TrainSchedulePanel(ts));
 			mainPanel.add(Box.createGlue());
 		}

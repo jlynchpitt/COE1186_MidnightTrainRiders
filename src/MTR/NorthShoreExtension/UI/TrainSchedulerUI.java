@@ -1,7 +1,7 @@
 /*
-* Filename: trainScheduler.java
+* Filename: trainSchedulerUI.java
 * Author: Matt Snyder
-* Last Edited: 11/7/2017
+* Last Edited: 11/22/2017
 * File Description: This contains the Train Scheduler. 
 * 
 * 
@@ -255,8 +255,9 @@ public class TrainSchedulerUI extends JFrame {
 				addStopRed.setEnabled(false);
 				schedTrainRed.setEnabled(false);
 				nextTrainRed.setEnabled(true);
-				
-				trainScheduler.addTrainSchedule("Red", trainID, authRed, departRed);
+				System.out.println("Red: " + trainID + " , " + authRed[0] + " , " + departRed[0]);
+				//trainScheduler.addTrainSchedule("Red", trainID, authRed, departRed);
+				ctcUI.tsh.addNewTrainSchedule("Red", trainID, authRed, departRed);
 				trainID++;
 			}
 		});
@@ -275,7 +276,8 @@ public class TrainSchedulerUI extends JFrame {
 				schedTrainGrn.setEnabled(false);
 				nextTrainGrn.setEnabled(true);
 				
-				trainScheduler.addTrainSchedule("Green", trainID, authGrn, departGrn);
+				//trainScheduler.addTrainSchedule("Green", trainID, authGrn, departGrn);
+				ctcUI.tsh.addNewTrainSchedule("Green", trainID, authGrn, departGrn);
 				trainID++;
 			}
 		});
