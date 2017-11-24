@@ -39,6 +39,8 @@ import java.util.*;
 import java.text.*;
 
 import MTR.NorthShoreExtension.UI.*;
+import MTR.NorthShoreExtension.MainMTR;
+import MTR.NorthShoreExtension.Backend.TrainControllerSrc.*;
 
 public class ctcUI {
 	
@@ -51,6 +53,9 @@ public class ctcUI {
 	final static boolean RIGHT_TO_LEFT = false;
 	
 	private static JPanel pane;
+	
+	int timeMultiplier;
+	TrainControllerHelper tch;
 	
 	//public static void ctcUI(Container pane) {
 	  public ctcUI() {
@@ -67,6 +72,8 @@ public class ctcUI {
 		int tempF = 56;
 		int numTrains = 0;
 		int throughput = 0;
+		timeMultiplier = 1;
+		tch = MainMTR.getTrainControllerHelper();
 		
 		pane.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -215,10 +222,28 @@ public class ctcUI {
 		pane.add(ambientTemp, gbc);
 		//-----------------
 		
-		timeMult = new JButton("Time Mult.: 10x");
+		timeMult = new JButton("Time Mult.: 1x");
 		gbc.gridx = 0;
 		gbc.gridy = 1;
 		pane.add(timeMult, gbc);
+		timeMult.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (timeMultiplier == 1) {
+					timeMultiplier = 2;
+					timeMult.setText("Time Mult.: 2x");
+				} else if (timeMultiplier == 2) {
+					timeMultiplier = 4;
+					timeMult.setText("Time Mult.: 4x");
+				} else if (timeMultiplier == 4) {
+					timeMultiplier = 10;
+					timeMult.setText("Time Mult.: 10x");
+				} else if (timeMultiplier == 10) {
+					timeMultiplier = 1;
+					timeMult.setText("Time Mult.: 1x");
+				}
+				tch.TrainControlHelper_setTimeMultiplier(timeMultiplier);
+			}
+		});
 		
 		trnInfo = new JButton("Train Model");
 		gbc.fill = GridBagConstraints.HORIZONTAL;
