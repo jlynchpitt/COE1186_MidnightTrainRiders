@@ -288,7 +288,7 @@ public class DBHelper {
 			connection = connect();
 			Statement statement = connection.createStatement();
 			statement.setQueryTimeout(30);
-			ResultSet result = statement.executeQuery("SELECT * from TrackInfo WHERE trackID = " + trackid + "'");
+			ResultSet result = statement.executeQuery("SELECT * from TrackInfo WHERE trackID = '" + trackid + "'");
 			limit = Integer.parseInt(result.getString("speedLimit"));
 		} catch(SQLException e) {
 			System.err.println(e);
