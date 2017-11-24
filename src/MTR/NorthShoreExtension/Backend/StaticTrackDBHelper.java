@@ -207,6 +207,35 @@ public class StaticTrackDBHelper {
 		}
 	}
 	
+	public int getFirstTrack() {
+		String query = "SELECT * FROM " + TRACK_INFO_TABLENAME + " WHERE firstTrack = '1'";
+		int trackID = -1;
+		
+		Connection connection = null;
+		Statement statement = null;
+		ResultSet result = null;
+		
+		try {
+			connection = connect();
+			
+			statement = connection.createStatement();
+			statement.setQueryTimeout(30); //TODO: Is this needed?
+			
+		    result = statement.executeQuery(query);   
+		    trackID = result.getInt("trackID");
+		}
+		catch(SQLException e){  
+			 System.err.println(e.getMessage()); 
+		}       
+		finally {         
+			if (result != null) try { result.close(); } catch (SQLException ignore) {}
+	        if (statement != null) try { statement.close(); } catch (SQLException ignore) {}
+	        if (connection != null) try { connection.close(); } catch (SQLException ignore) {}
+		 }
+		
+		return trackID;
+	}
+	
 	public int getTrackLength(int trackid) {
 		int length = 0;
 		Connection connection = null;
@@ -275,6 +304,32 @@ public class StaticTrackDBHelper {
        }
        return conn;
    }
+   
+   /* Sample query
+   private ResultSet executeQuery(String query) {
+		Connection connection = null;
+		Statement statement = null;
+		ResultSet result = null;
+		
+		try {
+			connection = connect();
+			
+			statement = connection.createStatement();
+			statement.setQueryTimeout(30); //TODO: Is this needed?
+			
+		    result = statement.executeQuery(query);   
+		}
+		catch(SQLException e){  
+			 System.err.println(e.getMessage()); 
+		}       
+		finally {         
+			if (result != null) try { result.close(); } catch (SQLException ignore) {}
+	        if (statement != null) try { statement.close(); } catch (SQLException ignore) {}
+	        if (connection != null) try { connection.close(); } catch (SQLException ignore) {}
+		 }
+		
+		return null;
+   }*/
 
 	/* Example executing query  
     ResultSet resultSet = statement.executeQuery("SELECT * from person");

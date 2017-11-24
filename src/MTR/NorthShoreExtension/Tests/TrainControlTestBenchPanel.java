@@ -48,6 +48,8 @@ import java.util.*;
 import java.text.NumberFormat;
 import javax.swing.text.NumberFormatter;
 import java.beans.*; //property change stuff
+
+import MTR.NorthShoreExtension.MainMTR;
 import MTR.NorthShoreExtension.Backend.*;
 import MTR.NorthShoreExtension.Backend.TrainControllerSrc.TrainController;
 import MTR.NorthShoreExtension.Backend.TrainControllerSrc.TrainControllerHelper;
@@ -86,15 +88,25 @@ public class TrainControlTestBenchPanel extends JPanel
     JLabel leftDoor;
     JLabel lights;
     JLabel announcements;
+    JLabel trackIDLabel;
     
     /* Internal status/state variables */
     private double powerCommand = 0; //kWatts
     private double actualSpeed = 0; //mph
     private boolean brakeApplied = false;
     private boolean eBrakeApplied = false;
+    
+    private int currentTrackID = 0;
+    private int lastTrackID = -1;
+    private boolean primaryDirection = true;
 
-    public TrainControlTestBenchPanel(TrainController tc) {
-        
+    private StaticTrackDBHelper db = null;
+    private TrainControlTestBenchUI ui = null;
+    
+    public TrainControlTestBenchPanel(TrainController tc, TrainControlTestBenchUI ui) {
+    	db = MainMTR.getStaticTrackDBHelper();
+    	this.ui = ui;
+    	
     	//Save arguments in instance variables.
         trainController = tc;
         trainController.setTrainControlTestBenchPanel(this);
@@ -242,6 +254,49 @@ public class TrainControlTestBenchPanel extends JPanel
         }
         else if(e.getSource() == moveToNextTrack) {
         	trainController.TrainControl_moveToNextTrack();
+        	
+        	/* Backend handling simulating track model */
+        	if(primaryDirection) {
+        		//Moving in primary direction
+        		if(currentTrackID == 2003) {
+        			//This is the switch
+        			if(ui.getSwitchPosition() == 1) {
+        				//Switch is up - connected to track 2004
+        				lastTrackID = currentTrackID;
+        				currentTrackID = 2004;
+        			}
+        			else {
+        				//Switch is down - connected to track 2010
+        				lastTrackID = currentTrackID;
+        				currentTrackID = 2010;
+        				primaryDirection = false;
+        			}
+        		}
+        		else if(currentTrackID == 2010) {
+        			primaryDirection = false;
+        			lastTrackID = currentTrackID;
+        			currentTrackID = 2003;
+        		}
+        		else {
+        			lastTrackID = currentTrackID;
+        			currentTrackID++;
+        		}
+        			
+        	}
+        	else {
+        		//Moving in secondary direction
+        		if(currentTrackID == 2001) {
+        			//TODO: Train back in yard - remove train from track
+        			lastTrackID = currentTrackID;
+        			currentTrackID = -1;
+        		}
+        		else {
+        			lastTrackID = currentTrackID;
+        			currentTrackID--;
+        		}
+        	}
+        	
+        	updateTrackID(currentTrackID);
         }
         else if(e.getSource() == passEBrake) {        		
         	trainController.TrainControl_setPassengerEBrake();
@@ -327,6 +382,14 @@ public class TrainControlTestBenchPanel extends JPanel
 		return speed;
 	}
 	
+    private void updateTrackID(int trackID) {
+    	trackID -= 2000;
+    	trackIDLabel.setText(Integer.toString(trackID));
+    	
+    	//Send beacon if appropriate
+    	//Switch beacon on 4,10
+    	//Station beacon on 1,3,5,7
+    }
     /*
      * Converts speed from km/h to mph before being displayed in the UI
      * Used for any label that displays a double based speed
@@ -516,7 +579,7 @@ public class TrainControlTestBenchPanel extends JPanel
     private void createTrainStatusPanel() {
         /* Track Status Panel */
     	trainStatusPanel = new JPanel();
-        GridLayout trainStatusPanelLayout = new GridLayout(4,2);
+        GridLayout trainStatusPanelLayout = new GridLayout(0,2);
         trainStatusPanel.setLayout(trainStatusPanelLayout);
         
         //Dynamic text labels        
@@ -524,6 +587,9 @@ public class TrainControlTestBenchPanel extends JPanel
         leftDoor = new JLabel(trainController.isLeftDoorOpen() ? "Open" : "Closed");
         lights = new JLabel(trainController.areLightsOn() ? "On" : "Off");
         announcements = new JLabel(trainController.getAnnouncements());
+        currentTrackID = db.getFirstTrack();
+        trackIDLabel = new JLabel();
+        updateTrackID(currentTrackID);
         
         //Add all labels to layout
         trainStatusPanel.add(new JLabel("Right Door: "));
@@ -534,9 +600,11 @@ public class TrainControlTestBenchPanel extends JPanel
         trainStatusPanel.add(lights);
         trainStatusPanel.add(new JLabel("Announcements: "));
         trainStatusPanel.add(announcements);
+        trainStatusPanel.add(new JLabel("Track ID: "));
+        trainStatusPanel.add(trackIDLabel);
         
     	trainStatusPanel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createTitledBorder("Vital Info"),
+                BorderFactory.createTitledBorder("Train Status"),
                 BorderFactory.createEmptyBorder(5,5,5,5)));    
     }
 }

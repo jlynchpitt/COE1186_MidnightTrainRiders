@@ -82,7 +82,7 @@ public class TrainControlTestBenchUI implements ActionListener {
     private JFormattedTextField trainIDTextField;
     private static TrainControllerHelper tch;
     
-    private int switchPosition = 1;
+    public int switchPosition = 1;
     
     public TrainControlTestBenchUI() {
     	createMainPanel();
@@ -137,7 +137,7 @@ public class TrainControlTestBenchUI implements ActionListener {
         controllerPane.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
         controllerPane.add(Box.createRigidArea(new Dimension(0, 5)));
         for(TrainController tc : tch.getTrainControllerList()) {
-	        controllerPane.add(new TrainControlTestBenchPanel(tc));
+	        controllerPane.add(new TrainControlTestBenchPanel(tc, this));
 	        controllerPane.add(Box.createGlue());
         }
         
@@ -253,6 +253,9 @@ public class TrainControlTestBenchUI implements ActionListener {
         });
     }
 
+    public int getSwitchPosition() {
+    	return switchPosition;
+    }
 	@Override
 	public void actionPerformed(ActionEvent e) {
         if(e.getSource() == dispatchTrainButton) {

@@ -46,6 +46,7 @@ public class TrainControllerHelper {
 		powerTimerTask = new TimerTask() {
 			@Override
 			public void run() {
+				//TODO: Still getting concurrent modification exception
 				for(TrainController tc : tcList ){
 					tc.calculatePowerCommand();
 				}
