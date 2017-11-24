@@ -273,7 +273,7 @@ public class BeaconCreater implements ActionListener, PropertyChangeListener {
 		}
 		
 		int primaryNextStationID = Integer.parseInt(pNextStationID.getText());
-		if(primaryNextStationID > 0 && ((greenLine.isSelected() && primaryNextStationID <= 13) || (redLine.isSelected() && primaryNextStationID <= 8))) {
+		if(primaryNextStationID >= 0 && ((greenLine.isSelected() && primaryNextStationID <= 13) || (redLine.isSelected() && primaryNextStationID <= 8))) {
 			primaryNextStationID = (primaryNextStationID & 0x0F) << 17;
 			beacon = beacon | primaryNextStationID;
 		}
@@ -282,7 +282,7 @@ public class BeaconCreater implements ActionListener, PropertyChangeListener {
 		}
 		
 		int secondaryNextStationID = Integer.parseInt(sNextStationID.getText());
-		if(secondaryNextStationID > 0 && ((greenLine.isSelected() && secondaryNextStationID <= 13) || (redLine.isSelected() && secondaryNextStationID <= 8))) {
+		if(secondaryNextStationID >= 0 && ((greenLine.isSelected() && secondaryNextStationID <= 13) || (redLine.isSelected() && secondaryNextStationID <= 8))) {
 			secondaryNextStationID = (secondaryNextStationID & 0x0F) << 13;
 			beacon = beacon | secondaryNextStationID;
 		}

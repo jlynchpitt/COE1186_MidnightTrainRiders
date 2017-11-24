@@ -388,7 +388,32 @@ public class TrainControlTestBenchPanel extends JPanel
     	
     	//Send beacon if appropriate
     	//Switch beacon on 4,10
+    	final int TRACK_4_BEACON = 1619001344;
+    	final int TRACK_10_BEACON = 1631584256;
     	//Station beacon on 1,3,5,7
+    	final int TRACK_1_BEACON = 539099136;
+    	final int TRACK_3_BEACON = 543170560;
+    	final int TRACK_5_BEACON = 547618816;
+    	final int TRACK_7_BEACON = 551567360;
+    	
+    	if(trackID == 1) {
+    		trainController.TrainControl_sendBeaconInfo(TRACK_1_BEACON);
+    	}
+    	else if(trackID == 3) {
+    		trainController.TrainControl_sendBeaconInfo(TRACK_3_BEACON);
+    	}
+    	else if(trackID == 4) {
+    		trainController.TrainControl_sendBeaconInfo(TRACK_4_BEACON);
+    	}
+    	else if(trackID == 5) {
+    		trainController.TrainControl_sendBeaconInfo(TRACK_5_BEACON);
+    	}
+    	else if(trackID == 7) {
+    		trainController.TrainControl_sendBeaconInfo(TRACK_7_BEACON);
+    	}
+    	else if(trackID == 10) {
+    		trainController.TrainControl_sendBeaconInfo(TRACK_10_BEACON);
+    	}
     }
     /*
      * Converts speed from km/h to mph before being displayed in the UI
