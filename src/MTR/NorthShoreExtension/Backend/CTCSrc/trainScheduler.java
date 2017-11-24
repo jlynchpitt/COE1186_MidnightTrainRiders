@@ -28,22 +28,6 @@ public class trainScheduler {
 	//import database info for greenline and red line
 	static String[] importedGrn;
 	static String[] importedRed;
-	static int j = 0;
-	static int k = 0;
-	
-	public static void loadDatabase() {
-		for (int i = 0; i < 8; i++) {
-			String text = Integer.toString(database.getTrackID(i));
-			String line = database.getColor(i);
-			if (line.equals("green")) {
-				importedGrn[j] = text;
-				j++;
-			} else if (line.equals("red")) {
-				importedRed[k] = text;
-				k++;
-			}
-		}
-	}
 	
 	//stop[i]
 	// if stop [0] == first section of track
@@ -56,7 +40,6 @@ public class trainScheduler {
 	//   
 	
 	public static int[] calcAuthority(int[] listOfStops) {
-		loadDatabase();
 		int[] authority = new int[199];
 		int l = 0;
 		int m = 1;
