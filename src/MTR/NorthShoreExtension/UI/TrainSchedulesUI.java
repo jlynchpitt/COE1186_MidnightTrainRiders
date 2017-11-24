@@ -10,9 +10,11 @@ package MTR.NorthShoreExtension.UI;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
 
 import MTR.NorthShoreExtension.Backend.CTCSrc.*;
 import MTR.NorthShoreExtension.UI.TrainSchedulePanel;
+import MTR.NorthShoreExtension.UI.*;
 
 public class TrainSchedulesUI extends JFrame {
 	
@@ -20,21 +22,29 @@ public class TrainSchedulesUI extends JFrame {
 	private static TrainSchedulesUI tsui = null;
 	private JPanel mainPanel = null;
 	public static trainScheduler ts;
+	static TrainScheduleHelper tsh;
+	JButton button;
 	
 	public TrainSchedulesUI() {
-		render();
+		makeMainPanel();
 	}
 	
 	protected void makeMainPanel() {
+		System.out.println("Entering makeMainPanel");
 		mainPanel = new JPanel();
-		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
+		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		mainPanel.add(Box.createRigidArea(new Dimension(0,5)));
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 		
-		for (TrainSchedule ts : ts.getTrainScheduleList()) {
+		for (TrainSchedule ts : ctcUI.tsh.getTrainScheduleList()) {
+			System.out.println("creating trainSchedulePanel");
+			System.out.println(ts.getFirstStop() + "\n");
+			//mainPanel.add(button =  new JButton("My Button"));
+			//can create buttons but not TrainSchedulePanels?
 			mainPanel.add(new TrainSchedulePanel(ts));
 			mainPanel.add(Box.createGlue());
 		}
+		System.out.println("exiting makeMainPanel");
 	}
 	
 	public static void repaintGUI( ) {
@@ -47,15 +57,21 @@ public class TrainSchedulesUI extends JFrame {
 		}
 	}
 	
-	private static void render() {
+	public static void createAndShowGUI(TrainScheduleHelper t) {
+		tsh = t;
 		if (frame == null) {
+			System.out.println("creating schedulesUI");
 			frame = new JFrame("Train Schedules");
+			frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 			
+			//error is probably here. it calls a function which call render()
 			tsui = new TrainSchedulesUI();
-			tsui.makeMainPanel();
+			//tsui.makeMainPanel();
 			tsui.mainPanel.setOpaque(true);
 			JScrollPane scroll = new JScrollPane(tsui.mainPanel);
 			frame.setContentPane(scroll);
+		} else {
+			repaintGUI();
 		}
 		
 		frame.setSize(800,400);

@@ -321,6 +321,22 @@ public class DBHelper {
 		return status;
 	}
 	
+	//added a method for retrieving the speed limit for each track section
+	public int getSpeedLimit(int trackid) {
+		int limit = 100;
+		Connection connection = null;
+		try {
+			connection = connect();
+			Statement statement = connection.createStatement();
+			statement.setQueryTimeout(30);
+			ResultSet result = statement.executeQuery("SELECT * from TrackInfo WHERE trackID = '" + trackid + "'");
+			limit = Integer.parseInt(result.getString("speedLimit"));
+		} catch(SQLException e) {
+			System.err.println(e);
+		}
+		return limit;
+	}
+	
 	public String getInfrastructure(int trackid) {
 		String type = null;
 		Connection connection = null;

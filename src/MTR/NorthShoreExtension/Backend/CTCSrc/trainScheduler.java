@@ -14,44 +14,81 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
 
+import MTR.NorthShoreExtension.MainMTR;
 import MTR.NorthShoreExtension.Backend.DBHelper;
 import MTR.NorthShoreExtension.Backend.CTCSrc.TrainSchedule;
 import MTR.NorthShoreExtension.UI.TrainSchedulePanel;
 
 
 public class trainScheduler {
-	static DBHelper database;
+	static DBHelper database = MainMTR.getDBHelper();
 	
-	int[] redLine = new int[99];
-	int[] grnLine = new int[199];
+	int[] redLine = new int[75];
+	int[] grnLine = new int[150];
 	//import database info for greenline and red line
-	static List<TrainSchedule> tsl = new ArrayList<TrainSchedule>();
+	static String[] importedGrn;
+	static String[] importedRed;
+	
+	//stop[i]
+	// if stop [0] == first section of track
+	//	 authority[0] = 1001;
+	//	 i++;
+	// else
+	//   authority[0] = 1001;
+	//   while authority[j] != stop[0]
+	//		authority[j] = authority[j-1].nextTrack()
+	//   
 	
 	public static int[] calcAuthority(int[] listOfStops) {
-		
 		int[] authority = new int[199];
-		if (listOfStops[0] < 1100 && listOfStops[0] >= 1000) {
-			//use red line
-			authority[0] = 1001; //leaves the yard and goes to the first section of track
+		int l = 0;
+		int m = 1;
+		if (listOfStops[0] >= 1000 && listOfStops[0] < 2000) {
+			authority[0] = 1001;
+			//for first stop
+			if (listOfStops[0] == 1001) {
+				l++;
+			} else {	
+				while (authority[m-1] != listOfStops[l]) {
+					authority[m] = database.getNextTrack(authority[m-1], "forward");
+					m++;
+				}
+				l++;
+			}
+			//for the next stops
+			for (int k = 0; k < listOfStops.length-1; k++) {
+				while(authority[m-1] != listOfStops[l]) {
+					authority[m] = database.getNextTrack(authority[m-1], "forward");
+					m++;
+				}
+				l++;
+			}
+
 		} else if (listOfStops[0] >= 2000 && listOfStops[0] <= 2151) {
-			//use green line
 			authority[0] = 2001;
+			//for first stop
+			if (listOfStops[0] == 2001) {
+				l++;
+			} else {	
+				while (authority[m-1] != listOfStops[l]) {
+					authority[m] = database.getNextTrack(authority[m-1], "forward");
+					m++;
+				}
+				l++;
+			}		
+			//for the next stops
+			for (int k = 0; k < listOfStops.length-1; k++) {
+				while(authority[m-1] != listOfStops[l]) {
+					authority[m] = database.getNextTrack(authority[m-1], "forward");
+					m++;
+				}
+				l++;
+			}
+			
 		}
-		
 		return authority;
 	}
 	
-	public static void addTrainSchedule(String line, int trainID, int[] stops, int[] departures) {
-		//int id = Integer.parseInt(trainID);
-		TrainSchedule ts = new TrainSchedule(line, trainID, stops, departures);
-		//return ts;
-		TrainSchedulePanel tsp = new TrainSchedulePanel(ts);
-		tsl.add(ts);
-	}
-	
-	public List<TrainSchedule> getTrainScheduleList() {
-		return tsl;
-	}
 	/*Scheduling helpers CTC_getBrokenTrack(int[] brokenTracks) {	
 	
 		}

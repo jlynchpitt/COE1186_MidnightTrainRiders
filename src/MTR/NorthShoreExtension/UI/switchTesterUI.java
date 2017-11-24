@@ -345,7 +345,7 @@ public class switchTesterUI extends JFrame {
 		rSwitch1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					switchTester.testSwitch(1010);
+					switchTester.testSwitch(1009);
 				} catch (AWTException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -356,7 +356,7 @@ public class switchTesterUI extends JFrame {
 		rSwitch2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					switchTester.testSwitch(1014);
+					switchTester.testSwitch(1015);
 				} catch (AWTException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

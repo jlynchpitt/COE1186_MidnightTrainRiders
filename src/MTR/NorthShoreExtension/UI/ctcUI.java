@@ -39,6 +39,9 @@ import java.util.*;
 import java.text.*;
 
 import MTR.NorthShoreExtension.UI.*;
+import MTR.NorthShoreExtension.MainMTR;
+import MTR.NorthShoreExtension.Backend.TrainControllerSrc.*;
+import MTR.NorthShoreExtension.Backend.CTCSrc.*;
 
 public class ctcUI {
 	
@@ -52,21 +55,67 @@ public class ctcUI {
 	
 	private static JPanel pane;
 	
+	int timeMultiplier;
+	TrainControllerHelper tch;
+	public long timeAsLong = 0;
+	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+	String simulationTime = sdf.format(timeAsLong);
+	int tempF = 0;
+	int numTrains = 0;
+	int throughput = 0;
+	public static TrainScheduleHelper tsh;
+	
+	public static TrainScheduleHelper getTrainScheduleHelper() {
+		return tsh;
+	}
+	
+	public int getTemp( ) {
+		return tempF;
+	}
+	
+	public void setTemp(int temp) {
+		tempF = temp;
+	}
+	
+	public int getNumTrains() {
+		return numTrains;
+	}
+	
+	public void setNumTrains(int trains) {
+		numTrains = trains;
+	}
+	
+	public int getThroughput() {
+		return throughput;
+	}
+	
+	public void setThroughput(int through) {
+		throughput = through;
+	}
+	
+	public void setTime(long time) {
+		timeAsLong = time;
+		simulationTime = sdf.format(timeAsLong);
+	}
+	
 	//public static void ctcUI(Container pane) {
 	  public ctcUI() {
 		  pane = new JPanel();
 		if (RIGHT_TO_LEFT) {
 			pane.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
 		}
-		Calendar cal = Calendar.getInstance();
+		/*Calendar cal = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-		String currentTime = sdf.format(cal.getTime());
+		String currentTime = sdf.format(cal.getTime());*/
 		
 		JButton schedTrain, schedRepair, reporting, trnInfo, trnCtrl, trkCtrl, timeMult, switchTest, schedules, engineerCtrls;
 		JPanel runningMode, thrput, trainNum, ambientTemp, currTime, trkModel;
-		int tempF = 56;
-		int numTrains = 0;
-		int throughput = 0;
+		tempF = 56;
+		numTrains = 0;
+		throughput = 0;
+		timeMultiplier = 1;
+		tsh = new TrainScheduleHelper();
+		tch = MainMTR.getTrainControllerHelper();
 		
 		pane.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -185,7 +234,7 @@ public class ctcUI {
 		currTime.setBorder(BorderFactory.createLineBorder(Color.black));
 		JTextArea time = new JTextArea(1,12);
 		time.setEditable(false);
-		time.setText(currentTime);
+		time.setText(simulationTime);
 		currTime.add(time);
 		
 		gbc.gridx = 3;
@@ -215,10 +264,28 @@ public class ctcUI {
 		pane.add(ambientTemp, gbc);
 		//-----------------
 		
-		timeMult = new JButton("Time Mult.: 10x");
+		timeMult = new JButton("Time Mult.: 1x");
 		gbc.gridx = 0;
 		gbc.gridy = 1;
 		pane.add(timeMult, gbc);
+		timeMult.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (timeMultiplier == 1) {
+					timeMultiplier = 2;
+					timeMult.setText("Time Mult.: 2x");
+				} else if (timeMultiplier == 2) {
+					timeMultiplier = 4;
+					timeMult.setText("Time Mult.: 4x");
+				} else if (timeMultiplier == 4) {
+					timeMultiplier = 10;
+					timeMult.setText("Time Mult.: 10x");
+				} else if (timeMultiplier == 10) {
+					timeMultiplier = 1;
+					timeMult.setText("Time Mult.: 1x");
+				}
+				tch.TrainControlHelper_setTimeMultiplier(timeMultiplier);
+			}
+		});
 		
 		trnInfo = new JButton("Train Model");
 		gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -294,7 +361,7 @@ public class ctcUI {
 		gbc.gridy = 5;
 		schedules.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFrame schedule = new TrainSchedulesUI();
+				TrainSchedulesUI.createAndShowGUI(tsh);
 			}
 		});
 		pane.add(schedules,gbc);
@@ -310,6 +377,8 @@ public class ctcUI {
 		pane.add(engineerCtrls,gbc);
 		
 		pane.setSize(850, 500);
+		
+		System.out.println("Results: " + getTemp() + getNumTrains() + getThroughput());
 	}
 		
 	private static void initLookAndFeel() {
