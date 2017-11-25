@@ -49,6 +49,7 @@ import java.text.NumberFormat;
 import javax.swing.text.NumberFormatter;
 import java.beans.*; //property change stuff
 import MTR.NorthShoreExtension.Backend.*;
+import MTR.NorthShoreExtension.Backend.TrainControllerSrc.DriverTrackInfo;
 import MTR.NorthShoreExtension.Backend.TrainControllerSrc.TrainController;
 
 public class TrainControlPanel extends JPanel
@@ -98,8 +99,11 @@ public class TrainControlPanel extends JPanel
     JLabel nextSpeedLimitLabel;
     JLabel currentTrackLengthLabel;
     JLabel nextTrackLengthLabel;
-    JLabel infrastructureLabel;
-    JLabel lineLabel;
+    JLabel lineLabel;    
+    JLabel stationLabel;
+    JLabel switchLabel;
+    JLabel undergroundLabel;
+    JLabel trackIDLabel;
     
     /* Vital Controls Components */
     JFormattedTextField driverSetSpeed;
@@ -268,6 +272,16 @@ public class TrainControlPanel extends JPanel
         		updateUIIntSpeed_convert(commandedSetSpeed, trainController.getCTCCommandedSetSpeed());
         		break;
         	case TRACK_INFO:
+        		DriverTrackInfo track = trainController.getCurrentTrackInfo();
+        		lineLabel.setText(track.line);
+        		currentSpeedLimitLabel.setText(Integer.toString(track.speedLimit));
+        		nextSpeedLimitLabel.setText(Integer.toString(track.nextSpeedLimit));
+        		currentTrackLengthLabel.setText(Integer.toString(track.length));
+        		nextTrackLengthLabel.setText(Integer.toString(track.nextLength));
+        		stationLabel.setText(track.isStation ? "Yes" : "No");
+        		switchLabel.setText(track.isSwitch ? "Yes" : "No");
+        		undergroundLabel.setText(track.isUnderground ? "Yes" : "No");
+        		trackIDLabel.setText(Integer.toString(track.trackID));
         		break;
         	case TEMPERATURE:
         		internalTemp.setText(Double.toString(trainController.getInternalTemp()));
@@ -469,7 +483,10 @@ public class TrainControlPanel extends JPanel
         nextSpeedLimitLabel = new JLabel();
         currentTrackLengthLabel = new JLabel();
         nextTrackLengthLabel = new JLabel();
-        infrastructureLabel = new JLabel();
+        stationLabel = new JLabel();
+        switchLabel = new JLabel();
+        undergroundLabel = new JLabel();
+        trackIDLabel = new JLabel();
         lineLabel = new JLabel();
         
         //Add all labels to layout
@@ -479,12 +496,18 @@ public class TrainControlPanel extends JPanel
         trackInfoPanel.add(currentSpeedLimitLabel);       
         trackInfoPanel.add(new JLabel("Next Speed Limit: "));
         trackInfoPanel.add(nextSpeedLimitLabel);       
-        trackInfoPanel.add(new JLabel("Infrastructure: "));
-        trackInfoPanel.add(infrastructureLabel);      
+        trackInfoPanel.add(new JLabel("Track ID: "));
+        trackInfoPanel.add(trackIDLabel);      
         trackInfoPanel.add(new JLabel("Current Length: "));
         trackInfoPanel.add(currentTrackLengthLabel);       
         trackInfoPanel.add(new JLabel("Next Length: "));
-        trackInfoPanel.add(nextTrackLengthLabel);       
+        trackInfoPanel.add(nextTrackLengthLabel);  
+        trackInfoPanel.add(new JLabel("Station: "));
+        trackInfoPanel.add(stationLabel);      
+        trackInfoPanel.add(new JLabel("Switch: "));
+        trackInfoPanel.add(switchLabel);       
+        trackInfoPanel.add(new JLabel("Underground: "));
+        trackInfoPanel.add(undergroundLabel);  
         
         trackInfoPanel.setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createTitledBorder("Track Info"),

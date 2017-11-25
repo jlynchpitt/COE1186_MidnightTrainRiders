@@ -13,9 +13,13 @@ package MTR.NorthShoreExtension.Backend.TrainControllerSrc;
 
 import java.awt.event.ActionEvent;
 
+import MTR.NorthShoreExtension.MainMTR;
+import MTR.NorthShoreExtension.Backend.DBHelper;
+import MTR.NorthShoreExtension.Backend.StaticTrackDBHelper;
 import MTR.NorthShoreExtension.Backend.TrainSrc.Train;
 import MTR.NorthShoreExtension.Tests.TrainControlTestBenchPanel;
 import MTR.NorthShoreExtension.UI.TrainControlPanel;
+import MTR.NorthShoreExtension.UI.TrainControlUI;
 
 public class TrainController {
 	//TODO: Change these variables to private and add getters/setters
@@ -58,13 +62,16 @@ public class TrainController {
 	private double internalTemp = 73; //TODO: Change actual temp to outside temp to start
 	
 	//Track Info
-	private int speedLimit = 0; //km/h
-	private int length = 0; //m
+	private DriverTrackInfo currentTrackInfo = null;
+	private DriverTrackInfo previousTrackInfo = null;
+	private StaticTrackDBHelper db = null;
 	
 	//TODO: Pass in train model object
 	public TrainController(int id, Train t, double pid_p, double pid_i){
 		trainID = id;
 		trainModel = t;
+		
+		db = MainMTR.getStaticTrackDBHelper();
 		
 		Kp = pid_p;
 		Ki = pid_i;
@@ -259,6 +266,15 @@ public class TrainController {
 	
 	public void TrainControl_sendBeaconInfo(int beacon) {
 		//translate beacon - TODO: 
+		
+		int trackID = (beacon & 0x1FE00000) >> 21;
+		trackID += 2000; //green line
+		previousTrackInfo = currentTrackInfo;
+		currentTrackInfo = db.getTrackInfo(trackID, true);
+		
+		updateUI(TrainControlPanel.TRACK_INFO);
+		
+		System.out.println("Current track: " + trackID);
 	}
 	
 	public void TrainControl_setFaultStatus(int status, boolean faultActive) {
@@ -362,6 +378,10 @@ public class TrainController {
 		return trainFaults;
 	}
 	
+	public DriverTrackInfo getCurrentTrackInfo() {
+		return currentTrackInfo;
+	}
+	
 	public String getEngineStatus(){
 		if(engineFailed) {
 			return "FAILED";
@@ -458,14 +478,14 @@ public class TrainController {
 	}
 	
 	private void updateTrainSetSpeed() {
-		if(manualMode && driverCommandedSetSpeed <= ctcCommandedSetSpeed && driverCommandedSetSpeed < speedLimit) {
+		if(manualMode && driverCommandedSetSpeed <= ctcCommandedSetSpeed && driverCommandedSetSpeed < currentTrackInfo.speedLimit) {
 			trainSetSpeed = driverCommandedSetSpeed;
 		}
-		else if(ctcCommandedSetSpeed <= speedLimit) {
+		else if(ctcCommandedSetSpeed <= currentTrackInfo.speedLimit) {
 			trainSetSpeed = ctcCommandedSetSpeed;
 		}
 		else {
-			trainSetSpeed = speedLimit;
+			trainSetSpeed = currentTrackInfo.speedLimit;
 		}
 	}
 	
