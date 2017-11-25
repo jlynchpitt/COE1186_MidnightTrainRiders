@@ -13,10 +13,11 @@ import MTR.NorthShoreExtension.Backend.DBHelper;
 import MTR.NorthShoreExtension.Backend.TrackModelSrc.*;
 import MTR.NorthShoreExtension.ProofOfConcept.Testing;
  
-public class TrackModelUI extends JPanel /*implements MouseListener*/ {
+public class TrackModelUI extends JPanel {
 	//Specify the look and feel to use.  Valid values:
     //null (use the default), "Metal", "System", "Motif", "GTK+"
     final static String LOOKANDFEEL = null;
+    static TrackModelUI instance;
     TrackModel trackFunctions = new TrackModel();
     int numTrack = 8;
     static LoadTrackModelUI loading = new LoadTrackModelUI();
@@ -37,6 +38,9 @@ public class TrackModelUI extends JPanel /*implements MouseListener*/ {
 	String showBroken = " ";
 	String showHeater = " ";
 	
+	public static TrackModelUI getModel() {
+		return instance;
+	}
     public static void getDB(DBHelper db) {
     		load = db;
     }
@@ -174,6 +178,9 @@ public class TrackModelUI extends JPanel /*implements MouseListener*/ {
     						g.fillRect((drawArray[2]-drawArray[0])/2, (drawArray[3]-drawArray[1])/2, 30, 15);
     						g.setColor(Color.red);
     						g.fillOval((drawArray[2]-10), (drawArray[3]-10), 8, 8);
+    						//draw train
+    						g.setColor(Color.blue);
+    			    	     	g.fillRect((drawArray[0]+10), (drawArray[1]-10), 30, 15);
     					}
     					
     					if(inf.equals("STATION") || inf.equals("STATION; PIONEER") || 
@@ -199,6 +206,8 @@ public class TrackModelUI extends JPanel /*implements MouseListener*/ {
     					}
     					if(stat.equals("Broken - Power Failure") || stat.equals("Broken - Broken Rail") || stat.equals("Broken - Track Circuit Failure")) {
     						//draw x
+    						g.drawLine(drawArray[0]-5, drawArray[1]-5, drawArray[0]+5, drawArray[1]+1);
+    			    	  		g.drawLine(drawArray[0]-5, drawArray[1]+1, drawArray[0]+5, drawArray[1]-5);
     					}
     				}
     				}
@@ -263,7 +272,7 @@ public class TrackModelUI extends JPanel /*implements MouseListener*/ {
      */
     public static void createAndShowGUI() {
      	load = MainMTR.getDBHelper();
-        TrackModelUI instance = new TrackModelUI();
+        instance = new TrackModelUI();
     		//Set the look and feel.
         initLookAndFeel();
  
@@ -288,35 +297,5 @@ public class TrackModelUI extends JPanel /*implements MouseListener*/ {
             }
         });
     }
-
-	/*@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}*/
     
 }
