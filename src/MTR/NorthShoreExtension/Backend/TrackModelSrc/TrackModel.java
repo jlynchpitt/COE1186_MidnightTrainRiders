@@ -92,7 +92,12 @@ public class TrackModel {
 	}
 	
 	public static void breakTrack(int id) {
-		brokenTrack[(brokenTrack.length -1)] = id;
+		if(brokenTrack.length == 0) {
+			brokenTrack[0] = id;
+		}
+		else {
+			brokenTrack[(brokenTrack.length)] = id;
+		}
 		wayside.WaysideController_BrokenTrack(brokenTrack);
 	}
 	
