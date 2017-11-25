@@ -12,6 +12,7 @@ import java.util.Random;
 
 public class TrackModel {
 	static WaysideFunctionsHub wayside;
+	static TrackModelUI loading;
 	//static Map<Integer, Track> trackList = new HashMap<Integer, Track>();
 	static Track updateTrack;
 	static int trackOccupency[] = new int[300];
@@ -91,13 +92,14 @@ public class TrackModel {
 		sendBeacon(update.trackOccupying, update.trainID);
 	}
 	
-	public static void breakTrack(int id) {
+	public static void breakTrack(int id, String status) {
 		if(brokenTrack.length == 0) {
 			brokenTrack[0] = id;
 		}
 		else {
 			brokenTrack[(brokenTrack.length)] = id;
 		}
+		load.updateTrackStatus(id, status);
 		wayside.WaysideController_BrokenTrack(brokenTrack);
 	}
 	
