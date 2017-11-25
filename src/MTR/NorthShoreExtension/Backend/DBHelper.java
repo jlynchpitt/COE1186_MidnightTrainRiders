@@ -301,6 +301,34 @@ public class DBHelper {
 		 }
 	}
 	
+	public int getTrackOccupied(int trackid) {
+		Connection connection = null;
+		int status = 0;
+		try {
+			connection = connect();
+			
+			Statement statement = connection.createStatement();
+			statement.setQueryTimeout(30); //TODO: Is this needed?
+			
+			ResultSet result = statement.executeQuery("SELECT * from  TrackInfo WHERE trackID = '" + trackid + "'");
+			status = result.getInt("occupied");  
+
+		}
+		catch(SQLException e){  
+			 System.err.println(e.getMessage()); 
+		 }       
+		 finally {         
+			 try {
+	               if(connection != null)
+	                  connection.close();
+		     }
+		     catch(SQLException e) {  // Use SQLException class instead.          
+		    	 System.err.println(e); 
+		     }
+		 }
+		return status;
+	}
+	
 	//added a method for getting information on track status (for Repair Scheduling) - Matt
 	public String getTrackStatus(int trackid) {
 		String status = null;

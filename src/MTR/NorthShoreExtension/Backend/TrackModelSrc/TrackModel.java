@@ -12,7 +12,7 @@ import java.util.Random;
 
 public class TrackModel {
 	static WaysideFunctionsHub wayside;
-	static Map<Integer, Track> trackList = new HashMap<Integer, Track>();
+	//static Map<Integer, Track> trackList = new HashMap<Integer, Track>();
 	static Track updateTrack;
 	static int trackOccupency[] = new int[300];
 	static int brokenTrack[] = new int[300];
@@ -102,10 +102,10 @@ public class TrackModel {
 		newTrain.distanceLeft = load.getTrackLength(trackid);
 		trainList.put(trainid, newTrain);
 		trackOccupency[(trackOccupency.length - 1)] = trackid;
-		updateTrack = trackList.get(trackid);
+		/*updateTrack = trackList.get(trackid);
 		trackList.remove(trackid);
 		updateTrack.trainOccupying = trainid;
-		trackList.put(trackid, updateTrack);
+		trackList.put(trackid, updateTrack);*/
 		load.updateTrackOccupied(trackid, 1);
 		train = new Train(trainid);
 		officalTrains.put(trainid, train);
@@ -136,16 +136,16 @@ public class TrackModel {
 	}
 	
 	public static void TrackModel_setSpeedAuthority(int trackid, int s, int[] a) {
-		updateTrack = trackList.get(trackid);
+		/*updateTrack = trackList.get(trackid);
 		trackList.remove(trackid);
 		updateTrack.authority = a.length;
-		updateTrack.speed = s;
-		if(updateTrack.occupied)
+		updateTrack.speed = s;*/
+		load.updateSpeedAuthority(trackid, s, a.length);
+		if(load.getTrackOccupied(trackid)!=0)
 		{
 			updateTrains = officalTrains.get(updateTrack.trainOccupying);
 			//updateTrains.TrainModel_setSpeedandAuthorty(s, a.length);
 		}
-		trackList.put(trackid, updateTrack);
 	}
 	
 	public static void sendBeacon(int trackid, int trainid) {

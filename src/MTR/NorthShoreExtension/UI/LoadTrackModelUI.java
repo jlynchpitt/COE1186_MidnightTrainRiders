@@ -33,6 +33,7 @@ public class LoadTrackModelUI extends JPanel
     JTextArea log;
     JFileChooser fc;
     static DBHelper load;
+    int row = 0;
  
     public LoadTrackModelUI() {
         super(new BorderLayout());
@@ -92,7 +93,6 @@ public class LoadTrackModelUI extends JPanel
                 String line;
 				try {
 					br = new BufferedReader(new FileReader(file));
-					int row = 0;
 					while((line = br.readLine())!=null) {
 						String[] trackInfo = line.split(",");
 						load.addTrack(row, Integer.parseInt(trackInfo[0].replaceAll("[^0-9]", "")), trackInfo[1], 
