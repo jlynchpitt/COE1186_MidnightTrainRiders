@@ -143,7 +143,11 @@ public class TrackModel {
 		load.updateSpeedAuthority(trackid, s, a.length);
 		if(load.getTrackOccupied(trackid)!=0)
 		{
-			updateTrains = officalTrains.get(updateTrack.trainOccupying);
+			for(int i = 0; i < officalTrains.size(); i++) {
+				if(trainList.get(i).trackOccupying == trackid) {
+					updateTrains = officalTrains.get(i);
+				}
+			}
 			//updateTrains.TrainModel_setSpeedandAuthorty(s, a.length);
 		}
 	}
