@@ -405,7 +405,7 @@ public class DBHelper {
 			statement.setQueryTimeout(30); //TODO: Is this needed?
 			
 		    ResultSet result = statement.executeQuery("SELECT * from TrackInfo WHERE trackID = '"+trackid+"'"); 
-		    if(result != null) {
+		    if(result.isBeforeFirst()) {
 		    	System.out.println("found track, checking");
 			    	returnString[0] = result.getString("line");
 			    	returnString[1] = result.getString("occupied");
@@ -422,7 +422,7 @@ public class DBHelper {
 			    	returnString[12] = result.getString("trackStatus");
 			    	returnString[13] = result.getString("heater");
 		    }
-		    else {
+		    else if(!result.isBeforeFirst()){
 			    	returnString[0] = " ";
 			    	returnString[1] = " ";
 			    	returnString[2] = " ";

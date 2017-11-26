@@ -231,6 +231,9 @@ public class TrackModelUI extends JPanel {
 				else if(showStatus.equals("1")) {
 					showStatus = "Occupied";
 				}
+				else if(showStatus.equals("-1")){
+					showStatus = " ";
+				}
 				showAuth = returnString[2];
 				showSpeed = returnString[3];
 				showSect = returnString[4];
