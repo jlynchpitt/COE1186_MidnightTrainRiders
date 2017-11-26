@@ -170,6 +170,8 @@ public class TrainControlPanel extends JPanel
     	add(bottomControlPanel, c);
     	
     	setMode(true);
+    	
+    	trainController.refreshUI();
     }
     
     /**
@@ -298,7 +300,7 @@ public class TrainControlPanel extends JPanel
         	case LIGHTS:
         		boolean lightsOn = trainController.areLightsOn();
         		String lightText = lightsOn == true ? "Turn Off Lights" : "Turn On Lights";
-        		setControlButtonState(openLDoor, lightText, lightsOn);
+        		setControlButtonState(turnOnLights, lightText, lightsOn);
         		break;
         	case BRAKES:
         		boolean brakeApplied = trainController.isBrakeApplied();

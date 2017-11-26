@@ -98,6 +98,17 @@ public class TrainController {
 		testBench = tctbp;
 	}
 	
+	public void refreshUI() {
+		updateUI(TrainControlPanel.ANNOUNCEMENT);
+		updateUI(TrainControlPanel.BRAKES);
+		updateUI(TrainControlPanel.DOORS);
+		updateUI(TrainControlPanel.FAULT);
+		updateUI(TrainControlPanel.LIGHTS);
+		updateUI(TrainControlPanel.TEMPERATURE);
+		updateUI(TrainControlPanel.TRACK_INFO);
+		updateUI(TrainControlPanel.VITAL);
+	}
+	
 	public void calculatePowerCommand() {
 		if(!eBrakeApplied && !brakeApplied && authority > 0 && !engineFailed) {
 			//Simple check against speed limit TODO: Move these checks into setters
@@ -266,15 +277,18 @@ public class TrainController {
 	
 	public void TrainControl_sendBeaconInfo(int beacon) {
 		//translate beacon - TODO: 
-		
-		int trackID = (beacon & 0x1FE00000) >> 21;
-		trackID += 2000; //green line
-		previousTrackInfo = currentTrackInfo;
-		currentTrackInfo = db.getTrackInfo(trackID, true);
-		
-		updateUI(TrainControlPanel.TRACK_INFO);
-		
-		System.out.println("Current track: " + trackID);
+		if(!signalPickupFailed) {
+			int trackID = (beacon & 0x1FE00000) >> 21;
+			trackID += 2000; //green line
+			if(currentTrackInfo != null) {
+				previousTrackInfo = currentTrackInfo.copy();
+			}
+			currentTrackInfo = db.getTrackInfo(trackID, calculateTravelDirection());
+			
+			updateUI(TrainControlPanel.TRACK_INFO);
+			
+			//System.out.println("Current track: " + trackID);
+		}
 	}
 	
 	public void TrainControl_setFaultStatus(int status, boolean faultActive) {
@@ -333,7 +347,10 @@ public class TrainController {
 	
 	public void TrainControl_moveToNextTrack() {
 		if(!signalPickupFailed) {
+			previousTrackInfo = currentTrackInfo.copy();
+			currentTrackInfo = db.getTrackInfo(currentTrackInfo.nextTrackID, calculateTravelDirection()); //TODO: Determine direction
 			
+			updateUI(TrainControlPanel.TRACK_INFO);
 		}
 	}
 	
@@ -504,5 +521,22 @@ public class TrainController {
 	 */
 	private void ensureSafeOperations() {
 		
+	}
+	
+	private boolean calculateTravelDirection() {
+		if(previousTrackInfo == null || currentTrackInfo == null || previousTrackInfo.trackID < currentTrackInfo.trackID) {
+			System.out.println("Primary direction");
+			return true;
+		}
+		else {
+			if(previousTrackInfo != null) {
+				System.out.println("prev track: " + previousTrackInfo.trackID);
+			}
+			if(currentTrackInfo != null) {
+				System.out.println("current track: " + currentTrackInfo.trackID);
+			}
+			System.out.println("Reverse direction");
+			return false;
+		}
 	}
 }

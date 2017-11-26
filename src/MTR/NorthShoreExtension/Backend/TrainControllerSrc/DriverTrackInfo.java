@@ -19,4 +19,11 @@ public class DriverTrackInfo {
 	public DriverTrackInfo() {
 		//Nothing needed in constructor
 	}
+	
+	public DriverTrackInfo copy() {
+		DriverTrackInfo dti = new DriverTrackInfo();
+		dti.trackID = this.trackID;
+		//dti.nextTrackID = this.nextTrackID; //TODO: is this needed?
+		return dti;
+	}
 }

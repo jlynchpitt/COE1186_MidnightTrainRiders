@@ -273,7 +273,7 @@ public class StaticTrackDBHelper {
 		    trackInfo.speedLimit = result.getInt("speedLimit");
 		    trackInfo.length = result.getInt("length");
 
-		    System.out.println("Got first track info");
+		    //System.out.println("Got first track info");
 		    
 		    //Get safest secondary track (minimum speed Limit)
 		    int primaryTrack = 0;
@@ -298,10 +298,12 @@ public class StaticTrackDBHelper {
 		    	secondQuery = "SELECT * FROM " + TRACK_INFO_TABLENAME + " WHERE trackID = '"+primaryTrack+"'";
 		    }
 		    
+		    //System.out.println("track id: " + trackID + " primary: " + primaryTrack + " secondary: " + secondaryTrack);
+		    
 		    nextStatement = connection.createStatement();
 		    nextStatement.setQueryTimeout(30); //TODO: Is this needed?
 		    
-		    nextResult = nextStatement.executeQuery(query);   
+		    nextResult = nextStatement.executeQuery(secondQuery);   
 
 		    trackInfo.nextTrackID = nextResult.getInt("trackID");
 		    trackInfo.nextSpeedLimit = nextResult.getInt("speedLimit");

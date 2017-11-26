@@ -61,7 +61,10 @@ import java.io.File;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class TrainControlTestBenchUI implements ActionListener {
 	//Specify the look and feel to use.  Valid values:
@@ -81,7 +84,8 @@ public class TrainControlTestBenchUI implements ActionListener {
     private JButton trainControlsUIButton;
     private JFormattedTextField trainIDTextField;
     private static TrainControllerHelper tch;
-    
+    private Map<Integer, TrainControlTestBenchPanel> panelList = new HashMap();
+
     public int switchPosition = 1;
     
     public TrainControlTestBenchUI() {
@@ -136,9 +140,13 @@ public class TrainControlTestBenchUI implements ActionListener {
         controllerPane.setLayout(new BoxLayout(controllerPane, BoxLayout.PAGE_AXIS));
         controllerPane.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
         controllerPane.add(Box.createRigidArea(new Dimension(0, 5)));
-        for(TrainController tc : tch.getTrainControllerList()) {
-	        controllerPane.add(new TrainControlTestBenchPanel(tc, this));
-	        controllerPane.add(Box.createGlue());
+        
+        //Add all test bench panels to the UI
+        updatePanelList();
+
+        for (TrainControlTestBenchPanel p : panelList.values()) {
+            controllerPane.add(p);
+            controllerPane.add(Box.createGlue());
         }
         
         picLabel = new JLabel();
@@ -306,5 +314,15 @@ public class TrainControlTestBenchUI implements ActionListener {
 		}
 		Icon icon = new ImageIcon(image.getScaledInstance(1450, 400, Image.SCALE_FAST));
 		picLabel.setIcon(icon);
+	}
+	
+	private void updatePanelList() {
+		List<TrainController> tcList = tch.getTrainControllerList();
+		for(TrainController tc : tcList) {
+			int trainID = tc.getTrainID();
+			if(!panelList.containsKey(trainID)) {
+				panelList.put(trainID, new TrainControlTestBenchPanel(tc, this));
+			}
+		}
 	}
 }
