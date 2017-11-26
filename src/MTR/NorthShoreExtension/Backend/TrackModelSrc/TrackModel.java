@@ -103,6 +103,10 @@ public class TrackModel {
 		wayside.WaysideController_BrokenTrack(brokenTrack);
 	}
 	
+	public static Map<Integer, Train> getTrains() {
+		return officalTrains;
+	}
+	
 	public static void TrackModel_addTrain(int trackid, int trainid) {
 		newTrain.trainID = trainid; 
 		newTrain.trackOccupying = trackid;
@@ -155,7 +159,7 @@ public class TrackModel {
 					updateTrains = officalTrains.get(i);
 				}
 			}
-			//updateTrains.TrainModel_setSpeedandAuthorty(s, a.length);
+			updateTrains.TrainModel_resendSpeedAuthority(s, a.length);
 		}
 	}
 	
