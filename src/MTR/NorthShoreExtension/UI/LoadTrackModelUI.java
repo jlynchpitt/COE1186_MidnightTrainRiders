@@ -33,7 +33,11 @@ public class LoadTrackModelUI extends JPanel
     JTextArea log;
     JFileChooser fc;
     static DBHelper load;
-    int row = 0;
+    static int row = 0;
+    
+    public static int sendRow() {
+    		return row;
+    }
  
     public LoadTrackModelUI() {
         super(new BorderLayout());

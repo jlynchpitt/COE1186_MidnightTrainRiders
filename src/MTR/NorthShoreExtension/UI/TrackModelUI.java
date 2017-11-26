@@ -19,8 +19,8 @@ public class TrackModelUI extends JPanel {
     final static String LOOKANDFEEL = null;
     static TrackModelUI instance;
     TrackModel trackFunctions = new TrackModel();
-    int numTrack = 150;
     static LoadTrackModelUI loading = new LoadTrackModelUI();
+    int numTrack = loading.sendRow();
     static DBHelper load;
     String[] returnString = new String[15];
     String showLine = " ";
