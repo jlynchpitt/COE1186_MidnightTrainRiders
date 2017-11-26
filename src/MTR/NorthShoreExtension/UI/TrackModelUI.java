@@ -19,7 +19,7 @@ public class TrackModelUI extends JPanel {
     final static String LOOKANDFEEL = null;
     static TrackModelUI instance;
     TrackModel trackFunctions = new TrackModel();
-    int numTrack = 8;
+    int numTrack = 150;
     static LoadTrackModelUI loading = new LoadTrackModelUI();
     static DBHelper load;
     String[] returnString = new String[15];
@@ -172,7 +172,7 @@ public class TrackModelUI extends JPanel {
     				else {
     					g.drawLine(drawArray[0], drawArray[1], drawArray[2], drawArray[3]);
     					g.setColor(Color.green);
-    					g.fillOval((drawArray[2]-10), (drawArray[3]-10), 8, 8);
+    					g.fillOval((drawArray[0]-5), (drawArray[1]-10), 8, 8);
     			
     					if(occupied!=0) {
     						g.fillRect((drawArray[2]-drawArray[0])/2, (drawArray[3]-drawArray[1])/2, 30, 15);
@@ -180,7 +180,7 @@ public class TrackModelUI extends JPanel {
     						g.fillOval((drawArray[2]-10), (drawArray[3]-10), 8, 8);
     						//draw train
     						g.setColor(Color.blue);
-    			    	     	g.fillRect((drawArray[0]+10), (drawArray[1]-10), 30, 15);
+    			    	     	g.fillRect((drawArray[0]+10), (drawArray[1]-10), 20, 10);
     					}
     					
     					if(inf.equals("STATION") || inf.equals("STATION; PIONEER") || 
@@ -194,12 +194,12 @@ public class TrackModelUI extends JPanel {
     							inf.equals("STATION; STEEL PLAZA; UNDERGROUND") || inf.equals("STATION; FIRST AVE; UNDERGROUND") ||
     							inf.equals("STATION; STATION SQUARE") || inf.equals("STATION; SOUTH HILLS JUNCTION")) {
     						  g.setColor(Color.gray);
-    					      g.fillOval((drawArray[2]+5), (drawArray[3]+5), 25, 15);
+    					      g.fillOval((drawArray[0]+10), (drawArray[1]), 15, 10);
     					}
     					if(inf.equals("SWITCH TO/FROM YARD") || inf.equals("SWITCH") || inf.equals("SWITCH; UNDERGROUND") ||
     							inf.equals("SWITCH TO YARD") || inf.equals("SWITCH FROM YARD")) {
     						g.setColor(Color.green);
-        					g.fillRect((drawArray[0]+5), (drawArray[1]+5), 10, 10);
+        					g.fillRect((drawArray[2]+5), (drawArray[3]+5), 10, 10);
     					}
     					if(inf.equals("RAILWAY CROSSING")) {
     						//draw railway crossing
@@ -225,6 +225,12 @@ public class TrackModelUI extends JPanel {
 		        returnString = load.getDisplayInfo(displayTrack);
 		        showLine = returnString[0];
 				showStatus = returnString[1];
+				if(showStatus.equals("0")) {
+					showStatus = "Free";
+				}
+				else if(showStatus.equals("1")) {
+					showStatus = "Occupied";
+				}
 				showAuth = returnString[2];
 				showSpeed = returnString[3];
 				showSect = returnString[4];

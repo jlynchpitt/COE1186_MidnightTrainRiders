@@ -18,7 +18,7 @@ public class TrackModel {
 	static int trackOccupency[] = new int[300];
 	static int brokenTrack[] = new int[300];
 	static Map<Integer, TrainsOperating> trainList = new HashMap<Integer, TrainsOperating>();
-	static Map<Integer, Train> officalTrains = new HashMap<Integer, Train>();
+	static Map<Integer, Train> officialTrains = new HashMap<Integer, Train>();
 	static TrainsOperating newTrain;
 	static TrainsOperating update;
 	static double difference;
@@ -103,6 +103,10 @@ public class TrackModel {
 		wayside.WaysideController_BrokenTrack(brokenTrack);
 	}
 	
+	public static Map<Integer, Train> getTrains() {
+		return officialTrains;
+	}
+	
 	public static void TrackModel_addTrain(int trackid, int trainid) {
 		newTrain.trainID = trainid; 
 		newTrain.trackOccupying = trackid;
@@ -115,7 +119,7 @@ public class TrackModel {
 		trackList.put(trackid, updateTrack);*/
 		load.updateTrackOccupied(trackid, 1);
 		train = new Train(trainid);
-		officalTrains.put(trainid, train);
+		officialTrains.put(trainid, train);
 		wayside.WaysideController_TrackOccupancy(trackOccupency);
 	}
 	
@@ -150,12 +154,12 @@ public class TrackModel {
 		load.updateSpeedAuthority(trackid, s, a.length);
 		if(load.getTrackOccupied(trackid)!=0)
 		{
-			for(int i = 0; i < officalTrains.size(); i++) {
+			for(int i = 0; i < officialTrains.size(); i++) {
 				if(trainList.get(i).trackOccupying == trackid) {
-					updateTrains = officalTrains.get(i);
+					updateTrains = officialTrains.get(i);
 				}
 			}
-			//updateTrains.TrainModel_setSpeedandAuthorty(s, a.length);
+			updateTrains.TrainModel_resendSpeedAuthority(s, a.length);
 		}
 	}
 	
