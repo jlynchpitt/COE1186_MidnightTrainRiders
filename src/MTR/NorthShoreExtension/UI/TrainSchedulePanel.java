@@ -16,6 +16,7 @@ import MTR.NorthShoreExtension.MainMTR;
 import MTR.NorthShoreExtension.Backend.*;
 import MTR.NorthShoreExtension.Backend.CTCSrc.*;
 import MTR.NorthShoreExtension.Backend.WaysideController.*;
+import MTR.NorthShoreExtension.Backend.TrackModelSrc.TrackModel;
 
 public class TrainSchedulePanel extends JPanel {
 	//JPanel trainLine;
@@ -66,8 +67,14 @@ public class TrainSchedulePanel extends JPanel {
 				int[] authority = trainScheduler.calcAuthority(ts.getListOfStops());
 				int speed = database.getSpeedLimit(Integer.parseInt(ts.getFirstStop()));
 				int trackID = Integer.parseInt(ts.getFirstStop());
-				
+				System.out.println("\n TrackID: " + trackID);
+				System.out.println("\n Speed: " + speed);
+				for (int i = 0; i < authority.length; i++) {
+					System.out.println("\n " + authority[0]);
+				}
 				WaysideFunctionsHub.OccupiedSpeedAuthority(trackID, speed, authority);
+				TrackModel.TrackModel_addTrain(trackID, ts.getTrainID());
+				dispatch.setEnabled(false);
 			}
 		});
 		add(dispatch);
