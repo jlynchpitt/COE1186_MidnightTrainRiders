@@ -456,6 +456,8 @@ public class TrainModelUI extends JFrame {
 		lblAcc.setText(String.format("%.2f", tr.getAcceleration()));
 	}
 	
+	
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
