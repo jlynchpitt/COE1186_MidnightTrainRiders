@@ -229,7 +229,7 @@ public class TrackModelUI extends JPanel {
 				// TODO Auto-generated method stub
 				int x=e.getX();
 		        int y=e.getY();
-		        System.out.println("recognized! x: " +x+"y: "+y);
+		        //System.out.println("recognized! x: " +x+"y: "+y);
 		        int displayTrack = 0;
 		        displayTrack = load.findCoordinates(x, y);
 		        returnString = load.getDisplayInfo(displayTrack);

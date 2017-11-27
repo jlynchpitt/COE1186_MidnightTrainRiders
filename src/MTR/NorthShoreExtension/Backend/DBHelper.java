@@ -406,7 +406,7 @@ public class DBHelper {
 			
 		    ResultSet result = statement.executeQuery("SELECT * from TrackInfo WHERE trackID = '"+trackid+"'"); 
 		    if(result.isBeforeFirst()) {
-		    	System.out.println("found track, checking");
+		    	//System.out.println("found track, checking");
 			    	returnString[0] = result.getString("line");
 			    	returnString[1] = result.getString("occupied");
 			    	returnString[2] = result.getString("speed");
