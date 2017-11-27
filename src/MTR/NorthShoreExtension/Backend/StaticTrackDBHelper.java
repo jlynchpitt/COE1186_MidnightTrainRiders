@@ -19,6 +19,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import MTR.NorthShoreExtension.Backend.TrainControllerSrc.DriverTrackInfo;
 
@@ -34,7 +36,7 @@ public class StaticTrackDBHelper {
 	
 	//NOTE: All times are integers as # of seconds since 1970
 	private static final String TRAIN_CONTROLS_TABLENAME = "TrainControls";
-	private static final String TRAIN_CONTROLS_COLUMNS = "trainID INTEGER, time INTEGER, powerCommand INTEGER, "
+	private static final String TRAIN_CONTROLS_COLUMNS = "trainID INTEGER, time INTEGER, powerCommand REAL, "
 			+ "speedCommand INTEGER, actualSpeed REAL";
 	
 	private static final String STATION_LIST_TABLENAME = "StationList";
@@ -352,19 +354,22 @@ public class StaticTrackDBHelper {
 		return length;
 	}
 	
-	public void addTrainStateRecord(int trainID, int time, int powerCmd, int speedCmd, double actualSpeed) throws SQLException {
+	public void addTrainStateRecord(int trainID, long time, double powerCmd, int speedCmd, double actualSpeed) {
 		Connection connection = null;
+		String query = "";
 		
 		try {
 			connection = connect();
 			
 			Statement statement = connection.createStatement();
 			statement.setQueryTimeout(30); //TODO: Is this needed?
-			
-		    statement.executeUpdate("INSERT INTO " + TRAIN_CONTROLS_TABLENAME + " values(' "+trainID+"', '"+time+"', '"
-		    		+powerCmd+"', '"+speedCmd+"', '"+actualSpeed+")");   
+			query = "INSERT INTO " + TRAIN_CONTROLS_TABLENAME + " values('"+trainID+"', '"+time+"', '"
+		    		+powerCmd+"', '"+speedCmd+"', '"+actualSpeed+"')";
+		    statement.executeUpdate(query);   
+		    
 		}
 		catch(SQLException e){  
+			System.out.println(query);
 			 System.err.println(e.getMessage()); 
 		 }       
 		 finally {         
@@ -391,6 +396,43 @@ public class StaticTrackDBHelper {
            System.out.println(e.getMessage());
        }
        return conn;
+   }
+   
+
+   public List<Double> getPowerList(int trainID){
+       List<Double> powerList = new ArrayList<>();
+
+	   Connection connection = null;
+		Statement statement = null;
+		ResultSet result = null;
+		
+		try {
+			connection = connect();
+			
+			statement = connection.createStatement();
+			statement.setQueryTimeout(30); //TODO: Is this needed?
+			
+			String query = "SELECT powerCommand FROM " + TRAIN_CONTROLS_TABLENAME + " WHERE trainID = '" +trainID+ "'";
+		    result = statement.executeQuery(query);  
+		    
+		    while(result.next())
+		    {
+		       // iterate & read the result set
+		    	powerList.add(result.getDouble("powerCommand"));
+		    }
+		    
+		    return powerList;
+		}
+		catch(SQLException e){  
+			 System.err.println(e.getMessage()); 
+		}       
+		finally {         
+			if (result != null) try { result.close(); } catch (SQLException ignore) {}
+	        if (statement != null) try { statement.close(); } catch (SQLException ignore) {}
+	        if (connection != null) try { connection.close(); } catch (SQLException ignore) {}
+		 }
+		
+		return null;
    }
    
    /* Sample query

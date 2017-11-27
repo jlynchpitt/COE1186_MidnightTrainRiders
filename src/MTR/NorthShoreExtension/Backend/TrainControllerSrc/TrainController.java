@@ -26,6 +26,7 @@ public class TrainController {
 	
 	private int trainID = 0;
 	private Train trainModel = null;
+	private TrainControllerHelper tcHelper = null;
 	private TrainControlPanel trainControlPanel = null;
 	private TrainControlTestBenchPanel testBench = null;
 	private boolean manualMode = true;
@@ -67,9 +68,10 @@ public class TrainController {
 	private StaticTrackDBHelper db = null;
 	
 	//TODO: Pass in train model object
-	public TrainController(int id, Train t, double pid_p, double pid_i, String line){
+	public TrainController(int id, Train t, TrainControllerHelper tch, double pid_p, double pid_i, String line){
 		trainID = id;
 		trainModel = t;
+		tcHelper = tch;
 		
 		db = MainMTR.getStaticTrackDBHelper();
 		
@@ -114,6 +116,9 @@ public class TrainController {
 	}
 	
 	public void calculatePowerCommand() {
+		//Log previous power and speed parameters to the database
+		db.addTrainStateRecord(trainID, tcHelper.getTime(), powerCommand, trainSetSpeed, actualSpeed);
+		
 		if(!eBrakeApplied && !brakeApplied && authority > 0 && !engineFailed) {
 			//Simple check against speed limit TODO: Move these checks into setters
 			if(driverCommandedSetSpeed > ctcCommandedSetSpeed) {

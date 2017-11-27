@@ -27,6 +27,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import MTR.NorthShoreExtension.Backend.StaticTrackDBHelper;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -190,16 +192,17 @@ public class GraphPanel extends JPanel {
         return scores;
     }
     
-    private static void createAndShowGui() {
-        List<Double> scores = new ArrayList<>();
+    public static void createAndShowGui(StaticTrackDBHelper db) {
+        /*List<Double> scores = new ArrayList<>();
         Random random = new Random();
         int maxDataPoints = 40;
         int maxScore = 10;
         for (int i = 0; i < maxDataPoints; i++) {
             scores.add((double) random.nextDouble() * maxScore);
 //            scores.add((double) i);
-        }
-        GraphPanel mainPanel = new GraphPanel(scores, "ylabel", "xlabel");
+        }*/
+        List<Double> power = db.getPowerList(123);
+        GraphPanel mainPanel = new GraphPanel(power, "Watts", "Time");
         mainPanel.setPreferredSize(new Dimension(1000, 600));
         JFrame frame = new JFrame("DrawGraph");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -209,11 +212,12 @@ public class GraphPanel extends JPanel {
         frame.setVisible(true);
     }
     
+    /*
     public static void main(String[] args) {
       SwingUtilities.invokeLater(new Runnable() {
          public void run() {
             createAndShowGui();
          }
       });
-   }
+   }*/
 }

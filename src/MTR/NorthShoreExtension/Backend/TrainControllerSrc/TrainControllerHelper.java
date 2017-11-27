@@ -69,7 +69,7 @@ public class TrainControllerHelper {
 	public TrainController addNewTrainController(int trainID, String lineColor) {
 		//Check if new train ID has been used
 		if(!idList.contains(trainID)) {
-			TrainController tc = new TrainController(trainID, null, pid_p, pid_i, lineColor);
+			TrainController tc = new TrainController(trainID, null, this, pid_p, pid_i, lineColor);
 			
 			//Add tc to list of trianControllers
 			tcList.add(tc);
@@ -117,4 +117,10 @@ public class TrainControllerHelper {
 	private void rescheduleTimer() {
 		powerTimer.scheduleAtFixedRate(powerTimerTask, 0, 1000/clockMultiplier);
 	}
+	
+
+	public long getTime() {
+		return simulatedClockTime;
+	}
+	
 }

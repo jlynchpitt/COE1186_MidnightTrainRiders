@@ -54,7 +54,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 
-public class TrainControlUI {
+public class TrainControlUI implements ActionListener {
 	//Specify the look and feel to use.  Valid values:
     //null (use the default), "Metal", "System", "Motif", "GTK+"
     final static String LOOKANDFEEL = "System";
@@ -81,6 +81,7 @@ public class TrainControlUI {
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 5)));
         
         graphButton = new JButton("Open Train Graph");
+        graphButton.addActionListener(this);
         buttonPanel.add(graphButton);
         mainPane.add(buttonPanel);
         
@@ -139,6 +140,17 @@ public class TrainControlUI {
 			frame.repaint();
 		}
 	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == graphButton) {
+        	SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                   GraphPanel.createAndShowGui(MainMTR.getStaticTrackDBHelper());
+                }
+             });
+        }	
+	}
 
     /**
      * Create the GUI and show it.  For thread safety,
@@ -176,7 +188,7 @@ public class TrainControlUI {
     public static void main(String[] args) {
     	//Create TrainControllerHelper - with sample test data to show different UI states
     	TrainControllerHelper tcHelper = new TrainControllerHelper();
-    	TrainController tc123 = tcHelper.addNewTrainController(123); 
+    	TrainController tc123 = tcHelper.addNewTrainController(123, "Green"); 
     	tc123.TrainControl_setCommandedSpeedAuthority(65, 5);
     	/*TrainController tc456 = tcHelper.addNewTrain(456);
     	tc456.brakeApplied = false;
@@ -184,15 +196,6 @@ public class TrainControlUI {
     	tc456.leftDoorOpen = true;
     	tc456.rightDoorOpen = true;
     	tc456.lightsOn = true;*/
-    	tcHelper.addNewTrainController(123); 
-    	tcHelper.addNewTrainController(123); 
-    	tcHelper.addNewTrainController(123); 
-    	tcHelper.addNewTrainController(123); 
-    	tcHelper.addNewTrainController(123); 
-    	tcHelper.addNewTrainController(123); 
-    	tcHelper.addNewTrainController(123); 
-    	tcHelper.addNewTrainController(123); 
-    	tcHelper.addNewTrainController(123); 
     	
         //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.
