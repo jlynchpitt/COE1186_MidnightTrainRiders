@@ -100,7 +100,13 @@ public class TrackModelUI extends JPanel {
     		String inf;
     		String stat;
     		
-
+    		public void drawString(Graphics g, String text, int x, int y)
+    		{
+    			for(String line : text.split("\n")) {
+    				g.drawString(line, x, y += g.getFontMetrics().getHeight());
+    			}
+    		}
+    		
     		TrackGraphic(){
     			//setPreferredSize(new Dimension(1000,600));
     			setPreferredSize(new Dimension(1500,900));
@@ -126,11 +132,11 @@ public class TrackModelUI extends JPanel {
     			g.drawString("Length(m):", 10, 200);
     			g.drawString("Grade(%):", 10, 230);
     			g.drawString("Speed Lm.(km/hr):", 10, 260);
-    			g.drawString("Infrastructre:", 10, 290);
-    			g.drawString("Elevation(m):", 10, 320);
-    			g.drawString("Tot. El.:", 10, 350);
-    			g.drawString("Status:", 10, 380);
-    			g.drawString("Heater:", 10, 410);
+    			g.drawString("Elevation(m):", 10, 290);
+    			g.drawString("Tot. El.:", 10, 320);
+    			g.drawString("Status:", 10, 350);
+    			g.drawString("Heater:", 10, 380);
+    			g.drawString("Infrastructure:", 10, 410);
     			g.drawString(showLine, 150, 20);
     			g.drawString(showStatus, 150, 50);
     			g.drawString(showSpeed, 150, 80);
@@ -140,11 +146,13 @@ public class TrackModelUI extends JPanel {
     			g.drawString(showLength, 150, 200);
     			g.drawString(showGrade, 150, 230);
     			g.drawString(showLimit, 150, 260);
-    			g.drawString(showInf, 150, 290);
-    			g.drawString(showEl, 150, 320);
-    			g.drawString(showCEl, 150, 350);
-    			g.drawString(showBroken, 150, 380);
-    			g.drawString(showHeater, 150, 410);
+    			g.drawString(showEl, 150, 290);
+    			g.drawString(showCEl, 150, 320);
+    			g.drawString(showBroken, 150, 350);
+    			g.drawString(showHeater, 150, 380);
+    			showInf=showInf.replaceAll(";", "\n");
+    			drawString(g, showInf, 150, 410);
+    			//g.drawString(showInf, 150, 410);
     			for(int i=0;i<numTrack;i++) {
     				//System.out.println("rowid:"+i);
     				color = load.getColor(i);
