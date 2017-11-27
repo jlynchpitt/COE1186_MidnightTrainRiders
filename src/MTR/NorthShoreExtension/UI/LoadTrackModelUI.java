@@ -71,18 +71,18 @@ public class LoadTrackModelUI extends JPanel
  
         //Create the save button.  We use the image from the JLF
         //Graphics Repository (but we extracted it from the jar).
-        saveButton = new JButton("Save a File...",
-                                 createImageIcon("images/Save16.gif"));
-        saveButton.addActionListener(this);
+        //saveButton = new JButton("Save a File...",
+        //                         createImageIcon("images/Save16.gif"));
+        //saveButton.addActionListener(this);
  
         //For layout purposes, put the buttons in a separate panel
         JPanel buttonPanel = new JPanel(); //use FlowLayout
         buttonPanel.add(openButton);
-        buttonPanel.add(saveButton);
+        //buttonPanel.add(saveButton);
  
         //Add the buttons and the log to this panel.
         add(buttonPanel, BorderLayout.PAGE_START);
-        add(logScrollPane, BorderLayout.CENTER);
+        //add(logScrollPane, BorderLayout.CENTER);
     }
  
     public void actionPerformed(ActionEvent e) {
