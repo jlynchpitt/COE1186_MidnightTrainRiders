@@ -1,3 +1,5 @@
+package MTR.NorthShoreExtension.UI;
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 

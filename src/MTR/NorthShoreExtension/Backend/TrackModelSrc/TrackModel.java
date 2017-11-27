@@ -29,6 +29,7 @@ public class TrackModel {
 	static int soldTicket = 0;
 	static Train train;
 	static Train updateTrains;
+	static int lastTrack = 0;
 		
 	class Track{
 		String line;
@@ -84,7 +85,8 @@ public class TrackModel {
 		}
 		else {
 			load.updateTrackOccupied(trackid, 0);
-			update.trackOccupying = load.getNextTrack(trackid, update.direction);
+			update.trackOccupying = load.getNextTrack(trackid, lastTrack);
+			lastTrack = update.trackOccupying;
 			load.updateTrackOccupied(update.trackOccupying, 1);
 			trainList.put(trainNum, update);
 		}

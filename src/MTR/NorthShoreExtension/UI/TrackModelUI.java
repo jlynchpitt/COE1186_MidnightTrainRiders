@@ -16,7 +16,7 @@ import MTR.NorthShoreExtension.ProofOfConcept.Testing;
 public class TrackModelUI extends JPanel {
 	//Specify the look and feel to use.  Valid values:
     //null (use the default), "Metal", "System", "Motif", "GTK+"
-    final static String LOOKANDFEEL = "System";
+    final static String LOOKANDFEEL = null;
     static TrackModelUI instance;
     TrackModel trackFunctions = new TrackModel();
     static LoadTrackModelUI loading = new LoadTrackModelUI();
@@ -137,21 +137,21 @@ public class TrackModelUI extends JPanel {
     			g.drawString("Status:", 10, 350);
     			g.drawString("Heater:", 10, 380);
     			g.drawString("Infrastructure:", 10, 410);
-    			g.drawString(showLine, 150, 20);
-    			g.drawString(showStatus, 150, 50);
-    			g.drawString(showSpeed, 150, 80);
-    			g.drawString(showAuth, 150, 110);
-    			g.drawString(showSect, 150, 140);
-    			g.drawString(showBlock, 150, 170);
-    			g.drawString(showLength, 150, 200);
-    			g.drawString(showGrade, 150, 230);
-    			g.drawString(showLimit, 150, 260);
-    			g.drawString(showEl, 150, 290);
-    			g.drawString(showCEl, 150, 320);
-    			g.drawString(showBroken, 150, 350);
-    			g.drawString(showHeater, 150, 380);
+    			g.drawString(showLine, 140, 20);
+    			g.drawString(showStatus, 140, 50);
+    			g.drawString(showSpeed, 140, 80);
+    			g.drawString(showAuth, 140, 110);
+    			g.drawString(showSect, 140, 140);
+    			g.drawString(showBlock, 140, 170);
+    			g.drawString(showLength, 140, 200);
+    			g.drawString(showGrade, 140, 230);
+    			g.drawString(showLimit, 140, 260);
+    			g.drawString(showEl, 140, 290);
+    			g.drawString(showCEl, 140, 320);
+    			g.drawString(showBroken, 140, 350);
+    			g.drawString(showHeater, 140, 380);
     			showInf=showInf.replaceAll(";", "\n");
-    			drawString(g, showInf, 150, 410);
+    			drawString(g, showInf, 140, 395);
     			//g.drawString(showInf, 150, 410);
     			for(int i=0;i<numTrack;i++) {
     				//System.out.println("rowid:"+i);
@@ -229,7 +229,7 @@ public class TrackModelUI extends JPanel {
 				// TODO Auto-generated method stub
 				int x=e.getX();
 		        int y=e.getY();
-		        System.out.println("recognized! x: " +x+"y: "+y);
+		        //System.out.println("recognized! x: " +x+"y: "+y);
 		        int displayTrack = 0;
 		        displayTrack = load.findCoordinates(x, y);
 		        returnString = load.getDisplayInfo(displayTrack);

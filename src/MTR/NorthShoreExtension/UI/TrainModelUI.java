@@ -1,3 +1,6 @@
+package MTR.NorthShoreExtension.UI;
+
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
@@ -23,6 +26,8 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.awt.event.ActionEvent;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.AbstractAction;
@@ -31,7 +36,7 @@ import javax.swing.Action;
 public class TrainModelUI extends JFrame {
 
 	private JPanel contentPane;
-	private Map tarray;
+	private Map tMap;
 	private Train tr;
 	private TrackModel tm;
 	private double p;
@@ -48,7 +53,7 @@ public class TrainModelUI extends JFrame {
 	 * Create the frame.
 	 */
 	public TrainModelUI() {
-		tarray=tm.getTrains();
+		tMap=tm.getTrains();
 		
 		
 		setBackground(new Color(240, 240, 240));
@@ -127,14 +132,21 @@ public class TrainModelUI extends JFrame {
 		contentPane.add(lblDynamic, gbc_lblDynamic);
 		
 		JComboBox comboBox = new JComboBox();
-		String[] tnames = new String [tarray.length];
-		for(int i=0;i<tarray.length;i++) {
-			tnames[i]="Train " + tarray[i].getTrainID();
+		
+		SortedSet<Integer> keys = new TreeSet<Integer>(tMap.keySet());
+		Integer[] tarray = new Integer[keys.size()];
+		keys.toArray(tarray);
+		String[] tnames = new String[keys.size()];
+		for (int i=0;i<tnames.length;i++) {
+			tnames[i]="Train "+tarray[i];
 		}
-		comboBox.setModel(new DefaultComboBoxModel(tarray));
+		comboBox.setModel(new DefaultComboBoxModel(tnames));
 		comboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				tr=tarray[comboBox.getSelectedIndex()];
+				String str = (String)comboBox.getSelectedItem();
+				String delim = " ";
+				String[] tokens = str.split(delim);
+				tr=(Train)tMap.get(Integer.valueOf(tokens[1]));
 			}
 		});
 		GridBagConstraints gbc_comboBox = new GridBagConstraints();
@@ -153,12 +165,14 @@ public class TrainModelUI extends JFrame {
 		gbc_lblMass.gridy = 2;
 		contentPane.add(lblMass, gbc_lblMass);
 		
-		JLabel lblM = new JLabel(String.format("%.2f",tr.getTrainMass()));
-		GridBagConstraints gbc_lblM = new GridBagConstraints();
-		gbc_lblM.insets = new Insets(0, 0, 5, 5);
-		gbc_lblM.gridx = 4;
-		gbc_lblM.gridy = 2;
-		contentPane.add(lblM, gbc_lblM);
+		if(tr!=null) {
+			JLabel lblM = new JLabel(String.format("%.2f",tr.getTrainMass()));
+			GridBagConstraints gbc_lblM = new GridBagConstraints();
+			gbc_lblM.insets = new Insets(0, 0, 5, 5);
+			gbc_lblM.gridx = 4;
+			gbc_lblM.gridy = 2;
+			contentPane.add(lblM, gbc_lblM);
+		}
 		
 		JLabel lblAcceleration = new JLabel("Acceleration:");
 		lblAcceleration.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -169,13 +183,14 @@ public class TrainModelUI extends JFrame {
 		gbc_lblAcceleration.gridy = 2;
 		contentPane.add(lblAcceleration, gbc_lblAcceleration);
 		
-		lblAcc = new JLabel(String.format("%.2f", tr.getAcceleration()));
-		GridBagConstraints gbc_lblAcc = new GridBagConstraints();
-		gbc_lblAcc.insets = new Insets(0, 0, 5, 5);
-		gbc_lblAcc.gridx = 6;
-		gbc_lblAcc.gridy = 2;
-		contentPane.add(lblAcc, gbc_lblAcc);
-		
+		if(tr!=null) {
+			lblAcc = new JLabel(String.format("%.2f", tr.getAcceleration()));
+			GridBagConstraints gbc_lblAcc = new GridBagConstraints();
+			gbc_lblAcc.insets = new Insets(0, 0, 5, 5);
+			gbc_lblAcc.gridx = 6;
+			gbc_lblAcc.gridy = 2;
+			contentPane.add(lblAcc, gbc_lblAcc);
+		}
 		
 		
 		JLabel lblPassengerCount = new JLabel("Passenger Count:");
@@ -299,12 +314,14 @@ public class TrainModelUI extends JFrame {
 		gbc_lblVelocity.gridy = 4;
 		contentPane.add(lblVelocity, gbc_lblVelocity);
 		
-		lblV = new JLabel(String.format("%.2f", tr.getVelocity()));
-		GridBagConstraints gbc_lblV = new GridBagConstraints();
-		gbc_lblV.insets = new Insets(0, 0, 5, 5);
-		gbc_lblV.gridx = 6;
-		gbc_lblV.gridy = 4;
-		contentPane.add(lblV, gbc_lblV);
+		if(tr!=null) {
+			lblV = new JLabel(String.format("%.2f", tr.getVelocity()));
+			GridBagConstraints gbc_lblV = new GridBagConstraints();
+			gbc_lblV.insets = new Insets(0, 0, 5, 5);
+			gbc_lblV.gridx = 6;
+			gbc_lblV.gridy = 4;
+			contentPane.add(lblV, gbc_lblV);
+		}
 		
 		JLabel lblCrewCount = new JLabel("Crew Count:");
 		lblCrewCount.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -437,6 +454,22 @@ public class TrainModelUI extends JFrame {
 	public void updateGUI() {
 		lblV.setText(String.format("%.2f", tr.getVelocity()));
 		lblAcc.setText(String.format("%.2f", tr.getAcceleration()));
+	}
+	
+	
+	
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					TrainModelUI frame = new TrainModelUI();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		
 	}
 	
 }

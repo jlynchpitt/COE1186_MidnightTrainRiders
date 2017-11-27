@@ -296,6 +296,12 @@ public class ctcUI {
 		gbc.gridwidth = 1; 
 		gbc.gridx = 1;
 		gbc.gridy = 1; // 5th row
+		trnInfo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TrainModelUI tmUI= new TrainModelUI();
+				tmUI.setVisible(true);
+			}
+		});
 		pane.add(trnInfo, gbc);
 		
 		trnCtrl = new JButton("Train Controls");
