@@ -151,7 +151,7 @@ public class TrackModelUI extends JPanel {
     			g.drawString(showBroken, 140, 350);
     			g.drawString(showHeater, 140, 380);
     			showInf=showInf.replaceAll(";", "\n");
-    			drawString(g, showInf, 140, 400);
+    			drawString(g, showInf, 140, 395);
     			//g.drawString(showInf, 150, 410);
     			for(int i=0;i<numTrack;i++) {
     				//System.out.println("rowid:"+i);
