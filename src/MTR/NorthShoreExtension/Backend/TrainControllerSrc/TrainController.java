@@ -66,12 +66,14 @@ public class TrainController {
 	private DriverTrackInfo currentTrackInfo = null;
 	private DriverTrackInfo previousTrackInfo = null;
 	private StaticTrackDBHelper db = null;
+	private String lineColor = "Green";
 	
 	//TODO: Pass in train model object
 	public TrainController(int id, Train t, TrainControllerHelper tch, double pid_p, double pid_i, String line){
 		trainID = id;
 		trainModel = t;
 		tcHelper = tch;
+		lineColor = line;
 		
 		db = MainMTR.getStaticTrackDBHelper();
 		
@@ -377,6 +379,10 @@ public class TrainController {
 	}
 	
 	/* Functions called by UI to get Train Control info */
+	public String getLineColor() {
+		return lineColor; 
+	}
+	
 	public double getKp() {
 		return Kp;
 	}
@@ -545,7 +551,7 @@ public class TrainController {
 		
 	}
 	
-	private boolean calculateTravelDirection() {
+	public boolean calculateTravelDirection() {
 		boolean primaryDirection = true;
 		if(previousTrackInfo == null || currentTrackInfo == null || previousTrackInfo.trackID < currentTrackInfo.trackID) {
 			primaryDirection = true;
