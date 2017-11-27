@@ -248,14 +248,14 @@ public class StaticTrackDBHelper {
 			firstTrack INTEGER, "
 			+ "lastTrack INTEGER, elevation REAL, cumulativeElevation REAL";
 	*/
-	public DriverTrackInfo getTrackInfo(int trackID, boolean primaryDirection) {
+	public DriverTrackInfo getTrackInfo(int trackID) {
 		DriverTrackInfo trackInfo = new DriverTrackInfo();
 		
 		Connection connection = null;
 		Statement statement = null;
-		Statement nextStatement = null;
 		ResultSet result = null;
 		ResultSet nextResult = null;
+		ResultSet prevResult = null;
 		
 		try {
 			connection = connect();
@@ -277,40 +277,43 @@ public class StaticTrackDBHelper {
 
 		    //System.out.println("Got first track info");
 		    
-		    //Get safest secondary track (minimum speed Limit)
-		    int primaryTrack = 0;
-		    int secondaryTrack = 0;
-		    if(primaryDirection) {
-		    	//Use next tracks
-		    	primaryTrack = result.getInt("primaryNext");
-		    	secondaryTrack = result.getInt("secondaryNext");
+		    //Get safest secondary track (minimum speed Limit) in both directions
+		    int primaryNextTrack = result.getInt("primaryNext");
+		    int secondaryNextTrack = result.getInt("secondaryNext");
+	    	int primaryPrevTrack = result.getInt("primaryPrev");
+	    	int secondaryPrevTrack = result.getInt("secondaryPrev");		    
+		    
+	    	/* Get safest next track */
+		    String nextQuery = "";
+		    if(secondaryNextTrack > 0) {
+		    	nextQuery = "SELECT *, min(speedLimit) as minSpeedLimit FROM "
+		    			+ "(SELECT * FROM " + TRACK_INFO_TABLENAME + " WHERE trackID = '"+ primaryNextTrack +"' or trackID = '"+ secondaryNextTrack +"')";
 		    }
 		    else {
-		    	//Use previous tracks
-		    	primaryTrack = result.getInt("primaryPrev");
-		    	secondaryTrack = result.getInt("secondaryPrev");
-		    	System.out.println("Using Prev tracks Track ID: "+ trackID+" primary: " + primaryTrack + " secondary: " +secondaryTrack);
+		    	nextQuery = "SELECT * FROM " + TRACK_INFO_TABLENAME + " WHERE trackID = '"+primaryNextTrack+"'";
 		    }
-		    
-		    String secondQuery = "";
-		    if(secondaryTrack > 0) {
-		    	secondQuery = "SELECT *, min(speedLimit) as minSpeedLimit FROM "
-		    			+ "(SELECT * FROM " + TRACK_INFO_TABLENAME + " WHERE trackID = '"+ primaryTrack +"' or trackID = '"+ secondaryTrack +"')";
-		    }
-		    else {
-		    	secondQuery = "SELECT * FROM " + TRACK_INFO_TABLENAME + " WHERE trackID = '"+primaryTrack+"'";
-		    }
-		    
-		    //System.out.println("track id: " + trackID + " primary: " + primaryTrack + " secondary: " + secondaryTrack);
-		    
-		    nextStatement = connection.createStatement();
-		    nextStatement.setQueryTimeout(30); //TODO: Is this needed?
-		    
-		    nextResult = nextStatement.executeQuery(secondQuery);   
+		    		    		    
+		    nextResult = statement.executeQuery(nextQuery);   
 
 		    trackInfo.nextTrackID = nextResult.getInt("trackID");
 		    trackInfo.nextSpeedLimit = nextResult.getInt("speedLimit");
 		    trackInfo.nextLength = nextResult.getInt("length");
+		    
+		    /* Get safest previous track */
+		    String prevQuery = "";
+		    if(secondaryPrevTrack > 0) {
+		    	prevQuery = "SELECT *, min(speedLimit) as minSpeedLimit FROM "
+		    			+ "(SELECT * FROM " + TRACK_INFO_TABLENAME + " WHERE trackID = '"+ primaryPrevTrack +"' or trackID = '"+ secondaryPrevTrack +"')";
+		    }
+		    else {
+		    	prevQuery = "SELECT * FROM " + TRACK_INFO_TABLENAME + " WHERE trackID = '"+primaryPrevTrack+"'";
+		    }
+		    
+		    prevResult = statement.executeQuery(prevQuery);   
+
+		    trackInfo.prevTrackID = prevResult.getInt("trackID");
+		    trackInfo.prevSpeedLimit = prevResult.getInt("speedLimit");
+		    trackInfo.prevLength = prevResult.getInt("length");
 		}
 		catch(SQLException e){  
 			 System.err.println("getTrackInfo: " + e.getMessage()); 
@@ -319,7 +322,7 @@ public class StaticTrackDBHelper {
 			if (result != null) try { result.close(); } catch (SQLException ignore) {}
 	        if (statement != null) try { statement.close(); } catch (SQLException ignore) {}
 	        if (nextResult != null) try { nextResult.close(); } catch (SQLException ignore) {}
-	        if (nextStatement != null) try { nextStatement.close(); } catch (SQLException ignore) {}
+	        if (prevResult != null) try { prevResult.close(); } catch (SQLException ignore) {}
 	        if (connection != null) try { connection.close(); } catch (SQLException ignore) {}
 		 }		
 		

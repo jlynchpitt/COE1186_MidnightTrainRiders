@@ -16,6 +16,11 @@ public class DriverTrackInfo {
 	public int nextSpeedLimit = 0;
 	public int nextLength = 0;
 	
+	//Prev Track - used when traveling in the opposite direction
+	public int prevTrackID = 0;
+	public int prevSpeedLimit = 0;
+	public int prevLength = 0;
+	
 	public DriverTrackInfo() {
 		//Nothing needed in constructor
 	}

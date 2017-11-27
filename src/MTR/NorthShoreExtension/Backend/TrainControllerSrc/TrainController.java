@@ -89,7 +89,7 @@ public class TrainController {
 		
 		//Put train on first track
 		int firstTrackID = db.getFirstTrack(line);
-		currentTrackInfo = db.getTrackInfo(firstTrackID, true);
+		currentTrackInfo = db.getTrackInfo(firstTrackID);
 	}
 	
 	public int getTrainID() {
@@ -291,13 +291,14 @@ public class TrainController {
 			trackID += 2000; //green line
 			
 			if(currentTrackInfo != null && trackID != currentTrackInfo.trackID) {
-				boolean travelDirection = calculateTravelDirection();
+				//TODO: Properly handle previous track and travel direction
+				/*boolean travelDirection = calculateTravelDirection();
 				if(currentTrackInfo != null) {
 					previousTrackInfo = currentTrackInfo.copy();
 					//previousTrackInfo = new DriverTrackInfo();
 					//previousTrackInfo.trackID = currentTrackInfo.trackID;
-				}
-				currentTrackInfo = db.getTrackInfo(trackID, travelDirection);
+				}*/
+				currentTrackInfo = db.getTrackInfo(trackID);
 				
 				updateUI(TrainControlPanel.TRACK_INFO);
 			}
@@ -310,7 +311,12 @@ public class TrainController {
 			previousTrackInfo = currentTrackInfo.copy();
 			//previousTrackInfo = new DriverTrackInfo();
 			//previousTrackInfo.trackID = currentTrackInfo.trackID;
-			currentTrackInfo = db.getTrackInfo(currentTrackInfo.nextTrackID, travelDirection); //TODO: Determine direction
+			if(travelDirection) {
+				currentTrackInfo = db.getTrackInfo(currentTrackInfo.nextTrackID);
+			}
+			else {
+				currentTrackInfo = db.getTrackInfo(currentTrackInfo.prevTrackID);
+			}
 			
 			updateUI(TrainControlPanel.TRACK_INFO);
 		}
@@ -540,19 +546,23 @@ public class TrainController {
 	}
 	
 	private boolean calculateTravelDirection() {
+		boolean primaryDirection = true;
 		if(previousTrackInfo == null || currentTrackInfo == null || previousTrackInfo.trackID < currentTrackInfo.trackID) {
-			System.out.println("Primary direction");
-			return true;
+			primaryDirection = true;
+			
+			if(previousTrackInfo != null && currentTrackInfo != null && currentTrackInfo.nextTrackID == previousTrackInfo.trackID) {
+				primaryDirection = false;
+			}
 		}
 		else {
-			if(previousTrackInfo != null) {
-				System.out.println("prev track: " + previousTrackInfo.trackID);
-			}
-			if(currentTrackInfo != null) {
-				System.out.println("current track: " + currentTrackInfo.trackID);
-			}
 			System.out.println("Reverse direction");
-			return false;
+			primaryDirection = false;
+			
+			if(currentTrackInfo.prevTrackID == previousTrackInfo.trackID) {
+				primaryDirection = true;
+			}
 		}
+		
+		return primaryDirection;
 	}
 }
