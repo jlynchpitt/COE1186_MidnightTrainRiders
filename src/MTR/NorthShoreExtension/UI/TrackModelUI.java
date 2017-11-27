@@ -194,7 +194,7 @@ public class TrackModelUI extends JPanel {
     							inf.equals("STATION; STEEL PLAZA; UNDERGROUND") || inf.equals("STATION; FIRST AVE; UNDERGROUND") ||
     							inf.equals("STATION; STATION SQUARE") || inf.equals("STATION; SOUTH HILLS JUNCTION")) {
     						  g.setColor(Color.gray);
-    					      g.fillOval((drawArray[0]+10), (drawArray[1]), 15, 10);
+    					      g.fillOval((drawArray[0]), (drawArray[1]), 15, 10);
     					}
     					if(inf.equals("SWITCH TO/FROM YARD") || inf.equals("SWITCH") || inf.equals("SWITCH; UNDERGROUND") ||
     							inf.equals("SWITCH TO YARD") || inf.equals("SWITCH FROM YARD")) {
