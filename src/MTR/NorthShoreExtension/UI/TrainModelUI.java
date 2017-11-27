@@ -455,7 +455,7 @@ public class TrainModelUI extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TrainModelTestUI frame = new TrainModelTestUI();
+					TrainModelUI frame = new TrainModelUI();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
