@@ -16,7 +16,7 @@ import MTR.NorthShoreExtension.ProofOfConcept.Testing;
 public class TrackModelUI extends JPanel {
 	//Specify the look and feel to use.  Valid values:
     //null (use the default), "Metal", "System", "Motif", "GTK+"
-    final static String LOOKANDFEEL = "System";
+    final static String LOOKANDFEEL = null;
     static TrackModelUI instance;
     TrackModel trackFunctions = new TrackModel();
     static LoadTrackModelUI loading = new LoadTrackModelUI();
