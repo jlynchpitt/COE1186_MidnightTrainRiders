@@ -483,7 +483,7 @@ public class DBHelper {
 		return length;
 	}
 	
-	public int getNextTrack(int trackid, String direction){
+	public int getNextTrack(int trackid, int prevTrack){
 		int nextTrack = 0;
 		Connection connection = null;
 		
@@ -494,20 +494,32 @@ public class DBHelper {
 			statement.setQueryTimeout(30); //TODO: Is this needed?
 			
 			ResultSet track = statement.executeQuery("SELECT * from TrackInfo WHERE trackID = '"+trackid+"'");
-			if(direction.equals("forward")) {
+			if(prevTrack > trackid) {
 				if(track.getInt("switchPosition")==0) {
 					nextTrack = track.getInt("nextTrack");
+					if(nextTrack == prevTrack) {
+						nextTrack = track.getInt("secondSwitch");
+					}
 				}
 				else {
 					nextTrack = track.getInt("secondSwitch");
+					if(nextTrack == prevTrack) {
+						nextTrack = track.getInt("nextTrack");
+					}
 				}
 			}
-			else if(direction.equals("backward")) {
+			else if(prevTrack < trackid) {
 				if(track.getInt("switchPosition")==0) {
 					nextTrack = track.getInt("prevTrack");
+					if(nextTrack == prevTrack) {
+						nextTrack = track.getInt("secondSwitch");
+					}
 				}
 				else {
 					nextTrack = track.getInt("secondSwitch");
+					if(nextTrack == prevTrack) {
+						nextTrack = track.getInt("prevTrack");
+					}
 				}
 			}
 
