@@ -50,6 +50,8 @@ public class TrainController {
 	private boolean brakesFailed = false;
 	private double Kp = 0;
 	private double Ki = 0;
+	private boolean autoAppliedBrake = false;
+	private boolean autoAppliedEBrake = false;
 	
 	/* Non-Vital Train Info */
 	private String trainFaults = "none"; //TODO: Possibly change to enumerated type
@@ -159,6 +161,8 @@ public class TrainController {
 			spdPID2.reset();
 			spdPID3.reset();
 		}
+		
+		ensureSafeOperations();
 		
 		updateUI(TrainControlPanel.VITAL);
 		
@@ -329,11 +333,10 @@ public class TrainController {
 		case TrainControllerHelper.BRAKE_FAILURE:
 			brakesFailed = faultActive;
 			
-			//Release all brakes if failing them
+			//Release standard brake and apply emergency brake if failing them
 			if(brakesFailed) {
 				operateBrake(false);
-				//TODO: Should e-brake also fail?
-				//operateEmergencyBrake(false);
+				operateEmergencyBrake(true);
 			}
 			break;
 		case TrainControllerHelper.ENGINE_FAILURE:
