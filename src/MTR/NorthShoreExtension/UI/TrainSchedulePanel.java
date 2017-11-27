@@ -69,11 +69,13 @@ public class TrainSchedulePanel extends JPanel {
 				int trackID = Integer.parseInt(ts.getFirstStop());
 				System.out.println("\n TrackID: " + trackID);
 				System.out.println("\n Speed: " + speed);
+				System.out.println("Authority: ");
 				for (int i = 0; i < authority.length; i++) {
-					System.out.println("\n " + authority[0]);
+					System.out.print(" " + authority[i]);
 				}
-				WaysideFunctionsHub.OccupiedSpeedAuthority(trackID, speed, authority);
+				System.out.println("/n");
 				TrackModel.TrackModel_addTrain(trackID, ts.getTrainID());
+				WaysideFunctionsHub.OccupiedSpeedAuthority(trackID, speed, authority);
 				dispatch.setEnabled(false);
 			}
 		});
