@@ -612,7 +612,7 @@ public class TrainControlTestBenchPanel extends JPanel
         leftDoor = new JLabel(trainController.isLeftDoorOpen() ? "Open" : "Closed");
         lights = new JLabel(trainController.areLightsOn() ? "On" : "Off");
         announcements = new JLabel(trainController.getAnnouncements());
-        currentTrackID = db.getFirstTrack();
+        currentTrackID = db.getFirstTrack("Green");
         trackIDLabel = new JLabel();
         updateTrackID(currentTrackID);
         

@@ -63,10 +63,13 @@ public class TrainControllerHelper {
 		powerTimer.scheduleAtFixedRate(powerTimerTask, 0, 1000);
 	}
 
-	public TrainController addNewTrainController(int trainID) {
+	/*
+	 * NOTE: For line color capitalize first letter: Green or Red
+	 */
+	public TrainController addNewTrainController(int trainID, String lineColor) {
 		//Check if new train ID has been used
 		if(!idList.contains(trainID)) {
-			TrainController tc = new TrainController(trainID, null, pid_p, pid_i);
+			TrainController tc = new TrainController(trainID, null, pid_p, pid_i, lineColor);
 			
 			//Add tc to list of trianControllers
 			tcList.add(tc);

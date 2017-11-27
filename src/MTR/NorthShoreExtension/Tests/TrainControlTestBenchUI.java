@@ -247,7 +247,7 @@ public class TrainControlTestBenchUI implements ActionListener {
     public static void main(String[] args) {
     	//Create TrainControllerHelper - with sample test data to show different UI states
     	tch = new TrainControllerHelper();
-    	tch.addNewTrainController(123);
+    	tch.addNewTrainController(123, "Green");
     	
     	//Load up database
     	MainMTR.getStaticTrackDBHelper();
@@ -268,7 +268,7 @@ public class TrainControlTestBenchUI implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
         if(e.getSource() == dispatchTrainButton) {
         	int id = Integer.parseInt(trainIDTextField.getText());
-        	if(null != tch.addNewTrainController(id)) {
+        	if(null != tch.addNewTrainController(id, "Green")) {
         		reloadGUI();
         		TrainControlUI.reloadGUI();
         	}

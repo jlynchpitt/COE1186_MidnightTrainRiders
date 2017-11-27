@@ -67,7 +67,7 @@ public class TrainController {
 	private StaticTrackDBHelper db = null;
 	
 	//TODO: Pass in train model object
-	public TrainController(int id, Train t, double pid_p, double pid_i){
+	public TrainController(int id, Train t, double pid_p, double pid_i, String line){
 		trainID = id;
 		trainModel = t;
 		
@@ -84,6 +84,10 @@ public class TrainController {
 		configSpeedPID(spdPID1);
 		configSpeedPID(spdPID2);
 		configSpeedPID(spdPID3);
+		
+		//Put train on first track
+		int firstTrackID = db.getFirstTrack(line);
+		currentTrackInfo = db.getTrackInfo(firstTrackID, true);
 	}
 	
 	public int getTrainID() {
@@ -280,14 +284,30 @@ public class TrainController {
 		if(!signalPickupFailed) {
 			int trackID = (beacon & 0x1FE00000) >> 21;
 			trackID += 2000; //green line
-			if(currentTrackInfo != null) {
-				previousTrackInfo = currentTrackInfo.copy();
+			
+			if(currentTrackInfo != null && trackID != currentTrackInfo.trackID) {
+				boolean travelDirection = calculateTravelDirection();
+				if(currentTrackInfo != null) {
+					previousTrackInfo = currentTrackInfo.copy();
+					//previousTrackInfo = new DriverTrackInfo();
+					//previousTrackInfo.trackID = currentTrackInfo.trackID;
+				}
+				currentTrackInfo = db.getTrackInfo(trackID, travelDirection);
+				
+				updateUI(TrainControlPanel.TRACK_INFO);
 			}
-			currentTrackInfo = db.getTrackInfo(trackID, calculateTravelDirection());
+		}
+	}
+	
+	public void TrainControl_moveToNextTrack() {
+		if(!signalPickupFailed) {
+			boolean travelDirection = calculateTravelDirection();
+			previousTrackInfo = currentTrackInfo.copy();
+			//previousTrackInfo = new DriverTrackInfo();
+			//previousTrackInfo.trackID = currentTrackInfo.trackID;
+			currentTrackInfo = db.getTrackInfo(currentTrackInfo.nextTrackID, travelDirection); //TODO: Determine direction
 			
 			updateUI(TrainControlPanel.TRACK_INFO);
-			
-			//System.out.println("Current track: " + trackID);
 		}
 	}
 	
@@ -343,15 +363,6 @@ public class TrainController {
 	public void TrainControl_setPassengerEBrake() {
 		//NOTE: Emergency brake can only be set from train model - it cannot be released
 		operateEmergencyBrake(true);
-	}
-	
-	public void TrainControl_moveToNextTrack() {
-		if(!signalPickupFailed) {
-			previousTrackInfo = currentTrackInfo.copy();
-			currentTrackInfo = db.getTrackInfo(currentTrackInfo.nextTrackID, calculateTravelDirection()); //TODO: Determine direction
-			
-			updateUI(TrainControlPanel.TRACK_INFO);
-		}
 	}
 	
 	/* Functions called by UI to get Train Control info */

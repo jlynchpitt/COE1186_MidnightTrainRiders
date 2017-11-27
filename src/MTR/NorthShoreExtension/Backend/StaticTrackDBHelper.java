@@ -210,8 +210,8 @@ public class StaticTrackDBHelper {
 		}
 	}
 	
-	public int getFirstTrack() {
-		String query = "SELECT * FROM " + TRACK_INFO_TABLENAME + " WHERE firstTrack = '1'";
+	public int getFirstTrack(String line) {
+		String query = "SELECT * FROM " + TRACK_INFO_TABLENAME + " WHERE firstTrack = '1' and line = '" + line + "'";
 		int trackID = -1;
 		
 		Connection connection = null;
@@ -285,8 +285,9 @@ public class StaticTrackDBHelper {
 		    }
 		    else {
 		    	//Use previous tracks
-		    	primaryTrack = result.getInt("primaryNext");
-		    	secondaryTrack = result.getInt("secondaryNext");
+		    	primaryTrack = result.getInt("primaryPrev");
+		    	secondaryTrack = result.getInt("secondaryPrev");
+		    	System.out.println("Using Prev tracks Track ID: "+ trackID+" primary: " + primaryTrack + " secondary: " +secondaryTrack);
 		    }
 		    
 		    String secondQuery = "";
