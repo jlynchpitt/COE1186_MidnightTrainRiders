@@ -205,7 +205,7 @@ public class GraphPanel extends JPanel {
         GraphPanel mainPanel = new GraphPanel(power, "Watts", "Time");
         mainPanel.setPreferredSize(new Dimension(1000, 600));
         JFrame frame = new JFrame("DrawGraph");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         frame.getContentPane().add(mainPanel);
         frame.pack();
         frame.setLocationRelativeTo(null);

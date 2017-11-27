@@ -125,7 +125,8 @@ public class TrainControlPanel extends JPanel
         trainController.setTrainControlPanel(this);
         
         String title = "Train ID: " + new Integer(trainController.getTrainID()).toString()
-        		+ "   Kp: " + trainController.getKp() + " Ki: " + trainController.getKi();
+        		+ "    " + trainController.getLineColor() + " Line"
+        		+ "    Kp: " + trainController.getKp() + " Ki: " + trainController.getKi();
         setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createTitledBorder(title),
                         BorderFactory.createEmptyBorder(5,5,5,5)));        
@@ -515,7 +516,7 @@ public class TrainControlPanel extends JPanel
         trackInfoPanel.add(nextTrackLengthLabel);  
         
         trackInfoPanel.setBorder(BorderFactory.createCompoundBorder(
-                        BorderFactory.createTitledBorder("Track Info: " + trainController.getLineColor()),
+                        BorderFactory.createTitledBorder("Track Info"),
                         BorderFactory.createEmptyBorder(5,5,5,5)));
     }
     
