@@ -46,6 +46,7 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 	{
 		WaysideFunctions.TrackModel_setSpeedAuthority(TrackID, Speed, Authority.length);
 		TrackModel.TrackModel_setSpeedAuthority(TrackID, Speed, Authority);
+		WaysideController.AuthorityArray(TrackID, Authority);
 		int TotalLength = 0;
 		for (int x = 0; x < Authority.length; x++)
 		{
