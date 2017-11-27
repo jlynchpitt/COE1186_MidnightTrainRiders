@@ -1,3 +1,6 @@
+package MTR.NorthShoreExtension.UI;
+
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
@@ -23,6 +26,8 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.awt.event.ActionEvent;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.AbstractAction;
@@ -31,7 +36,7 @@ import javax.swing.Action;
 public class TrainModelUI extends JFrame {
 
 	private JPanel contentPane;
-	private Map tarray;
+	private Map tMap;
 	private Train tr;
 	private TrackModel tm;
 	private double p;
@@ -48,7 +53,7 @@ public class TrainModelUI extends JFrame {
 	 * Create the frame.
 	 */
 	public TrainModelUI() {
-		tarray=tm.getTrains();
+		tMap=tm.getTrains();
 		
 		
 		setBackground(new Color(240, 240, 240));
@@ -127,14 +132,21 @@ public class TrainModelUI extends JFrame {
 		contentPane.add(lblDynamic, gbc_lblDynamic);
 		
 		JComboBox comboBox = new JComboBox();
-		String[] tnames = new String [tarray.length];
-		for(int i=0;i<tarray.length;i++) {
-			tnames[i]="Train " + tarray[i].getTrainID();
+		
+		SortedSet<Integer> keys = new TreeSet<Integer>(tMap.keySet());
+		Integer[] tarray = new Integer[keys.size()];
+		keys.toArray(tarray);
+		String[] tnames = new String[keys.size()];
+		for (int i=0;i<tnames.length;i++) {
+			tnames[i]="Train "+tarray[i];
 		}
-		comboBox.setModel(new DefaultComboBoxModel(tarray));
+		comboBox.setModel(new DefaultComboBoxModel(tnames));
 		comboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				tr=tarray[comboBox.getSelectedIndex()];
+				String str = (String)comboBox.getSelectedItem();
+				String delim = " ";
+				String[] tokens = str.split(delim);
+				tr=(Train)tMap.get(Integer.valueOf(tokens[1]));
 			}
 		});
 		GridBagConstraints gbc_comboBox = new GridBagConstraints();
@@ -437,6 +449,20 @@ public class TrainModelUI extends JFrame {
 	public void updateGUI() {
 		lblV.setText(String.format("%.2f", tr.getVelocity()));
 		lblAcc.setText(String.format("%.2f", tr.getAcceleration()));
+	}
+	
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					TrainModelTestUI frame = new TrainModelTestUI();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		
 	}
 	
 }
