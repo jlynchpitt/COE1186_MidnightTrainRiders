@@ -16,7 +16,7 @@ import MTR.NorthShoreExtension.ProofOfConcept.Testing;
 public class TrackModelUI extends JPanel {
 	//Specify the look and feel to use.  Valid values:
     //null (use the default), "Metal", "System", "Motif", "GTK+"
-    final static String LOOKANDFEEL = null;
+    final static String LOOKANDFEEL = "System";
     static TrackModelUI instance;
     TrackModel trackFunctions = new TrackModel();
     static LoadTrackModelUI loading = new LoadTrackModelUI();
@@ -102,7 +102,8 @@ public class TrackModelUI extends JPanel {
     		
 
     		TrackGraphic(){
-    			setPreferredSize(new Dimension(1000,600));
+    			//setPreferredSize(new Dimension(1000,600));
+    			setPreferredSize(new Dimension(1500,900));
     		}
 
     		@Override
@@ -110,7 +111,8 @@ public class TrackModelUI extends JPanel {
     			super.paintComponent(g);
     			//draw yard
     			g.setColor(Color.white);
-    			g.fillRoundRect(250,10,735,575,15,15);
+    			//g.fillRoundRect(250,10,735,575,15,15);
+    			g.fillRoundRect(250,10,1235,885,15,15);
     			//"Line/Status","Speed/Authority","Section","Block","Length (m)", 
     			//"Grade(%)", "Speed Limit (km/hr)","Infrastructre", "Elevation(m)",
     			//"Cumlative Elevation", "Track Status", "Heater"
