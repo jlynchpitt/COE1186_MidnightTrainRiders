@@ -165,12 +165,14 @@ public class TrainModelUI extends JFrame {
 		gbc_lblMass.gridy = 2;
 		contentPane.add(lblMass, gbc_lblMass);
 		
-		JLabel lblM = new JLabel(String.format("%.2f",tr.getTrainMass()));
-		GridBagConstraints gbc_lblM = new GridBagConstraints();
-		gbc_lblM.insets = new Insets(0, 0, 5, 5);
-		gbc_lblM.gridx = 4;
-		gbc_lblM.gridy = 2;
-		contentPane.add(lblM, gbc_lblM);
+		if(tr!=null) {
+			JLabel lblM = new JLabel(String.format("%.2f",tr.getTrainMass()));
+			GridBagConstraints gbc_lblM = new GridBagConstraints();
+			gbc_lblM.insets = new Insets(0, 0, 5, 5);
+			gbc_lblM.gridx = 4;
+			gbc_lblM.gridy = 2;
+			contentPane.add(lblM, gbc_lblM);
+		}
 		
 		JLabel lblAcceleration = new JLabel("Acceleration:");
 		lblAcceleration.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -181,13 +183,14 @@ public class TrainModelUI extends JFrame {
 		gbc_lblAcceleration.gridy = 2;
 		contentPane.add(lblAcceleration, gbc_lblAcceleration);
 		
-		lblAcc = new JLabel(String.format("%.2f", tr.getAcceleration()));
-		GridBagConstraints gbc_lblAcc = new GridBagConstraints();
-		gbc_lblAcc.insets = new Insets(0, 0, 5, 5);
-		gbc_lblAcc.gridx = 6;
-		gbc_lblAcc.gridy = 2;
-		contentPane.add(lblAcc, gbc_lblAcc);
-		
+		if(tr!=null) {
+			lblAcc = new JLabel(String.format("%.2f", tr.getAcceleration()));
+			GridBagConstraints gbc_lblAcc = new GridBagConstraints();
+			gbc_lblAcc.insets = new Insets(0, 0, 5, 5);
+			gbc_lblAcc.gridx = 6;
+			gbc_lblAcc.gridy = 2;
+			contentPane.add(lblAcc, gbc_lblAcc);
+		}
 		
 		
 		JLabel lblPassengerCount = new JLabel("Passenger Count:");
@@ -311,12 +314,14 @@ public class TrainModelUI extends JFrame {
 		gbc_lblVelocity.gridy = 4;
 		contentPane.add(lblVelocity, gbc_lblVelocity);
 		
-		lblV = new JLabel(String.format("%.2f", tr.getVelocity()));
-		GridBagConstraints gbc_lblV = new GridBagConstraints();
-		gbc_lblV.insets = new Insets(0, 0, 5, 5);
-		gbc_lblV.gridx = 6;
-		gbc_lblV.gridy = 4;
-		contentPane.add(lblV, gbc_lblV);
+		if(tr!=null) {
+			lblV = new JLabel(String.format("%.2f", tr.getVelocity()));
+			GridBagConstraints gbc_lblV = new GridBagConstraints();
+			gbc_lblV.insets = new Insets(0, 0, 5, 5);
+			gbc_lblV.gridx = 6;
+			gbc_lblV.gridy = 4;
+			contentPane.add(lblV, gbc_lblV);
+		}
 		
 		JLabel lblCrewCount = new JLabel("Crew Count:");
 		lblCrewCount.setFont(new Font("Tahoma", Font.PLAIN, 14));
