@@ -1,7 +1,9 @@
 package MTR.NorthShoreExtension.Backend.TrainSrc;
 
+import MTR.NorthShoreExtension.MainMTR;
 import MTR.NorthShoreExtension.Backend.TrackModelSrc.TrackModel;
 import MTR.NorthShoreExtension.Backend.TrainControllerSrc.TrainController;
+import MTR.NorthShoreExtension.Backend.TrainControllerSrc.TrainControllerHelper;
 
 public class Train {
 	final double length=32.2;
@@ -25,8 +27,14 @@ public class Train {
 	
 	public Train(int t){
 		tm = new TrainMovement(trainmass);
+		TrainControllerHelper tch = MainMTR.getTrainControllerHelper();
+		tch.addNewTrainController(t);
 		p = new Passengers();
 		trainID=t;
+	}
+	
+	public int getTrainID() {
+		return trainID;
 	}
 	
 	public void setNextPower(double np) {
@@ -40,7 +48,7 @@ public class Train {
 	public void TrainModel_setPower(double p){
 		tm.setMovement(p);
 
-		tc.TrainControl_setActualSpeed(tm.getVelocity());	// This line receives the velocity from the train movement class and sends it to the train controller
+		tc.TrainControl_setActualSpeed(3.6*tm.getVelocity());	// This line receives the velocity from the train movement class and sends it to the train controller
 		tkm.TrackModel_setDistance(trainID, tm.getDistance());
 	}
 	
@@ -201,12 +209,10 @@ public class Train {
 	}
 
 	public void turnLightsOn(boolean b) {
-		// TODO Auto-generated method stub
 		this.lightson=b;
 	}
 
 	public void openLeftDoor(boolean b) {
-		// TODO Auto-generated method stub
 		this.leftdoor=b;
 	}
 	
@@ -214,7 +220,6 @@ public class Train {
 		this.rightdoor=b;
 	}
 
-	
 	
 	public double getTotalMass() {
 		return(p.getPassengerWeight()+trainmass);
