@@ -14,9 +14,19 @@ public class WaysideController //this class is the logic to decide what to do wi
 {
 	public static int[] OccupiedTracks;
 	public static int[] CurrentSwitchLayout;
-	public static void AuthorityArray(int[][] IncomingAuthorityArray)
+	public static int[][] TrackPlans;
+	public static void AuthorityArray(int TrackID, int[] IncomingAuthorityArray)
 	{
-	
+		
+		for (int x = 0; x < OccupiedTracks.length; x++)
+		{
+			for(int y = 0; y< IncomingAuthorityArray.length; y++)
+			{
+				TrackPlans[x][y] = TrackID;
+				TrackPlans[x][y+1] = IncomingAuthorityArray[x];
+			}
+			
+		}
 	}
 		
 
@@ -27,6 +37,7 @@ public class WaysideController //this class is the logic to decide what to do wi
 	public static void UpdateOccupiedTracks(int[] IncomingTrackArray)
 	{
 		OccupiedTracks = IncomingTrackArray;
+		TrackPlans = new int [IncomingTrackArray.length][];
 		NorthGreenLine();
 		SouthGreenLine();
 		NorthRedLine();
@@ -114,19 +125,68 @@ public class WaysideController //this class is the logic to decide what to do wi
 			{
 				if (LayerTracks[x] == 1033 || LayerTracks[x] == 1032)
 				{
-					TrackModel.TrackModel_setSwitch(1032, 0);
+					for (int y = 0; y < TrackPlans.length; y++)
+					{
+						if (TrackPlans[y][0] == 1033)
+						{
+							if (TrackPlans[y][1] == 1032)
+							{
+								TrackModel.TrackModel_setSwitch(1032, 0);
+							}
+							if (TrackPlans[y][1] == 1072)
+							{
+								TrackModel.TrackModel_setSwitch(1032, 1);
+							}
+						}
+					}
+					
 				}
 				else if (LayerTracks[x] == 1028)
 				{
-					TrackModel.TrackModel_setSwitch(1027, 0);
+					for (int y = 0; y < TrackPlans.length; y++)
+					{
+						if (TrackPlans[y][0] == 1028)
+						{
+							if (TrackPlans[y][1] == 1027)
+							{
+								TrackModel.TrackModel_setSwitch(1027, 0);
+							}
+						}
+					}
 				}
 				else if (LayerTracks[x] == 1017 || LayerTracks[x] == 1016)
 				{
-					TrackModel.TrackModel_setSwitch(1015, 0);
+					for (int y = 0; y < TrackPlans.length; y++)
+					{
+						if (TrackPlans[y][0] == 1016)
+						{
+							if (TrackPlans[y][1] == 1015)
+							{
+								TrackModel.TrackModel_setSwitch(1015, 0);
+							}
+							if (TrackPlans[y][1] == 1001)
+							{
+								TrackModel.TrackModel_setSwitch(1015, 1);
+							}
+						}
+					}
 				}
 				else if (LayerTracks[x] == 1011 || LayerTracks[x] == 1010)
 				{
-					TrackModel.TrackModel_setSwitch(1009, 0);
+					for (int y = 0; y < TrackPlans.length; y++)
+					{
+						if (TrackPlans[y][0] == 1010)
+						{
+							if (TrackPlans[y][1] == 1009)
+							{
+								TrackModel.TrackModel_setSwitch(1009, 0);
+							}
+							else
+							{
+								TrackModel.TrackModel_setSwitch(1009, 1);
+							}
+						}
+					}
 				}
 				else if (LayerTracks[x] == 1002 || LayerTracks[x] == 1001)
 				{
@@ -134,7 +194,20 @@ public class WaysideController //this class is the logic to decide what to do wi
 				}
 				else if (LayerTracks[x] == 1026)
 				{
-					TrackModel.TrackModel_setSwitch(1027,1);
+					for (int y = 0; y < TrackPlans.length; y++)
+					{
+						if (TrackPlans[y][0] == 1026)
+						{
+							if (TrackPlans[y][1] == 1027)
+							{
+								TrackModel.TrackModel_setSwitch(1032, 0);
+							}
+							if (TrackPlans[y][1] == 1076)
+							{
+								TrackModel.TrackModel_setSwitch(1032, 1);
+							}
+						}
+					}
 				}
 				else if (LayerTracks[x] == 1073 || LayerTracks[x] == 1072)
 				{
@@ -160,7 +233,20 @@ public class WaysideController //this class is the logic to decide what to do wi
 				}
 				else if (LayerTracks[x] == 1044)
 				{
-					TrackModel.TrackModel_setSwitch(1043, 0);
+					for (int y = 0; y < TrackPlans.length; y++)
+					{
+						if (TrackPlans[y][0] == 1044)
+						{
+							if (TrackPlans[y][1] == 1043)
+							{
+								TrackModel.TrackModel_setSwitch(1043, 0);
+							}
+							if (TrackPlans[y][1] == 1067)
+							{
+								TrackModel.TrackModel_setSwitch(1043, 1);
+							}
+						}
+					}
 				}
 				else if (LayerTracks[x] == 1039)
 				{
@@ -168,7 +254,20 @@ public class WaysideController //this class is the logic to decide what to do wi
 				}
 				else if (LayerTracks[x] == 1037)
 				{
-					TrackModel.TrackModel_setSwitch(1038, 1);
+					for (int y = 0; y < TrackPlans.length; y++)
+					{
+						if (TrackPlans[y][0] == 1037)
+						{
+							if (TrackPlans[y][1] == 1038)
+							{
+								TrackModel.TrackModel_setSwitch(1038, 0);
+							}
+							if (TrackPlans[y][1] == 1071)
+							{
+								TrackModel.TrackModel_setSwitch(1038, 1);
+							}
+						}
+					}
 				}
 				else if (LayerTracks[x] == 1068 || LayerTracks[x] == 1067)
 				{
@@ -176,6 +275,20 @@ public class WaysideController //this class is the logic to decide what to do wi
 				}
 				else if (LayerTracks[x] == 1051)
 				{
+					for (int y = 0; y < TrackPlans.length; y++)
+					{
+						if (TrackPlans[y][0] == 1051)
+						{
+							if (TrackPlans[y][1] == 1052)
+							{
+								TrackModel.TrackModel_setSwitch(1052, 0);
+							}
+							if (TrackPlans[y][1] == 1066)
+							{
+								TrackModel.TrackModel_setSwitch(1052, 1);
+							}
+						}
+					}
 					TrackModel.TrackModel_setSwitch(1052,1);
 				}
 				
