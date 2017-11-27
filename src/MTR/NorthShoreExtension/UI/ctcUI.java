@@ -54,15 +54,18 @@ public class ctcUI {
 	final static boolean RIGHT_TO_LEFT = false;
 	
 	private static JPanel pane;
+	private static JFrame frame;
+	public static ctcUI ctc1;
+	public static JTextArea time;
 	
 	int timeMultiplier;
 	TrainControllerHelper tch;
-	public long timeAsLong = 0;
-	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-	String simulationTime = sdf.format(timeAsLong);
-	int tempF = 0;
-	int numTrains = 0;
-	int throughput = 0;
+	static long timeAsLong = 0;
+	static SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+	static String simulationTime = sdf.format(timeAsLong);
+	static int tempF = 0;
+	static int numTrains = 0;
+	static int throughput = 0;
 	public static TrainScheduleHelper tsh;
 	
 	public static TrainScheduleHelper getTrainScheduleHelper() {
@@ -93,9 +96,10 @@ public class ctcUI {
 		throughput = through;
 	}
 	
-	public void setTime(long time) {
-		timeAsLong = time;
+	public static void setTime(long givenTime) {
+		timeAsLong = givenTime;
 		simulationTime = sdf.format(timeAsLong);
+		time.setText(simulationTime);
 	}
 	
 	//public static void ctcUI(Container pane) {
@@ -232,7 +236,7 @@ public class ctcUI {
 		//time
 		currTime = new JPanel();
 		currTime.setBorder(BorderFactory.createLineBorder(Color.black));
-		JTextArea time = new JTextArea(1,12);
+		time = new JTextArea(1,12);
 		time.setEditable(false);
 		time.setText(simulationTime);
 		currTime.add(time);
@@ -418,12 +422,12 @@ public class ctcUI {
 			initLookAndFeel();
 			
 			//setup the window
-			JFrame frame = new JFrame("CTC");
+			frame = new JFrame("CTC");
 			frame.setResizable(false);
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			
 			//ctcUI(frame.getContentPane());
-			ctcUI ctc1 = new ctcUI();
+			ctc1 = new ctcUI();
 			ctcUI.pane.setOpaque(true);
 			frame.setContentPane(ctc1.pane);
 			
@@ -439,5 +443,4 @@ public class ctcUI {
 				}
 			});
 		}
-	
 }
