@@ -37,6 +37,7 @@ public class Train {
 		return trainID;
 	}
 	
+	/*
 	public void setNextPower(double np) {
 		this.nextpower=np;
 	}
@@ -44,6 +45,7 @@ public class Train {
 	public double getNextPower(){
 		return(nextpower);
 	}
+	*/
 	//Functions that the Train Controller Calls//
 	public void TrainModel_setPower(double p){
 		tm.setMovement(p);
@@ -240,7 +242,7 @@ public class Train {
 		tm.seteBrake(true);
 	}
 	
-	public void setPassnegerEBraker(boolean b) {
+	public void setPassnegerEBrake(boolean b) {
 		this.passengerEBrake=b;
 		tm.seteBrake(true);
 	}
