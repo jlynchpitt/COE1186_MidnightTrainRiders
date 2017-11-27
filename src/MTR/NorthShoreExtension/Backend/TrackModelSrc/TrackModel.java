@@ -12,6 +12,7 @@ import java.util.Random;
 
 public class TrackModel {
 	static WaysideFunctionsHub wayside;
+	static TrackModel trackmod = new TrackModel();
 	static TrackModelUI loading;
 	//static Map<Integer, Track> trackList = new HashMap<Integer, Track>();
 	static Track updateTrack;
@@ -19,7 +20,6 @@ public class TrackModel {
 	static int brokenTrack[] = new int[300];
 	static Map<Integer, TrainsOperating> trainList = new HashMap<Integer, TrainsOperating>();
 	static Map<Integer, Train> officialTrains = new HashMap<Integer, Train>();
-	static TrainsOperating newTrain;
 	static TrainsOperating update;
 	static double difference;
 	static int speed, authority;
@@ -108,6 +108,7 @@ public class TrackModel {
 	}
 	
 	public static void TrackModel_addTrain(int trackid, int trainid) {
+		TrackModel.TrainsOperating newTrain = trackmod.new TrainsOperating();
 		newTrain.trainID = trainid; 
 		newTrain.trackOccupying = trackid;
 		newTrain.distanceLeft = load.getTrackLength(trackid);
