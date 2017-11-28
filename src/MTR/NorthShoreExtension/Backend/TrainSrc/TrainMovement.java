@@ -81,9 +81,9 @@ public class TrainMovement {
 		}
 		
 		
-		if(acceleration>0.5) {
+		/*if(acceleration>0.5) {
 			acceleration=0.5;
-		}
+		}*/
 		nextVelocity = acceleration+velocity;
 		if(nextVelocity<0) {
 			nextVelocity=0;
