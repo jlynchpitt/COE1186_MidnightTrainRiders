@@ -2,6 +2,7 @@
 package MTR.NorthShoreExtension.Backend.WaysideController;
 
 import java.awt.List;
+import java.util.Stack;
 import java.util.Arrays;
 
 import MTR.NorthShoreExtension.MainMTR;
@@ -14,13 +15,23 @@ public class WaysideController //this class is the logic to decide what to do wi
 {
 	public static int[] OccupiedTracks;
 	public static int[] CurrentSwitchLayout;
-	public static int[][] TrackPlans;
+	public static int[][] TrackPlans = null;
+	public static int[] NorthGreenSwitchArray;
+	public static int[] SouthGreenSwitchArray;
+	public static int[] NorthRedSwitchArray;
+	public static int[] SouthRedSwitchArray;
+	static Stack<Integer> NG = new Stack<>();
+	static Stack<Integer> SG = new Stack<>();
+	static Stack<Integer> NR = new Stack<>();
+	static Stack<Integer> SR = new Stack<>();
+	static DBHelper load = MainMTR.getDBHelper();
+	
 	public static void AuthorityArray(int TrackID, int[] IncomingAuthorityArray)
 	{
 		
 		for (int x = 0; x < OccupiedTracks.length; x++)
 		{
-			for(int y = 0; y< IncomingAuthorityArray.length; y++)
+			for(int y = 0; y< IncomingAuthorityArray.length+1; y++)
 			{
 				TrackPlans[x][y] = TrackID;
 				TrackPlans[x][y+1] = IncomingAuthorityArray[x];
@@ -30,12 +41,62 @@ public class WaysideController //this class is the logic to decide what to do wi
 	}
 		
 
-	public static void SpeedArray(int[] IncomingSpeedArray)
+	//read in the switches
+	//create four stacks of switches  based on location
+	public static void UpdateSwitches()  
 	{
-		
+		//stack.toArray(array)
+		//go through all green tracks
+		for (int x = 0; x < 150; x++)
+		{
+			//give it proper code
+			int input = 2000 + x;
+			
+			//if the infrastructure at that track is a switch
+			if (load.getInfrastructure(input).equals("swtich"))
+			{
+				//if the switch designation is within these parameters
+				if (input >= 2000 && input <= 2068 || input >= 2110 && input <= 2150)
+				{
+					//push it as a north green switch
+					NG.push(input);
+				}
+				if (input > 2068 && input < 2110)
+				{
+					//push it as a north green switch
+					SG.push(input);
+				}
+			}
+		}
+		//go through all the red tracks
+		for (int x = 0; x < 76; x++)
+		{
+			//give it proper coding
+			int input = 1000 + x;
+			
+			//if the infrastructure if a switch
+			if (load.getInfrastructure(input).equals("swtich"))
+			{
+				//if the track possesses certain designations
+				if (input >= 1000 && input <= 1035 || input >= 1072 && input <= 1076)
+				{
+					//push it as a north red switch
+					NR.push(input);
+				}
+				if (input > 1035 && input < 1072)
+				{
+					//push it as a south red switch
+					SR.push(input);
+				}
+			}
+		}
 	}
+
+	
+	//takes a moment to decide actions based on occupied tracks
 	public static void UpdateOccupiedTracks(int[] IncomingTrackArray)
 	{
+		
 		OccupiedTracks = IncomingTrackArray;
 		TrackPlans = new int [IncomingTrackArray.length][];
 		NorthGreenLine();
@@ -47,254 +108,174 @@ public class WaysideController //this class is the logic to decide what to do wi
 	{
 
 	}
-	public static void NorthGreenLine()
+	
+	/*
+	public static void RailwayCrossingCheck()
 	{
-		
-		List OccupancyList = (List) Arrays.asList(OccupiedTracks);
-		int[] LayerTracks = {2013, 2014, 2002, 2003, 2027, 2028, 2150, 2149, 2057, 2056, 2062, 2061}; 
-		for (int x = 0; x <LayerTracks.length; x++)
+		if (TrackPlans != null)
 		{
-			if (Arrays.asList(OccupiedTracks).contains(LayerTracks[x]))  //train approaching switch
+			for (int x = 0; x < TrackPlans.length; x++) //go through all the track plans
 			{
-				if (LayerTracks[x] == 2013 || LayerTracks[x] == 2014)
+				if (TrackPlans[x] != null)
 				{
-					TrackModel.TrackModel_setSwitch(2012, 1);
-				}
-				else if (LayerTracks[x] == 2003 || LayerTracks[x] == 2002)
-				{
-					TrackModel.TrackModel_setSwitch(2012, 0);
-				}
-				else if (LayerTracks[x] == 2049 || LayerTracks[x] == 2050)
-				{
-					TrackModel.TrackModel_setSwitch(2029, 1);
-				}
-				else if (LayerTracks[x] == 2027 || LayerTracks[x] == 2028)
-				{
-					TrackModel.TrackModel_setSwitch(2029, 0);
-				}
-				else if (LayerTracks[x] == 2056 || LayerTracks[x] == 2057)
-				{
-					TrackModel.TrackModel_setSwitch(2058, 1);
-				}
-				else if (LayerTracks[x] == 2061 || LayerTracks[x] == 2062)
-				{
-					TrackModel.TrackModel_setSwitch(2062, 1);
-				}
-				
-			}
-		}
-	}
-	public static void SouthGreenLine()
-	{
-		
-		List OccupancyList = (List) Arrays.asList(OccupiedTracks);
-		int[] LayerTracks = {2075, 2076, 2078, 2077, 2084, 2085, 2099, 2100}; 
-		for (int x = 0; x <LayerTracks.length; x++)
-		{
-			if (Arrays.asList(OccupiedTracks).contains(LayerTracks[x]))  //train approaching switch
-			{
-				if (LayerTracks[x] == 2075 || LayerTracks[x] == 2076)
-				{
-					TrackModel.TrackModel_setSwitch(2076, 1);
-				}
-				else if (LayerTracks[x] == 2077 || LayerTracks[x] == 2078)
-				{
-					TrackModel.TrackModel_setSwitch(2076, 0);
-				}
-				else if (LayerTracks[x] == 2084 || LayerTracks[x] == 2085)
-				{
-					TrackModel.TrackModel_setSwitch(2086, 1);
-				}
-				else if (LayerTracks[x] == 2086 || LayerTracks[x] == 2087)
-				{
-					TrackModel.TrackModel_setSwitch(2086, 0);
-				}
-
-				
-			}
-		}
-	}
-	public static void NorthRedLine()
-	{
-		
-		List OccupancyList = (List) Arrays.asList(OccupiedTracks);
-		int[] LayerTracks = {1033,1032, 1031, 1072, 1073, 1028, 1027, 1026, 1076, 1075, 1017, 1016, 1015, 1014, 1001, 1002, 1008, 1009, 1010, 1011}; 
-		for (int x = 0; x <LayerTracks.length; x++)
-		{
-			if (Arrays.asList(OccupiedTracks).contains(LayerTracks[x]))  //train approaching switch
-			{
-				if (LayerTracks[x] == 1033 || LayerTracks[x] == 1032)
-				{
-					for (int y = 0; y < TrackPlans.length; y++)
+					for (int y = 0; y < TrackPlans[x].length; y++)
 					{
-						if (TrackPlans[y][0] == 1033)
+						if (load.getInfrastructure(TrackPlans[x][y]).equals("Railway Crossing") || load.getInfrastructure(TrackPlans[x][y+1]).equals("Railway Crossing") || load.getInfrastructure(TrackPlans[x][y-1]).equals("Railway Crossing")) //if an upcoming track is a crossing
 						{
-							if (TrackPlans[y][1] == 1032)
-							{
-								TrackModel.TrackModel_setSwitch(1032, 0);
-							}
-							if (TrackPlans[y][1] == 1072)
-							{
-								TrackModel.TrackModel_setSwitch(1032, 1);
-							}
+							
 						}
+					{
+						if (TrackPlans[x][1] == TrackPlans[x][0] + 1 || TrackPlans[x][1] == TrackPlans[x][0] + 1)  //if the next track is only one off of the previous, it goes in a straight line
+						{
+							TrackModel.TrackModel_setSwitch(TrackPlans[x][1], 0);  //so set switch to straight
+						}
+						else  //if next track is not one difference, then it takes a diferent switch
+						{
+							TrackModel.TrackModel_setSwitch(TrackPlans[x][1], 1);  //set switch angled
+						}
+					}
 					}
 					
 				}
-				else if (LayerTracks[x] == 1028)
-				{
-					for (int y = 0; y < TrackPlans.length; y++)
-					{
-						if (TrackPlans[y][0] == 1028)
-						{
-							if (TrackPlans[y][1] == 1027)
-							{
-								TrackModel.TrackModel_setSwitch(1027, 0);
-							}
-						}
-					}
-				}
-				else if (LayerTracks[x] == 1017 || LayerTracks[x] == 1016)
-				{
-					for (int y = 0; y < TrackPlans.length; y++)
-					{
-						if (TrackPlans[y][0] == 1016)
-						{
-							if (TrackPlans[y][1] == 1015)
-							{
-								TrackModel.TrackModel_setSwitch(1015, 0);
-							}
-							if (TrackPlans[y][1] == 1001)
-							{
-								TrackModel.TrackModel_setSwitch(1015, 1);
-							}
-						}
-					}
-				}
-				else if (LayerTracks[x] == 1011 || LayerTracks[x] == 1010)
-				{
-					for (int y = 0; y < TrackPlans.length; y++)
-					{
-						if (TrackPlans[y][0] == 1010)
-						{
-							if (TrackPlans[y][1] == 1009)
-							{
-								TrackModel.TrackModel_setSwitch(1009, 0);
-							}
-							else
-							{
-								TrackModel.TrackModel_setSwitch(1009, 1);
-							}
-						}
-					}
-				}
-				else if (LayerTracks[x] == 1002 || LayerTracks[x] == 1001)
-				{
-					TrackModel.TrackModel_setSwitch(1015, 1);
-				}
-				else if (LayerTracks[x] == 1026)
-				{
-					for (int y = 0; y < TrackPlans.length; y++)
-					{
-						if (TrackPlans[y][0] == 1026)
-						{
-							if (TrackPlans[y][1] == 1027)
-							{
-								TrackModel.TrackModel_setSwitch(1032, 0);
-							}
-							if (TrackPlans[y][1] == 1076)
-							{
-								TrackModel.TrackModel_setSwitch(1032, 1);
-							}
-						}
-					}
-				}
-				else if (LayerTracks[x] == 1073 || LayerTracks[x] == 1072)
-				{
-					TrackModel.TrackModel_setSwitch(1032, 1);
-				}
-				
-				
 			}
 		}
 	}
-	public static void SouthRedLine()
+	
+	*/
+	public static void NorthGreenLine()
 	{
-		
-		List OccupancyList = (List) Arrays.asList(OccupiedTracks);
-		int[] LayerTracks = {1065,1066,1053,1052,1051,1044,1043,1042,1067,1068,1070,1071,1037,1038,1039}; 
-		for (int x = 0; x <LayerTracks.length; x++)
+		if (TrackPlans != null)
 		{
-			if (Arrays.asList(OccupiedTracks).contains(LayerTracks[x]))  //train approaching switch
+			for (int x = 0; x < TrackPlans.length; x++) //go through all the track plans
 			{
-				if (LayerTracks[x] == 1053)
+				if (TrackPlans[x] != null)
 				{
-					TrackModel.TrackModel_setSwitch(1052, 0);
-				}
-				else if (LayerTracks[x] == 1044)
-				{
-					for (int y = 0; y < TrackPlans.length; y++)
+					if (NG.contains(TrackPlans[x][1]))  //if an upcoming track is a switch
 					{
-						if (TrackPlans[y][0] == 1044)
+						if (TrackPlans[x][1] == TrackPlans[x][0] + 1 || TrackPlans[x][1] == TrackPlans[x][0] - 1)  //if the next track is only one off of the previous, it goes in a straight line
 						{
-							if (TrackPlans[y][1] == 1043)
+							if (load.getSwitch(TrackPlans[x][1]) == 1) //if needs to be straight but not straight
 							{
-								TrackModel.TrackModel_setSwitch(1043, 0);
+								//so set switch to straight
+								WaysideFunctionsHub.WaysideController_Switch(TrackPlans[x][1]);
 							}
-							if (TrackPlans[y][1] == 1067)
+							
+						}
+						else  //if next track is not one difference, then it takes a diferent switch
+						{
+							if (load.getSwitch(TrackPlans[x][1]) == 0)  //if needs to be angled but straight
 							{
-								TrackModel.TrackModel_setSwitch(1043, 1);
+								//so set switch to angle
+								WaysideFunctionsHub.WaysideController_Switch(TrackPlans[x][1]);
 							}
 						}
 					}
 				}
-				else if (LayerTracks[x] == 1039)
+			}
+		}
+		
+	}
+	public static void SouthGreenLine()
+	{
+		if (TrackPlans != null)
+		{
+			for (int x = 0; x < TrackPlans.length; x++) //go through all the track plans
+			{
+				if (TrackPlans[x] != null)
 				{
-					TrackModel.TrackModel_setSwitch(1038, 0);
-				}
-				else if (LayerTracks[x] == 1037)
-				{
-					for (int y = 0; y < TrackPlans.length; y++)
+					if (SG.contains(TrackPlans[x][1]))  //if an upcoming track is a switch
 					{
-						if (TrackPlans[y][0] == 1037)
+						if (TrackPlans[x][1] == TrackPlans[x][0] + 1 || TrackPlans[x][1] == TrackPlans[x][0] - 1)  //if the next track is only one off of the previous, it goes in a straight line
 						{
-							if (TrackPlans[y][1] == 1038)
+							if (load.getSwitch(TrackPlans[x][1]) == 1) //if needs to be straight but not straight
 							{
-								TrackModel.TrackModel_setSwitch(1038, 0);
+								//so set switch to straight
+								WaysideFunctionsHub.WaysideController_Switch(TrackPlans[x][1]);
 							}
-							if (TrackPlans[y][1] == 1071)
+							
+						}
+						else  //if next track is not one difference, then it takes a diferent switch
+						{
+							if (load.getSwitch(TrackPlans[x][1]) == 0)  //if needs to be angled but straight
 							{
-								TrackModel.TrackModel_setSwitch(1038, 1);
+								//so set switch to angle
+								WaysideFunctionsHub.WaysideController_Switch(TrackPlans[x][1]);
 							}
 						}
 					}
 				}
-				else if (LayerTracks[x] == 1068 || LayerTracks[x] == 1067)
-				{
-					TrackModel.TrackModel_setSwitch(1043, 1);
-				}
-				else if (LayerTracks[x] == 1051)
-				{
-					for (int y = 0; y < TrackPlans.length; y++)
-					{
-						if (TrackPlans[y][0] == 1051)
-						{
-							if (TrackPlans[y][1] == 1052)
-							{
-								TrackModel.TrackModel_setSwitch(1052, 0);
-							}
-							if (TrackPlans[y][1] == 1066)
-							{
-								TrackModel.TrackModel_setSwitch(1052, 1);
-							}
-						}
-					}
-					TrackModel.TrackModel_setSwitch(1052,1);
-				}
-				
 				
 			}
 		}
+		
+	}
+	public static void NorthRedLine()
+	{
+		if (TrackPlans != null)
+		{
+			for (int x = 0; x < TrackPlans.length; x++) //go through all the track plans
+			{
+				if (TrackPlans[x] != null)
+				{
+					if (NR.contains(TrackPlans[x][1]))  //if an upcoming track is a switch
+					{
+						if (TrackPlans[x][1] == TrackPlans[x][0] + 1 || TrackPlans[x][1] == TrackPlans[x][0] - 1)  //if the next track is only one off of the previous, it goes in a straight line
+						{
+							if (load.getSwitch(TrackPlans[x][1]) == 1) //if needs to be straight but not straight
+							{
+								//so set switch to straight
+								WaysideFunctionsHub.WaysideController_Switch(TrackPlans[x][1]);
+							}
+							
+						}
+						else  //if next track is not one difference, then it takes a diferent switch
+						{
+							if (load.getSwitch(TrackPlans[x][1]) == 0)  //if needs to be angled but straight
+							{
+								//so set switch to angle
+								WaysideFunctionsHub.WaysideController_Switch(TrackPlans[x][1]);
+							}
+						}
+					}
+				}
+				
+			}
+		}
+		
+	}
+	public static void SouthRedLine()
+	{
+		if (TrackPlans != null)
+		{
+			for (int x = 0; x < TrackPlans.length; x++) //go through all the track plans
+			{
+				if (TrackPlans[x] != null)
+				{
+					if (SR.contains(TrackPlans[x][1]))  //if an upcoming track is a switch
+					{
+						if (TrackPlans[x][1] == TrackPlans[x][0] + 1 || TrackPlans[x][1] == TrackPlans[x][0] - 1)  //if the next track is only one off of the previous, it goes in a straight line
+						{
+							if (load.getSwitch(TrackPlans[x][1]) == 1) //if needs to be straight but not straight
+							{
+								//so set switch to straight
+								WaysideFunctionsHub.WaysideController_Switch(TrackPlans[x][1]);
+							}
+							
+						}
+						else  //if next track is not one difference, then it takes a diferent switch
+						{
+							if (load.getSwitch(TrackPlans[x][1]) == 0)  //if needs to be angled but straight
+							{
+								//so set switch to angle
+								WaysideFunctionsHub.WaysideController_Switch(TrackPlans[x][1]);
+							}
+						}
+					}
+				}
+				
+			}
+		}
+		
 	}
 
 }
