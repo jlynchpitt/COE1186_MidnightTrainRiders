@@ -57,6 +57,13 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 	public static DefaultTableModel om = new DefaultTableModel();
 	public static DefaultTableModel am = new DefaultTableModel();
 	public static DefaultTableModel dm1 = new DefaultTableModel(250,4);
+	public static boolean TablesCreated = false;
+	public static boolean dm1exists = false;
+	public static boolean dmexists = false;
+	public static boolean omexists = false;
+	public static boolean amexists = false;
+	
+	
 	public static JTable table1;
 	public static JTable table;
 	public static JScrollPane scroll1;
@@ -71,10 +78,7 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
    public static void main(String[] args) //main body
    {
 	   //setup panels
-	   PLCSetup();
-	   TrackInfoSetup();
-	   SwitchSetup();
-	   TestSetup();
+	   ComponentAdder();
 	   //add action
 	    ActionAdder();  
 	//create frame 
@@ -94,10 +98,7 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 	   load = MainMTR.getDBHelper();
 	   //System.out.println("BLAH BLAH: " + load.getInfrastructure(2050));
 	 //setup panels
-	   PLCSetup();
-	   TrackInfoSetup();
-	   SwitchSetup();
-	   TestSetup();
+	   ComponentAdder();
 	   //add action
 	    ActionAdder();  
 	//create frame 
@@ -203,71 +204,66 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 
    public static void OccupiedTrackTableUpdater(Object[][] ObjectArray)
    {
-	   for (int x = 0; x < ObjectArray.length; x++)
+	   if (TablesCreated)
 	   {
-		   //dm1.addRow(ObjectArray[x]);
-		   
-		   for (int y = 0; y < ObjectArray[x].length; y++)
+		   for (int x = 0; x < ObjectArray.length; x++)
 		   {
-			   if (x > dm1.getRowCount()-1)
+			   //dm1.addRow(ObjectArray[x]);
+			   
+			   for (int y = 0; y < ObjectArray[x].length; y++)
 			   {
-				   dm1.addRow(ObjectArray[x]);
+				   if (x > dm1.getRowCount()-1)
+				   {
+					   dm1.addRow(ObjectArray[x]);
+				   }
+				   else
+				   {
+					   dm1.setValueAt(ObjectArray[x][y], x, y);
+				   }
+				   Scroll1Height = dm1.getRowCount()*(20); 
+				   //scroll1.setPreferredSize(new Dimension(500, 100));
+				   //System.out.println(Scroll1Height);
 			   }
-			   else
-			   {
-				   dm1.setValueAt(ObjectArray[x][y], x, y);
-			   }
-			   Scroll1Height = dm1.getRowCount()*(20); 
-			   //scroll1.setPreferredSize(new Dimension(500, 100));
-			   //System.out.println(Scroll1Height);
+			   
+			   
+				   //System.out.println(x);
 		   }
-		   
-		   
-			   //System.out.println(x);
 	   }
+	   
    }
    
    public static void OccupiedTrackAuthoritySpeedUpdater(int TrackID, int NextTrack, int AuthorityDist)
-   {
-	   /*
-	   for (int x = 0; x < dm1.getRowCount(); x++)
+   {  
+	   if (TablesCreated)
 	   {
-		   System.out.print("Current Chart: ");
-		   for (int y = 0; y < dm1.getColumnCount(); y++)
-		   {
-			   System.out.print("||" + dm1.getValueAt(x, y));
-		   }
-		   System.out.println("");
-	   }
-	   */
-	   
-		   //dm1.addRow(ObjectArray[x]);
+		   String LineColor = "Green";
+		   String BlockNumber =  Integer.toString(TrackID).substring(1);
+		   int firstDigit = Character.getNumericValue(Integer.toString(TrackID).charAt(0));
 		   
-		   String LineColor = null;
-	   String BlockNumber =  Integer.toString(TrackID).substring(1);
-	   int firstDigit = Character.getNumericValue(Integer.toString(TrackID).charAt(0));
-	   
-	   if (firstDigit == 1)
-	   {
-		   LineColor = "Red";
-	   }
-	   if (firstDigit == 2)
-	   {
-		   LineColor = "Green";
-	   }
-	   for (int x = 0; x < dm1.getRowCount(); x++)
-	   {
-		   if (dm1.getValueAt(x, 0).equals(LineColor))
+		   if (firstDigit == 1)
 		   {
-			   if (dm1.getValueAt(x, 1).equals(BlockNumber))
+			   LineColor = "Red";
+		   }
+		   if (firstDigit == 2)
+		   {
+			   LineColor = "Green";
+		   }
+		   for (int x = 0; x < dm1.getRowCount(); x++)
+		   {
+			   
+			   if (dm1.getValueAt(x, 0).equals(LineColor))
 			   {
-				   dm1.setValueAt(NextTrack, x, 2);
-				   dm1.setValueAt(AuthorityDist, x, 3);
+				   if (dm1.getValueAt(x, 1).equals(BlockNumber))
+				   {
+					   dm1.setValueAt(NextTrack, x, 2);
+					   dm1.setValueAt(AuthorityDist, x, 3);
+				   }
+				   
 			   }
 			   
 		   }
-		   
 	   }
+		   
 	   
 	   
 	   
@@ -275,13 +271,15 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
    public static void SwitchChartUpdater(int ID)  //update with actual information
    {
 	   String BlockNumber =  Integer.toString(ID).substring(1);
-
-	   //LineColor = DB.getColor(IncomingTrackOccupancyArray[x]);
-	   for (int x = 0; x < dm.getRowCount(); x++)
+	   if (TablesCreated)
 	   {
-		   if (Integer.parseInt(BlockNumber) == Integer.parseInt((String)(dm.getValueAt(x,1))))
+		   //LineColor = DB.getColor(IncomingTrackOccupancyArray[x]);
+		   for (int x = 0; x < dm.getRowCount(); x++)
 		   {
-			   SwitchSwitcher(x);
+			   if (Integer.parseInt(BlockNumber) == Integer.parseInt((String)(dm.getValueAt(x,1))))
+			   {
+				   SwitchSwitcher(x);
+			   }
 		   }
 	   }
    }
@@ -291,6 +289,8 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 	   PLCSetup();
 	   TrackInfoSetup();
 	   SwitchSetup();
+	   TestSetup();
+	   TablesCreated = true;
    }
    public static void TestSetup()
    {   
