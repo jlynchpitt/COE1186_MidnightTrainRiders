@@ -41,7 +41,7 @@ public class TrainModelUI extends JFrame {
 	private TrackModel tm;
 	private double p;
 	private JTextField txtAcc;
-	private JLabel lblV, lblAcc, lblLd,lblRightDoor;
+	private JLabel lblV, lblAcc, lblLd,;
 	private JComboBox comboBox;
 	private boolean b=false;
 
