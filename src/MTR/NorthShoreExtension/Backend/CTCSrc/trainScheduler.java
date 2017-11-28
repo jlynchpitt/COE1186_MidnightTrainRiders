@@ -102,16 +102,19 @@ public class trainScheduler {
 			prevSection = 2061;
 			lastSection = 2058;
 			authority[0] = firstSection; //replace with first section from yard
-			authority[1] = database.schedNextTrack(firstSection, prevSection);
+			if (listOfStops[0] != firstSection || listOfStops[1] > 0) {
+				//System.out.println("yes");
+				authority[1] = database.schedNextTrack(firstSection, prevSection);
+			}
 			//database.showTrackTest();
-			System.out.println("Auth: " + authority[0] + " " + authority[1]);
-			System.out.println("L: " + l);
-			System.out.println("M: " + m);
+			//System.out.println("Auth: " + authority[0] + " " + authority[1]);
+			//System.out.println("L: " + l);
+			//System.out.println("M: " + m);
 			if (listOfStops[0] == firstSection) {
 				l++;
 			} else if (listOfStops[0] == authority[1]) {
 				System.out.println(authority[m]);
-				m++;
+				//m++; //this could be the issue //yeah pretty sure it waas this guy
 				l++;
 			} else {
 				while (listOfStops[l] != authority[m]) {
@@ -132,7 +135,7 @@ public class trainScheduler {
 			//remaining stops
 			//loop through all of the stops
 			while (listOfStops[l] != 0) {
-				while (listOfStops[l] != authority[m]) {
+				while (listOfStops[l] != authority[m]) { //error throws here?
 					m++;
 					authority[m] = database.schedNextTrack(authority[m-1], authority[m-2]);
 					System.out.println("" + m + ": " + authority[m]);
