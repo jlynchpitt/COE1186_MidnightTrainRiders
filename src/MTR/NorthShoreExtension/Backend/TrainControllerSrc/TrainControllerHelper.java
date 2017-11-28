@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import MTR.NorthShoreExtension.Backend.TrainSrc.Train;
 import MTR.NorthShoreExtension.UI.ctcUI;
 
 
@@ -66,10 +67,10 @@ public class TrainControllerHelper {
 	/*
 	 * NOTE: For line color capitalize first letter: Green or Red
 	 */
-	public TrainController addNewTrainController(int trainID, String lineColor) {
+	public TrainController addNewTrainController(int trainID, String lineColor, Train train) {
 		//Check if new train ID has been used
 		if(!idList.contains(trainID)) {
-			TrainController tc = new TrainController(trainID, null, this, pid_p, pid_i, lineColor);
+			TrainController tc = new TrainController(trainID, train, this, pid_p, pid_i, lineColor);
 			
 			//Add tc to list of trianControllers
 			tcList.add(tc);
