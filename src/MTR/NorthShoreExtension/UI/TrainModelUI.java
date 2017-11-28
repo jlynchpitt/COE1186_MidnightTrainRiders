@@ -41,7 +41,7 @@ public class TrainModelUI extends JFrame {
 	private TrackModel tm;
 	private double p;
 	private JTextField txtAcc;
-	private JLabel lblV, lblAcc, lblLd,;
+	private JLabel lblV, lblAcc, lblLd,lblRd;
 	private JComboBox comboBox;
 	private boolean b=false;
 
@@ -377,7 +377,6 @@ public class TrainModelUI extends JFrame {
 		contentPane.add(lblRightDoor, gbc_lblRightDoor);
 		
 		if(tr!=null) {
-			JLabel lblRd;
 			if(tr.getRightDoor()) {
 				lblRd = new JLabel("On");
 			}else {
@@ -554,7 +553,12 @@ public class TrainModelUI extends JFrame {
 		if(tr.getLeftDoor()) {
 			lblLd.setText("On");
 		}else {
-			lblLd= new JLabel("Off");
+			lblLd.setText("Off");
+		}
+		if(tr.getRightDoor()) {
+			lblRd.setText("On");
+		}else {
+			lblRd.setText("Off");
 		}
 		
 	}

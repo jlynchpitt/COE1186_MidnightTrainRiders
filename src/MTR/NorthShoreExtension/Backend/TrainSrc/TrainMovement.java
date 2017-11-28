@@ -47,7 +47,7 @@ public class TrainMovement {
 			
 			normalForce = mass*gravity*Math.cos(pheta);
 		    if(velocity==0){
-		    	engineForce = power/0.1;
+		    	engineForce = power/0.5;
 		    	xForce=engineForce-mass*gravity*Math.sin(pheta);
 		    	
 		    	if(Math.abs(xForce)>staticFriction*normalForce&&xForce>0) {
