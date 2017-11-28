@@ -85,6 +85,26 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 	  
 	  
    } 
+   
+   public static void createAndShowWaysideControlGUI() 
+	{
+	 //setup panels
+	   PLCSetup();
+	   TrackInfoSetup();
+	   SwitchSetup();
+	   TestSetup();
+	   //add action
+	    ActionAdder();  
+	//create frame 
+	  int width = 750;
+      int height = 500;
+      f.setSize(width, height);
+	  f.getContentPane().add(plc);
+      f.setVisible(true);
+      //OccupiedTrackTableUpdater();
+	  
+	  
+   }
    public static DBHelper sendDB() {
 		return load;
    }
