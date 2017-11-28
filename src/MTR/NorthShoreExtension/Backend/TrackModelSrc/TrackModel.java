@@ -89,6 +89,7 @@ public class TrackModel {
 			lastTrack = trackid;
 			load.updateTrackOccupied(update.trackOccupying, 1);
 			trainList.put(trainNum, update);
+			officialTrains.get(trainNum).TrainModel_moveToNextTrack();
 		}
 		sellTicket(update.trackOccupying);
 		sendBeacon(update.trackOccupying, update.trainID);
