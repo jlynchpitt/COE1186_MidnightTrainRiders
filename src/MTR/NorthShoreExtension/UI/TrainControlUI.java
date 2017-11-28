@@ -188,7 +188,7 @@ public class TrainControlUI implements ActionListener {
     public static void main(String[] args) {
     	//Create TrainControllerHelper - with sample test data to show different UI states
     	TrainControllerHelper tcHelper = new TrainControllerHelper();
-    	TrainController tc123 = tcHelper.addNewTrainController(123, "Green"); 
+    	TrainController tc123 = tcHelper.addNewTrainController(123, "Green", null); 
     	tc123.TrainControl_setCommandedSpeedAuthority(65, 5);
     	/*TrainController tc456 = tcHelper.addNewTrain(456);
     	tc456.brakeApplied = false;

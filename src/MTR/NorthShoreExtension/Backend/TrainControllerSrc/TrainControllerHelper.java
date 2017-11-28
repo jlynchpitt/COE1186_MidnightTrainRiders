@@ -9,12 +9,16 @@
  */
 package MTR.NorthShoreExtension.Backend.TrainControllerSrc;
 
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import MTR.NorthShoreExtension.Backend.TrackModelSrc.TrackModel;
 import MTR.NorthShoreExtension.Backend.TrainSrc.Train;
+import MTR.NorthShoreExtension.UI.TrackModelUI;
+import MTR.NorthShoreExtension.UI.TrackModelUI.TrackGraphic;
 import MTR.NorthShoreExtension.UI.ctcUI;
 
 
@@ -43,6 +47,7 @@ public class TrainControllerHelper {
 	private ctcUI ctc_ui = null;
 	
 	public TrainControllerHelper(){
+		System.out.println("TCH initialized");
 		//Initialize Timer - Timer controls updating the commanded power every second
 		powerTimerTask = new TimerTask() {
 			@Override
@@ -58,6 +63,12 @@ public class TrainControllerHelper {
 				/*if(ctc_ui != null) {
 					ctc_ui.setTime(simulatedClockTime);
 				}*/
+				
+				//Repaint Track model UI - TODO: Limit how often this runs
+				if(TrackModelUI.trackGraphic != null) {
+					System.out.println("Got track graphic");
+					TrackModelUI.trackGraphic.actionPerformed(new ActionEvent(this, 1, ""));
+				}
 			}
 		};
 		

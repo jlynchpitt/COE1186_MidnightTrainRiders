@@ -22,7 +22,6 @@ import MTR.NorthShoreExtension.UI.LoadTrackModelUI;
  *
  */
 public class MainMTR3 {
-	public static TrainControllerHelper tcHelper = null;
 	public static boolean fullUI = false;
 	private static DBHelper dbHelper = null;
 	private static StaticTrackDBHelper staticDBHelper = null;
@@ -32,9 +31,7 @@ public class MainMTR3 {
 	 */
 	public static void main(String[] args) {
 		fullUI = true;
-		
-		tcHelper = new TrainControllerHelper();
-		
+				
 		SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 //Turn off metal's use of bold fonts
@@ -42,7 +39,6 @@ public class MainMTR3 {
                 LoadTrackModelUI.createAndShowGUI();
             }
         });
-
 	}
 	
 	public static DBHelper getDBHelper() {
@@ -54,27 +50,4 @@ public class MainMTR3 {
 			return dbHelper;
 		}
 	}
-	
-	public static TrainControllerHelper getTrainControllerHelper() {
-		if(tcHelper != null) {
-			return tcHelper;
-		}
-		else {
-			tcHelper = new TrainControllerHelper();
-			return tcHelper;
-		}
-	}
-	
-	public static StaticTrackDBHelper getStaticTrackDBHelper() {
-		if(staticDBHelper != null) {
-			return staticDBHelper;
-		}
-		else {
-			staticDBHelper = new StaticTrackDBHelper();
-			//staticDBHelper.loadFileIntoDB("green_staticTrackInfo.csv");
-			//staticDBHelper.loadFileIntoDB("red_staticTrackInfo.csv"); //Causes read in error - array out of bounds
-			staticDBHelper.loadFileIntoDB("test_staticTrackInfo.csv");
-			return staticDBHelper;
-		}
-	}	
 }
