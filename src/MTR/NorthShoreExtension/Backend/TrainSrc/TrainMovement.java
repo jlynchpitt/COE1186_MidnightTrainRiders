@@ -15,8 +15,8 @@ public class TrainMovement {
 	private double pheta;			//angle of the slope//
 	private double cd;
 	private boolean eBrake, brake;
-	final double staticFriction = 0.78; //Static Friciton of hard Steel on Steel//
-	final double kineticFriction = 0.42; //Kinetic Friction of hard Steel on steel//
+	final double staticFriction = 0.001; //Static Friciton of hard Steel on Steel//
+	final double kineticFriction = 0.001; //Kinetic Friction of hard Steel on steel//
 	final double gravity =  9.807; //expressed in m/s^2//
 	final double brakeAcc = -1.2;
 	final double eBrakeAcc = -2.73;
@@ -47,7 +47,7 @@ public class TrainMovement {
 			
 			normalForce = mass*gravity*Math.cos(pheta);
 		    if(velocity==0){
-		    	engineForce = power/0.5;
+		    	engineForce = power/0.1;
 		    	xForce=engineForce-mass*gravity*Math.sin(pheta);
 		    	
 		    	if(Math.abs(xForce)>staticFriction*normalForce&&xForce>0) {
@@ -80,6 +80,7 @@ public class TrainMovement {
 			}
 		}
 		
+		
 		if(acceleration>0.5) {
 			acceleration=0.5;
 		}
@@ -93,6 +94,9 @@ public class TrainMovement {
 			distance=0;
 		}
 		cd+=distance;
+		System.out.println("Velocity: "+velocity);
+		System.out.println("Next Velocity: "+nextVelocity);
+		System.out.println("Accerleration: "+acceleration);
 		this.velocity = nextVelocity;
 	}
 	

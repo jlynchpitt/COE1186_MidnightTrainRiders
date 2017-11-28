@@ -19,7 +19,7 @@ public class TrainSchedule {
 	
 	String trackLine = "";
 	static int[] stops = new int[99];
-	int[] authority = new int [199];
+	int[] authority;
 	int[] departures = new int [99];
 	static int trainID = 0;
 	
@@ -28,6 +28,9 @@ public class TrainSchedule {
 		trainID = id;
 		stops = listOfStops;
 		authority = trainScheduler.calcAuthority(listOfStops);
+		/*for (int i = 0; i < authority.length; i++) {
+			System.out.println(":-: " + authority[i]);
+		}*/
 		trackLine = line;
 	}
 	
