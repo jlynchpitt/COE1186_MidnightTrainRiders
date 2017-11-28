@@ -391,8 +391,8 @@ public class DBHelper {
 			
 		    ResultSet result = statement.executeQuery("SELECT * from TrackInfo WHERE trackID = '"+trackid+"'");   
 		    	type = result.getString("infrastructure");
-		    	if(type.equals(null) || type.equals(" ")) {
-		    		type = " ";
+		    	if(type == null) {
+		    		type = "none";
 		    	}
 		}
 		catch(SQLException e){  
