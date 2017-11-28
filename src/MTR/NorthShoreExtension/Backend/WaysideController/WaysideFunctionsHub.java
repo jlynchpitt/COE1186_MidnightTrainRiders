@@ -10,6 +10,7 @@ package MTR.NorthShoreExtension.Backend.WaysideController;
 
 import java.awt.List;
 import java.util.Arrays;
+import java.util.Stack;
 
 import MTR.NorthShoreExtension.MainMTR;
 import MTR.NorthShoreExtension.Backend.DBHelper;
@@ -30,6 +31,8 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 	public static int[] TrackOccupancyArray;
 	public static int[] BrokenTrackArray;
 	public static int[] OccupiedTrackArray;
+	
+	static Stack<Integer> OccupiedTracks = new Stack<>();
 	public static int[] AuthorArray = {2130,2131,2141,2145,2165,2146,2147};
 	public static WaysideFunctions obj = new WaysideFunctions();
 	public static WaysideControllerUI obj2 = new WaysideControllerUI();
@@ -103,7 +106,12 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 		//sends the occupied tracks to the CTC for further information
 	   public static void WaysideController_TrackOccupancy(int[] IncomingTrackOccupancyArray)
 	   {
+		   
 		   OccupiedTrackArray = IncomingTrackOccupancyArray;
+		   for (int x = 0; x < IncomingTrackOccupancyArray.length; x++)
+		   {
+			   OccupiedTracks.push(IncomingTrackOccupancyArray[x]);
+		   }
 		   WaysideController TrackUpdate = new WaysideController();
 		   WaysideController.UpdateOccupiedTracks(IncomingTrackOccupancyArray);
 		   //TrainScheduleHelper.CTC_getOccupiedTracks(IncomingTrackOccupancyArray);  
@@ -119,7 +127,7 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 			   String LineColor = null;
 			   
 			   int firstDigit = Character.getNumericValue(IncomingNumber.charAt(0));
-			   String BlockNumber =  IncomingNumber.substring(1,3);
+			   String BlockNumber =  IncomingNumber.substring(1);
 			   System.out.println("BLOCK: " + BlockNumber);
 			   WaysideFunctionsHub track = new WaysideFunctionsHub();
 
