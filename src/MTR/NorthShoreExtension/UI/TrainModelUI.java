@@ -41,8 +41,8 @@ public class TrainModelUI extends JFrame {
 	private TrackModel tm;
 	private double p;
 	private JTextField txtAcc;
-	private JLabel lblV, lblAcc;
-	private JComboBox combobox;
+	private JLabel lblV, lblAcc, lblLd,lblRightDoor;
+	private JComboBox comboBox;
 	private boolean b=false;
 
 	/**
@@ -132,7 +132,7 @@ public class TrainModelUI extends JFrame {
 		gbc_lblDynamic.gridy = 1;
 		contentPane.add(lblDynamic, gbc_lblDynamic);
 		
-		JComboBox comboBox = new JComboBox();
+		comboBox = new JComboBox();
 		
 		SortedSet<Integer> keys = new TreeSet<Integer>(tMap.keySet());
 		Integer[] tarray = new Integer[keys.size()];
@@ -148,6 +148,7 @@ public class TrainModelUI extends JFrame {
 				String delim = " ";
 				String[] tokens = str.split(delim);
 				tr=(Train)tMap.get(Integer.valueOf(tokens[1]));
+				updateGUI();
 			}
 		});
 		GridBagConstraints gbc_comboBox = new GridBagConstraints();
@@ -550,8 +551,27 @@ public class TrainModelUI extends JFrame {
 	public void updateGUI() {
 		lblV.setText(String.format("%.2f", tr.getVelocity()));
 		lblAcc.setText(String.format("%.2f", tr.getAcceleration()));
+		if(tr.getLeftDoor()) {
+			lblLd.setText("On");
+		}else {
+			lblLd= new JLabel("Off");
+		}
+		
 	}
 	
+	public void addTrain() {
+		tMap=tm.getTrains();
+		
+		SortedSet<Integer> keys = new TreeSet<Integer>(tMap.keySet());
+		Integer[] tarray = new Integer[keys.size()];
+		keys.toArray(tarray);
+		String[] tnames = new String[keys.size()];
+		for (int i=0;i<tnames.length;i++) {
+			tnames[i]="Train "+tarray[i];
+		}
+		comboBox.setModel(new DefaultComboBoxModel(tnames));
+		
+	}
 	
 	
 	public static void main(String[] args) {
