@@ -120,6 +120,7 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 			   
 			   int firstDigit = Character.getNumericValue(IncomingNumber.charAt(0));
 			   String BlockNumber =  IncomingNumber.substring(1,3);
+			   System.out.println("BLOCK: " + BlockNumber);
 			   WaysideFunctionsHub track = new WaysideFunctionsHub();
 
 			   if (firstDigit == 1)
