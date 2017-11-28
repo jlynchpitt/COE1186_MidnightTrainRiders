@@ -28,7 +28,7 @@ public class Train {
 	public Train(int t){
 		tm = new TrainMovement(trainmass);
 		TrainControllerHelper tch = MainMTR.getTrainControllerHelper();
-		tc = tch.addNewTrainController(t,"Green");
+		tc = tch.addNewTrainController(t,"Green", this);
 		p = new Passengers();
 		trainID=t;
 	}
@@ -48,8 +48,9 @@ public class Train {
 	*/
 	//Functions that the Train Controller Calls//
 	public void TrainModel_setPower(double p){
-		tm.setMovement(p/1000); //the power is divided by 1000 to convert from Kilowatts to watts
-
+		tm.setMovement(p*1000); //the power is divided by 1000 to convert from Kilowatts to watts
+		
+		System.out.println("Got power: " + p);
 		tc.TrainControl_setActualSpeed(3.6*tm.getVelocity());	// This line receives the velocity from the train movement class and sends it to the train controller
 		tkm.TrackModel_setDistance(trainID, tm.getDistance());
 	}
