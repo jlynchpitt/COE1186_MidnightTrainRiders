@@ -180,6 +180,7 @@ public class TrackModelUI extends JPanel {
     					}
     				}
     				else {
+    					//((Graphics2D) g).setStroke(new BasicStroke(2));
     					g.drawLine(drawArray[0], drawArray[1], drawArray[2], drawArray[3]);
     					g.setColor(Color.green);
     					g.fillOval((drawArray[0]-5), (drawArray[1]-10), 8, 8);
@@ -187,7 +188,7 @@ public class TrackModelUI extends JPanel {
     					if(occupied!=0) {
     						g.fillRect((drawArray[2]-drawArray[0])/2, (drawArray[3]-drawArray[1])/2, 30, 15);
     						g.setColor(Color.red);
-    						g.fillOval((drawArray[2]-10), (drawArray[3]-10), 8, 8);
+    						g.fillOval((drawArray[0]-5), (drawArray[1]-10), 8, 8);
     						//draw train
     						g.setColor(Color.blue);
     			    	     	g.fillRect((drawArray[0]+10), (drawArray[1]-10), 20, 10);
@@ -202,7 +203,8 @@ public class TrackModelUI extends JPanel {
     							inf.equals("STATION: SHADYSIDE") || inf.equals("STATION: HERRON AVE") ||
     							inf.equals("STATION; SWISSVILLE") || inf.equals("STATION;    PENN STATION; UNDERGROUND") ||
     							inf.equals("STATION; STEEL PLAZA; UNDERGROUND") || inf.equals("STATION; FIRST AVE; UNDERGROUND") ||
-    							inf.equals("STATION; STATION SQUARE") || inf.equals("STATION; SOUTH HILLS JUNCTION")) {
+    							inf.equals("STATION; STATION SQUARE") || inf.equals("STATION; SOUTH HILLS JUNCTION") ||
+    							inf.equals("STATION; POPLAR")) {
     						  g.setColor(Color.gray);
     					      g.fillOval((drawArray[0]), (drawArray[1]), 15, 10);
     					}
@@ -229,7 +231,7 @@ public class TrackModelUI extends JPanel {
 				// TODO Auto-generated method stub
 				int x=e.getX();
 		        int y=e.getY();
-		        //System.out.println("recognized! x: " +x+"y: "+y);
+		        System.out.println("recognized! x: " +x+"y: "+y);
 		        int displayTrack = 0;
 		        displayTrack = load.findCoordinates(x, y);
 		        returnString = load.getDisplayInfo(displayTrack);

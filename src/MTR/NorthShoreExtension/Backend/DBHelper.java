@@ -111,6 +111,7 @@ public class DBHelper {
 		int startY = 0;
 		int endX = 0;
 		int endY = 0;
+		int store = 0;
 		try {
 			connection = connect();
 			
@@ -124,9 +125,22 @@ public class DBHelper {
 		           startY = resultSet.getInt("startY");
 		           endX = resultSet.getInt("endX");
 		           endY = resultSet.getInt("endY");
-		           if((x >= (startX-15) && x <= (endX+15)) && (y >= (startY-15) && y <= (endY+15))) {
-		        	   		trackid = resultSet.getInt("trackID");
+		           if(startX > endX) {
+		        	   store = startX;
+		        	   startX = endX;
+		        	   endX = store;
 		           }
+		           
+		           if(startY > endY) {
+		        	   store = startY;
+		        	   startY = endY;
+		        	   endY = store;
+		           }
+		           
+		        		   if((x >= (startX-10) && x <= (endX+10)) && (y >= (startY-10) && y <= (endY+10))) {
+			        	   		trackid = resultSet.getInt("trackID");
+			        	   }
+
 		        }
 		}
 		catch(SQLException e){  
