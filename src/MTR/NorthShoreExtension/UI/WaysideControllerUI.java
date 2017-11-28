@@ -56,13 +56,13 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 	public static DefaultTableModel dm = new DefaultTableModel();
 	public static DefaultTableModel om = new DefaultTableModel();
 	public static DefaultTableModel am = new DefaultTableModel();
-	public static DefaultTableModel dm1 = new DefaultTableModel();
+	public static DefaultTableModel dm1 = new DefaultTableModel(250,4);
 	public static JTable table1;
 	public static JTable table;
 	public static JScrollPane scroll1;
 	public static JScrollPane scroll;
 	public static JScrollPane scroll2;
-	public static int Scroll1Height = 75;
+	public static int Scroll1Height = 100;
 	static DBHelper load;
 	
     
@@ -218,7 +218,7 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 				   dm1.setValueAt(ObjectArray[x][y], x, y);
 			   }
 			   Scroll1Height = dm1.getRowCount()*(20); 
-			   scroll1.setPreferredSize(new Dimension(500, Scroll1Height));
+			   //scroll1.setPreferredSize(new Dimension(500, 100));
 			   //System.out.println(Scroll1Height);
 		   }
 		   
@@ -244,7 +244,7 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 		   //dm1.addRow(ObjectArray[x]);
 		   
 		   String LineColor = null;
-	   String BlockNumber =  Integer.toString(TrackID).substring(1,4);
+	   String BlockNumber =  Integer.toString(TrackID).substring(1);
 	   int firstDigit = Character.getNumericValue(Integer.toString(TrackID).charAt(0));
 	   
 	   if (firstDigit == 1)
@@ -274,7 +274,7 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
    }
    public static void SwitchChartUpdater(int ID)  //update with actual information
    {
-	   String BlockNumber =  Integer.toString(ID).substring(1,4);
+	   String BlockNumber =  Integer.toString(ID).substring(1);
 
 	   //LineColor = DB.getColor(IncomingTrackOccupancyArray[x]);
 	   for (int x = 0; x < dm.getRowCount(); x++)
@@ -324,14 +324,14 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 	   dm.setDataVector(new Object[][] { }, new Object[] { "Line", "Track", "Dest Track", "Alt Track" });
 	   for(Integer obj : RedSwitch)
 	   {
-		   String Color = Integer.toString(obj).substring(1,4);
+		   String Color = Integer.toString(obj).substring(1);
 		   Object[] Switches = {"Red", Color, load.getNextTrack(obj, obj+1), load.getAltTrack(obj)};
 		   dm.addRow(Switches);
 	       //System.out.println(load.getInfrastructure(obj) + ": " + obj + " at " + load.getSwitch(obj) + " With the Next: " + load.getNextTrack(obj, obj+1) + " or " + load.getAltTrack(obj));
 	   }
 	   for(Integer obj : GreenSwitch)
 	   {
-		   String Color = Integer.toString(obj).substring(1,4);
+		   String Color = Integer.toString(obj).substring(1);
 		   Object[] Switches = {"Green", Color, load.getNextTrack(obj, obj+1), load.getAltTrack(obj)};
 		   dm.addRow(Switches);
 	       //System.out.println(load.getInfrastructure(obj) + ": " + obj + " at " + load.getSwitch(obj) + " With the Next: " + load.getNextTrack(obj, obj+1) + " or " + load.getAltTrack(obj));
