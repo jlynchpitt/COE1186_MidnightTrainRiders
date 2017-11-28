@@ -119,7 +119,7 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 			   String LineColor = null;
 			   
 			   int firstDigit = Character.getNumericValue(IncomingNumber.charAt(0));
-			   String BlockNumber =  IncomingNumber.substring(1,4);
+			   String BlockNumber =  IncomingNumber.substring(1,3);
 			   WaysideFunctionsHub track = new WaysideFunctionsHub();
 
 			   if (firstDigit == 1)
