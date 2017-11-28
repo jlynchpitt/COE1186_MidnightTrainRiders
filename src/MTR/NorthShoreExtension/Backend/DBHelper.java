@@ -29,11 +29,6 @@ public class DBHelper {
 			+ "curveEnd INTEGER, trackStatus STRING, heater STRING, speed INTEGER, authority INTEGER, occupied INTEGER,"
 			+ "nextTrack INTEGER, prevTrack INTEGER, secondSwitch INTEGER, switchPosition INTEGER";
 	
-	//NOTE: All times are integers as # of seconds since 1970
-	private static final String TRAIN_CONTROLS_TABLENAME = "TrainControls";
-	private static final String TRAIN_CONTROLS_COLUMNS = "trainID INTEGER, time INTEGER, powerCommand INTEGER, "
-			+ "speedCommand INTEGER, actualSpeed REAL";
-	
 	private static final String INCIDENT_TABLENAME = "Incidents";
 	private static final String INCIDENT_COLUMNS = "errorType STRING, timeBroken INTEGER, timeFixed INTEGER, trackID INTEGER"
 			+ "trainID INTEGER";
@@ -45,6 +40,7 @@ public class DBHelper {
 	public DBHelper() {
 		// load the sqlite-JDBC driver using the current class loader
 		Connection connection = null;
+		Statement statement = null;
 		try
 		{
 			Class.forName("org.sqlite.JDBC");
@@ -52,14 +48,11 @@ public class DBHelper {
 		    // create a database connection
 		    connection = connect();
 	
-		    Statement statement = connection.createStatement();
+		    statement = connection.createStatement();
 		    statement.setQueryTimeout(30);  // set timeout to 30 sec. Keep this???
 	
 		    statement.executeUpdate("DROP TABLE IF EXISTS " + TRACK_INFO_TABLENAME);
 		    statement.executeUpdate("CREATE TABLE " + TRACK_INFO_TABLENAME + " (" + TRACK_INFO_COLUMNS + ")");	
-		    
-		    statement.executeUpdate("DROP TABLE IF EXISTS " + TRAIN_CONTROLS_TABLENAME);
-		    statement.executeUpdate("CREATE TABLE " + TRAIN_CONTROLS_TABLENAME + " (" + TRAIN_CONTROLS_COLUMNS + ")");	
 		    
 		    statement.executeUpdate("DROP TABLE IF EXISTS " + INCIDENT_TABLENAME);
 		    statement.executeUpdate("CREATE TABLE " + INCIDENT_TABLENAME + " (" + INCIDENT_COLUMNS + ")");	
@@ -73,14 +66,9 @@ public class DBHelper {
 		 catch(ClassNotFoundException e) {
 			 System.err.println(e.getMessage());
 		 }
-		 finally {         
-			 try {
-	               if(connection != null)
-	                  connection.close();
-		     }
-		     catch(SQLException e) {  // Use SQLException class instead.          
-		    	 System.err.println(e); 
-		     }
+		finally {         
+	        if (statement != null) try { statement.close(); } catch (SQLException ignore) {}
+	        if (connection != null) try { connection.close(); } catch (SQLException ignore) {}
 		 }
 	}
 	
@@ -106,6 +94,8 @@ public class DBHelper {
 	}
 	public int findCoordinates(int x, int y) {
 		Connection connection = null;
+		Statement statement = null;
+		ResultSet resultSet = null;
 		int trackid = 0;
 		int startX = 0;
 		int startY = 0;
@@ -115,10 +105,10 @@ public class DBHelper {
 		try {
 			connection = connect();
 			
-			Statement statement = connection.createStatement();
+			statement = connection.createStatement();
 			statement.setQueryTimeout(30); //TODO: Is this needed?
 			
-			ResultSet resultSet = statement.executeQuery("SELECT * from TrackInfo");  
+			resultSet = statement.executeQuery("SELECT * from TrackInfo");  
 			 while(resultSet.next())
 		        {
 		           startX = resultSet.getInt("startX");
@@ -146,28 +136,26 @@ public class DBHelper {
 		catch(SQLException e){  
 			 System.err.println(e.getMessage()); 
 		 }       
-		 finally {         
-			 try {
-	               if(connection != null)
-	                  connection.close();
-		     }
-		     catch(SQLException e) {  // Use SQLException class instead.          
-		    	 System.err.println(e); 
-		     }
+		finally {         
+			if (resultSet != null) try { resultSet.close(); } catch (SQLException ignore) {}
+	        if (statement != null) try { statement.close(); } catch (SQLException ignore) {}
+	        if (connection != null) try { connection.close(); } catch (SQLException ignore) {}
 		 }
 		return trackid;
 	}
 	
 	public void showTrackTest() {
 		Connection connection = null;
+		Statement statement = null;
+		ResultSet resultSet = null;
 		
 		try {
 			connection = connect();
 			
-			Statement statement = connection.createStatement();
+			statement = connection.createStatement();
 			statement.setQueryTimeout(30); //TODO: Is this needed?
 			
-			ResultSet resultSet = statement.executeQuery("SELECT * from TrackInfo");  
+			 resultSet = statement.executeQuery("SELECT * from TrackInfo");  
 			 while(resultSet.next())
 		        {
 		           // iterate & read the result set
@@ -200,24 +188,21 @@ public class DBHelper {
 		catch(SQLException e){  
 			 System.err.println(e.getMessage()); 
 		 }       
-		 finally {         
-			 try {
-	               if(connection != null)
-	                  connection.close();
-		     }
-		     catch(SQLException e) {  // Use SQLException class instead.          
-		    	 System.err.println(e); 
-		     }
+		finally {         
+			if (resultSet != null) try { resultSet.close(); } catch (SQLException ignore) {}
+	        if (statement != null) try { statement.close(); } catch (SQLException ignore) {}
+	        if (connection != null) try { connection.close(); } catch (SQLException ignore) {}
 		 }
 	}
 	
 	public void updateTrackStatus(int trackid, String status) {
 		Connection connection = null;
+		Statement statement = null;
 		
 		try {
 			connection = connect();
 			
-			Statement statement = connection.createStatement();
+			statement = connection.createStatement();
 			statement.setQueryTimeout(30); //TODO: Is this needed?
 			
 		    statement.executeUpdate("UPDATE TrackInfo SET trackStatus = '"+status+"' WHERE trackID = '"+trackid+"'");   
@@ -226,24 +211,20 @@ public class DBHelper {
 		catch(SQLException e){  
 			 System.err.println(e.getMessage()); 
 		 }       
-		 finally {         
-			 try {
-	               if(connection != null)
-	                  connection.close();
-		     }
-		     catch(SQLException e) {  // Use SQLException class instead.          
-		    	 System.err.println(e); 
-		     }
+		finally {         
+	        if (statement != null) try { statement.close(); } catch (SQLException ignore) {}
+	        if (connection != null) try { connection.close(); } catch (SQLException ignore) {}
 		 }
 	}
 
 	public void updateHeater(int trackid, String heaterStatus) {
 		Connection connection = null;
+		Statement statement = null;
 		
 		try {
 			connection = connect();
 			
-			Statement statement = connection.createStatement();
+			statement = connection.createStatement();
 			statement.setQueryTimeout(30); //TODO: Is this needed?
 			
 		    statement.executeUpdate("UPDATE TrackInfo SET heater = '"+heaterStatus+"' WHERE trackID = '"+trackid+"'");   
@@ -252,24 +233,19 @@ public class DBHelper {
 		catch(SQLException e){  
 			 System.err.println(e.getMessage()); 
 		 }       
-		 finally {         
-			 try {
-	               if(connection != null)
-	                  connection.close();
-		     }
-		     catch(SQLException e) {  // Use SQLException class instead.          
-		    	 System.err.println(e); 
-		     }
+		finally {         
+	        if (statement != null) try { statement.close(); } catch (SQLException ignore) {}
+	        if (connection != null) try { connection.close(); } catch (SQLException ignore) {}
 		 }
 	}
 
 	public void updateSpeedAuthority(int trackid, int speed, int authority) {
 		Connection connection = null;
-		
+		Statement statement = null;
 		try {
 			connection = connect();
 			
-			Statement statement = connection.createStatement();
+			statement = connection.createStatement();
 			statement.setQueryTimeout(30); //TODO: Is this needed?
 			
 		    statement.executeUpdate("UPDATE TrackInfo SET speed = '"+speed+"', authority = '"+authority+"' WHERE trackID = '"+trackid+"'");   
@@ -278,24 +254,20 @@ public class DBHelper {
 		catch(SQLException e){  
 			 System.err.println(e.getMessage()); 
 		 }       
-		 finally {         
-			 try {
-	               if(connection != null)
-	                  connection.close();
-		     }
-		     catch(SQLException e) {  // Use SQLException class instead.          
-		    	 System.err.println(e); 
-		     }
+		finally {         
+	        if (statement != null) try { statement.close(); } catch (SQLException ignore) {}
+	        if (connection != null) try { connection.close(); } catch (SQLException ignore) {}
 		 }
 	}
 
 	public void updateTrackOccupied(int trackid, int isOccupied) {
 		Connection connection = null;
+		Statement statement = null;
 		
 		try {
 			connection = connect();
 			
-			Statement statement = connection.createStatement();
+			statement = connection.createStatement();
 			statement.setQueryTimeout(30); //TODO: Is this needed?
 			
 		    statement.executeUpdate("UPDATE TrackInfo SET occupied = '"+isOccupied+"' WHERE trackID = '"+trackid+"'");   
@@ -304,41 +276,34 @@ public class DBHelper {
 		catch(SQLException e){  
 			 System.err.println(e.getMessage()); 
 		 }       
-		 finally {         
-			 try {
-	               if(connection != null)
-	                  connection.close();
-		     }
-		     catch(SQLException e) {  // Use SQLException class instead.          
-		    	 System.err.println(e); 
-		     }
+		finally {         
+	        if (statement != null) try { statement.close(); } catch (SQLException ignore) {}
+	        if (connection != null) try { connection.close(); } catch (SQLException ignore) {}
 		 }
 	}
 	
 	public int getTrackOccupied(int trackid) {
 		Connection connection = null;
+		Statement statement = null;
+		ResultSet result = null;
 		int status = 0;
 		try {
 			connection = connect();
 			
-			Statement statement = connection.createStatement();
+			statement = connection.createStatement();
 			statement.setQueryTimeout(30); //TODO: Is this needed?
 			
-			ResultSet result = statement.executeQuery("SELECT * from  TrackInfo WHERE trackID = '" + trackid + "'");
+			result = statement.executeQuery("SELECT * from  TrackInfo WHERE trackID = '" + trackid + "'");
 			status = result.getInt("occupied");  
 
 		}
 		catch(SQLException e){  
 			 System.err.println(e.getMessage()); 
 		 }       
-		 finally {         
-			 try {
-	               if(connection != null)
-	                  connection.close();
-		     }
-		     catch(SQLException e) {  // Use SQLException class instead.          
-		    	 System.err.println(e); 
-		     }
+		finally {         
+			if (result != null) try { result.close(); } catch (SQLException ignore) {}
+	        if (statement != null) try { statement.close(); } catch (SQLException ignore) {}
+	        if (connection != null) try { connection.close(); } catch (SQLException ignore) {}
 		 }
 		return status;
 	}
@@ -347,18 +312,24 @@ public class DBHelper {
 	public String getTrackStatus(int trackid) {
 		String status = null;
 		Connection connection = null;
-		
+		Statement statement = null;
+		ResultSet result = null;
 		try {
 			connection = connect();
 			
-			Statement statement = connection.createStatement();
+			statement = connection.createStatement();
 			statement.setQueryTimeout(30);
 			
-			ResultSet result = statement.executeQuery("SELECT * from  TrackInfo WHERE trackID = '" + trackid + "'");
+			result = statement.executeQuery("SELECT * from  TrackInfo WHERE trackID = '" + trackid + "'");
 			status = result.getString("trackStatus");
 		} catch(SQLException e) {
 			System.err.println(e);
 		}
+		finally {         
+			if (result != null) try { result.close(); } catch (SQLException ignore) {}
+	        if (statement != null) try { statement.close(); } catch (SQLException ignore) {}
+	        if (connection != null) try { connection.close(); } catch (SQLException ignore) {}
+		 }
 		
 		return status;
 	}
@@ -367,46 +338,51 @@ public class DBHelper {
 	public int getSpeedLimit(int trackid) {
 		int limit = 100;
 		Connection connection = null;
+		Statement statement = null;
+		ResultSet result = null;
 		try {
 			connection = connect();
-			Statement statement = connection.createStatement();
+			statement = connection.createStatement();
 			statement.setQueryTimeout(30);
-			ResultSet result = statement.executeQuery("SELECT * from TrackInfo WHERE trackID = '" + trackid + "'");
+			result = statement.executeQuery("SELECT * from TrackInfo WHERE trackID = '" + trackid + "'");
 			limit = Integer.parseInt(result.getString("speedLimit"));
 		} catch(SQLException e) {
 			System.err.println(e);
 		}
+		finally {         
+			if (result != null) try { result.close(); } catch (SQLException ignore) {}
+	        if (statement != null) try { statement.close(); } catch (SQLException ignore) {}
+	        if (connection != null) try { connection.close(); } catch (SQLException ignore) {}
+		 }
 		return limit;
 	}
 	
 	public String getInfrastructure(int trackid) {
 		String type = null;
 		Connection connection = null;
+		Statement statement = null;
+		ResultSet result = null;
 		
 		try {
 			connection = connect();
 			
-			Statement statement = connection.createStatement();
+			statement = connection.createStatement();
 			statement.setQueryTimeout(30); //TODO: Is this needed?
 			
-		    ResultSet result = statement.executeQuery("SELECT * from TrackInfo WHERE trackID = '"+trackid+"'");   
-		    	type = result.getString("infrastructure");
-		    	if(type == null) {
-		    		type = "none";
-		    	}
+		    result = statement.executeQuery("SELECT * from TrackInfo WHERE trackID = '"+trackid+"'");   
+		    type = result.getString("infrastructure");
 		}
 		catch(SQLException e){  
 			 System.err.println(e.getMessage()); 
 		 }       
-		 finally {         
-			 try {
-	               if(connection != null)
-	                  connection.close();
-		     }
-		     catch(SQLException e) {  // Use SQLException class instead.          
-		    	 System.err.println(e); 
-		     }
+		finally {         
+			if (result != null) try { result.close(); } catch (SQLException ignore) {}
+	        if (statement != null) try { statement.close(); } catch (SQLException ignore) {}
+	        if (connection != null) try { connection.close(); } catch (SQLException ignore) {}
 		 }
+		if(type == null) {
+    		type = "none";
+    	}
 		return type;
 	}
 	//"Line/Status","Speed/Authority","Section","Block","Length (m)", 
@@ -414,14 +390,16 @@ public class DBHelper {
 	//"Cumlative Elevation", "Track Status", "Heater"
 	public String[] getDisplayInfo(int trackid) {
 		Connection connection = null;
+		Statement statement = null;
+		ResultSet result = null;
 		
 		try {
 			connection = connect();
 			
-			Statement statement = connection.createStatement();
+			statement = connection.createStatement();
 			statement.setQueryTimeout(30); //TODO: Is this needed?
 			
-		    ResultSet result = statement.executeQuery("SELECT * from TrackInfo WHERE trackID = '"+trackid+"'"); 
+		    result = statement.executeQuery("SELECT * from TrackInfo WHERE trackID = '"+trackid+"'"); 
 		    if(result.isBeforeFirst()) {
 		    	//System.out.println("found track, checking");
 			    	returnString[0] = result.getString("line");
@@ -460,14 +438,10 @@ public class DBHelper {
 		catch(SQLException e){  
 			 System.err.println(e.getMessage()); 
 		 }       
-		 finally {         
-			 try {
-	               if(connection != null)
-	                  connection.close();
-		     }
-		     catch(SQLException e) {  // Use SQLException class instead.          
-		    	 System.err.println(e); 
-		     }
+		finally {         
+			if (result != null) try { result.close(); } catch (SQLException ignore) {}
+	        if (statement != null) try { statement.close(); } catch (SQLException ignore) {}
+	        if (connection != null) try { connection.close(); } catch (SQLException ignore) {}
 		 }
 		return returnString;
 	}
@@ -475,27 +449,25 @@ public class DBHelper {
 	public int getTrackLength(int trackid) {
 		int length = 0;
 		Connection connection = null;
+		Statement statement = null;
+		ResultSet result = null;
 		
 		try {
 			connection = connect();
 			
-			Statement statement = connection.createStatement();
+			statement = connection.createStatement();
 			statement.setQueryTimeout(30); //TODO: Is this needed?
 			
-		    ResultSet result = statement.executeQuery("SELECT * from TrackInfo WHERE trackID = '"+trackid+"'");   
+		    result = statement.executeQuery("SELECT * from TrackInfo WHERE trackID = '"+trackid+"'");   
 		    	length = result.getInt("length");
 		}
 		catch(SQLException e){  
 			 System.err.println(e.getMessage()); 
 		 }       
-		 finally {         
-			 try {
-	               if(connection != null)
-	                  connection.close();
-		     }
-		     catch(SQLException e) {  // Use SQLException class instead.          
-		    	 System.err.println(e); 
-		     }
+		finally {         
+			if (result != null) try { result.close(); } catch (SQLException ignore) {}
+	        if (statement != null) try { statement.close(); } catch (SQLException ignore) {}
+	        if (connection != null) try { connection.close(); } catch (SQLException ignore) {}
 		 }
 		return length;
 	}
@@ -503,14 +475,16 @@ public class DBHelper {
 	public int schedNextTrack(int trackid, int prevTrack) {
 		int nextTrack = 0;
 		Connection connection = null;
+		Statement statement = null;
+		ResultSet track = null;
 		
 		try {
 			connection = connect();
 			
-			Statement statement = connection.createStatement();
+			statement = connection.createStatement();
 			statement.setQueryTimeout(30); //TODO: Is this needed?
 
-			ResultSet track = statement.executeQuery("SELECT * from TrackInfo WHERE trackID = '"+trackid+"'");
+			track = statement.executeQuery("SELECT * from TrackInfo WHERE trackID = '"+trackid+"'");
 			if(prevTrack < trackid) {
 				if(track.getInt("switchPosition")==0) {
 					nextTrack = track.getInt("nextTrack");
@@ -544,14 +518,10 @@ public class DBHelper {
 		catch(SQLException e){  
 			 System.err.println(e.getMessage()); 
 		 }       
-		 finally {         
-			 try {
-	               if(connection != null)
-	                  connection.close();
-		     }
-		     catch(SQLException e) {  // Use SQLException class instead.          
-		    	 System.err.println(e); 
-		     }
+		finally {         
+			if (track != null) try { track.close(); } catch (SQLException ignore) {}
+	        if (statement != null) try { statement.close(); } catch (SQLException ignore) {}
+	        if (connection != null) try { connection.close(); } catch (SQLException ignore) {}
 		 }
 
 		return nextTrack;
@@ -561,14 +531,16 @@ public class DBHelper {
 	public int getAltTrack(int trackid){
 		int nextTrack = 0;
 		Connection connection = null;
+		Statement statement = null;
+		ResultSet track = null;
 		//make connection
 		try {
 			connection = connect();
 			
-			Statement statement = connection.createStatement();
+			statement = connection.createStatement();
 			statement.setQueryTimeout(30); //TODO: Is this needed?
 			//access data table
-			ResultSet track = statement.executeQuery("SELECT * from TrackInfo WHERE trackID = '"+trackid+"'");
+			track = statement.executeQuery("SELECT * from TrackInfo WHERE trackID = '"+trackid+"'");
 				//if switch is straight
 				if(track.getInt("switchPosition")==0) 
 				{
@@ -589,14 +561,10 @@ public class DBHelper {
 		catch(SQLException e){  
 			 System.err.println(e.getMessage()); 
 		 }       
-		 finally {         
-			 try {
-	               if(connection != null)
-	                  connection.close();
-		     }
-		     catch(SQLException e) {  // Use SQLException class instead.          
-		    	 System.err.println(e); 
-		     }
+		finally {         
+			if (track != null) try { track.close(); } catch (SQLException ignore) {}
+	        if (statement != null) try { statement.close(); } catch (SQLException ignore) {}
+	        if (connection != null) try { connection.close(); } catch (SQLException ignore) {}
 		 }
 
 		return nextTrack;
@@ -605,15 +573,17 @@ public class DBHelper {
 	public int getNextTrack(int trackid, int prevTrack){
 		int nextTrack = 0;
 		Connection connection = null;
+		Statement statement = null;
+		ResultSet track = null;
 		
 		try {
 			connection = connect();
 			
-			Statement statement = connection.createStatement();
+			statement = connection.createStatement();
 			statement.setQueryTimeout(30); //TODO: Is this needed?
 
-			ResultSet track = statement.executeQuery("SELECT * from TrackInfo WHERE trackID = '"+trackid+"'");
-			if(prevTrack > trackid) {
+			track = statement.executeQuery("SELECT * from TrackInfo WHERE trackID = '"+trackid+"'");
+			if(prevTrack < trackid) {
 				if(track.getInt("switchPosition")==0) {
 					nextTrack = track.getInt("nextTrack");
 					if(nextTrack == prevTrack) {
@@ -627,7 +597,7 @@ public class DBHelper {
 					}
 				}
 			}
-			else if(prevTrack < trackid) {
+			else if(prevTrack > trackid) {
 				if(track.getInt("switchPosition")==0) {
 					nextTrack = track.getInt("prevTrack");
 					if(nextTrack == prevTrack) {
@@ -646,14 +616,10 @@ public class DBHelper {
 		catch(SQLException e){  
 			 System.err.println(e.getMessage()); 
 		 }       
-		 finally {         
-			 try {
-	               if(connection != null)
-	                  connection.close();
-		     }
-		     catch(SQLException e) {  // Use SQLException class instead.          
-		    	 System.err.println(e); 
-		     }
+		finally {         
+			if (track != null) try { track.close(); } catch (SQLException ignore) {}
+	        if (statement != null) try { statement.close(); } catch (SQLException ignore) {}
+	        if (connection != null) try { connection.close(); } catch (SQLException ignore) {}
 		 }
 
 		return nextTrack;
@@ -661,11 +627,12 @@ public class DBHelper {
 	
 	public void setSwitch(int trackid, int position) {
 		Connection connection = null;
+		Statement statement = null;
 		
 		try {
 			connection = connect();
 			
-			Statement statement = connection.createStatement();
+			statement = connection.createStatement();
 			statement.setQueryTimeout(30); //TODO: Is this needed?
 			
 		    statement.executeUpdate("UPDATE TrackInfo SET switchPosition = '"+position+"' WHERE trackID = '"+trackid+"'");   
@@ -674,112 +641,103 @@ public class DBHelper {
 		catch(SQLException e){  
 			 System.err.println(e.getMessage()); 
 		 }       
-		 finally {         
-			 try {
-	               if(connection != null)
-	                  connection.close();
-		     }
-		     catch(SQLException e) {  // Use SQLException class instead.          
-		    	 System.err.println(e); 
-		     }
+		finally {         
+	        if (statement != null) try { statement.close(); } catch (SQLException ignore) {}
+	        if (connection != null) try { connection.close(); } catch (SQLException ignore) {}
 		 }
 	}
 	
 	public int getSwitch(int trackid) {
 		Connection connection = null;
+		Statement statement = null;
+		ResultSet track = null;
 		int position = 0;
 		try {
 			connection = connect();
 			
-			Statement statement = connection.createStatement();
+			statement = connection.createStatement();
 			statement.setQueryTimeout(30); //TODO: Is this needed?
 			
-			ResultSet track = statement.executeQuery("SELECT * from TrackInfo WHERE trackID = '"+trackid+"'"); 
+			track = statement.executeQuery("SELECT * from TrackInfo WHERE trackID = '"+trackid+"'"); 
 		    position = track.getInt("switchPosition");
 
 		}
 		catch(SQLException e){  
 			 System.err.println(e.getMessage()); 
 		 }       
-		 finally {         
-			 try {
-	               if(connection != null)
-	                  connection.close();
-		     }
-		     catch(SQLException e) {  // Use SQLException class instead.          
-		    	 System.err.println(e); 
-		     }
+		finally {         
+			if (track != null) try { track.close(); } catch (SQLException ignore) {}
+	        if (statement != null) try { statement.close(); } catch (SQLException ignore) {}
+	        if (connection != null) try { connection.close(); } catch (SQLException ignore) {}
 		 }
 		return position;
 	}
 	
 	public int getTrackID(int rowid) {
 		Connection connection = null;
+		Statement statement = null;
+		ResultSet track = null;
 		int id = 0;
 		try {
 			connection = connect();
 			
-			Statement statement = connection.createStatement();
+			statement = connection.createStatement();
 			statement.setQueryTimeout(30); //TODO: Is this needed?
 			
-			ResultSet track = statement.executeQuery("SELECT * from TrackInfo WHERE rowID = '"+rowid+"'"); 
+			track = statement.executeQuery("SELECT * from TrackInfo WHERE rowID = '"+rowid+"'"); 
 		    id = track.getInt("trackID");
 
 		}
 		catch(SQLException e){  
 			 System.err.println(e.getMessage()); 
 		 }       
-		 finally {         
-			 try {
-	               if(connection != null)
-	                  connection.close();
-		     }
-		     catch(SQLException e) {  // Use SQLException class instead.          
-		    	 System.err.println(e); 
-		     }
+		finally {         
+			if (track != null) try { track.close(); } catch (SQLException ignore) {}
+	        if (statement != null) try { statement.close(); } catch (SQLException ignore) {}
+	        if (connection != null) try { connection.close(); } catch (SQLException ignore) {}
 		 }
 		return id;
 	}
 	
 	public String getColor(int rowID) {
 		Connection connection = null;
+		Statement statement = null;
+		ResultSet resultSet = null;
 		String color = null;
 		
 		try {
 			connection = connect();
 			
-			Statement statement = connection.createStatement();
+			statement = connection.createStatement();
 			statement.setQueryTimeout(30); //TODO: Is this needed?
 			
-		    ResultSet resultSet = statement.executeQuery("SELECT * from TrackInfo where rowID = '"+rowID+"'");   
+		    resultSet = statement.executeQuery("SELECT * from TrackInfo where rowID = '"+rowID+"'");   
 		    color = resultSet.getString("line");
 		    //System.out.println("color = " + color);
 		}
 		catch(SQLException e){  
 			 System.err.println(e.getMessage()); 
 		 }       
-		 finally {         
-			 try {
-	               if(connection != null)
-	                  connection.close();
-		     }
-		     catch(SQLException e) {  // Use SQLException class instead.          
-		    	 System.err.println(e); 
-		     }
+		finally {         
+			if (resultSet != null) try { resultSet.close(); } catch (SQLException ignore) {}
+	        if (statement != null) try { statement.close(); } catch (SQLException ignore) {}
+	        if (connection != null) try { connection.close(); } catch (SQLException ignore) {}
 		 }
 		return color;
 	}
 	
 	public int[] getDrawingCoordinates(int rowID) {
 		Connection connection = null;
+		Statement statement = null;
+		ResultSet resultSet = null;
 		
 		try {
 			connection = connect();
 			
-			Statement statement = connection.createStatement();
+			statement = connection.createStatement();
 			statement.setQueryTimeout(30); //TODO: Is this needed?
 			
-			ResultSet resultSet = statement.executeQuery("SELECT * from TrackInfo where rowID = '"+rowID+"'");   
+			resultSet = statement.executeQuery("SELECT * from TrackInfo where rowID = '"+rowID+"'");   
 			returnArray[0] = resultSet.getInt("startX");
 			returnArray[1] = resultSet.getInt("startY");
 		    returnArray[2] = resultSet.getInt("endX");
@@ -792,43 +750,14 @@ public class DBHelper {
 		catch(SQLException e){  
 			 System.err.println(e.getMessage()); 
 		 }       
-		 finally {         
-			 try {
-	               if(connection != null)
-	                  connection.close();
-		     }
-		     catch(SQLException e) {  // Use SQLException class instead.          
-		    	 System.err.println(e); 
-		     }
+		finally {         
+			if (resultSet != null) try { resultSet.close(); } catch (SQLException ignore) {}
+	        if (statement != null) try { statement.close(); } catch (SQLException ignore) {}
+	        if (connection != null) try { connection.close(); } catch (SQLException ignore) {}
 		 }
 		return returnArray;
 	}
 	
-	public void addTrainStateRecord(int trainID, int time, int powerCmd, int speedCmd, double actualSpeed) throws SQLException {
-		Connection connection = null;
-		
-		try {
-			connection = connect();
-			
-			Statement statement = connection.createStatement();
-			statement.setQueryTimeout(30); //TODO: Is this needed?
-			
-		    statement.executeUpdate("INSERT INTO " + TRAIN_CONTROLS_TABLENAME + " values(' "+trainID+"', '"+time+"', '"
-		    		+powerCmd+"', '"+speedCmd+"', '"+actualSpeed+")");   
-		}
-		catch(SQLException e){  
-			 System.err.println(e.getMessage()); 
-		 }       
-		 finally {         
-			 try {
-	               if(connection != null)
-	                  connection.close();
-		     }
-		     catch(SQLException e) {  // Use SQLException class instead.          
-		    	 System.err.println(e); 
-		     }
-		 }
-	}
 	
 	/**
     * Connect to the database

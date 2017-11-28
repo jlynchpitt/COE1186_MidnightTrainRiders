@@ -86,7 +86,7 @@ public class TrackModel {
 		else {
 			load.updateTrackOccupied(trackid, 0);
 			update.trackOccupying = load.getNextTrack(trackid, lastTrack);
-			lastTrack = update.trackOccupying;
+			lastTrack = trackid;
 			load.updateTrackOccupied(update.trackOccupying, 1);
 			trainList.put(trainNum, update);
 		}

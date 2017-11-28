@@ -91,10 +91,11 @@ public class StaticTrackDBHelper {
 			int speedLimit, int primaryNext, int secondaryNext, int primaryPrev, int secondaryPrev, int biDirectional,
 			int station, int isSwitch, int underground, int firstTrack, int lastTrack, double elevation, double cumulativeElevation) {
 		Connection connection = null;
+		Statement statement = null;
 		try {
 			connection = connect();
 			
-			Statement statement = connection.createStatement();
+			statement = connection.createStatement();
 			statement.setQueryTimeout(30); //TODO: Is this needed?
 			
 			String queryUpdateStatement = "INSERT INTO " + TRACK_INFO_TABLENAME + " values(' "+trackID+"', '"+line+"', '"+section+"', '"
@@ -118,6 +119,10 @@ public class StaticTrackDBHelper {
 				}
 			}
 		}
+		finally {         
+	        if (statement != null) try { statement.close(); } catch (SQLException ignore) {}
+	        if (connection != null) try { connection.close(); } catch (SQLException ignore) {}
+		 }
 	    //default trainStatus = ""
 	    //default speed, authority, occupied = 0
 	    //default switchPosition = 0
@@ -187,10 +192,12 @@ public class StaticTrackDBHelper {
 	
 	public void addStation(int trackID, int stationID, String stationName, String stationSide) {
 		Connection connection = null;
+		Statement statement = null;
+		
 		try{
 			connection = connect();
 			
-			Statement statement = connection.createStatement();
+			statement = connection.createStatement();
 			statement.setQueryTimeout(30); //TODO: Is this needed?
 			
 		    statement.executeUpdate("INSERT INTO " + STATION_LIST_TABLENAME + " values(' "+trackID+"', '"+stationID+"', '"+stationName+"', '"
@@ -210,6 +217,10 @@ public class StaticTrackDBHelper {
 				}
 			}
 		}
+		finally {         
+	        if (statement != null) try { statement.close(); } catch (SQLException ignore) {}
+	        if (connection != null) try { connection.close(); } catch (SQLException ignore) {}
+		 }
 	}
 	
 	public int getFirstTrack(String line) {
