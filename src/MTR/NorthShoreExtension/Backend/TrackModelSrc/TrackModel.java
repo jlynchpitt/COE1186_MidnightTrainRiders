@@ -139,7 +139,8 @@ public class TrackModel {
 				type.equals("STATION: SHADYSIDE") || type.equals("STATION: HERRON AVE") ||
 				type.equals("STATION; SWISSVILLE") || type.equals("STATION;    PENN STATION; UNDERGROUND") ||
 				type.equals("STATION; STEEL PLAZA; UNDERGROUND") || type.equals("STATION; FIRST AVE; UNDERGROUND") ||
-				type.equals("STATION; STATION SQUARE") || type.equals("STATION; SOUTH HILLS JUNCTION")) {
+				type.equals("STATION; STATION SQUARE") || type.equals("STATION; SOUTH HILLS JUNCTION") ||
+				type.equals("STATION; POPLAR")) {
 			soldTicket += rand.nextInt(50) + 1;
 		}
 		else {
@@ -186,7 +187,8 @@ public class TrackModel {
 				type.equals("STATION: SHADYSIDE") || type.equals("STATION: HERRON AVE") ||
 				type.equals("STATION; SWISSVILLE") || type.equals("STATION;    PENN STATION; UNDERGROUND") ||
 				type.equals("STATION; STEEL PLAZA; UNDERGROUND") || type.equals("STATION; FIRST AVE; UNDERGROUND") ||
-				type.equals("STATION; STATION SQUARE") || type.equals("STATION; SOUTH HILLS JUNCTION")) {
+				type.equals("STATION; STATION SQUARE") || type.equals("STATION; SOUTH HILLS JUNCTION") ||
+				type.equals("STATION; POPLAR")) {
 		
 				//set beacon here
 		}
