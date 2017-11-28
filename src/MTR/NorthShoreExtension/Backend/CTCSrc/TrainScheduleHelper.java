@@ -17,7 +17,8 @@ import MTR.NorthShoreExtension.Backend.CTCSrc.TrainSchedule;
 
 public class TrainScheduleHelper {
 	static List<TrainSchedule> tsl;
-	static int[] occupied = new int[200];
+	static int[] occupied = new int[250];
+	static int[] broken = new int [250];
 	
 	public TrainScheduleHelper() {
 		tsl = new ArrayList<TrainSchedule>();
@@ -38,7 +39,11 @@ public class TrainScheduleHelper {
 		return tsl;
 	}
 	
-	public static void updateOccupiedTracks(int[] occupiedTracks) {
+	public static void CTC_getOccupiedTracks(int[] occupiedTracks) {
 		occupied = occupiedTracks;
+	}
+	
+	public static void CTC_getBrokenTracks(int[] brokenTracks) {
+		broken = brokenTracks;
 	}
 }
