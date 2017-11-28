@@ -497,7 +497,7 @@ public class TrainController {
 	}
 	
 	private void configSpeedPID(MiniPID pid) {
-		pid.setOutputLimits(0, 160); //Train engine power limits: 0-120 kW (0-160 horsepower)
+		pid.setOutputLimits(0, 480); //Train engine power limits: 0-120 kW * 4 engines
 		pid.setSetpoint(0);
 	}
 	
