@@ -40,6 +40,7 @@ public class trainScheduler {
 	//   
 	
 	public static int[] calcAuthority(int[] listOfStops) {
+		List<Integer> auth = new ArrayList<Integer>();
 		int[] authority = new int[199];
 		int l = 0;
 		int m = 1;
@@ -102,9 +103,11 @@ public class trainScheduler {
 			prevSection = 2061;
 			lastSection = 2058;
 			authority[0] = firstSection; //replace with first section from yard
+			auth.add(0, firstSection);
 			if (listOfStops[0] != firstSection || listOfStops[1] > 0) {
 				//System.out.println("yes");
 				authority[1] = database.schedNextTrack(firstSection, prevSection);
+				auth.add(1, database.schedNextTrack(firstSection, prevSection));
 			}
 			//database.showTrackTest();
 			//System.out.println("Auth: " + authority[0] + " " + authority[1]);
@@ -121,10 +124,12 @@ public class trainScheduler {
 					m++;
 					if (m == 1) {
 						authority[m] = database.schedNextTrack(firstSection, (firstSection-1));
-						System.out.println("" + m + ": " + authority[m]);
+						//System.out.println("" + m + ": " + authority[m]);
+						auth.add(m, database.schedNextTrack(firstSection, (firstSection-1)));
 					} else {
 						authority[m] = database.schedNextTrack(authority[m-1], authority[m-2]);
-						System.out.println("" + m + ": " + authority[m]);
+						//System.out.println("" + m + ": " + authority[m]);
+						auth.add(m, database.schedNextTrack(authority[m-1], authority[m-2]));
 					}
 				}
 				l++;
@@ -138,7 +143,8 @@ public class trainScheduler {
 				while (listOfStops[l] != authority[m]) { //error throws here?
 					m++;
 					authority[m] = database.schedNextTrack(authority[m-1], authority[m-2]);
-					System.out.println("" + m + ": " + authority[m]);
+					//System.out.println("" + m + ": " + authority[m]);
+					auth.add(m, database.schedNextTrack(authority[m-1], authority[m-2]));
 				}
 				l++;
 			}
@@ -148,10 +154,20 @@ public class trainScheduler {
 		}
 		
 		int k = 0;
-		while (authority[k] != 0) {
+		for (k = 0; k < auth.size(); k++) {
+			System.out.println(".:. :" + auth.get(k));
+		}
+		
+		/*while (authority[k] != 0) {
 			System.out.println(".: " + authority[k]);
 			k++;
+		}*/
+		authority = new int[auth.size()];
+		for (int r = 0; r < auth.size(); r++) {
+			authority[r] = auth.get(r);
 		}
+		System.out.println(auth.size());
+		
 		return authority;
 	}
 	
