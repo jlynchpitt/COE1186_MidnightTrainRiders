@@ -28,7 +28,7 @@ public class Train {
 	public Train(int t){
 		tm = new TrainMovement(trainmass);
 		TrainControllerHelper tch = MainMTR.getTrainControllerHelper();
-		tch.addNewTrainController(t,"Green");
+		tc = tch.addNewTrainController(t,"Green");
 		p = new Passengers();
 		trainID=t;
 	}
