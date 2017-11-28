@@ -321,7 +321,11 @@ public class ctcUI {
 		gbc.gridx = 3; 
 		gbc.gridwidth = 1; 
 		gbc.gridy = 1; //fifth row
-		
+		trkCtrl.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				WaysideControllerUI.createAndShowWaysideControlGUI();
+			}
+		});
 		pane.add(trkCtrl, gbc);
 		
 		//trackModel Panel
