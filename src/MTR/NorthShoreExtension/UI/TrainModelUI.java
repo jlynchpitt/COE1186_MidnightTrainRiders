@@ -41,7 +41,8 @@ public class TrainModelUI extends JFrame {
 	private TrackModel tm;
 	private double p;
 	private JTextField txtAcc;
-	private JLabel lblV, lblAcc;
+	private JLabel lblV, lblAcc, lblLd,;
+	private JComboBox comboBox;
 	private boolean b=false;
 
 	/**
@@ -65,9 +66,9 @@ public class TrainModelUI extends JFrame {
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
 		gbl_contentPane.columnWidths = new int[]{0, 150, 20, 100, 100, 100, 100, 100, 100, 100, 100, 0};
-		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gbl_contentPane.columnWeights = new double[]{0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		contentPane.setLayout(gbl_contentPane);
 		
 		JLabel lblSelectTrain = new JLabel("Select Train:");
@@ -131,7 +132,7 @@ public class TrainModelUI extends JFrame {
 		gbc_lblDynamic.gridy = 1;
 		contentPane.add(lblDynamic, gbc_lblDynamic);
 		
-		JComboBox comboBox = new JComboBox();
+		comboBox = new JComboBox();
 		
 		SortedSet<Integer> keys = new TreeSet<Integer>(tMap.keySet());
 		Integer[] tarray = new Integer[keys.size()];
@@ -147,6 +148,7 @@ public class TrainModelUI extends JFrame {
 				String delim = " ";
 				String[] tokens = str.split(delim);
 				tr=(Train)tMap.get(Integer.valueOf(tokens[1]));
+				updateGUI();
 			}
 		});
 		GridBagConstraints gbc_comboBox = new GridBagConstraints();
@@ -486,12 +488,55 @@ public class TrainModelUI extends JFrame {
 		gbc_lblCumulativeDistance.gridy = 7;
 		contentPane.add(lblCumulativeDistance, gbc_lblCumulativeDistance);
 		
-		JButton btnBrakeFailure = new JButton("Brake Failure");
-		GridBagConstraints gbc_btnBrakeFailure = new GridBagConstraints();
-		gbc_btnBrakeFailure.insets = new Insets(0, 0, 0, 5);
-		gbc_btnBrakeFailure.gridx = 6;
-		gbc_btnBrakeFailure.gridy = 13;
-		contentPane.add(btnBrakeFailure, gbc_btnBrakeFailure);
+		JLabel lblFailureModes = new JLabel("Failure Modes:");
+		lblFailureModes.setForeground(new Color(220, 20, 60));
+		lblFailureModes.setFont(new Font("Arial", Font.BOLD, 18));
+		GridBagConstraints gbc_lblFailureModes = new GridBagConstraints();
+		gbc_lblFailureModes.gridwidth = 2;
+		gbc_lblFailureModes.insets = new Insets(0, 0, 5, 5);
+		gbc_lblFailureModes.gridx = 3;
+		gbc_lblFailureModes.gridy = 13;
+		contentPane.add(lblFailureModes, gbc_lblFailureModes);
+		
+		JLabel lblBrakeFailure = new JLabel("Brake Failure:");
+		lblBrakeFailure.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		GridBagConstraints gbc_lblBrakeFailure = new GridBagConstraints();
+		gbc_lblBrakeFailure.anchor = GridBagConstraints.EAST;
+		gbc_lblBrakeFailure.gridwidth = 2;
+		gbc_lblBrakeFailure.insets = new Insets(0, 0, 5, 5);
+		gbc_lblBrakeFailure.gridx = 3;
+		gbc_lblBrakeFailure.gridy = 14;
+		contentPane.add(lblBrakeFailure, gbc_lblBrakeFailure);
+		
+		JLabel lblEngineFailure = new JLabel("Engine Failure:");
+		lblEngineFailure.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		GridBagConstraints gbc_lblEngineFailure = new GridBagConstraints();
+		gbc_lblEngineFailure.anchor = GridBagConstraints.EAST;
+		gbc_lblEngineFailure.gridwidth = 2;
+		gbc_lblEngineFailure.insets = new Insets(0, 0, 5, 5);
+		gbc_lblEngineFailure.gridx = 3;
+		gbc_lblEngineFailure.gridy = 15;
+		contentPane.add(lblEngineFailure, gbc_lblEngineFailure);
+		
+		JLabel lblSignalPickupFailure = new JLabel("Signal Pickup Failure: ");
+		lblSignalPickupFailure.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		GridBagConstraints gbc_lblSignalPickupFailure = new GridBagConstraints();
+		gbc_lblSignalPickupFailure.anchor = GridBagConstraints.EAST;
+		gbc_lblSignalPickupFailure.gridwidth = 2;
+		gbc_lblSignalPickupFailure.insets = new Insets(0, 0, 5, 5);
+		gbc_lblSignalPickupFailure.gridx = 3;
+		gbc_lblSignalPickupFailure.gridy = 16;
+		contentPane.add(lblSignalPickupFailure, gbc_lblSignalPickupFailure);
+		
+		JLabel lblPassengerEmergencyBrake = new JLabel("Passenger Emergency Brake:");
+		lblPassengerEmergencyBrake.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		GridBagConstraints gbc_lblPassengerEmergencyBrake = new GridBagConstraints();
+		gbc_lblPassengerEmergencyBrake.anchor = GridBagConstraints.EAST;
+		gbc_lblPassengerEmergencyBrake.gridwidth = 2;
+		gbc_lblPassengerEmergencyBrake.insets = new Insets(0, 0, 0, 5);
+		gbc_lblPassengerEmergencyBrake.gridx = 3;
+		gbc_lblPassengerEmergencyBrake.gridy = 17;
+		contentPane.add(lblPassengerEmergencyBrake, gbc_lblPassengerEmergencyBrake);
 		
 		if(tr!=null) {
 			JLabel lblCd = new JLabel(String.format("%.2f",tr.getCumulativeDistance()));
@@ -506,8 +551,27 @@ public class TrainModelUI extends JFrame {
 	public void updateGUI() {
 		lblV.setText(String.format("%.2f", tr.getVelocity()));
 		lblAcc.setText(String.format("%.2f", tr.getAcceleration()));
+		if(tr.getLeftDoor()) {
+			lblLd.setText("On");
+		}else {
+			lblLd= new JLabel("Off");
+		}
+		
 	}
 	
+	public void addTrain() {
+		tMap=tm.getTrains();
+		
+		SortedSet<Integer> keys = new TreeSet<Integer>(tMap.keySet());
+		Integer[] tarray = new Integer[keys.size()];
+		keys.toArray(tarray);
+		String[] tnames = new String[keys.size()];
+		for (int i=0;i<tnames.length;i++) {
+			tnames[i]="Train "+tarray[i];
+		}
+		comboBox.setModel(new DefaultComboBoxModel(tnames));
+		
+	}
 	
 	
 	public static void main(String[] args) {
