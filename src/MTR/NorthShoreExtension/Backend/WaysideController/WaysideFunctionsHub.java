@@ -112,12 +112,10 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 		   {
 			   OccupiedTracks.push(IncomingTrackOccupancyArray[x]);
 		   }
-		   WaysideController TrackUpdate = new WaysideController();
 		   WaysideController.UpdateOccupiedTracks(IncomingTrackOccupancyArray);
 		   //TrainScheduleHelper.CTC_getOccupiedTracks(IncomingTrackOccupancyArray);  
 
 		   // Just stuff for the UI----------------------------------------------------
-		   DBHelper DB = new DBHelper();
 		   int ArrayLength = IncomingTrackOccupancyArray.length;
 		   Object[][] multi = new Object[ArrayLength][4];
 		   for (int x = 0; x < IncomingTrackOccupancyArray.length; x++)
@@ -129,7 +127,6 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 			   int firstDigit = Character.getNumericValue(IncomingNumber.charAt(0));
 			   String BlockNumber =  IncomingNumber.substring(1);
 			   //System.out.println("BLOCK: " + BlockNumber);
-			   WaysideFunctionsHub track = new WaysideFunctionsHub();
 
 			   if (firstDigit == 1)
 			   {
