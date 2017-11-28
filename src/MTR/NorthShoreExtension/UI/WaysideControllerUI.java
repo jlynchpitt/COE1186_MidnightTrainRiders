@@ -14,6 +14,8 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.event.ActionListener;
+import java.util.Stack;
+
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -25,6 +27,7 @@ import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
+import MTR.NorthShoreExtension.MainMTR;
 import MTR.NorthShoreExtension.Backend.DBHelper;
 import MTR.NorthShoreExtension.Backend.WaysideController.WaysideFunctions;
 import MTR.NorthShoreExtension.Backend.WaysideController.WaysideFunctionsHub;
@@ -88,6 +91,8 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
    
    public static void createAndShowWaysideControlGUI() 
 	{
+	   load = MainMTR.getDBHelper();
+	   //System.out.println("BLAH BLAH: " + load.getInfrastructure(2050));
 	 //setup panels
 	   PLCSetup();
 	   TrackInfoSetup();
@@ -103,11 +108,18 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
       f.setVisible(true);
       //OccupiedTrackTableUpdater();
 	  
+      System.out.println("TEST");
 	  
    }
-   public static DBHelper sendDB() {
+	   public static void getDB(DBHelper db) {
+			load = db;
+	}
+
+	public static DBHelper sendDB() {
 		return load;
-   }
+	}
+   
+   
    //set the functions of the buttons
    public static void ActionAdder()
    {
@@ -234,6 +246,7 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 		   String LineColor = null;
 	   String BlockNumber =  Integer.toString(TrackID).substring(1,4);
 	   int firstDigit = Character.getNumericValue(Integer.toString(TrackID).charAt(0));
+	   
 	   if (firstDigit == 1)
 	   {
 		   LineColor = "Red";
@@ -246,8 +259,6 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 	   {
 		   if (dm1.getValueAt(x, 0).equals(LineColor))
 		   {
-			   //System.out.println("PAIN TRAIN: " + dm1.getValueAt(x, 0));
-			   //System.out.println(dm1.getValueAt(x, 1) + "-----" + BlockNumber + "----------" + TrackID);
 			   if (dm1.getValueAt(x, 1).equals(BlockNumber))
 			   {
 				   dm1.setValueAt(NextTrack, x, 2);
@@ -283,27 +294,55 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
    }
    public static void TestSetup()
    {   
+	   Stack<Integer> GreenSwitch = new Stack<>();
+	   Stack<Integer> RedSwitch = new Stack<>();
 	   ButtonAdder();  
 	   ActionAdder(); 
-	   dm.setDataVector(new Object[][] { { "Red", "09", "C3", "Yard", "D1" },
-			{ "Red", "15", "A2", "A1", "B2" },
-			{ "Red", "27", "E3", "F1", "A1" },
-			{ "Red", "32", "H8", "T1", "H9" },
-			{ "Red", "38", "H15", "Q1", "H16" },
-			{ "Red", "43", "H20", "H21", "O1" },
-			{ "Red", "52", "J4", "N1", "J5" },
-			{ "Green", "12", "C6", "D4", "A1" },
-			{ "Green", "29", "G1", "F8", "Z1" },
-			{ "Green", "58", "J1", "K1", "Yard" },
-			{ "Green", "62", "J5", "I22", "Yard" },
-			{ "Green", "76", "M3", "R1", "N1" },
-			{ "Green", "86", "O1", "N9", "Q3" }		}, new Object[] { "Line", "Block", "Track", "Dest Track", "Alt Track" });
-
+	   int GreenTrack = 2001;
+	   int RedTrack = 1001;
+	   while (load.getInfrastructure(GreenTrack) != null)
+	   {
+		   if (load.getInfrastructure(GreenTrack).equalsIgnoreCase("Switch"))
+		   {
+			   //System.out.println(GreenTrack);
+			   GreenSwitch.push(GreenTrack);
+		   }
+		   
+		   GreenTrack++;		   
+	   }
+	   //System.out.println(RedTrack);
+	   while (load.getInfrastructure(RedTrack) != null)
+	   {
+		   if (load.getInfrastructure(RedTrack).equalsIgnoreCase("Switch"))
+		   {
+			   //System.out.println(RedTrack);
+			   RedSwitch.push(RedTrack);
+		   }
+		   
+		   RedTrack++;		   
+	   }
+	   dm.setDataVector(new Object[][] { }, new Object[] { "Line", "Track", "Dest Track", "Alt Track" });
+	   for(Integer obj : RedSwitch)
+	   {
+		   String Color = Integer.toString(obj).substring(1,4);
+		   Object[] Switches = {"Red", Color, load.getNextTrack(obj, obj+1), load.getAltTrack(obj)};
+		   dm.addRow(Switches);
+	       //System.out.println(load.getInfrastructure(obj) + ": " + obj + " at " + load.getSwitch(obj) + " With the Next: " + load.getNextTrack(obj, obj+1) + " or " + load.getAltTrack(obj));
+	   }
+	   for(Integer obj : GreenSwitch)
+	   {
+		   String Color = Integer.toString(obj).substring(1,4);
+		   Object[] Switches = {"Green", Color, load.getNextTrack(obj, obj+1), load.getAltTrack(obj)};
+		   dm.addRow(Switches);
+	       //System.out.println(load.getInfrastructure(obj) + ": " + obj + " at " + load.getSwitch(obj) + " With the Next: " + load.getNextTrack(obj, obj+1) + " or " + load.getAltTrack(obj));
+	   }
+	   
+	   
 		table = new JTable(dm);
 		scroll = new JScrollPane(table);
 		scroll.setPreferredSize(new Dimension(500,260));
 		//-----------------------------------------------------------------------------
-	    dm1.setDataVector(new Object[][] { { "Green", "C5", "Swtch", "20 mi" }}, new Object[] { "Line", "Occupied Track", "Dest Track", "Athrty" });
+	    dm1.setDataVector(new Object[][] { { "Color", "Black", "Track", "length" }}, new Object[] { "Line", "Occupied Track", "Dest Track", "Athrty" });
 
 	    table1 = new JTable(dm1);
 

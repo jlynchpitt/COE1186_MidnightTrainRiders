@@ -554,6 +554,51 @@ public class DBHelper {
 		return nextTrack;
 	}
 	
+		//prints the alternate track of switches
+	public int getAltTrack(int trackid){
+		int nextTrack = 0;
+		Connection connection = null;
+		//make connection
+		try {
+			connection = connect();
+			
+			Statement statement = connection.createStatement();
+			statement.setQueryTimeout(30); //TODO: Is this needed?
+			//access data table
+			ResultSet track = statement.executeQuery("SELECT * from TrackInfo WHERE trackID = '"+trackid+"'");
+				//if switch is straight
+				if(track.getInt("switchPosition")==0) 
+				{
+					//return alternate track
+						nextTrack = track.getInt("secondSwitch");
+					
+				}
+				else  //otherwise switch is angled 
+				{
+					//return straight track
+					nextTrack = track.getInt("nextTrack");
+					
+				}
+			
+
+		}
+		//error catcher
+		catch(SQLException e){  
+			 System.err.println(e.getMessage()); 
+		 }       
+		 finally {         
+			 try {
+	               if(connection != null)
+	                  connection.close();
+		     }
+		     catch(SQLException e) {  // Use SQLException class instead.          
+		    	 System.err.println(e); 
+		     }
+		 }
+
+		return nextTrack;
+	}
+	
 	public int getNextTrack(int trackid, int prevTrack){
 		int nextTrack = 0;
 		Connection connection = null;

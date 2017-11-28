@@ -8,7 +8,9 @@ import javax.swing.*;
 import javax.swing.filechooser.*;
 
 import MTR.NorthShoreExtension.MainMTR;
+import MTR.NorthShoreExtension.MainMTR3;
 import MTR.NorthShoreExtension.Backend.DBHelper;
+import MTR.NorthShoreExtension.Backend.TrackModelSrc.TrackModel;
 
 import javax.swing.SwingUtilities;
 import javax.jnlp.*;
@@ -51,7 +53,7 @@ public class LoadTrackModelUI extends JPanel
         JScrollPane logScrollPane = new JScrollPane(log);
  
         //Create a file chooser
-        fc = new JFileChooser();
+        fc = new JFileChooser("C:\\Users\\joely\\Desktop\\SoftwareEngineering\\Workspace\\MTR_SoftwareEngineering");
  
         //Uncomment one of the following lines to try a different
         //file selection mode.  The first allows just directories
@@ -156,6 +158,32 @@ public class LoadTrackModelUI extends JPanel
 						ctcUI.formAndRenderGUI();
 					}
 				});
+            }
+            else if(MainMTR3.fullUI) {
+            	//Start the TrainController, and Train Model if running that main test program
+            	javax.swing.SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						TrainControlUI.createAndShowTrainControlGUI(null);
+					}
+				});
+
+            	javax.swing.SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+		            	TrainModelUI tmUI= new TrainModelUI();
+						tmUI.setVisible(true);					
+					}
+				});
+            	
+            	//Dispatch a test train + give it some authority
+            	TrackModel.TrackModel_addTrain(2062, 0);
+            	int a[]=new int[5];
+            	a[0] = 2062;
+            	a[1] = 2063;
+            	a[2] = 2064;
+            	a[3] = 2065;
+            	a[4] = 2066;
+            	
+            	TrackModel.TrackModel_setSpeedAuthority(2062, 30, a);
             }
         //Handle save button action.
         } else if (e.getSource() == saveButton) {

@@ -13,6 +13,7 @@ public class TrainMovement {
 	private double xForce;			//in Newtons, this is the force in the x direction neglecting friction//
 	private double totalForce; 		//in Newtowns//
 	private double pheta;			//angle of the slope//
+	private double cd;
 	private boolean eBrake, brake;
 	final double staticFriction = 0.78; //Static Friciton of hard Steel on Steel//
 	final double kineticFriction = 0.42; //Kinetic Friction of hard Steel on steel//
@@ -46,11 +47,11 @@ public class TrainMovement {
 			
 			normalForce = mass*gravity*Math.cos(pheta);
 		    if(velocity==0){
-		    	engineForce = power/0.1;
+		    	engineForce = power/0.5;
 		    	xForce=engineForce-mass*gravity*Math.sin(pheta);
 		    	
 		    	if(Math.abs(xForce)>staticFriction*normalForce&&xForce>0) {
-		    		totalForce=(xForce-staticFriction*normalForce); //The force is divided by 100 to negate the extreme initial velocity and acceleration caused by dividing power by a small velocity
+		    		totalForce=(xForce-staticFriction*normalForce); 
 		    	}else if (Math.abs(xForce)<staticFriction*normalForce) {
 		    		totalForce=0;
 		    	}else {
@@ -91,6 +92,7 @@ public class TrainMovement {
 		if(distance<0) {
 			distance=0;
 		}
+		cd+=distance;
 		this.velocity = nextVelocity;
 	}
 	
@@ -105,7 +107,11 @@ public class TrainMovement {
 	public double getDistance() {
 		return distance;
 	}
-
+	
+	public double getCumulativeDistance() {
+		return cd;
+	}
+	
 	public void setBrake(boolean b) {
 		this.brake=b;	
 	}

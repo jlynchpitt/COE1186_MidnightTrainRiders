@@ -123,7 +123,9 @@ public class TrackModel {
 		load.updateTrackOccupied(trackid, 1);
 		train = new Train(trainid);
 		officialTrains.put(trainid, train);
-		wayside.WaysideController_TrackOccupancy(trackOccupency);
+		if(MainMTR.fullUI) {
+			wayside.WaysideController_TrackOccupancy(trackOccupency);
+		}
 	}
 	
 	public static void sellTicket(int trackid) {
