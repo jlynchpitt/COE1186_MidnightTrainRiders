@@ -5,8 +5,6 @@ import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseEvent;
 
 import MTR.NorthShoreExtension.MainMTR;
 import MTR.NorthShoreExtension.Backend.DBHelper;
@@ -89,7 +87,7 @@ public class TrackModelUI extends JPanel {
         }
     }
     
-    public class TrackGraphic extends JPanel implements MouseListener{
+    public class TrackGraphic extends JPanel implements MouseListener, ActionListener{
     		private static final long serialVersionUID = 1L;
     		int[] drawArray = new int[9];
     		int trackNumber = 0;
@@ -284,7 +282,21 @@ public class TrackModelUI extends JPanel {
 				// TODO Auto-generated method stub
 				
 			}
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(e.getSource() == MainMTR.getTrainControllerHelper()) {
+					System.out.println("Got event - TCH");
+					repaint();
+				}
+				
+				System.out.println("Got event");
+			}
+			
+			
     }
+    
+    
  
     /**
      * Create the GUI and show it.  For thread safety,

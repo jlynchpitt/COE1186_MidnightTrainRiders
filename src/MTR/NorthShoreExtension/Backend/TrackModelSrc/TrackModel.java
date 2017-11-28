@@ -154,14 +154,21 @@ public class TrackModel {
 		trackList.remove(trackid);
 		updateTrack.authority = a.length;
 		updateTrack.speed = s;*/
+		int trainid = 0;
 		load.updateSpeedAuthority(trackid, s, a.length);
 		if(load.getTrackOccupied(trackid)!=0)
 		{
-			for(int i = 0; i < officialTrains.size(); i++) {
+			for(Map.Entry<Integer, TrainsOperating> entry : trainList.entrySet()) {
+				trainid = entry.getKey();
+				if(trainList.get(trainid).trackOccupying == trackid) {
+					updateTrains = officialTrains.get(trainid);
+				}
+			}
+			/*for(int i = 0; i < officialTrains.size(); i++) {
 				if(trainList.get(i).trackOccupying == trackid) {
 					updateTrains = officialTrains.get(i);
 				}
-			}
+			}*/
 			updateTrains.TrainModel_resendSpeedAuthority(s, a.length);
 		}
 	}
