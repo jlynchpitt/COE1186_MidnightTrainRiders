@@ -12,6 +12,7 @@ import MTR.NorthShoreExtension.Backend.TrackModelSrc.*;
 import MTR.NorthShoreExtension.ProofOfConcept.Testing;
  
 public class TrackModelUI extends JPanel {
+	public static TrackGraphic trackGraphic = null;
 	//Specify the look and feel to use.  Valid values:
     //null (use the default), "Metal", "System", "Motif", "GTK+"
     final static String LOOKANDFEEL = null;
@@ -108,6 +109,7 @@ public class TrackModelUI extends JPanel {
     		TrackGraphic(){
     			//setPreferredSize(new Dimension(1000,600));
     			setPreferredSize(new Dimension(1500,900));
+    			addMouseListener(this);
     		}
 
     		@Override
@@ -221,7 +223,6 @@ public class TrackModelUI extends JPanel {
     					}
     				}
     				}
-    			addMouseListener(this);
     			}
 
 			@Override
@@ -285,18 +286,10 @@ public class TrackModelUI extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(e.getSource() == MainMTR.getTrainControllerHelper()) {
-					System.out.println("Got event - TCH");
-					repaint();
-				}
-				
-				System.out.println("Got event");
+				//TODO: If adding more events to this contact Joe
+				repaint();
 			}
-			
-			
     }
-    
-    
  
     /**
      * Create the GUI and show it.  For thread safety,
@@ -313,7 +306,8 @@ public class TrackModelUI extends JPanel {
         JFrame frame = new JFrame("Track Model UI");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JPanel panel = new JPanel();
-        panel.add(instance.new TrackGraphic());
+        trackGraphic = instance.new TrackGraphic();
+        panel.add(trackGraphic);
         frame.add(panel);
 	    
         //Display the window.
