@@ -37,8 +37,8 @@ public class TrainSchedulesUI extends JFrame {
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 		
 		for (TrainSchedule ts : ctcUI.tsh.getTrainScheduleList()) {
-			System.out.println("creating trainSchedulePanel");
-			System.out.println(ts.getFirstStop() + "\n");
+			System.out.println("\n creating trainSchedulePanel");
+			System.out.println("\n First Stop: " + ts.getFirstStop() + "\n");
 			//mainPanel.add(button =  new JButton("My Button"));
 			//can create buttons but not TrainSchedulePanels?
 			mainPanel.add(new TrainSchedulePanel(ts));

@@ -1,7 +1,7 @@
 /*
 * Filename: trainScheduler.java
 * Author: Matt Snyder
-* Last Edited: 11/11/2017
+* Last Edited: 11/28/2017
 * File Description: The back-end operations of the Train Scheduler sub-component
 */
 
@@ -128,6 +128,26 @@ public class trainScheduler {
 			}
 			System.out.println("L: " + l);
 			System.out.println("M: " + m);
+			
+			//remaining stops
+			//loop through all of the stops
+			while (listOfStops[l] != 0) {
+				while (listOfStops[l] != authority[m]) {
+					m++;
+					authority[m] = database.schedNextTrack(authority[m-1], authority[m-2]);
+					System.out.println("" + m + ": " + authority[m]);
+				}
+				l++;
+			}
+			
+			System.out.println("L: " + l);
+			System.out.println("M: " + m);
+		}
+		
+		int k = 0;
+		while (authority[k] != 0) {
+			System.out.println(".: " + authority[k]);
+			k++;
 		}
 		return authority;
 	}

@@ -17,6 +17,7 @@ import MTR.NorthShoreExtension.Backend.CTCSrc.TrainSchedule;
 
 public class TrainScheduleHelper {
 	static List<TrainSchedule> tsl;
+	static int[] occupied = new int[200];
 	
 	public TrainScheduleHelper() {
 		tsl = new ArrayList<TrainSchedule>();
@@ -24,16 +25,20 @@ public class TrainScheduleHelper {
 	
 	public void addNewTrainSchedule(String line, int id, int[] stops, int[] departures) {
 		TrainSchedule ts = new TrainSchedule(line, id, stops, departures);
-		System.out.println("\n Line: " + line + " id: " + id + "First stop: " + stops[0]);
-		System.out.println("\n Line: " + ts.getLine() + "id: " + ts.getTrainID() + " First stop: " + ts.getFirstStop());
+		//System.out.println("\n Line: " + line + " id: " + id + "First stop: " + stops[0]);
+		//System.out.println("\n Line: " + ts.getLine() + "id: " + ts.getTrainID() + " First stop: " + ts.getFirstStop());
 		tsl.add(ts);
 	}
 	
 	public List<TrainSchedule> getTrainScheduleList() {	
 		for (int i = 0; i < tsl.size(); i++) {
 			System.out.println(i);
-			System.out.print("Stop: " + tsl.get(i).getFirstStop());
+			System.out.print("\n Stop: " + tsl.get(i).getFirstStop());
 		}
 		return tsl;
+	}
+	
+	public static void updateOccupiedTracks(int[] occupiedTracks) {
+		occupied = occupiedTracks;
 	}
 }

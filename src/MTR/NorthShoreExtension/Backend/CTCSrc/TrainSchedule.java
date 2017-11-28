@@ -1,6 +1,6 @@
 /* Filename: TrainSchedule.java
  * Author: Matt Snyder
- * Last Edited: 11/20/17
+ * Last Edited: 11/24/17
  * File Description: The back-end object for containing the train schedules. One will be created for each train that is scheduled.
  * Its main function is to hold the information for each train's list of stops, the planned departures time for each stop, and the
  * line that it is on.  
