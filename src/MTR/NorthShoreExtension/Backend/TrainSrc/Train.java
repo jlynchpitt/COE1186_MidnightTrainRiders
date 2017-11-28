@@ -15,7 +15,7 @@ public class Train {
 	private int cars; //static int variables
 	private int temperature, passengers, crewcount; //dynamic int variables
 	private boolean leftdoor, rightdoor, lightson;
-	private String authority;
+	private int authority;
 	private double maxacceleration, maxvelocity, maxdeceleration, nextpower;
 	private int maxpassengers, trainID;
 	private boolean engineFailure, signalFailure, brakeFailure, passengerEBrake;
@@ -48,7 +48,7 @@ public class Train {
 	*/
 	//Functions that the Train Controller Calls//
 	public void TrainModel_setPower(double p){
-		tm.setMovement(p);
+		tm.setMovement(p/1000); //the power is divided by 1000 to convert from Kilowatts to watts
 
 		tc.TrainControl_setActualSpeed(3.6*tm.getVelocity());	// This line receives the velocity from the train movement class and sends it to the train controller
 		tkm.TrackModel_setDistance(trainID, tm.getDistance());
@@ -83,6 +83,7 @@ public class Train {
 	}
 	
 	public void TrainModel_resendSpeedAuthority(int v, int a) {
+		this.authority=a;
 		tc.TrainControl_setCommandedSpeedAuthority(v,a);
 	}
 
@@ -110,13 +111,10 @@ public class Train {
 	public double getDistance() {
 		return tm.getDistance();
 	}
-	public String getAuthority() {
+	public int getAuthority() {
 		return authority;
 	}
 
-	public void setAuthority(String authority) {
-		this.authority = authority;
-	}
 
 	public int getTemperature() {
 		return temperature;
@@ -214,17 +212,21 @@ public class Train {
 		this.lightson=b;
 	}
 
-	public void openLeftDoor(boolean b) {
-		this.leftdoor=b;
+	public boolean getLeftDoor() {
+		return leftdoor;
 	}
 	
-	public void openRightDoor(boolean b) {
-		this.rightdoor=b;
+	public boolean getRightDoor() {
+		return rightdoor;
 	}
 
 	
 	public double getTotalMass() {
 		return(p.getPassengerWeight()+trainmass);
+	}
+	
+	public double getCumulativeDistance() {
+		return(tm.getCumulativeDistance());
 	}
 	
 	public void setEngineFailure(boolean b) {
@@ -246,4 +248,5 @@ public class Train {
 		this.passengerEBrake=b;
 		tm.seteBrake(true);
 	}
+	
 }
