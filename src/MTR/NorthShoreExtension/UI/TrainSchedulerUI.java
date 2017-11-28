@@ -1,7 +1,7 @@
 /*
 * Filename: trainScheduler.java
 * Author: Matt Snyder
-* Last Edited: 11/7/2017
+* Last Edited: 11/28/2017
 * File Description: This contains the Train Scheduler. 
 * 
 * 
@@ -41,7 +41,7 @@ public class TrainSchedulerUI extends JFrame {
 	//create two arrays for demo purpose. actual will have the list imported from the database
 	static DBHelper database = MainMTR.getDBHelper();
 	
-	String[] grnLineStops = {"2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009"};
+	String[] grnLineStops = {"2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009"}; //fall-back data in case file doesn't get loaded
 	String[] redLineStops = {"1001", "1002", "1003", "1004", "1005", "1006", "1007", "1008", "1009"};
 	String[] importedRed = new String[75];
 	String[] importedGrn = new String[150];
@@ -77,7 +77,7 @@ public class TrainSchedulerUI extends JFrame {
 		//parameters for test.csv
 		int j = 0;
 		int k = 0;
-		for (int i = 0; i < 8; i++) {
+		for (int i = 0; i < 150; i++) {
 			String text = Integer.toString(database.getTrackID(i));
 			String line = database.getColor(i);
 			if (line.equals("green")) {
@@ -279,7 +279,7 @@ public class TrainSchedulerUI extends JFrame {
 				String stop = (String) grnStopsImported.getSelectedItem();
 				stop = stop.substring(1);
 				int stopAsInt = Integer.parseInt(stop) + 2000;
-				System.out.println(stopAsInt); //remove after finished testing
+				System.out.println("Stop: " + stopAsInt); //remove after finished testing
 				schedStopsGrn[xGrn-1] = stopAsInt;
 				String grnStop = grnStops.getSelectedItem().toString();
 				String grnDepart = (grnHour1.getText() + grnHour0.getText() + ":" + grnMins1.getText() + grnMins0.getText());

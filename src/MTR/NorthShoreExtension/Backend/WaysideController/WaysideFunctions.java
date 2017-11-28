@@ -121,7 +121,7 @@ public class WaysideFunctions  //this is a test class designed to function as a 
 				//System.out.println("Second passed");
 				//System.out.println("Second passed" + counter);
 				//AuthorityTester();
-				SwitchTester();
+				//SwitchTester();
 				OccupiedTrackTester();
 				
 		}
