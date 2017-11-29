@@ -42,8 +42,18 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 	
 	public static void main(String[] args) 
 	{
-
-
+		int [] BrokenTracks = {0,1,2,3,4,5};
+		int [] OccupiedTracks = {000,100,200,300,400,500};
+		int[] alpha = {0,1,2,3,4,5,6};
+		int[] beta = {9,8,7,6,5,4,3};
+		int[] delta = {11,22,33,44,55,66,77};
+		int[] Occupy = {100, 200, 300};
+		WaysideController_BrokenTrack(BrokenTracks);
+		WaysideController_TrackOccupancy(OccupiedTracks);
+		OccupiedSpeedAuthority(100, 50, alpha);
+		OccupiedSpeedAuthority(200, 250, beta);
+		
+		System.out.println("COMPLETE");
 	}
 
 
@@ -55,13 +65,19 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 	//not sure if correct
 	public static void OccupiedSpeedAuthority(int TrackID, int Speed, int[] Authority) // CTC calls this to send me info
 	{
+		
 		WaysideFunctions.TrackModel_setSpeedAuthority(TrackID, Speed, Authority.length);
 		TrackModel.TrackModel_setSpeedAuthority(TrackID, Speed, Authority); //send the data to track model
-		//if the track id is something occupied, pass it to logic controller
-		if (Arrays.asList(TrackOccupancyArray).contains(TrackID)) 
+
+
+		System.out.print("Train on: " + TrackID + " will go at: " + Speed + " down: ");
+		for (int x = 0; x < Authority.length; x++)
 		{
-			WaysideController.AuthorityArray(TrackID, Authority);
+			System.out.print(Authority[x] + " ");
 		}
+		System.out.println("to reach its destination.");
+		WaysideController.AuthorityArray(TrackID, Authority);
+		
 		
 		//UI stuff------------------------------------------------------------------
 		int TotalLength = 0;
@@ -108,14 +124,16 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 	   {
 		   
 		   OccupiedTrackArray = IncomingTrackOccupancyArray;
+		   System.out.print("Tracks: ");
 		   for (int x = 0; x < IncomingTrackOccupancyArray.length; x++)
 		   {
-			   OccupiedTracks.push(IncomingTrackOccupancyArray[x]);
+			   System.out.print(IncomingTrackOccupancyArray[x] + " ");
 		   }
+		   System.out.println("are occupied.");
 		   WaysideController.UpdateOccupiedTracks(IncomingTrackOccupancyArray);
 		   //TrainScheduleHelper.CTC_getOccupiedTracks(IncomingTrackOccupancyArray);  
 
-		   // Just stuff for the UI----------------------------------------------------
+		   // Just stuff for the UI-------------------------------------------------------------------------------------------
 		   int ArrayLength = IncomingTrackOccupancyArray.length;
 		   Object[][] multi = new Object[ArrayLength][4];
 		   for (int x = 0; x < IncomingTrackOccupancyArray.length; x++)
@@ -145,7 +163,7 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 
 
 		   WaysideControllerUI.OccupiedTrackTableUpdater(multi);
-		   WaysideFunctions.CTC_getOccupancy(IncomingTrackOccupancyArray);
+		   //WaysideFunctions.CTC_getOccupancy(IncomingTrackOccupancyArray);
 	   }
 	   
 	   
@@ -153,7 +171,12 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 	   //sends the broken tracks to CTC for further information
 	   public static void WaysideController_BrokenTrack(int[] IncomingBrokenTrackArray)  //TM calls this to send me broken track info
 	   {
-		   
+		   System.out.print("Tracks: ");
+			for (int x = 0; x < IncomingBrokenTrackArray.length; x++)
+			{
+				System.out.print(IncomingBrokenTrackArray[x] + " ");
+			}
+			System.out.println("broke.");
 		   BrokenTrackArray = IncomingBrokenTrackArray;
 			WaysideFunctions.CTC_getBrokenTrack(BrokenTrackArray);
 			//TrainScheduleHelper.CTC_getBrokenTrack(BrokenTrackArray);

@@ -39,6 +39,7 @@ public class WaysideController //this class is the logic to decide what to do wi
 		int[] beta = {9,8,7,6,5,4,3};
 		int[] delta = {11,22,33,44,55,66,77};
 		int[] Occupy = {100, 200, 300};
+		int[] FloorStreet = {11, 200, 300};
 		UpdateOccupiedTracks(Occupy);
 		AuthorityArray(100, alpha);
 		System.out.println("-------------------------");
@@ -47,8 +48,11 @@ public class WaysideController //this class is the logic to decide what to do wi
 		AuthorityArray(300, delta);
 		System.out.println("-------------------------");
 		AuthorityArray(100, delta);
+		System.out.println("-------------------------");
+		UpdateOccupiedTracks(FloorStreet);
 		System.out.println("COMPLETE");
 	}
+	
 	public static void AuthorityArray(int TrackID, int[] IncomingAuthorityArray)
 	{
 		ArrayList<Integer> StorageList = new ArrayList<Integer>();
@@ -64,12 +68,13 @@ public class WaysideController //this class is the logic to decide what to do wi
 		for (int x = 0; x < ListOfTrackPlans.size(); x++)
 		{
 			//if the list as the location has Track ID
-			if (ListOfTrackPlans.get(x).contains(TrackID))
+			if (ListOfTrackPlans.get(x).get(0) == TrackID)
 			{
 				ListOfTrackPlans.set(x, StorageList);
 				inside = true;
 				break;
 			}
+			
 		}
 		if (!inside)
 		{
@@ -142,6 +147,33 @@ public class WaysideController //this class is the logic to decide what to do wi
 	}
 
 	
+	public static void TrackPlansUpdate(int TrackID)
+	{
+		for (int x = 0; x < ListOfTrackPlans.size(); x++)
+		{
+			
+			if (TrackID == ListOfTrackPlans.get(x).get(1))
+			{
+				ArrayList<Integer> StorageList = new ArrayList<Integer>();
+				for (int y = 1; y < ListOfTrackPlans.get(x).size(); y++)
+				{
+					StorageList.add(ListOfTrackPlans.get(x).get(y));
+				}
+				
+				ListOfTrackPlans.set(x,StorageList);
+			}
+		}
+		for (int x = 0; x < ListOfTrackPlans.size(); x++)
+		{
+			
+			for(int y = 0; y < ListOfTrackPlans.get(x).size(); y++)
+			{
+				System.out.print("||" + ListOfTrackPlans.get(x).get(y));
+			}
+			System.out.println("");
+		}
+	}
+	
 	//takes a moment to decide actions based on occupied tracks
 	public static void UpdateOccupiedTracks(int[] IncomingTrackArray)
 	{
@@ -151,8 +183,10 @@ public class WaysideController //this class is the logic to decide what to do wi
 		for (int x = 0; x < IncomingTrackArray.length; x++)
 		{
 			StackOfOccupiedTracks.push(IncomingTrackArray[x]);
+			TrackPlansUpdate(IncomingTrackArray[x]);
 		}
 		TrackPlans = new int [IncomingTrackArray.length][];
+		
 		NorthGreenLine();
 		SouthGreenLine();
 		NorthRedLine();

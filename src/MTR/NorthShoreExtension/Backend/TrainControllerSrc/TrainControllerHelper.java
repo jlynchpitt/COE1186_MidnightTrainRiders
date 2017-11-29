@@ -35,8 +35,8 @@ public class TrainControllerHelper {
 	public static final int SIGNAL_PICKUP_FAILURE = 2;
 	public static final int BRAKE_FAILURE = 3;
 	
-	private double pid_p = 0.4;
-	private double pid_i = 0.25; 
+	private double pid_p = 1;
+	private double pid_i = 0; 
 	private Timer powerTimer = new Timer();
 	private List<Integer> idList = new ArrayList<>();
 	private List<TrainController> tcList = new ArrayList<TrainController>();
@@ -66,7 +66,6 @@ public class TrainControllerHelper {
 				
 				//Repaint Track model UI - TODO: Limit how often this runs
 				if(TrackModelUI.trackGraphic != null) {
-					System.out.println("Got track graphic");
 					TrackModelUI.trackGraphic.actionPerformed(new ActionEvent(this, 1, ""));
 				}
 			}

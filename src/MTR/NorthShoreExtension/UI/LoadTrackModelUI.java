@@ -175,15 +175,7 @@ public class LoadTrackModelUI extends JPanel
 				});
             	
             	//Dispatch a test train + give it some authority
-            	TrackModel.TrackModel_addTrain(2062, 0);
-            	int a[]=new int[5];
-            	a[0] = 2062;
-            	a[1] = 2063;
-            	a[2] = 2064;
-            	a[3] = 2065;
-            	a[4] = 2066;
-            	
-            	TrackModel.TrackModel_setSpeedAuthority(2062, 30, a);
+            	MainMTR3.dispatchATrain();
             }
         //Handle save button action.
         } else if (e.getSource() == saveButton) {
