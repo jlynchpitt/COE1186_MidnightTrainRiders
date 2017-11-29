@@ -43,7 +43,9 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 	public static void main(String[] args) 
 	{
 		int [] BrokenTracks = {0,1,2,3,4,5};
-		int [] OccupiedTracks = {000,100,200,300,400,500};
+		int [] OccupiedTracks = {100,200,300,400,500};
+		int [] OccupiedTracks2 = {0,200,300,400,500};
+		int [] OccupiedTracks3 = {1,9,11,400,500};
 		int[] alpha = {0,1,2,3,4,5,6};
 		int[] beta = {9,8,7,6,5,4,3};
 		int[] delta = {11,22,33,44,55,66,77};
@@ -52,7 +54,9 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 		WaysideController_TrackOccupancy(OccupiedTracks);
 		OccupiedSpeedAuthority(100, 50, alpha);
 		OccupiedSpeedAuthority(200, 250, beta);
-		
+		OccupiedSpeedAuthority(300, 150, delta);
+		WaysideController_TrackOccupancy(OccupiedTracks2);
+		WaysideController_TrackOccupancy(OccupiedTracks3);
 		System.out.println("COMPLETE");
 	}
 
