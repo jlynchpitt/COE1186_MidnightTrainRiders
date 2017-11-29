@@ -98,7 +98,7 @@ public class TrackModel {
 				MainMTR3.moveTrack();
 			}
 		}
-		System.out.println("Difference: "+difference);
+		//System.out.println("Difference: "+difference);
 		sellTicket(update.trackOccupying);
 		sendBeacon(update.trackOccupying, update.trainID);
 	}
