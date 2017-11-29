@@ -54,7 +54,8 @@ public class TrainSchedulePanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				int[] authority = trainScheduler.calcAuthority(ts.getListOfStops());
 				int speed = database.getSpeedLimit(Integer.parseInt(ts.getFirstStop()));
-				int trackID = Integer.parseInt(ts.getFirstStop());
+				//int trackID = Integer.parseInt(ts.getFirstStop());
+				int trackID = authority[0];
 				System.out.println("\n TrackID: " + trackID);
 				System.out.println("\n Speed: " + speed);
 				//System.out.println("\n Authority: ");
