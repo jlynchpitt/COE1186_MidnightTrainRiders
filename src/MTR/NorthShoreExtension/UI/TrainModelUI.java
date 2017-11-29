@@ -36,7 +36,7 @@ import javax.swing.Action;
 public class TrainModelUI extends JFrame {
 
 	private JPanel contentPane;
-	private Map tMap;
+	private Map<Integer,Train> tMap = new HashMap<Integer,Train>();
 	private Train tr;
 	private TrackModel tm;
 	private double p;
@@ -142,15 +142,26 @@ public class TrainModelUI extends JFrame {
 			tnames[i]="Train "+tarray[i];
 		}
 		comboBox.setModel(new DefaultComboBoxModel(tnames));
+		if(tnames!=null) {
+			comboBox.setSelectedIndex(0);
+			String str = (String)comboBox.getSelectedItem();
+			String delim = " ";
+			String[] tokens = str.split(delim);
+			System.out.println("Print:"+Integer.valueOf(tokens[1]));
+			tr=tMap.get(Integer.valueOf(tokens[1]));
+		}
+		
 		comboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String str = (String)comboBox.getSelectedItem();
 				String delim = " ";
 				String[] tokens = str.split(delim);
-				tr=(Train)tMap.get(Integer.valueOf(tokens[1]));
+				System.out.println("Print:"+Integer.valueOf(tokens[1]));
+				tr=tMap.get(Integer.valueOf(tokens[1]));
 				updateGUI();
 			}
 		});
+		
 		GridBagConstraints gbc_comboBox = new GridBagConstraints();
 		gbc_comboBox.insets = new Insets(0, 0, 5, 5);
 		gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
@@ -453,7 +464,7 @@ public class TrainModelUI extends JFrame {
 		contentPane.add(lblCars, gbc_lblCars);
 		
 		if(tr!=null) {
-			JLabel lblC = new JLabel(String.format("%.2f", tr.getCars()));
+			JLabel lblC = new JLabel(String.format("%d", tr.getCars()));
 			GridBagConstraints gbc_lblC = new GridBagConstraints();
 			gbc_lblC.insets = new Insets(0, 0, 5, 5);
 			gbc_lblC.gridx = 4;
@@ -548,6 +559,7 @@ public class TrainModelUI extends JFrame {
 	}
 	
 	public void updateGUI() {
+		System.out.println("Poop");
 		lblV.setText(String.format("%.2f", tr.getVelocity()));
 		lblAcc.setText(String.format("%.2f", tr.getAcceleration()));
 		if(tr.getLeftDoor()) {
