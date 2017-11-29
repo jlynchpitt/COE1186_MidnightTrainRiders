@@ -16,14 +16,6 @@ import java.awt.event.*;
 import java.awt.event.ActionListener;
 import java.util.Stack;
 
-import javax.swing.DefaultCellEditor;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
@@ -31,6 +23,7 @@ import MTR.NorthShoreExtension.MainMTR;
 import MTR.NorthShoreExtension.Backend.DBHelper;
 import MTR.NorthShoreExtension.Backend.WaysideController.WaysideFunctions;
 import MTR.NorthShoreExtension.Backend.WaysideController.WaysideFunctionsHub;
+import MTR.NorthShoreExtension.UI.TrackModelUI.TrackGraphic;
 
 
 
@@ -44,6 +37,7 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 	public static JPanel SC = new JPanel();
 	public static JPanel TestPanel = new JPanel();
 	public static JFrame f = new JFrame("Wayside Controller");  //create frame with frame name
+	public static JFrame frame = new JFrame("Track Model UI");
 	public static Component text = new TextArea(SampleCode);  //create text area
 	public static JButton SaveButton = new JButton("Save"); //create one of the buttons
 	//public static JButton SaveButton = new JButton("Save");
@@ -65,12 +59,15 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 	public static JScrollPane scroll2;
 	public static int Scroll1Height = 75;
 	static DBHelper load;
+	static TrackModelUI instance;
+	public static TrackGraphic trackGraphic = null;
 	
     
 	  
 	  //public static int[] ProtoArray = {0,1,2,3,4,5,6};
    public static void main(String[] args) //main body
    {
+	   load = MainMTR.getDBHelper();
 	   //setup panels
 	   ComponentAdder();
 	   //add action
@@ -90,20 +87,27 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
    public static void createAndShowWaysideControlGUI() 
 	{
 	   load = MainMTR.getDBHelper();
+       
+       //f.pack();
+	   f.setVisible(true);
+	   
 	   //System.out.println("BLAH BLAH: " + load.getInfrastructure(2050));
 	 //setup panels
 	   ComponentAdder();
 	   //add action
-	    ActionAdder();  
+	   
+	   ActionAdder();  
+	   
 	//create frame 
 	  int width = 750;
       int height = 500;
       f.setSize(width, height);
 	  f.getContentPane().add(plc);
-      f.setVisible(true);
+      
       //OccupiedTrackTableUpdater();
 	  
       System.out.println("TEST");
+      
 	  
    }
 	   public static void getDB(DBHelper db) {
@@ -286,11 +290,15 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
    //register all panels
    public static void ComponentAdder()
    {
+	   
 	   PLCSetup();
 	   TrackInfoSetup();
 	   SwitchSetup();
+	   
 	   TestSetup();
+	   
 	   TablesCreated = true;
+	   
    }
    public static void TestSetup()
    {   
@@ -300,7 +308,9 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 	   ActionAdder(); 
 	   int GreenTrack = 2001;
 	   int RedTrack = 1001;
-	   while (load.getInfrastructure(GreenTrack) != null)
+
+	   
+	   while (!load.getInfrastructure(GreenTrack).equalsIgnoreCase("none"))
 	   {
 		   if (load.getInfrastructure(GreenTrack).equalsIgnoreCase("Switch"))
 		   {
@@ -310,8 +320,9 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 		   
 		   GreenTrack++;		   
 	   }
+	   
 	   //System.out.println(RedTrack);
-	   while (load.getInfrastructure(RedTrack) != null)
+	   while (!load.getInfrastructure(RedTrack).equalsIgnoreCase("none"))
 	   {
 		   if (load.getInfrastructure(RedTrack).equalsIgnoreCase("Switch"))
 		   {
@@ -321,6 +332,7 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 		   
 		   RedTrack++;		   
 	   }
+	   
 	   dm.setDataVector(new Object[][] { }, new Object[] { "Line", "Track", "Dest Track", "Alt Track" });
 	   for(Integer obj : RedSwitch)
 	   {
@@ -373,6 +385,7 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 	   //TestPanel.add(text, BorderLayout.WEST);  //add tframo e 
 	   TestPanel.add(ButtonBox, BorderLayout.WEST);
 	   //f.getContentPane().add(plc);
+	    
    }
  //set up plc panel  
    public static void PLCSetup()
