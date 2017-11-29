@@ -95,9 +95,9 @@ public class TrainMovement {
 			distance=0;
 		}
 		cd+=distance;
-		System.out.println("Velocity: "+velocity);
-		System.out.println("Next Velocity: "+nextVelocity);
-		System.out.println("Accerleration: "+acceleration);
+		//System.out.println("Velocity: "+velocity);
+		//System.out.println("Next Velocity: "+nextVelocity);
+		//System.out.println("Accerleration: "+acceleration);
 		this.velocity = nextVelocity;
 	}
 	

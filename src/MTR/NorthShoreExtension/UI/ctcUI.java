@@ -298,7 +298,7 @@ public class ctcUI {
 		gbc.gridy = 1; // 5th row
 		trnInfo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				TrainModelUI tmUI= new TrainModelUI();
+				TrainModelUI tmUI= MainMTR.getTrainModelUI();
 				tmUI.setVisible(true);
 			}
 		});
