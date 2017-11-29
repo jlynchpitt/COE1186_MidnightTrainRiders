@@ -71,8 +71,8 @@ public class TrainControllerHelper {
 				if(TrackModelUI.trackGraphic != null && (simulatedClockTime - lastRedrawTime) > timeBetweenRedraw) {
 					lastRedrawTime = simulatedClockTime;
 					TrackModelUI.trackGraphic.actionPerformed(new ActionEvent(this, 1, ""));
-					MainMTR.getTrainModelUI().actionPerformed(new ActionEvent(this, 1, ""));
 				}
+				MainMTR.getTrainModelUI().actionPerformed(new ActionEvent(this, 1, ""));
 			}
 		};
 		
