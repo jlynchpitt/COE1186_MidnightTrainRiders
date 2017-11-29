@@ -33,7 +33,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-public class TrainModelUI extends JFrame {
+public class TrainModelUI extends JFrame implements ActionListener{
 
 	private JPanel contentPane;
 	private Map<Integer,Train> tMap = new HashMap<Integer,Train>();
@@ -557,6 +557,14 @@ public class TrainModelUI extends JFrame {
 			contentPane.add(lblCd, gbc_lblCd);
 		}
 		
+		
+		
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		//TODO: If adding more events to this contact Joe
+		updateGUI();
 	}
 	
 	public void updateGUI() {
