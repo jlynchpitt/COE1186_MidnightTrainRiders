@@ -169,8 +169,10 @@ public class LoadTrackModelUI extends JPanel
 
             	javax.swing.SwingUtilities.invokeLater(new Runnable() {
 					public void run() {
-		            	TrainModelUI tmUI= new TrainModelUI();
-						tmUI.setVisible(true);					
+		            	TrainModelUI tmUI;
+						tmUI = new TrainModelUI();
+						tmUI.setVisible(true);		
+							
 					}
 				});
             	

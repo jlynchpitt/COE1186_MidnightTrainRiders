@@ -30,6 +30,8 @@ public class Train {
 		TrainControllerHelper tch = MainMTR.getTrainControllerHelper();
 		tc = tch.addNewTrainController(t,"Green", this);
 		p = new Passengers();
+		leftdoor=false;
+		rightdoor=false;
 		trainID=t;
 	}
 	

@@ -52,6 +52,7 @@ public class TrainModelUI extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @throws InterruptedException 
 	 */
 	public TrainModelUI() {
 		tMap=tm.getTrains();
@@ -311,11 +312,10 @@ public class TrainModelUI extends JFrame {
 		contentPane.add(lblLeftDoor, gbc_lblLeftDoor);
 		
 		if(tr!=null) {
-			JLabel lblLd;
 			if(tr.getLeftDoor()) {
-				lblLd= new JLabel("On");
+				lblLd= new JLabel("Open");
 			}else {
-				lblLd= new JLabel("Off");
+				lblLd= new JLabel("Closed");
 			}
 			GridBagConstraints gbc_lblLd = new GridBagConstraints();
 			gbc_lblLd.insets = new Insets(0, 0, 5, 0);
@@ -389,9 +389,9 @@ public class TrainModelUI extends JFrame {
 		
 		if(tr!=null) {
 			if(tr.getRightDoor()) {
-				lblRd = new JLabel("On");
+				lblRd = new JLabel("Open");
 			}else {
-				lblRd = new JLabel("Off");
+				lblRd = new JLabel("Closed");
 			}
 			GridBagConstraints gbc_lblRd = new GridBagConstraints();
 			gbc_lblRd.insets = new Insets(0, 0, 5, 0);
@@ -556,6 +556,7 @@ public class TrainModelUI extends JFrame {
 			gbc_lblCd.gridy = 7;
 			contentPane.add(lblCd, gbc_lblCd);
 		}
+		
 	}
 	
 	public void updateGUI() {
