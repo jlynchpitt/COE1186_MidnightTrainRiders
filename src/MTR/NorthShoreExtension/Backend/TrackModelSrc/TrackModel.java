@@ -91,13 +91,14 @@ public class TrackModel {
 			lastTrack = trackid;
 			load.updateTrackOccupied(update.trackOccupying, 1);
 			sub = load.getTrackLength(update.trackOccupying);
-			difference = sub + difference;
+			update.distanceLeft = sub + difference;
 			trainList.put(trainNum, update);
 			officialTrains.get(trainNum).TrainModel_moveToNextTrack();
 			if(MainMTR3.fullUI) {
 				MainMTR3.moveTrack();
 			}
 		}
+		System.out.println("Difference: "+difference);
 		sellTicket(update.trackOccupying);
 		sendBeacon(update.trackOccupying, update.trainID);
 	}
