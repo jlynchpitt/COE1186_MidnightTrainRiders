@@ -22,8 +22,11 @@ public class TrainMovement {
 	
 	
 	public TrainMovement(double m){
-		eBrake=false;
+		this.eBrake=false;
+		this.brake=false;
+		this.pheta=0;
 		this.mass=m;
+		this.velocity=0;
 	}
 	
 	public void setMass(double m) {
@@ -45,21 +48,23 @@ public class TrainMovement {
 		    if(velocity==0){
 		    	engineForce = power/0.1;
 		    	xForce=engineForce-mass*gravity*Math.sin(pheta);
+		    	
 		    	if(Math.abs(xForce)>staticFriction*normalForce&&xForce>0) {
-		    		totalForce=xForce-staticFriction*normalForce;
+		    		totalForce=(xForce-staticFriction*normalForce); //The force is divided by 100 to negate the extreme initial velocity and acceleration caused by dividing power by a small velocity
 		    	}else if (Math.abs(xForce)<staticFriction*normalForce) {
 		    		totalForce=0;
 		    	}else {
-		    		totalForce=xForce+staticFriction*normalForce;
+		    		//totalForce=xForce+staticFriction*normalForce;
+		    		totalForce=0;
 		    	}
 		    }else{
+		    	engineForce=power/velocity;
 		    	xForce=engineForce-mass*gravity*Math.sin(pheta);
-		    	if(Math.abs(xForce)>kineticFriction*normalForce&&xForce>0) {
+		    	if(xForce>=0) {
 		    		totalForce=xForce-kineticFriction*normalForce;
-		    	}else if (Math.abs(xForce)<kineticFriction*normalForce) {
-		    		totalForce=0;
 		    	}else {
-		    		totalForce=xForce+kineticFriction*normalForce;
+		    		//totalForce=xForce+kineticFriction*normalForce;
+		    		totalForce=0;
 		    	}
 		    }
 		    acceleration = totalForce/mass;
@@ -73,13 +78,20 @@ public class TrainMovement {
 				acceleration = brakeAcc;
 			}
 		}
+		
+		if(acceleration>0.5) {
+			acceleration=0.5;
+		}
 		nextVelocity = acceleration+velocity;
 		if(nextVelocity<0) {
 			nextVelocity=0;
 			acceleration=0;
 		}
 		distance = 0.5*acceleration+velocity;
-		velocity = nextVelocity;
+		if(distance<0) {
+			distance=0;
+		}
+		this.velocity = nextVelocity;
 	}
 	
 	public double getVelocity() {

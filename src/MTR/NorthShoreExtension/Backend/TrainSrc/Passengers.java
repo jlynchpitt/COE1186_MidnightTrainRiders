@@ -10,7 +10,7 @@ public class Passengers {
 	private double passengerWeight;
 	
 	public Passengers() {
-		
+		passengerWeight=0;
 	}
 	
 	public void passengersIn() {

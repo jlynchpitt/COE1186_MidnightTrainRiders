@@ -14,7 +14,7 @@ public class Train {
 	private int temperature, passengers, crewcount; //dynamic int variables
 	private boolean leftdoor, rightdoor, lightson;
 	private String authority;
-	private double maxacceleration, maxvelocity, maxdeceleration;
+	private double maxacceleration, maxvelocity, maxdeceleration, nextpower;
 	private int maxpassengers, trainID;
 	private boolean engineFailure, signalFailure, brakeFailure, passengerEBrake;
 	
@@ -24,14 +24,22 @@ public class Train {
 	Passengers p;
 	
 	public Train(int t){
-		tm = new TrainMovement(this.getTotalMass());
+		tm = new TrainMovement(trainmass);
 		p = new Passengers();
 		trainID=t;
 	}
 	
+	public void setNextPower(double np) {
+		this.nextpower=np;
+	}
+	
+	public double getNextPower(){
+		return(nextpower);
+	}
 	//Functions that the Train Controller Calls//
 	public void TrainModel_setPower(double p){
-		tm.setMovement(p);										// calls the set power function in the TrainMovement Class
+		tm.setMovement(p);
+
 		tc.TrainControl_setActualSpeed(tm.getVelocity());	// This line receives the velocity from the train movement class and sends it to the train controller
 		tkm.TrackModel_setDistance(trainID, tm.getDistance());
 	}
@@ -63,6 +71,10 @@ public class Train {
 	public void TrainModel_moveToNextTrack() {
 		tc.TrainControl_moveToNextTrack();
 	}
+	
+	public void TrainModel_resendSpeedAuthority(int a) {
+		//tc.TrainControl_setCommandedSpeedAuthority(tm.getVelocity(),a);
+	}
 
 	
 	public double getAcceleration() {
@@ -84,7 +96,10 @@ public class Train {
 	public double getVelocity() {
 		return tm.getVelocity();
 	}
-
+	
+	public double getDistance() {
+		return tm.getDistance();
+	}
 	public String getAuthority() {
 		return authority;
 	}
