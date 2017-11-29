@@ -143,7 +143,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 			tnames[i]="Train "+tarray[i];
 		}
 		comboBox.setModel(new DefaultComboBoxModel(tnames));
-		if(tnames!=null) {
+		if(tnames.length > 0) {
 			comboBox.setSelectedIndex(0);
 			String str = (String)comboBox.getSelectedItem();
 			String delim = " ";
