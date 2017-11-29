@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import MTR.NorthShoreExtension.MainMTR;
 import MTR.NorthShoreExtension.Backend.TrackModelSrc.TrackModel;
 import MTR.NorthShoreExtension.Backend.TrainSrc.Train;
 import MTR.NorthShoreExtension.UI.TrackModelUI;
@@ -45,6 +46,8 @@ public class TrainControllerHelper {
 	private TimerTask powerTimerTask;
 	private long simulatedClockTime = System.currentTimeMillis();
 	private ctcUI ctc_ui = null;
+	private final int timeBetweenRedraw = 3000;
+	private long lastRedrawTime = 0;
 	
 	public TrainControllerHelper(){
 		System.out.println("TCH initialized");
@@ -65,8 +68,10 @@ public class TrainControllerHelper {
 				}*/
 				
 				//Repaint Track model UI - TODO: Limit how often this runs
-				if(TrackModelUI.trackGraphic != null) {
+				if(TrackModelUI.trackGraphic != null && (simulatedClockTime - lastRedrawTime) > timeBetweenRedraw) {
+					lastRedrawTime = simulatedClockTime;
 					TrackModelUI.trackGraphic.actionPerformed(new ActionEvent(this, 1, ""));
+					//MainMTR.getTrainModelUI().actionPerformed(new ActionEvent(this, 1, ""));
 				}
 			}
 		};

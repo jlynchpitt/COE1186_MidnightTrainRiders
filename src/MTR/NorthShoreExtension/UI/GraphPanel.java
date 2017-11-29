@@ -201,7 +201,7 @@ public class GraphPanel extends JPanel {
             scores.add((double) random.nextDouble() * maxScore);
 //            scores.add((double) i);
         }*/
-        List<Double> power = db.getPowerList(123);
+        List<Double> power = db.getPowerList(0); //TODO: Auto get train id
         GraphPanel mainPanel = new GraphPanel(power, "Watts", "Time");
         mainPanel.setPreferredSize(new Dimension(1000, 600));
         JFrame frame = new JFrame("DrawGraph");

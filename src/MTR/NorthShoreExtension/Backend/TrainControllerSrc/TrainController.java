@@ -551,7 +551,9 @@ public class TrainController {
 	 * Behavior is different in manual and automatic modes
 	 */
 	private void ensureSafeOperations() {
-		
+		if(authority == 0) {
+			operateEmergencyBrake(true);
+		}
 	}
 	
 	public boolean calculateTravelDirection() {
