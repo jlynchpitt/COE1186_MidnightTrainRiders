@@ -75,6 +75,7 @@ public class TrackModel {
 	}
 	
 	public static void TrackModel_setDistance(int trainNum, double distance) {
+		int sub = 0;
 		update = trainList.get(trainNum);
 		int trackid = update.trackOccupying;
 		trainList.remove(trainNum);
@@ -88,6 +89,8 @@ public class TrackModel {
 			update.trackOccupying = load.getNextTrack(trackid, lastTrack);
 			lastTrack = trackid;
 			load.updateTrackOccupied(update.trackOccupying, 1);
+			sub = load.getTrackLength(update.trackOccupying);
+			difference = sub + difference;
 			trainList.put(trainNum, update);
 			officialTrains.get(trainNum).TrainModel_moveToNextTrack();
 		}
