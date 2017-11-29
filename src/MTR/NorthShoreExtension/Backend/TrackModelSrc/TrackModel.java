@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import MTR.NorthShoreExtension.MainMTR;
+import MTR.NorthShoreExtension.MainMTR3;
 import MTR.NorthShoreExtension.Backend.DBHelper;
 import MTR.NorthShoreExtension.Backend.TrainSrc.Train;
 import MTR.NorthShoreExtension.Backend.WaysideController.WaysideFunctionsHub;
@@ -90,6 +91,9 @@ public class TrackModel {
 			load.updateTrackOccupied(update.trackOccupying, 1);
 			trainList.put(trainNum, update);
 			officialTrains.get(trainNum).TrainModel_moveToNextTrack();
+			if(MainMTR3.fullUI) {
+				MainMTR3.moveTrack();
+			}
 		}
 		sellTicket(update.trackOccupying);
 		sendBeacon(update.trackOccupying, update.trainID);
@@ -159,7 +163,12 @@ public class TrackModel {
 		updateTrack.authority = a.length;
 		updateTrack.speed = s;*/
 		int trainid = 0;
-		load.updateSpeedAuthority(trackid, s, a.length);
+		int auth = 0;
+		if(a != null) {
+			System.out.println("Valid authority array");
+			auth = a.length;
+		}
+		load.updateSpeedAuthority(trackid, s, auth);
 		if(load.getTrackOccupied(trackid)!=0)
 		{
 			for(Map.Entry<Integer, TrainsOperating> entry : trainList.entrySet()) {
@@ -173,7 +182,7 @@ public class TrackModel {
 					updateTrains = officialTrains.get(i);
 				}
 			}*/
-			updateTrains.TrainModel_resendSpeedAuthority(s, a.length);
+			updateTrains.TrainModel_resendSpeedAuthority(s, auth);
 		}
 	}
 	
