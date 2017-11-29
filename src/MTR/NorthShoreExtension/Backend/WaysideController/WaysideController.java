@@ -38,21 +38,22 @@ public class WaysideController //this class is the logic to decide what to do wi
 		int[] alpha = {0,1,2,3,4,5,6};
 		int[] beta = {9,8,7,6,5,4,3};
 		int[] delta = {11,22,33,44,55,66,77};
+		int[] epsilon = {88,89,90,91,92,93,94};
 		int[] Occupy = {100, 200, 300};
 		int[] FloorStreet = {11, 200, 300};
+		int[] CeilingStreet = {22, 88, 300};
 		UpdateOccupiedTracks(Occupy);
 		AuthorityArray(100, alpha);
-		System.out.println("-------------------------");
 		AuthorityArray(200, beta);
-		System.out.println("-------------------------");
 		AuthorityArray(300, delta);
-		System.out.println("-------------------------");
-		AuthorityArray(100, delta);
-		System.out.println("-------------------------");
+		AuthorityArray(100, epsilon);
 		UpdateOccupiedTracks(FloorStreet);
+		UpdateOccupiedTracks(CeilingStreet);
 		System.out.println("COMPLETE");
 	}
 	
+	
+	//create a list of the plans with the supposedly current track occupied and the tracks that are to come after it
 	public static void AuthorityArray(int TrackID, int[] IncomingAuthorityArray)
 	{
 		ArrayList<Integer> StorageList = new ArrayList<Integer>();
@@ -81,7 +82,7 @@ public class WaysideController //this class is the logic to decide what to do wi
 			ListOfTrackPlans.add(StorageList);
 			
 		}
-		
+		System.out.println("Current Plans: ");
 		for (int x = 0; x < ListOfTrackPlans.size(); x++)
 		{
 			
@@ -91,12 +92,14 @@ public class WaysideController //this class is the logic to decide what to do wi
 			}
 			System.out.println("");
 		}
+		System.out.println("-------------------------");
 	
 	}
 		
 
 	//read in the switches
 	//create four stacks of switches  based on location
+	//based on cardinal direction and color (North/South, Green/redO
 	public static void UpdateSwitches()  
 	{
 		//stack.toArray(array)
@@ -146,9 +149,11 @@ public class WaysideController //this class is the logic to decide what to do wi
 		}
 	}
 
-	
+	//updartes the track plans
+	//iff a currently occupied track is the second unit in the plans, alter the plans to show that the train has moved
 	public static void TrackPlansUpdate(int TrackID)
 	{
+		boolean updated = false;
 		for (int x = 0; x < ListOfTrackPlans.size(); x++)
 		{
 			
@@ -161,17 +166,24 @@ public class WaysideController //this class is the logic to decide what to do wi
 				}
 				
 				ListOfTrackPlans.set(x,StorageList);
+				updated = true;
 			}
 		}
-		for (int x = 0; x < ListOfTrackPlans.size(); x++)
+		if (updated)
 		{
-			
-			for(int y = 0; y < ListOfTrackPlans.get(x).size(); y++)
+			System.out.println("After updating the plans: ");
+			for (int x = 0; x < ListOfTrackPlans.size(); x++)
 			{
-				System.out.print("||" + ListOfTrackPlans.get(x).get(y));
+				
+				for(int y = 0; y < ListOfTrackPlans.get(x).size(); y++)
+				{
+					System.out.print("||" + ListOfTrackPlans.get(x).get(y));
+				}
+				System.out.println("");
 			}
-			System.out.println("");
+			System.out.println("-------------------------");
 		}
+	
 	}
 	
 	//takes a moment to decide actions based on occupied tracks
@@ -192,41 +204,9 @@ public class WaysideController //this class is the logic to decide what to do wi
 		NorthRedLine();
 		SouthRedLine();
 	}
+
 	
-	
-	/*
-	public static void RailwayCrossingCheck()
-	{
-		if (TrackPlans != null)
-		{
-			for (int x = 0; x < TrackPlans.length; x++) //go through all the track plans
-			{
-				if (TrackPlans[x] != null)
-				{
-					for (int y = 0; y < TrackPlans[x].length; y++)
-					{
-						if (load.getInfrastructure(TrackPlans[x][y]).equals("Railway Crossing") || load.getInfrastructure(TrackPlans[x][y+1]).equals("Railway Crossing") || load.getInfrastructure(TrackPlans[x][y-1]).equals("Railway Crossing")) //if an upcoming track is a crossing
-						{
-							
-						}
-					{
-						if (TrackPlans[x][1] == TrackPlans[x][0] + 1 || TrackPlans[x][1] == TrackPlans[x][0] + 1)  //if the next track is only one off of the previous, it goes in a straight line
-						{
-							TrackModel.TrackModel_setSwitch(TrackPlans[x][1], 0);  //so set switch to straight
-						}
-						else  //if next track is not one difference, then it takes a diferent switch
-						{
-							TrackModel.TrackModel_setSwitch(TrackPlans[x][1], 1);  //set switch angled
-						}
-					}
-					}
-					
-				}
-			}
-		}
-	}
-	
-	*/
+	//all the logic unit controlling the switches
 	public static void NorthGreenLine()
 	{
 
