@@ -94,10 +94,12 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 			{
 				TotalLength += 50;
 			}
+			System.out.println("Deus Vult");
+		System.out.println("Dis Track: " + TrackID + " Next Track: " + Authority[0]);
+			
 		}
 		
-		System.out.println("Deus Vult");
-		System.out.println("Dis Track: " + TrackID + " Next Track: " + Authority[0]);
+		
 		if (Authority.length > 1)
 		{
 			System.out.println("Update chart");
