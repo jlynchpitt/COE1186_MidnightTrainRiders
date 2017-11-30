@@ -52,7 +52,8 @@ public class TrainControllerHelper {
 	public TrainControllerHelper(){
 		System.out.println("TCH initialized");
 		//Initialize Timer - Timer controls updating the commanded power every second
-		powerTimerTask = new TimerTask() {
+		powerTimerTask = new PowerTimerTask();
+		/*powerTimerTask = new TimerTask() {
 			@Override
 			public void run() {
 				//TODO: Still getting concurrent modification exception
@@ -63,9 +64,10 @@ public class TrainControllerHelper {
 				//Update simulated clock time - assume every running of timer task is 1 second in the "real world"
 				simulatedClockTime += 1000;
 				
-				/*if(ctc_ui != null) {
-					ctc_ui.setTime(simulatedClockTime);
-				}*/
+				//if(ctc_ui != null) {
+				//	ctc_ui.setTime(simulatedClockTime);
+				//}
+				ctcUI.setTime(simulatedClockTime);
 				
 				//Repaint Track model UI - TODO: Limit how often this runs
 				if(TrackModelUI.trackGraphic != null && (simulatedClockTime - lastRedrawTime) > timeBetweenRedraw) {
@@ -74,7 +76,7 @@ public class TrainControllerHelper {
 				}
 				MainMTR.getTrainModelUI().actionPerformed(new ActionEvent(this, 1, ""));
 			}
-		};
+		};*/
 		
 		powerTimer.scheduleAtFixedRate(powerTimerTask, 0, 1000);
 	}
@@ -131,12 +133,42 @@ public class TrainControllerHelper {
 	}
 	
 	private void rescheduleTimer() {
-		powerTimer.scheduleAtFixedRate(powerTimerTask, 0, 1000/clockMultiplier);
+		//powerTimer.scheduleAtFixedRate(powerTimerTask, 0, 1000/clockMultiplier);
+		powerTimer.scheduleAtFixedRate(new PowerTimerTask(), 0, 1000/clockMultiplier);
 	}
 	
 
 	public long getTime() {
 		return simulatedClockTime;
+	}
+	
+	class PowerTimerTask extends TimerTask{
+        PowerTimerTask(){
+
+        }
+        
+		@Override
+		public void run() {
+			//TODO: Still getting concurrent modification exception
+			for(TrainController tc : tcList ){
+				tc.calculatePowerCommand();
+			}
+			
+			//Update simulated clock time - assume every running of timer task is 1 second in the "real world"
+			simulatedClockTime += 1000;
+			
+			/*if(ctc_ui != null) {
+				ctc_ui.setTime(simulatedClockTime);
+			}*/
+			ctcUI.setTime(simulatedClockTime);
+			
+			//Repaint Track model UI - TODO: Limit how often this runs
+			if(TrackModelUI.trackGraphic != null && (simulatedClockTime - lastRedrawTime) > timeBetweenRedraw) {
+				lastRedrawTime = simulatedClockTime;
+				TrackModelUI.trackGraphic.actionPerformed(new ActionEvent(this, 1, ""));
+			}
+			MainMTR.getTrainModelUI().actionPerformed(new ActionEvent(this, 1, ""));
+		}
 	}
 	
 }

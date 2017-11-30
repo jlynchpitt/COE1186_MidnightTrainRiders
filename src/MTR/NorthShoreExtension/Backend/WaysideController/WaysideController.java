@@ -115,7 +115,7 @@ public class WaysideController //this class is the logic to decide what to do wi
 			//if the infrastructure at that track is a switch
 			if (load.getInfrastructure(input).equalsIgnoreCase("Switch"))
 			{
-				TrackModel.TrackModel_setSwitch(input, 1);
+				//TrackModel.TrackModel_setSwitch(input, 1);
 				System.out.println("SWITCH MOVED TO POSITION: " + load.getSwitch(input));
 				System.out.print(input + " | ");
 				//if the switch designation is within these parameters
@@ -273,11 +273,19 @@ public class WaysideController //this class is the logic to decide what to do wi
 				for (int y = 0; y<SG.size(); y++)
 				{
 					System.out.println("DISTANCE TO SWITCH: " + Math.abs(StackOfOccupiedTracks.get(x) - SG.get(y)));
-					if (Math.abs(StackOfOccupiedTracks.get(x) - SG.get(y)) == 1)
+					if (Math.abs(StackOfOccupiedTracks.get(x) - SG.get(y)) <= 1)
 					{
-						System.out.println("CAPTAIN, SWITCHBERG ALERT!" + load.getSwitch(SG.get(y)));
-						WaysideFunctionsHub.WaysideController_Switch(SG.get(y));
-						System.out.println("SWITCHBERG CHANGED!" + load.getSwitch(SG.get(y)));
+						if (load.getSwitch(SG.get(y)) != 0)
+						{
+							WaysideFunctionsHub.WaysideController_Switch(SG.get(y));
+						}
+					}
+					else
+					{
+						if (load.getSwitch(SG.get(y)) != 1)
+						{
+							WaysideFunctionsHub.WaysideController_Switch(SG.get(y));
+						}
 					}
 				}
 			}
