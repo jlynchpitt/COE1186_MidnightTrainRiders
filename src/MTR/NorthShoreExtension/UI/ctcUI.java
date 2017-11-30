@@ -99,7 +99,9 @@ public class ctcUI {
 	public static void setTime(long givenTime) {
 		timeAsLong = givenTime;
 		simulationTime = sdf.format(timeAsLong);
-		time.setText(simulationTime);
+		if(time != null) {
+			time.setText(simulationTime);
+		}
 	}
 	
 	//public static void ctcUI(Container pane) {
