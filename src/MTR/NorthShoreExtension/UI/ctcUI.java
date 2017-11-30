@@ -84,7 +84,7 @@ public class ctcUI {
 		return numTrains;
 	}
 	
-	public void setNumTrains(int trains) {
+	public static void setNumTrains(int trains) {
 		numTrains = trains;
 	}
 	

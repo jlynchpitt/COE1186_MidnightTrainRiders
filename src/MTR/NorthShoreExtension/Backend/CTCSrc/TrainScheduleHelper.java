@@ -18,6 +18,7 @@ import MTR.NorthShoreExtension.Backend.CTCSrc.TrainSchedule;
 import MTR.NorthShoreExtension.Backend.WaysideController.*;
 import MTR.NorthShoreExtension.MainMTR;
 import MTR.NorthShoreExtension.Backend.*;
+import MTR.NorthShoreExtension.UI.ctcUI;
 
 public class TrainScheduleHelper {
 	static List<TrainSchedule> tsl;
@@ -36,6 +37,7 @@ public class TrainScheduleHelper {
 		//System.out.println("\n Line: " + line + " id: " + id + "First stop: " + stops[0]);
 		//System.out.println("\n Line: " + ts.getLine() + "id: " + ts.getTrainID() + " First stop: " + ts.getFirstStop());
 		tsl.add(ts);
+		ctcUI.setNumTrains(tsl.size());
 	}
 	
 	public List<TrainSchedule> getTrainScheduleList() {	

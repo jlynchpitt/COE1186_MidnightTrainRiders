@@ -274,6 +274,7 @@ public class TrainSchedulerUI extends JFrame {
 		addStopGrn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String grnLine = "";
+				authGrn[0] = 2062;
 				int nextAuthGrn = Math.abs(grnStopsImported.getSelectedIndex() - authGrn[xGrn-1]);
 				authGrn[xGrn] = grnStops.getSelectedIndex();
 				String stop = (String) grnStopsImported.getSelectedItem();
@@ -283,7 +284,7 @@ public class TrainSchedulerUI extends JFrame {
 				schedStopsGrn[xGrn-1] = stopAsInt;
 				String grnStop = grnStops.getSelectedItem().toString();
 				String grnDepart = (grnHour1.getText() + grnHour0.getText() + ":" + grnMins1.getText() + grnMins0.getText());
-				String grnNextStop = "Stop " + xGrn + ": \n " + grnLine + ": " + grnStop + " \n Departure: " + grnDepart + "\n Authority: " + nextAuthGrn + "\n Suggested Speed: MAX";
+				String grnNextStop = "Stop " + xGrn + ": \n " + grnLine + ": " + stopAsInt + " \n Departure: " + grnDepart + "\n Suggested Speed: " + database.getSpeedLimit(stopAsInt);
 				String grnPrevious = stopRouteGrn.getText();
 				stopRouteGrn.setText(grnPrevious + "\n\n" + grnNextStop);
 				int departureGrn = Integer.parseInt(grnHour1.getText())*1000 + Integer.parseInt(grnHour0.getText())*100 + Integer.parseInt(grnMins1.getText())*10 + Integer.parseInt(grnMins0.getText());
@@ -326,6 +327,7 @@ public class TrainSchedulerUI extends JFrame {
 				nextTrainGrn.setEnabled(true);
 				TrainScheduleHelper.trainTracker.add(trainID, 9999);
 				ctcUI.tsh.addNewTrainSchedule("Green", trainID, schedStopsGrn, departGrn);
+				TrainSchedulesUI.repaintGUI();
 				trainID++;
 			}
 		});

@@ -41,7 +41,7 @@ public class trainScheduler {
 	
 	public static List<Integer> calcAuthority(int[] listOfStops) {
 		List<Integer> auth = new ArrayList<Integer>();
-		int[] authority = new int[199];
+		//[] authority = new int[199];
 		int l = 0;
 		int m = 1;
 		int firstSection = 0;
@@ -102,11 +102,11 @@ public class trainScheduler {
 			firstSection = 2062;
 			prevSection = 2061;
 			lastSection = 2058;
-			authority[0] = firstSection; //replace with first section from yard
+			//authority[0] = firstSection; //replace with first section from yard
 			auth.add(0, firstSection);
 			if (listOfStops[0] != firstSection || listOfStops[1] > 0) {
 				//System.out.println("yes");
-				authority[1] = database.schedNextTrack(firstSection, prevSection);
+				//authority[1] = database.schedNextTrack(firstSection, prevSection);
 				auth.add(1, database.schedNextTrack(firstSection, prevSection));
 			}
 			//database.showTrackTest();
@@ -115,21 +115,21 @@ public class trainScheduler {
 			//System.out.println("M: " + m);
 			if (listOfStops[0] == firstSection) {
 				l++;
-			} else if (listOfStops[0] == authority[1]) {
-				System.out.println(authority[m]);
+			} else if (listOfStops[0] == auth.get(1)) {
+				System.out.println(auth.get(0));
 				//m++; //this could be the issue //yeah pretty sure it waas this guy
 				l++;
 			} else {
-				while (listOfStops[l] != authority[m]) {
+				while (listOfStops[l] != auth.get(m)) {
 					m++;
 					if (m == 1) {
-						authority[m] = database.schedNextTrack(firstSection, (firstSection-1));
+						//authority[m] = database.schedNextTrack(firstSection, (firstSection-1));
 						//System.out.println("" + m + ": " + authority[m]);
 						auth.add(m, database.schedNextTrack(firstSection, (firstSection-1)));
 					} else {
-						authority[m] = database.schedNextTrack(authority[m-1], authority[m-2]);
+						//authority[m] = database.schedNextTrack(authority[m-1], authority[m-2]);
 						//System.out.println("" + m + ": " + authority[m]);
-						auth.add(m, database.schedNextTrack(authority[m-1], authority[m-2]));
+						auth.add(m, database.schedNextTrack(auth.get(m-1), auth.get(m-2)));
 					}
 				}
 				l++;
@@ -140,11 +140,11 @@ public class trainScheduler {
 			//remaining stops
 			//loop through all of the stops
 			while (listOfStops[l] != 0) {
-				while (listOfStops[l] != authority[m]) { //error throws here?
+				while (listOfStops[l] != auth.get(m)) { //error throws here?
 					m++;
-					authority[m] = database.schedNextTrack(authority[m-1], authority[m-2]);
+					//authority[m] = database.schedNextTrack(authority[m-1], authority[m-2]);
 					//System.out.println("" + m + ": " + authority[m]);
-					auth.add(m, database.schedNextTrack(authority[m-1], authority[m-2]));
+					auth.add(m, database.schedNextTrack(auth.get(m), auth.get(m)));
 				}
 				l++;
 			}

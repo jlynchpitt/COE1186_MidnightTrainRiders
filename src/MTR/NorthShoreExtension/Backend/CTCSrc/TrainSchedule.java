@@ -20,13 +20,13 @@ import MTR.NorthShoreExtension.Backend.CTCSrc.trainScheduler;
 public class TrainSchedule {
 	
 	String trackLine = "";
-	static int[] stops = new int[99];
+	int[] stops = new int[99];
 	//int[] authority;
-	static List<Integer> authority = new ArrayList<Integer>();
+	List<Integer> authority = new ArrayList<Integer>();
 	int[] departures = new int [99];
-	static int trainID = 0;
-	static int currLocation = 9999; //9999 represents the Yard
-	static int nextLocation = 8888;
+	int trainID = 0;
+	int currLocation = 9999; //9999 represents the Yard
+	int nextLocation = 8888;
 	
 	
 	public TrainSchedule(String line, int id, int[] listOfStops, int[] departureTimes) {

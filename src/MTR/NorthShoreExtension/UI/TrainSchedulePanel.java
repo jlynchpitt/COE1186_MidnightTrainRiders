@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 import MTR.NorthShoreExtension.MainMTR;
-import MTR.NorthShoreExtension.UI.ctcUI; //just for testing time changing function of ctc
+import MTR.NorthShoreExtension.UI.ctcUI; 
 import MTR.NorthShoreExtension.Backend.*;
 import MTR.NorthShoreExtension.Backend.CTCSrc.*;
 import MTR.NorthShoreExtension.Backend.WaysideController.*;

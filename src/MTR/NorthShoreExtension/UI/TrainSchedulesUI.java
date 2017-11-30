@@ -21,8 +21,8 @@ public class TrainSchedulesUI extends JFrame {
 	private static JFrame frame = null;
 	private static TrainSchedulesUI tsui = null;
 	private JPanel mainPanel = null;
-	public static trainScheduler ts;
-	static TrainScheduleHelper tsh;
+	public trainScheduler ts;
+	public static TrainScheduleHelper tsh;
 	JButton button;
 	
 	public TrainSchedulesUI() {
