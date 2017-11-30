@@ -568,18 +568,19 @@ public class TrainModelUI extends JFrame implements ActionListener{
 	}
 	
 	public void updateGUI() {
-		System.out.println("Poop");
-		lblV.setText(String.format("%.2f", tr.getVelocity()));
-		lblAcc.setText(String.format("%.2f", tr.getAcceleration()));
-		if(tr.getLeftDoor()) {
-			lblLd.setText("On");
-		}else {
-			lblLd.setText("Off");
-		}
-		if(tr.getRightDoor()) {
-			lblRd.setText("On");
-		}else {
-			lblRd.setText("Off");
+		if(tr!=null) {
+			lblV.setText(String.format("%.2f", tr.getVelocity()));
+			lblAcc.setText(String.format("%.2f", tr.getAcceleration()));
+			if(tr.getLeftDoor()) {
+				lblLd.setText("On");
+			}else {
+				lblLd.setText("Off");
+			}
+			if(tr.getRightDoor()) {
+				lblRd.setText("On");
+			}else {
+				lblRd.setText("Off");
+			}
 		}
 		
 	}
@@ -594,7 +595,16 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		for (int i=0;i<tnames.length;i++) {
 			tnames[i]="Train "+tarray[i];
 		}
+		System.out.println(tnames);
 		comboBox.setModel(new DefaultComboBoxModel(tnames));
+		if(tnames.length > 0) {
+			comboBox.setSelectedIndex(0);
+			String str = (String)comboBox.getSelectedItem();
+			String delim = " ";
+			String[] tokens = str.split(delim);
+			System.out.println("Print:"+Integer.valueOf(tokens[1]));
+			tr=tMap.get(Integer.valueOf(tokens[1]));
+		}
 		
 	}
 	
