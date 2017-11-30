@@ -240,7 +240,7 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 	   if (TablesCreated)
 	   {
 		   String LineColor = null;
-		   String BlockNumber =  Integer.toString(TrackID).substring(1,4);
+		   String BlockNumber =  Integer.toString(TrackID).substring(1);
 		   int firstDigit = Character.getNumericValue(Integer.toString(TrackID).charAt(0));
 		   
 		   if (firstDigit == 1)
@@ -259,8 +259,10 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 			   if (dm1.getValueAt(x, 0).equals(LineColor) || dm1.getValueAt(x, 0).equals("Color"))
 			   {
 				   System.out.println("COLOR FOUND");
-				   if (dm1.getValueAt(x, 1).equals(BlockNumber) || dm1.getValueAt(x, 1).equals("Black"))
+				  System.out.println(dm1.getValueAt(x, 1) + " to " + TrackID);
+				   if (dm1.getValueAt(x, 2).equals(TrackID) || dm1.getValueAt(x, 1).equals("Black"))
 				   {
+					   System.out.println("NUMBER FOUND");
 					   dm1.setValueAt(NextTrack, x, 2);
 					   dm1.setValueAt(AuthorityDist, x, 3);
 				   }
