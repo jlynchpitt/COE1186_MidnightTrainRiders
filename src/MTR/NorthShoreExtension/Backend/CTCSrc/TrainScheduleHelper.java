@@ -71,7 +71,14 @@ public class TrainScheduleHelper {
 					//train moved! update it's position and authority
 					tsl.get(j).setCurrentLocation(tsl.get(j).getNextLocation()); 
 					tsl.get(j).authority.remove(0); //this should remove the next location from the authority and then shift everything to the left
-					tsl.get(j).setNextLocation(tsl.get(j).authority.get(0));
+					if (tsl.get(j).authority.size() != 0) {
+						//if the authority isn't empty
+						tsl.get(j).setNextLocation(tsl.get(j).authority.get(0));
+					}
+					else {
+						//if there is no authority left, send an empty array?
+						tsl.get(j).setNextLocation(0000);
+					}
 					int[] auth = new int[tsl.get(j).authority.size()];
 					for (int i = 0; i < auth.length; i++) {
 						auth[i] = tsl.get(j).authority.get(i);
