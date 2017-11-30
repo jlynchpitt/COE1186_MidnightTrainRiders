@@ -206,13 +206,14 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 
    public static void OccupiedTrackTableUpdater(Object[][] ObjectArray)
    {
+	   System.out.println("DISPLAYING OCCUPIED TRACK");
 	   if (TablesCreated)
 	   {
 		   for (int x = 0; x < ObjectArray.length; x++)
 		   {
 			   //dm1.addRow(ObjectArray[x]);
 			   
-			   for (int y = 0; y < ObjectArray[x].length; y++)
+			   for (int y = 0; y < ObjectArray[x].length-2; y++)
 			   {
 				   if (x > dm1.getRowCount()-1)
 				   {
@@ -250,11 +251,15 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 		   {
 			   LineColor = "Green";
 		   }
+		   System.out.println("COLOR: " + LineColor + " BLOCKS: " + BlockNumber + " NEXT TRACK: " + NextTrack);
 		   for (int x = 0; x < dm1.getRowCount(); x++)
 		   {
-			   if (dm1.getValueAt(x, 0).equals(LineColor))
+			   System.out.println("CHECKING TABLE FOR UPDATE");
+			   System.out.println(dm1.getValueAt(x, 0) + " to " + LineColor);
+			   if (dm1.getValueAt(x, 0).equals(LineColor) || dm1.getValueAt(x, 0).equals("Color"))
 			   {
-				   if (dm1.getValueAt(x, 1).equals(BlockNumber))
+				   System.out.println("COLOR FOUND");
+				   if (dm1.getValueAt(x, 1).equals(BlockNumber) || dm1.getValueAt(x, 1).equals("Black"))
 				   {
 					   dm1.setValueAt(NextTrack, x, 2);
 					   dm1.setValueAt(AuthorityDist, x, 3);
