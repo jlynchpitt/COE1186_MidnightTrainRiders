@@ -16,6 +16,16 @@ import java.awt.event.*;
 import java.awt.event.ActionListener;
 import java.util.Stack;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import javax.swing.*;
+import javax.swing.text.*;
+
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
@@ -65,7 +75,7 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
     
 	  
 	  //public static int[] ProtoArray = {0,1,2,3,4,5,6};
-   public static void main(String[] args) //main body
+   public static void main(String[] args) throws IOException //main body
    {
 	   load = MainMTR.getDBHelper();
 	   //setup panels
@@ -84,7 +94,7 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 	  
    } 
    
-   public static void createAndShowWaysideControlGUI() 
+   public static void createAndShowWaysideControlGUI() throws IOException 
 	{
 	   load = MainMTR.getDBHelper();
        
@@ -296,7 +306,7 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 	   
    }
    //register all panels
-   public static void ComponentAdder()
+   public static void ComponentAdder() throws IOException
    {
 	   
 	   PLCSetup();
@@ -396,10 +406,20 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 	    
    }
  //set up plc panel  
-   public static void PLCSetup()
+   public static void PLCSetup() throws IOException
    {
-	   
-	   
+	   Reader();
+	   /*
+	   try
+       {
+           FileReader reader = new FileReader( "WaysideController.java" );
+           BufferedReader br = new BufferedReader(reader);
+           Component.read( br, null );
+           br.close();
+           Component.requestFocus();
+       }
+       catch(Exception e2) { System.out.println(e2); }
+	  */
 	   ButtonAdder();
 	   
 	   ActionAdder();
@@ -419,7 +439,14 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 	   //f.getContentPane().add(plc);
    }
   
+   public static void Reader()throws IOException
+   {
 
+	   String contents = new String(Files.readAllBytes(Paths.get("C:\\Users\\Owner\\Desktop\\temp.txt")));
+       System.out.println(contents);
+	       
+	   
+   }
 //set up switch panel
   public static void SwitchSetup()
    {
