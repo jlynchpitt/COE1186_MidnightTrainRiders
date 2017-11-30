@@ -79,6 +79,7 @@ public class TrackModel {
 	
 	public static void TrackModel_setDistance(int trainNum, double distance) {
 		int sub = 0;
+		int location = 0;
 		update = trainList.get(trainNum);
 		int trackid = update.trackOccupying;
 		trainList.remove(trainNum);
@@ -88,6 +89,12 @@ public class TrackModel {
 			trainList.put(trainNum, update);
 		}
 		else {
+			for(int i = 0; i < trackOccupency.length; i++)
+			{
+				if(trackOccupency[i]==trackid) {
+					location = i;
+				}
+			}
 			load.updateTrackOccupied(trackid, 0);
 			update.trackOccupying = load.getNextTrack(trackid, lastTrack);
 			lastTrack = trackid;
@@ -95,9 +102,13 @@ public class TrackModel {
 			sub = load.getTrackLength(update.trackOccupying);
 			update.distanceLeft = sub + difference;
 			trainList.put(trainNum, update);
+			trackOccupency[location] = update.trackOccupying;
 			officialTrains.get(trainNum).TrainModel_moveToNextTrack();
 			if(MainMTR3.fullUI) {
 				MainMTR3.moveTrack();
+			}
+			if(MainMTR.fullUI) {
+				wayside.WaysideController_TrackOccupancy(trackOccupency);
 			}
 		}
 		//System.out.println("Difference: "+difference);
