@@ -26,7 +26,7 @@ public class MainMTR3 {
 	public static boolean fullUI = false;
 	private static DBHelper dbHelper = null;
 	private static StaticTrackDBHelper staticDBHelper = null;
-	static int auth[]=new int[5];
+	static int auth[]=new int[3];
 	static int trackID = 0;
 	
 	/**
@@ -74,8 +74,8 @@ public class MainMTR3 {
     	auth[0] = 2062;
     	auth[1] = 2063;
     	auth[2] = 2064;
-    	auth[3] = 2065;
-    	auth[4] = 2066;
+    	//auth[3] = 2065;
+    	//auth[4] = 2066;
     	
     	TrackModel.TrackModel_setSpeedAuthority(2062, 30, auth);
 	}
