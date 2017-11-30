@@ -259,8 +259,8 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 			   if (dm1.getValueAt(x, 0).equals(LineColor) || dm1.getValueAt(x, 0).equals("Color"))
 			   {
 				   System.out.println("COLOR FOUND");
-				  System.out.println(dm1.getValueAt(x, 1) + " to " + BlockNumber);
-				   if (dm1.getValueAt(x, 1).equals(BlockNumber) || dm1.getValueAt(x, 1).equals("Black"))
+				  System.out.println(dm1.getValueAt(x, 1) + " to " + TrackID);
+				   if (dm1.getValueAt(x, 2).equals(TrackID) || dm1.getValueAt(x, 1).equals("Black"))
 				   {
 					   System.out.println("NUMBER FOUND");
 					   dm1.setValueAt(NextTrack, x, 2);
