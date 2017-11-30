@@ -7,7 +7,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
+import MTR.NorthShoreExtension.Backend.UnitConverter;
 import MTR.NorthShoreExtension.Backend.TrackModelSrc.TrackModel;
 import MTR.NorthShoreExtension.Backend.TrainSrc.Train;
 
@@ -32,6 +34,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.BorderFactory;
 
 public class TrainModelUI extends JFrame implements ActionListener{
 
@@ -44,6 +47,19 @@ public class TrainModelUI extends JFrame implements ActionListener{
 	private JLabel lblV, lblAcc, lblLd,lblRd, lblL_1;
 	private JComboBox comboBox;
 	private boolean b=false;
+	private JLabel lblM;
+	private JLabel lblPc;
+	private JLabel lblL;
+	private JLabel lblDcc;
+	private JLabel lblPw;
+	private JLabel lblW;
+	private JLabel lblCc;
+	private JLabel lblH;
+	private JLabel lblA;
+	private JLabel lblTw;
+	private JLabel lblC;
+	private JLabel lblD;
+	private JLabel lblCd;
 
 	/**
 	 * Launch the application.
@@ -67,9 +83,9 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
 		gbl_contentPane.columnWidths = new int[]{0, 150, 20, 100, 100, 100, 100, 100, 100, 100, 100, 0};
-		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-		gbl_contentPane.columnWeights = new double[]{0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_contentPane.columnWeights = new double[]{0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		contentPane.setLayout(gbl_contentPane);
 		
 		JLabel lblSelectTrain = new JLabel("Select Train:");
@@ -89,7 +105,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		gbc_separator.fill = GridBagConstraints.VERTICAL;
 		gbc_separator.ipady = 2;
 		gbc_separator.ipadx = 2;
-		gbc_separator.gridheight = 7;
+		gbc_separator.gridheight = 13;
 		gbc_separator.gridx = 2;
 		gbc_separator.gridy = 1;
 		contentPane.add(separator, gbc_separator);
@@ -160,6 +176,11 @@ public class TrainModelUI extends JFrame implements ActionListener{
 				System.out.println("Print:"+Integer.valueOf(tokens[1]));
 				tr=tMap.get(Integer.valueOf(tokens[1]));
 				updateGUI();
+				lblM.setText(String.format("%.2f",tr.getTrainMass())+" kg");
+				lblH.setText(String.format("%.2f",tr.getHeight())+" m");
+				lblW.setText(String.format("%.2f",tr.getWidth())+" m");
+				lblL.setText(String.format("%.2f",tr.getLength())+" m");
+				lblC.setText(tr.getCars()+"");
 			}
 		});
 		
@@ -180,8 +201,9 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		contentPane.add(lblMass, gbc_lblMass);
 		
 
-		JLabel lblM = new JLabel();
+		lblM = new JLabel();
 		GridBagConstraints gbc_lblM = new GridBagConstraints();
+		gbc_lblM.anchor = GridBagConstraints.WEST;
 		gbc_lblM.insets = new Insets(0, 0, 5, 5);
 		gbc_lblM.gridx = 4;
 		gbc_lblM.gridy = 2;
@@ -199,6 +221,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 
 		lblAcc = new JLabel();
 		GridBagConstraints gbc_lblAcc = new GridBagConstraints();
+		gbc_lblAcc.anchor = GridBagConstraints.WEST;
 		gbc_lblAcc.insets = new Insets(0, 0, 5, 5);
 		gbc_lblAcc.gridx = 6;
 		gbc_lblAcc.gridy = 2;
@@ -215,8 +238,9 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		contentPane.add(lblPassengerCount, gbc_lblPassengerCount);
 		
 
-		JLabel lblPc = new JLabel();
+		lblPc = new JLabel();
 		GridBagConstraints gbc_lblPc = new GridBagConstraints();
+		gbc_lblPc.anchor = GridBagConstraints.WEST;
 		gbc_lblPc.insets = new Insets(0, 0, 5, 5);
 		gbc_lblPc.gridx = 8;
 		gbc_lblPc.gridy = 2;
@@ -235,6 +259,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 
 		lblL_1 = new JLabel();
 		GridBagConstraints gbc_lblL_1 = new GridBagConstraints();
+		gbc_lblL_1.anchor = GridBagConstraints.WEST;
 		gbc_lblL_1.insets = new Insets(0, 0, 5, 0);
 		gbc_lblL_1.gridx = 10;
 		gbc_lblL_1.gridy = 2;
@@ -251,8 +276,9 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		contentPane.add(lblLength, gbc_lblLength);
 		
 
-		JLabel lblL = new JLabel();
+		lblL = new JLabel();
 		GridBagConstraints gbc_lblL = new GridBagConstraints();
+		gbc_lblL.anchor = GridBagConstraints.WEST;
 		gbc_lblL.insets = new Insets(0, 0, 5, 5);
 		gbc_lblL.gridx = 4;
 		gbc_lblL.gridy = 3;
@@ -269,8 +295,9 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		contentPane.add(lblDeceleration, gbc_lblDeceleration);
 		
 
-		JLabel lblDcc = new JLabel();
+		lblDcc = new JLabel();
 		GridBagConstraints gbc_lblDcc = new GridBagConstraints();
+		gbc_lblDcc.anchor = GridBagConstraints.WEST;
 		gbc_lblDcc.insets = new Insets(0, 0, 5, 5);
 		gbc_lblDcc.gridx = 6;
 		gbc_lblDcc.gridy = 3;
@@ -287,8 +314,9 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		contentPane.add(lblPassengerWeight, gbc_lblPassengerWeight);
 		
 
-		JLabel lblPw = new JLabel();
+		lblPw = new JLabel();
 		GridBagConstraints gbc_lblPw = new GridBagConstraints();
+		gbc_lblPw.anchor = GridBagConstraints.WEST;
 		gbc_lblPw.insets = new Insets(0, 0, 5, 5);
 		gbc_lblPw.gridx = 8;
 		gbc_lblPw.gridy = 3;
@@ -307,6 +335,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 	
 		lblLd= new JLabel();
 		GridBagConstraints gbc_lblLd = new GridBagConstraints();
+		gbc_lblLd.anchor = GridBagConstraints.WEST;
 		gbc_lblLd.insets = new Insets(0, 0, 5, 0);
 		gbc_lblLd.gridx = 10;
 		gbc_lblLd.gridy = 3;
@@ -323,8 +352,9 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		contentPane.add(lblWidth, gbc_lblWidth);
 		
 	
-		JLabel lblW = new JLabel();
+		lblW = new JLabel();
 		GridBagConstraints gbc_lblW = new GridBagConstraints();
+		gbc_lblW.anchor = GridBagConstraints.WEST;
 		gbc_lblW.insets = new Insets(0, 0, 5, 5);
 		gbc_lblW.gridx = 4;
 		gbc_lblW.gridy = 4;
@@ -344,6 +374,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		
 		lblV = new JLabel();
 		GridBagConstraints gbc_lblV = new GridBagConstraints();
+		gbc_lblV.anchor = GridBagConstraints.WEST;
 		gbc_lblV.insets = new Insets(0, 0, 5, 5);
 		gbc_lblV.gridx = 6;
 		gbc_lblV.gridy = 4;
@@ -360,8 +391,9 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		contentPane.add(lblCrewCount, gbc_lblCrewCount);
 		
 		
-		JLabel lblCc = new JLabel();
+		lblCc = new JLabel();
 		GridBagConstraints gbc_lblCc = new GridBagConstraints();
+		gbc_lblCc.anchor = GridBagConstraints.WEST;
 		gbc_lblCc.insets = new Insets(0, 0, 5, 5);
 		gbc_lblCc.gridx = 8;
 		gbc_lblCc.gridy = 4;
@@ -379,6 +411,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		
 		lblRd = new JLabel();
 		GridBagConstraints gbc_lblRd = new GridBagConstraints();
+		gbc_lblRd.anchor = GridBagConstraints.WEST;
 		gbc_lblRd.insets = new Insets(0, 0, 5, 0);
 		gbc_lblRd.gridx = 10;
 		gbc_lblRd.gridy = 4;
@@ -394,8 +427,9 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		contentPane.add(lblHeight, gbc_lblHeight);
 		
 
-		JLabel lblH = new JLabel();
+		lblH = new JLabel();
 		GridBagConstraints gbc_lblH = new GridBagConstraints();
+		gbc_lblH.anchor = GridBagConstraints.WEST;
 		gbc_lblH.insets = new Insets(0, 0, 5, 5);
 		gbc_lblH.gridx = 4;
 		gbc_lblH.gridy = 5;
@@ -412,8 +446,9 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		contentPane.add(lblAuthority, gbc_lblAuthority);
 		
 
-		JLabel lblA = new JLabel();
+		lblA = new JLabel();
 		GridBagConstraints gbc_lblA = new GridBagConstraints();
+		gbc_lblA.anchor = GridBagConstraints.WEST;
 		gbc_lblA.insets = new Insets(0, 0, 5, 5);
 		gbc_lblA.gridx = 6;
 		gbc_lblA.gridy = 5;
@@ -430,8 +465,9 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		contentPane.add(lblTotalWeight, gbc_lblTotalWeight);
 		
 
-		JLabel lblTw = new JLabel();
+		lblTw = new JLabel();
 		GridBagConstraints gbc_lblTw = new GridBagConstraints();
+		gbc_lblTw.anchor = GridBagConstraints.WEST;
 		gbc_lblTw.insets = new Insets(0, 0, 5, 0);
 		gbc_lblTw.gridx = 10;
 		gbc_lblTw.gridy = 5;
@@ -448,8 +484,9 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		contentPane.add(lblCars, gbc_lblCars);
 		
 
-		JLabel lblC = new JLabel();
+		lblC = new JLabel();
 		GridBagConstraints gbc_lblC = new GridBagConstraints();
+		gbc_lblC.anchor = GridBagConstraints.WEST;
 		gbc_lblC.insets = new Insets(0, 0, 5, 5);
 		gbc_lblC.gridx = 4;
 		gbc_lblC.gridy = 6;
@@ -466,8 +503,9 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		contentPane.add(lblDistance, gbc_lblDistance);
 		
 
-		JLabel lblD = new JLabel();
+		lblD = new JLabel();
 		GridBagConstraints gbc_lblD = new GridBagConstraints();
+		gbc_lblD.anchor = GridBagConstraints.WEST;
 		gbc_lblD.insets = new Insets(0, 0, 5, 5);
 		gbc_lblD.gridx = 6;
 		gbc_lblD.gridy = 6;
@@ -482,6 +520,17 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		gbc_lblCumulativeDistance.gridy = 7;
 		contentPane.add(lblCumulativeDistance, gbc_lblCumulativeDistance);
 		
+		JSeparator separator_1 = new JSeparator();
+		GridBagConstraints gbc_separator_1 = new GridBagConstraints();
+		gbc_separator_1.fill = GridBagConstraints.HORIZONTAL;
+		gbc_separator_1.ipady = 1;
+		gbc_separator_1.ipadx = 1;
+		gbc_separator_1.gridwidth = 4;
+		gbc_separator_1.insets = new Insets(0, 0, 5, 5);
+		gbc_separator_1.gridx = 3;
+		gbc_separator_1.gridy = 8;
+		contentPane.add(separator_1, gbc_separator_1);
+		
 		JLabel lblFailureModes = new JLabel("Failure Modes:");
 		lblFailureModes.setForeground(new Color(220, 20, 60));
 		lblFailureModes.setFont(new Font("Arial", Font.BOLD, 18));
@@ -489,57 +538,141 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		gbc_lblFailureModes.gridwidth = 2;
 		gbc_lblFailureModes.insets = new Insets(0, 0, 5, 5);
 		gbc_lblFailureModes.gridx = 3;
-		gbc_lblFailureModes.gridy = 13;
+		gbc_lblFailureModes.gridy = 9;
 		contentPane.add(lblFailureModes, gbc_lblFailureModes);
 		
 		JLabel lblBrakeFailure = new JLabel("Brake Failure:");
 		lblBrakeFailure.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblBrakeFailure = new GridBagConstraints();
-		gbc_lblBrakeFailure.anchor = GridBagConstraints.EAST;
+		gbc_lblBrakeFailure.anchor = GridBagConstraints.WEST;
 		gbc_lblBrakeFailure.gridwidth = 2;
 		gbc_lblBrakeFailure.insets = new Insets(0, 0, 5, 5);
 		gbc_lblBrakeFailure.gridx = 3;
-		gbc_lblBrakeFailure.gridy = 14;
+		gbc_lblBrakeFailure.gridy = 10;
 		contentPane.add(lblBrakeFailure, gbc_lblBrakeFailure);
+		
+		JButton button = new JButton("On");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(tr.getBrakeFailure()) {
+					tr.setBrakeFailure(false);
+					button.setBackground(Color.LIGHT_GRAY);
+					button.setText("On");
+				}else {
+					tr.setBrakeFailure(true);
+					button.setText("Off");
+					button.setBackground(Color.RED);
+				}
+			}
+		});
+		GridBagConstraints gbc_button = new GridBagConstraints();
+		gbc_button.anchor = GridBagConstraints.WEST;
+		gbc_button.insets = new Insets(0, 0, 5, 5);
+		gbc_button.gridx = 6;
+		gbc_button.gridy = 10;
+		contentPane.add(button, gbc_button);
 		
 		JLabel lblEngineFailure = new JLabel("Engine Failure:");
 		lblEngineFailure.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblEngineFailure = new GridBagConstraints();
-		gbc_lblEngineFailure.anchor = GridBagConstraints.EAST;
+		gbc_lblEngineFailure.anchor = GridBagConstraints.WEST;
 		gbc_lblEngineFailure.gridwidth = 2;
 		gbc_lblEngineFailure.insets = new Insets(0, 0, 5, 5);
 		gbc_lblEngineFailure.gridx = 3;
-		gbc_lblEngineFailure.gridy = 15;
+		gbc_lblEngineFailure.gridy = 11;
 		contentPane.add(lblEngineFailure, gbc_lblEngineFailure);
+		
+		JButton btnOn = new JButton("On");
+		btnOn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(tr.getEngineFailure()) {
+					tr.setEngineFailure(false);
+					button.setBackground(Color.LIGHT_GRAY);
+					button.setText("On");
+				}else {
+					tr.setEngineFailure(true);
+					button.setText("Off");
+					button.setBackground(Color.RED);
+				}
+			}
+		});
+		GridBagConstraints gbc_btnOn = new GridBagConstraints();
+		gbc_btnOn.anchor = GridBagConstraints.WEST;
+		gbc_btnOn.insets = new Insets(0, 0, 5, 5);
+		gbc_btnOn.gridx = 6;
+		gbc_btnOn.gridy = 11;
+		contentPane.add(btnOn, gbc_btnOn);
 		
 		JLabel lblSignalPickupFailure = new JLabel("Signal Pickup Failure: ");
 		lblSignalPickupFailure.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblSignalPickupFailure = new GridBagConstraints();
-		gbc_lblSignalPickupFailure.anchor = GridBagConstraints.EAST;
+		gbc_lblSignalPickupFailure.anchor = GridBagConstraints.WEST;
 		gbc_lblSignalPickupFailure.gridwidth = 2;
 		gbc_lblSignalPickupFailure.insets = new Insets(0, 0, 5, 5);
 		gbc_lblSignalPickupFailure.gridx = 3;
-		gbc_lblSignalPickupFailure.gridy = 16;
+		gbc_lblSignalPickupFailure.gridy = 12;
 		contentPane.add(lblSignalPickupFailure, gbc_lblSignalPickupFailure);
+		
+		
+		lblCd = new JLabel();
+		GridBagConstraints gbc_lblCd = new GridBagConstraints();
+		gbc_lblCd.anchor = GridBagConstraints.WEST;
+		gbc_lblCd.insets = new Insets(0, 0, 5, 5);
+		gbc_lblCd.gridx = 6;
+		gbc_lblCd.gridy = 7;
+		contentPane.add(lblCd, gbc_lblCd);
+		
+		JButton btnOn_1 = new JButton("On");
+		btnOn_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(tr.getSignalFailure()) {
+					tr.setSignalFailure(false);
+					button.setBackground(Color.LIGHT_GRAY);
+					button.setText("On");
+				}else {
+					tr.setSignalFailure(true);
+					button.setText("Off");
+					button.setBackground(Color.RED);
+				}
+			}
+		});
+		GridBagConstraints gbc_btnOn_1 = new GridBagConstraints();
+		gbc_btnOn_1.anchor = GridBagConstraints.WEST;
+		gbc_btnOn_1.insets = new Insets(0, 0, 5, 5);
+		gbc_btnOn_1.gridx = 6;
+		gbc_btnOn_1.gridy = 12;
+		contentPane.add(btnOn_1, gbc_btnOn_1);
 		
 		JLabel lblPassengerEmergencyBrake = new JLabel("Passenger Emergency Brake:");
 		lblPassengerEmergencyBrake.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblPassengerEmergencyBrake = new GridBagConstraints();
-		gbc_lblPassengerEmergencyBrake.anchor = GridBagConstraints.EAST;
+		gbc_lblPassengerEmergencyBrake.anchor = GridBagConstraints.WEST;
 		gbc_lblPassengerEmergencyBrake.gridwidth = 2;
-		gbc_lblPassengerEmergencyBrake.insets = new Insets(0, 0, 0, 5);
+		gbc_lblPassengerEmergencyBrake.insets = new Insets(0, 0, 5, 5);
 		gbc_lblPassengerEmergencyBrake.gridx = 3;
-		gbc_lblPassengerEmergencyBrake.gridy = 17;
+		gbc_lblPassengerEmergencyBrake.gridy = 13;
 		contentPane.add(lblPassengerEmergencyBrake, gbc_lblPassengerEmergencyBrake);
 		
-		if(tr!=null) {
-			JLabel lblCd = new JLabel(String.format("%.2f",tr.getCumulativeDistance()));
-			GridBagConstraints gbc_lblCd = new GridBagConstraints();
-			gbc_lblCd.insets = new Insets(0, 0, 5, 5);
-			gbc_lblCd.gridx = 6;
-			gbc_lblCd.gridy = 7;
-			contentPane.add(lblCd, gbc_lblCd);
-		}
+		JButton btnOn_2 = new JButton("On");
+		btnOn_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(tr.getPassengerEBrake()) {
+					tr.setPassnegerEBrake(false);
+					button.setBackground(Color.LIGHT_GRAY);
+					button.setText("On");
+				}else {
+					tr.setPassnegerEBrake(true);
+					button.setText("Off");
+					button.setBackground(Color.RED);
+				}
+			}
+		});
+		GridBagConstraints gbc_btnOn_2 = new GridBagConstraints();
+		gbc_btnOn_2.anchor = GridBagConstraints.WEST;
+		gbc_btnOn_2.insets = new Insets(0, 0, 5, 5);
+		gbc_btnOn_2.gridx = 6;
+		gbc_btnOn_2.gridy = 13;
+		contentPane.add(btnOn_2, gbc_btnOn_2);
 		
 		
 		
@@ -553,8 +686,21 @@ public class TrainModelUI extends JFrame implements ActionListener{
 	
 	public void updateGUI() {
 		if(tr!=null) {
-			lblV.setText(String.format("%.2f", tr.getVelocity()));
-			lblAcc.setText(String.format("%.2f", tr.getAcceleration()));
+			lblV.setText(String.format("%.2f", 2.23694*tr.getVelocity())+" MPH");
+			lblAcc.setText(String.format("%.2f", tr.getAcceleration())+" m/s^2");
+			lblDcc.setText(String.format("%.2f", tr.getDeceleration())+" m/s^2");
+			lblA.setText(String.format("%d", tr.getAuthority())+" blocks");
+			lblD.setText(String.format("%.2f", tr.getDistance())+" m");
+			lblCd.setText(String.format("%.2f", tr.getCumulativeDistance())+" m");
+			lblPc.setText(tr.getPassengers()+"");
+			lblPw.setText(tr.getPassengerMass()+" kg");
+			lblC.setText(tr.getCrewcount()+"");
+			lblTw.setText(String.format("%.2f", tr.getTotalMass())+" kg");
+			if(tr.getLightson()) {
+				lblL_1.setText("On");
+			}else {
+				lblL_1.setText("Off");
+			}
 			if(tr.getLeftDoor()) {
 				lblLd.setText("On");
 			}else {
@@ -565,6 +711,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 			}else {
 				lblRd.setText("Off");
 			}
+			
 		}
 		
 	}
@@ -591,6 +738,11 @@ public class TrainModelUI extends JFrame implements ActionListener{
 			String[] tokens = str.split(delim);
 			System.out.println("Print:"+Integer.valueOf(tokens[1]));
 			tr=tMap.get(Integer.valueOf(tokens[1]));
+			lblM.setText(String.format("%.2f",tr.getTrainMass())+" kg");
+			lblH.setText(String.format("%.2f",tr.getHeight())+" m");
+			lblW.setText(String.format("%.2f",tr.getWidth())+" m");
+			lblL.setText(String.format("%.2f",tr.getLength())+" m");
+			lblC.setText(tr.getCars()+"");
 		}
 		
 	}

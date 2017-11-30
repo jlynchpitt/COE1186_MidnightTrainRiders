@@ -251,4 +251,22 @@ public class Train {
 		tm.seteBrake(true);
 	}
 	
+	public boolean getEngineFailure() {
+		return engineFailure;
+	}
+	
+	public boolean getSignalFailure() {
+		return signalFailure;
+	}
+	
+	public boolean getBrakeFailure() {
+		return brakeFailure;
+		
+	}
+	
+	public boolean getPassengerEBrake() {
+		return passengerEBrake;
+		
+	}
+	
 }
