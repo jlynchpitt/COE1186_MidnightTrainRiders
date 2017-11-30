@@ -140,11 +140,12 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 		   // Just stuff for the UI-------------------------------------------------------------------------------------------
 		   int ArrayLength = IncomingTrackOccupancyArray.length;
 		   Object[][] multi = new Object[ArrayLength][4];
+		   Stack<Object[]> multiList = new Stack<>();
 		   for (int x = 0; x < IncomingTrackOccupancyArray.length; x++)
 		   {
 
 			   String IncomingNumber = Integer.toString(IncomingTrackOccupancyArray[x]);
-			   String LineColor = null;
+			   String LineColor = "Blank";
 			   
 			   int firstDigit = Character.getNumericValue(IncomingNumber.charAt(0));
 			   String BlockNumber =  IncomingNumber.substring(1);
@@ -158,13 +159,22 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 			   {
 				   LineColor = "Green";
 			   }
-			
-				multi[x][0] = LineColor;
-				multi[x][1] = BlockNumber;
-				multi[x][2] = "Placeholder";
-				multi[x][3] = "Placeholder";
+			   if (!LineColor.equals("Blank"))
+			   {
+				   //System.out.println("COLOR: ");
+				   multi[x][0] = LineColor;
+					multi[x][1] = BlockNumber;
+					multi[x][2] = "Placeholder";
+					multi[x][3] = "Placeholder";
+					multiList.add(multi[x]);
+			   }
+				
 		   }
-
+		   multi = new Object[multiList.size()][4];
+		   for (int x = 0; x < multiList.size(); x++)
+		   {
+			   multi[x] = multiList.get(x);
+		   }
 
 		   WaysideControllerUI.OccupiedTrackTableUpdater(multi);
 		   //WaysideFunctions.CTC_getOccupancy(IncomingTrackOccupancyArray);
