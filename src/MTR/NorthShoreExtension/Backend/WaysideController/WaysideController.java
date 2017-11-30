@@ -263,27 +263,36 @@ public class WaysideController //this class is the logic to decide what to do wi
 	public static void SouthGreenLine()
 	{
 		System.out.println("XDDDD");
+		//look at occupied tracks
 		for (int x = 0; x < StackOfOccupiedTracks.size(); x++)
 		{
+			//if both exist
 			if (StackOfOccupiedTracks.get(x) != 0 && SG.size() > 0)
 			{
 				System.out.println("NOPE: " + SG.get(0));
 			
-			
+				//go through south green switches
 				for (int y = 0; y<SG.size(); y++)
 				{
 					System.out.println("DISTANCE TO SWITCH: " + Math.abs(StackOfOccupiedTracks.get(x) - SG.get(y)));
+					
+					//if train is one track away from switch or less
 					if (Math.abs(StackOfOccupiedTracks.get(x) - SG.get(y)) <= 1)
 					{
+						//if switch is not straight
 						if (load.getSwitch(SG.get(y)) != 0)
 						{
+							//straighten switch
 							WaysideFunctionsHub.WaysideController_Switch(SG.get(y));
 						}
 					}
+					//if train is over one track away
 					else
 					{
+						//if switch is not angled
 						if (load.getSwitch(SG.get(y)) != 1)
 						{
+							//angle switch
 							WaysideFunctionsHub.WaysideController_Switch(SG.get(y));
 						}
 					}
