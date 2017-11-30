@@ -135,7 +135,7 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 		   }
 		   System.out.println("are occupied.");
 		   WaysideController.UpdateOccupiedTracks(IncomingTrackOccupancyArray);
-		   //TrainScheduleHelper.CTC_getOccupiedTracks(IncomingTrackOccupancyArray);  
+		   TrainScheduleHelper.CTC_getOccupiedTracks(IncomingTrackOccupancyArray);  
 
 		   // Just stuff for the UI-------------------------------------------------------------------------------------------
 		   int ArrayLength = IncomingTrackOccupancyArray.length;
@@ -182,8 +182,8 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 			}
 			System.out.println("broke.");
 		   BrokenTrackArray = IncomingBrokenTrackArray;
-			WaysideFunctions.CTC_getBrokenTrack(BrokenTrackArray);
-			//TrainScheduleHelper.CTC_getBrokenTrack(BrokenTrackArray);
+			//WaysideFunctions.CTC_getBrokenTrack(BrokenTrackArray);
+			TrainScheduleHelper.CTC_getBrokenTracks(BrokenTrackArray);
 
 	   }
    

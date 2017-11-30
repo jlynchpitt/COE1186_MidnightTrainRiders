@@ -9,6 +9,8 @@ import MTR.NorthShoreExtension.Backend.DBHelper;
 import MTR.NorthShoreExtension.Backend.TrainSrc.Train;
 import MTR.NorthShoreExtension.Backend.WaysideController.WaysideFunctionsHub;
 import MTR.NorthShoreExtension.UI.TrackModelUI;
+import MTR.NorthShoreExtension.UI.TrainModelUI;
+
 import java.util.Random;
 
 public class TrackModel {
@@ -98,7 +100,7 @@ public class TrackModel {
 				MainMTR3.moveTrack();
 			}
 		}
-		System.out.println("Difference: "+difference);
+		//System.out.println("Difference: "+difference);
 		sellTicket(update.trackOccupying);
 		sendBeacon(update.trackOccupying, update.trainID);
 	}
@@ -136,6 +138,8 @@ public class TrackModel {
 		if(MainMTR.fullUI) {
 			wayside.WaysideController_TrackOccupancy(trackOccupency);
 		}
+		TrainModelUI tmUI=MainMTR.getTrainModelUI();
+		tmUI.addTrain();
 	}
 	
 	public static void sellTicket(int trackid) {

@@ -449,6 +449,77 @@ public class StaticTrackDBHelper {
 		return null;
    }
    
+   public List<Double> getSetSpeedList(int trainID){
+       List<Double> powerList = new ArrayList<>();
+
+	   Connection connection = null;
+		Statement statement = null;
+		ResultSet result = null;
+		
+		try {
+			connection = connect();
+			
+			statement = connection.createStatement();
+			statement.setQueryTimeout(30); //TODO: Is this needed?
+			
+			String query = "SELECT speedCommand FROM " + TRAIN_CONTROLS_TABLENAME + " WHERE trainID = '" +trainID+ "'";
+		    result = statement.executeQuery(query);  
+		    
+		    while(result.next())
+		    {
+		       // iterate & read the result set
+		    	powerList.add(result.getDouble("speedCommand"));
+		    }
+		    
+		    return powerList;
+		}
+		catch(SQLException e){  
+			 System.err.println(e.getMessage()); 
+		}       
+		finally {         
+			if (result != null) try { result.close(); } catch (SQLException ignore) {}
+	        if (statement != null) try { statement.close(); } catch (SQLException ignore) {}
+	        if (connection != null) try { connection.close(); } catch (SQLException ignore) {}
+		 }
+		
+		return null;
+   }
+   
+   public List<Double> getActualSpeedList(int trainID){
+       List<Double> powerList = new ArrayList<>();
+
+	   Connection connection = null;
+		Statement statement = null;
+		ResultSet result = null;
+		
+		try {
+			connection = connect();
+			
+			statement = connection.createStatement();
+			statement.setQueryTimeout(30); //TODO: Is this needed?
+			
+			String query = "SELECT actualSpeed FROM " + TRAIN_CONTROLS_TABLENAME + " WHERE trainID = '" +trainID+ "'";
+		    result = statement.executeQuery(query);  
+		    
+		    while(result.next())
+		    {
+		       // iterate & read the result set
+		    	powerList.add(result.getDouble("actualSpeed"));
+		    }
+		    
+		    return powerList;
+		}
+		catch(SQLException e){  
+			 System.err.println(e.getMessage()); 
+		}       
+		finally {         
+			if (result != null) try { result.close(); } catch (SQLException ignore) {}
+	        if (statement != null) try { statement.close(); } catch (SQLException ignore) {}
+	        if (connection != null) try { connection.close(); } catch (SQLException ignore) {}
+		 }
+		
+		return null;
+   }
    /* Sample query
    private ResultSet executeQuery(String query) {
 		Connection connection = null;

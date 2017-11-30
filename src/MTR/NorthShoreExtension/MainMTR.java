@@ -15,6 +15,7 @@ import MTR.NorthShoreExtension.Backend.DBHelper;
 import MTR.NorthShoreExtension.Backend.StaticTrackDBHelper;
 import MTR.NorthShoreExtension.Backend.TrainControllerSrc.TrainControllerHelper;
 import MTR.NorthShoreExtension.UI.LoadTrackModelUI;
+import MTR.NorthShoreExtension.UI.TrainModelUI;
 
 /**
  * @author Joe Lynch
@@ -26,6 +27,7 @@ public class MainMTR {
 	public static boolean fullUI = false;
 	private static DBHelper dbHelper = null;
 	private static StaticTrackDBHelper staticDBHelper = null;
+	private static TrainModelUI trainModelUI = null;
 	
 	/**
 	 * @param args
@@ -71,10 +73,20 @@ public class MainMTR {
 		}
 		else {
 			staticDBHelper = new StaticTrackDBHelper();
-			//staticDBHelper.loadFileIntoDB("green_staticTrackInfo.csv");
+			staticDBHelper.loadFileIntoDB("green_staticTrackInfo.csv");
 			//staticDBHelper.loadFileIntoDB("red_staticTrackInfo.csv"); //Causes read in error - array out of bounds
-			staticDBHelper.loadFileIntoDB("test_staticTrackInfo.csv");
+			//staticDBHelper.loadFileIntoDB("test_staticTrackInfo.csv");
 			return staticDBHelper;
 		}
 	}	
+	
+	public static TrainModelUI getTrainModelUI() {
+		if(trainModelUI != null) {
+			return trainModelUI;
+		}
+		else {
+			trainModelUI = new TrainModelUI();
+			return trainModelUI;
+		}
+	}
 }
