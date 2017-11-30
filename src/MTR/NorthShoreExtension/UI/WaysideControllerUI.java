@@ -1,514 +1,201 @@
 /*
- * Filename: WaysideControllerUI.java
+ * Filename: WaysideFunctionsHub.java
  * Author: Eric Cheung
  * Date Created:10/27
- * File Description: Creates basic wayside UI and basic functionalities
+ * File Description: Receives and bounces data to appropriate parties.  These include the CTC and TrackModel and pass on 
+ * information to the WaysideController, who will take the appropriate action
+ * 
  */
-package MTR.NorthShoreExtension.UI;
-import java.awt.BorderLayout;
-import java.awt.Button;
-import java.awt.Component;
-import java.awt.Frame;
-import java.awt.TextArea;
-import java.awt.*;
-import javax.swing.*;
-import java.awt.event.*;
-import java.awt.event.ActionListener;
-import java.util.Stack;
+package MTR.NorthShoreExtension.Backend.WaysideController;
 
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
+import java.awt.List;
+import java.util.Arrays;
+import java.util.Stack;
 
 import MTR.NorthShoreExtension.MainMTR;
 import MTR.NorthShoreExtension.Backend.DBHelper;
-import MTR.NorthShoreExtension.Backend.WaysideController.WaysideFunctions;
-import MTR.NorthShoreExtension.Backend.WaysideController.WaysideFunctionsHub;
-import MTR.NorthShoreExtension.UI.TrackModelUI.TrackGraphic;
+import MTR.NorthShoreExtension.Backend.CTCSrc.TrainScheduleHelper;
+import MTR.NorthShoreExtension.Backend.TrackModelSrc.TrackModel;
+import MTR.NorthShoreExtension.UI.TrackModelUI;
+import MTR.NorthShoreExtension.UI.WaysideControllerUI;
 
 
-
-public class WaysideControllerUI  //the purpose of this class is to simply display all the information
+public class WaysideFunctionsHub //the purpose of this class is to receive and organize the information
 {
-	//imports all packages
-	public static String SampleCode = "Int total = 0;\n Public static void main (String [] args)\n{\n    If (traindist <= 100)\n    {\n        Do\n        {\n            Close gate\n            Signal light\n        }\n    }\n    Public boolean distmeas(int trackcount)\n    {\n        For (int x = 0; x < trackcount; x++)\n        {\n            Total += x; \n        }\n        If (total <= standarddist)\n        {\n            Return true;\n        }\n        Else\n        {\n            Return false;\n        ]\n    }\n}";
-	//basic frame and components
-	public static JPanel plc = new JPanel();
-	public static JPanel TI = new JPanel();
-	public static JPanel SC = new JPanel();
-	public static JPanel TestPanel = new JPanel();
-	public static JFrame f = new JFrame("Wayside Controller");  //create frame with frame name
-	public static JFrame frame = new JFrame("Track Model UI");
-	public static Component text = new TextArea(SampleCode);  //create text area
-	public static JButton SaveButton = new JButton("Save"); //create one of the buttons
-	//public static JButton SaveButton = new JButton("Save");
-	public static JButton SwtchCtrlButton = new JButton("To Switch Control Hub"); //create one of the buttons
-	public static JButton PLCButton = new JButton("To PLC"); //create one of the buttons
-	public static JButton TrackInfoButton = new JButton("To Track Info Hub"); //create one of the buttons
-	public static JButton Test = new JButton ("Tester");
-	public static int FrameTracker = 0;
+	
+	/*
+	 *Information received: All occupied tracks, authority of trains on those tracks, the speed, broken tracks
+	 */
+	public static int[] AuthorityArray;
+	public static int[] SpeedArray;
+	public static int[] TrackOccupancyArray;
+	public static int[] BrokenTrackArray;
+	public static int[] OccupiedTrackArray;
+	
+	static Stack<Integer> OccupiedTracks = new Stack<>();
+	public static int[] AuthorArray = {2130,2131,2141,2145,2165,2146,2147};
 	public static WaysideFunctions obj = new WaysideFunctions();
-	public static DefaultTableModel dm = new DefaultTableModel();
-	public static DefaultTableModel om = new DefaultTableModel();
-	public static DefaultTableModel am = new DefaultTableModel();
-	public static DefaultTableModel dm1 = new DefaultTableModel();
-	public static boolean TablesCreated = false;
-	public static JTable table1;
-	public static JTable table;
-	public static JScrollPane scroll1;
-	public static JScrollPane scroll;
-	public static JScrollPane scroll2;
-	public static int Scroll1Height = 75;
-	static DBHelper load;
-	static TrackModelUI instance;
-	public static TrackGraphic trackGraphic = null;
+	public static WaysideControllerUI obj2 = new WaysideControllerUI();
+	static WaysideControllerUI helper = new WaysideControllerUI();
+	static DBHelper load = MainMTR.getDBHelper();
+	//static DBHelper load = helper.sendDB();
 	
-    
-	  
-	  //public static int[] ProtoArray = {0,1,2,3,4,5,6};
-   public static void main(String[] args) //main body
-   {
-	   load = MainMTR.getDBHelper();
-	   //setup panels
-	   ComponentAdder();
-	   //add action
-	    ActionAdder();  
-	//create frame 
-	  int width = 750;
-      int height = 500;
-      f.setSize(width, height);
-	  f.getContentPane().add(plc);
-      f.setVisible(true);
-      //OccupiedTrackTableUpdater();
-	  
-	  
-	  
-   } 
-   
-   public static void createAndShowWaysideControlGUI() 
+	public static void main(String[] args) 
 	{
-	   load = MainMTR.getDBHelper();
-       
-       //f.pack();
-	   f.setVisible(true);
-	   
-	   //System.out.println("BLAH BLAH: " + load.getInfrastructure(2050));
-	 //setup panels
-	   ComponentAdder();
-	   //add action
-	   
-	   ActionAdder();  
-	   
-	//create frame 
-	  int width = 750;
-      int height = 500;
-      f.setSize(width, height);
-	  f.getContentPane().add(plc);
-      
-      //OccupiedTrackTableUpdater();
-	  
-      System.out.println("TEST");
-      
-	  
-   }
-	   public static void getDB(DBHelper db) {
-			load = db;
+		int [] BrokenTracks = {0,1,2,3,4,5};
+		int [] OccupiedTracks = {100,200,300,400,500};
+		int [] OccupiedTracks2 = {0,200,300,400,500};
+		int [] OccupiedTracks3 = {1,9,11,400,500};
+		int[] alpha = {0,1,2,3,4,5,6};
+		int[] beta = {9,8,7,6,5,4,3};
+		int[] delta = {11,22,33,44,55,66,77};
+		int[] Occupy = {100, 200, 300};
+		WaysideController_BrokenTrack(BrokenTracks);
+		WaysideController_TrackOccupancy(OccupiedTracks);
+		OccupiedSpeedAuthority(100, 50, alpha);
+		OccupiedSpeedAuthority(200, 250, beta);
+		OccupiedSpeedAuthority(300, 150, delta);
+		WaysideController_TrackOccupancy(OccupiedTracks2);
+		WaysideController_TrackOccupancy(OccupiedTracks3);
+		System.out.println("COMPLETE");
 	}
 
-	public static DBHelper sendDB() {
-		return load;
+
+	//CTC calls this to send me information on the speed of the occupied tracks and the authority
+	//calls this multiple times
+	//trackID of track currently occupied
+	//the speed
+	//authority
+	//not sure if correct
+	public static void OccupiedSpeedAuthority(int TrackID, int Speed, int[] Authority) // CTC calls this to send me info
+	{
+		
+		WaysideFunctions.TrackModel_setSpeedAuthority(TrackID, Speed, Authority.length);
+		TrackModel.TrackModel_setSpeedAuthority(TrackID, Speed, Authority); //send the data to track model
+
+
+		System.out.print("Train on: " + TrackID + " will go at: " + Speed + " down: ");
+		for (int x = 0; x < Authority.length; x++)
+		{
+			System.out.print(Authority[x] + " ");
+		}
+		System.out.println("to reach its destination.");
+		WaysideController.AuthorityArray(TrackID, Authority);
+		
+		
+		//UI stuff------------------------------------------------------------------
+		int TotalLength = 0;
+		for (int x = 0; x < Authority.length; x++)
+		{
+			TotalLength += 50;
+		}
+
+		if (Authority.length > 1)
+		{
+			WaysideControllerUI.OccupiedTrackAuthoritySpeedUpdater(TrackID, Authority[1], TotalLength);
+		}
+		else
+		{
+			WaysideControllerUI.OccupiedTrackAuthoritySpeedUpdater(TrackID, 0, TotalLength);
+		}
+		
+		
 	}
-   
-   
-   //set the functions of the buttons
-   public static void ActionAdder()
-   {
+	
+	//CTC calls this to test the switch
+	//will alternate the switch positions
+	public static int WaysideController_Switch(int SwitchID)   
+	 {
+		//System.out.println("Switch ID: " + SwitchID);
+		//check to see if conditions are safe
+		if (load.getSwitch(SwitchID) == 0)	
+		{
+			TrackModel.TrackModel_setSwitch(SwitchID, 1);
+		}
+		else
+		{
+			TrackModel.TrackModel_setSwitch(SwitchID, 0);
+		}
+		
+		WaysideControllerUI.SwitchChartUpdater(SwitchID);
+		return 0;
+		   //update switch
+	 }
+	
+	   //TM calls this to send me array of tracks that are occupied
+		//sends the occupied tracks to the CTC for further information
+	   public static void WaysideController_TrackOccupancy(int[] IncomingTrackOccupancyArray)
+	   {
+		   
+		   OccupiedTrackArray = IncomingTrackOccupancyArray;
+		   System.out.print("Tracks: ");
+		   for (int x = 0; x < IncomingTrackOccupancyArray.length; x++)
+		   {
+			   System.out.print(IncomingTrackOccupancyArray[x] + " ");
+		   }
+		   System.out.println("are occupied.");
+		   WaysideController.UpdateOccupiedTracks(IncomingTrackOccupancyArray);
+		   TrainScheduleHelper.CTC_getOccupiedTracks(IncomingTrackOccupancyArray);  
+
+		   // Just stuff for the UI-------------------------------------------------------------------------------------------
+		   int ArrayLength = IncomingTrackOccupancyArray.length;
+		   Object[][] multi = new Object[ArrayLength][4];
+		   Stack<Object[]> multiList = new Stack<>();
+		   for (int x = 0; x < IncomingTrackOccupancyArray.length; x++)
+		   {
+
+			   String IncomingNumber = Integer.toString(IncomingTrackOccupancyArray[x]);
+			   String LineColor = "Blank";
+			   
+			   int firstDigit = Character.getNumericValue(IncomingNumber.charAt(0));
+			   String BlockNumber =  IncomingNumber.substring(1);
+			   //System.out.println("BLOCK: " + BlockNumber);
+
+			   if (firstDigit == 1)
+			   {
+				   LineColor = "Red";
+			   }
+			   if (firstDigit == 2)
+			   {
+				   LineColor = "Green";
+			   }
+			   if (!LineColor.equals("Blank"))
+			   {
+				   //System.out.println("COLOR: ");
+				   multi[x][0] = LineColor;
+					multi[x][1] = BlockNumber;
+					multi[x][2] = "Placeholder";
+					multi[x][3] = "Placeholder";
+					multiList.add(multi[x]);
+			   }
+				
+		   }
+		   multi = new Object[multiList.size()][4];
+		   for (int x = 0; x < multiList.size(); x++)
+		   {
+			   multi[x] = multiList.get(x);
+		   }
+
+		   WaysideControllerUI.OccupiedTrackTableUpdater(multi);
+		   //WaysideFunctions.CTC_getOccupancy(IncomingTrackOccupancyArray);
+	   }
 	   
-	   //exit window
-	   f.addWindowListener
-	   (
-			new WindowAdapter() 
+	   
+	   //TM calls this to send array of broken tracks
+	   //sends the broken tracks to CTC for further information
+	   public static void WaysideController_BrokenTrack(int[] IncomingBrokenTrackArray)  //TM calls this to send me broken track info
+	   {
+		   System.out.print("Tracks: ");
+			for (int x = 0; x < IncomingBrokenTrackArray.length; x++)
 			{
-				 public void windowClosing(WindowEvent windowEvent)
-				 {
-					System.exit(0);
-				 }        
+				System.out.print(IncomingBrokenTrackArray[x] + " ");
 			}
-	  );  
-	  /*
-	  PLIC -- 0
-	  SC -- 1
-	  TI -- 2
-	  */
-	   
-		//button that goes to switch control
-	   Test.addActionListener(new ActionListener()
-		{
-		  public void actionPerformed(ActionEvent e)
-		  {
-			  f.getContentPane().removeAll();
-			  FrameTracker = 1;
-			  f.getContentPane().add(TestPanel);
-			  f.revalidate();
-			  WaysideFunctions.Timer();
-			  //start test
-		  }
-		});
-	  SwtchCtrlButton.addActionListener(new ActionListener()
-		{
-		  public void actionPerformed(ActionEvent e)
-		  {
-			  f.getContentPane().removeAll();
-			  FrameTracker = 1;
-			  f.getContentPane().add(SC);
-			  f.revalidate();
-		  }
-		});
-	//button that goes to track info
-	TrackInfoButton.addActionListener(new ActionListener()
-	{
-	  public void actionPerformed(ActionEvent e)
-	  {
+			System.out.println("broke.");
+		   BrokenTrackArray = IncomingBrokenTrackArray;
+			//WaysideFunctions.CTC_getBrokenTrack(BrokenTrackArray);
+			TrainScheduleHelper.CTC_getBrokenTracks(BrokenTrackArray);
 
-		  f.getContentPane().removeAll();
-		  FrameTracker = 2;
-		  f.getContentPane().add(TI);
-		  f.revalidate();
-	  }
-	});
-	
-	//button that goes to plc
-	PLCButton.addActionListener(new ActionListener()
-	{
-	  public void actionPerformed(ActionEvent e)
-	  {
-
-			f.getContentPane().removeAll();
-		  FrameTracker = 2;
-		  f.getContentPane().add(plc);
-		  f.revalidate();
-	  }
-	});
-		
-		
-
-   }
-   public static void SwitchSwitcher(int x)  //switch based on location in the chart
-   {
-	   if (TablesCreated)
-	   {
-		   //System.out.println(dm.getRowCount());
-		   Object placeholder = dm.getValueAt(x, 4);
-		   dm.setValueAt(dm.getValueAt(x, 3), x,4);
-		   dm.setValueAt(placeholder, x,3);
 	   }
-	   
-   }
-
-   public static void OccupiedTrackTableUpdater(Object[][] ObjectArray)
-   {
-	   if (TablesCreated)
-	   {
-		   for (int x = 0; x < ObjectArray.length; x++)
-		   {
-			   //dm1.addRow(ObjectArray[x]);
-			   
-			   for (int y = 0; y < ObjectArray[x].length; y++)
-			   {
-				   if (x > dm1.getRowCount()-1)
-				   {
-					   dm1.addRow(ObjectArray[x]);
-				   }
-				   else
-				   {
-					   dm1.setValueAt(ObjectArray[x][y], x, y);
-				   }
-				   Scroll1Height = dm1.getRowCount()*(20); 
-				   scroll1.setPreferredSize(new Dimension(500, Scroll1Height));
-				   //System.out.println(Scroll1Height);
-			   }
-			   
-			   
-				   //System.out.println(x);
-		   }
-	   }
-	   
-   }
    
-   public static void OccupiedTrackAuthoritySpeedUpdater(int TrackID, int NextTrack, int AuthorityDist)
-   {
-	   if (TablesCreated)
-	   {
-		   String LineColor = null;
-		   String BlockNumber =  Integer.toString(TrackID).substring(1,4);
-		   int firstDigit = Character.getNumericValue(Integer.toString(TrackID).charAt(0));
-		   
-		   if (firstDigit == 1)
-		   {
-			   LineColor = "Red";
-		   }
-		   if (firstDigit == 2)
-		   {
-			   LineColor = "Green";
-		   }
-		   for (int x = 0; x < dm1.getRowCount(); x++)
-		   {
-			   if (dm1.getValueAt(x, 0).equals(LineColor))
-			   {
-				   if (dm1.getValueAt(x, 1).equals(BlockNumber))
-				   {
-					   dm1.setValueAt(NextTrack, x, 2);
-					   dm1.setValueAt(AuthorityDist, x, 3);
-				   }
-				   
-			   }
-			   
-		   }
-	   }
-		   
-		   
-	   
-	   
-	   
-   }
-   public static void SwitchChartUpdater(int ID)  //update with actual information
-   {
-	   if (TablesCreated)
-	   {
-		   String BlockNumber =  Integer.toString(ID).substring(1,4);
 
-		   //LineColor = DB.getColor(IncomingTrackOccupancyArray[x]);
-		   for (int x = 0; x < dm.getRowCount(); x++)
-		   {
-			   if (Integer.parseInt(BlockNumber) == Integer.parseInt((String)(dm.getValueAt(x,1))))
-			   {
-				   SwitchSwitcher(x);
-			   }
-		   }
-	   }
-	   
-   }
-   //register all panels
-   public static void ComponentAdder()
-   {
-	   
-	   PLCSetup();
-	   TrackInfoSetup();
-	   SwitchSetup();
-	   
-	   TestSetup();
-	   
-	   TablesCreated = true;
-	   
-   }
-   public static void TestSetup()
-   {   
-	   Stack<Integer> GreenSwitch = new Stack<>();
-	   Stack<Integer> RedSwitch = new Stack<>();
-	   ButtonAdder();  
-	   ActionAdder(); 
-	   int GreenTrack = 2001;
-	   int RedTrack = 1001;
-
-	   
-	   while (!load.getInfrastructure(GreenTrack).equalsIgnoreCase("none"))
-	   {
-		   if (load.getInfrastructure(GreenTrack).equalsIgnoreCase("Switch"))
-		   {
-			   //System.out.println(GreenTrack);
-			   GreenSwitch.push(GreenTrack);
-		   }
-		   
-		   GreenTrack++;		   
-	   }
-	   
-	   //System.out.println(RedTrack);
-	   while (!load.getInfrastructure(RedTrack).equalsIgnoreCase("none"))
-	   {
-		   if (load.getInfrastructure(RedTrack).equalsIgnoreCase("Switch"))
-		   {
-			   //System.out.println(RedTrack);
-			   RedSwitch.push(RedTrack);
-		   }
-		   
-		   RedTrack++;		   
-	   }
-	   
-	   dm.setDataVector(new Object[][] { }, new Object[] { "Line", "Track", "Dest Track", "Alt Track" });
-	   for(Integer obj : RedSwitch)
-	   {
-		   String Color = Integer.toString(obj).substring(1,4);
-		   Object[] Switches = {"Red", Color, load.getNextTrack(obj, obj+1), load.getAltTrack(obj)};
-		   dm.addRow(Switches);
-	       //System.out.println(load.getInfrastructure(obj) + ": " + obj + " at " + load.getSwitch(obj) + " With the Next: " + load.getNextTrack(obj, obj+1) + " or " + load.getAltTrack(obj));
-	   }
-	   for(Integer obj : GreenSwitch)
-	   {
-		   String Color = Integer.toString(obj).substring(1,4);
-		   Object[] Switches = {"Green", Color, load.getNextTrack(obj, obj+1), load.getAltTrack(obj)};
-		   dm.addRow(Switches);
-	       //System.out.println(load.getInfrastructure(obj) + ": " + obj + " at " + load.getSwitch(obj) + " With the Next: " + load.getNextTrack(obj, obj+1) + " or " + load.getAltTrack(obj));
-	   }
-	   
-	   
-		table = new JTable(dm);
-		scroll = new JScrollPane(table);
-		scroll.setPreferredSize(new Dimension(500,260));
-		//-----------------------------------------------------------------------------
-	    dm1.setDataVector(new Object[][] { { "Color", "Black", "Track", "length" }}, new Object[] { "Line", "Occupied Track", "Dest Track", "Athrty" });
-
-	    table1 = new JTable(dm1);
-
-
-	//---------------------------------------------------------------------		
-		DefaultTableModel am = new DefaultTableModel();
-	    am.setDataVector(new Object[][] { { "Green", "E3" },
-	        { "Red", "I2" } }, new Object[] { "Xing", "Line"});
-
-	    JTable lighttable = new JTable(am);
-	    scroll1 = new JScrollPane(table1);
-		scroll2 = new JScrollPane(lighttable);
-		scroll1.setPreferredSize(new Dimension(500,Scroll1Height));
-		scroll2.setPreferredSize(new Dimension(100,75));
-		//------------------------------------------
-		TestPanel.add(scroll, BorderLayout.WEST);
-		TestPanel.add(scroll1, BorderLayout.WEST);
-		TestPanel.add(scroll2, BorderLayout.EAST);
-		//------------------------------------
-	   //final JComboBox<String> cb = new JComboBox<String>(choices);
-	   Box ButtonBox;
-	   ButtonBox = Box.createVerticalBox();
-	   ButtonBox.add( Box.createVerticalStrut( 25 ) );
-	   //ButtonBox.add(cb, BorderLayout.NORTH);
-	   ButtonBox.add(SwtchCtrlButton, BorderLayout.EAST);
-	   ButtonBox.add(TrackInfoButton, BorderLayout.EAST);
-	   ButtonBox.add(PLCButton, BorderLayout.EAST);//add to frame
-	   //TestPanel.add(text, BorderLayout.WEST);  //add tframo e 
-	   TestPanel.add(ButtonBox, BorderLayout.WEST);
-	   //f.getContentPane().add(plc);
-	    
-   }
- //set up plc panel  
-   public static void PLCSetup()
-   {
-	   
-	   
-	   ButtonAdder();
-	   
-	   ActionAdder();
-	   
-	   String[] choices = { "Green Line","Red Line"};
-	   final JComboBox<String> cb = new JComboBox<String>(choices);
-	   Box ButtonBox;
-	   ButtonBox = Box.createVerticalBox();
-	   ButtonBox.add( Box.createVerticalStrut( 25 ) );
-	   ButtonBox.add(cb, BorderLayout.NORTH);
-	   ButtonBox.add(SaveButton, BorderLayout.EAST);
-	   ButtonBox.add(SwtchCtrlButton, BorderLayout.EAST);
-	   ButtonBox.add(TrackInfoButton, BorderLayout.EAST);	  //add to frame
-	   ButtonBox.add(Test, BorderLayout.EAST);
-	   plc.add(text, BorderLayout.WEST);  //add tframo e 
-	   plc.add(ButtonBox, BorderLayout.WEST);
-	   //f.getContentPane().add(plc);
-   }
-  
-
-//set up switch panel
-  public static void SwitchSetup()
-   {
-	   
-	  ButtonAdder();
-		ActionAdder();
-		
-	   //DefaultTableModel dm = new DefaultTableModel();
-		dm.setDataVector(new Object[][] { { "Red", "09", "C3", "Yard", "D1" },
-			{ "Red", "15", "A2", "A1", "B2" },
-			{ "Red", "27", "E3", "F1", "A1" },
-			{ "Red", "32", "H8", "T1", "H9" },
-			{ "Red", "38", "H15", "Q1", "H16" },
-			{ "Red", "43", "H20", "H21", "O1" },
-			{ "Red", "52", "J4", "N1", "J5" },
-			{ "Green", "12", "C6", "D4", "A1" },
-			{ "Green", "29", "G1", "F8", "Z1" },
-			{ "Green", "58", "J1", "K1", "Yard" },
-			{ "Green", "62", "J5", "I22", "Yard" },
-			{ "Green", "76", "M3", "R1", "N1" },
-			{ "Green", "86", "O1", "N9", "Q3" }		}, new Object[] { "Line", "Block", "Track", "Dest Track", "Alt Track" });
-
-		table = new JTable(dm);
-		
-		scroll = new JScrollPane(table);
-		
-		SC.add(scroll, BorderLayout.WEST);
-		
-		
-		
-		
-		Box ButtonBox1;
-		
-		ButtonBox1 = Box.createVerticalBox();
-		  
-		   ButtonBox1.add( Box.createVerticalStrut( 25 ) );
-		   
-		   ButtonBox1.add(PLCButton, BorderLayout.EAST);
-		    
-		 ButtonBox1.add(TrackInfoButton, BorderLayout.EAST);	  //add to frame
-		
-		SC.add(ButtonBox1, BorderLayout.EAST);
-		
-		//f.getContentPane().add(SC);
-		   
-	   
-   }
-     
-   //set up track info panel
-   
-   public static void TrackInfoSetup()
-   {
-	   ButtonAdder();  
-	   ActionAdder(); 
-		//-----------------------------------------------------------------------------
-	    dm1.setDataVector(new Object[][] { { "Green", "C5", "Swtch", "20 mi" }}, new Object[] { "Line", "Occupied Track", "Dest Track", "Athrty" });
-
-	    table1 = new JTable(dm1);
-
-
-	//---------------------------------------------------------------------		
-		DefaultTableModel am = new DefaultTableModel();
-	    am.setDataVector(new Object[][] { { "Green", "E3" },
-	        { "Red", "I2" } }, new Object[] { "Xing", "Line"});
-
-	    JTable lighttable = new JTable(am);
-	    scroll1 = new JScrollPane(table1);
-		scroll2 = new JScrollPane(lighttable);
-		//scroll1.setPreferredSize(new Dimension(500,Scroll1Height));
-		scroll2.setPreferredSize(new Dimension(100,75));
-
-
-	TI.add(scroll1, BorderLayout.WEST);
-	TI.add(scroll2, BorderLayout.EAST);
-	
-	
-	
-	
-	Box ButtonBox;
-	   ButtonBox = Box.createVerticalBox();
-	   ButtonBox.add( Box.createVerticalStrut( 100 ) );
-	    ButtonBox.add(SwtchCtrlButton, BorderLayout.EAST);
-	   ButtonBox.add(PLCButton, BorderLayout.EAST);
-    
-	TI.add(ButtonBox, BorderLayout.EAST);
-	//f.getContentPane().add(TI);
-	
-   }
-   public static void ButtonAdder()
-   {
-	   SwtchCtrlButton = new JButton("To Switch Control Hub"); //create one of the buttons
-	   PLCButton = new JButton("To PLC"); //create one of the buttons
-		TrackInfoButton = new JButton("To Track Info Hub"); //create one of the buttons
-		Test = new JButton("Test");
-   }
-
-
-
-   
 }
