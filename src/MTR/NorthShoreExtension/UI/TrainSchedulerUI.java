@@ -324,7 +324,7 @@ public class TrainSchedulerUI extends JFrame {
 				addStopGrn.setEnabled(false);
 				schedTrainGrn.setEnabled(false);
 				nextTrainGrn.setEnabled(true);
-				
+				TrainScheduleHelper.trainTracker.add(trainID, 9999);
 				ctcUI.tsh.addNewTrainSchedule("Green", trainID, schedStopsGrn, departGrn);
 				trainID++;
 			}
