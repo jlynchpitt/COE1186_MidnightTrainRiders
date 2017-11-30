@@ -587,12 +587,12 @@ public class TrainModelUI extends JFrame implements ActionListener{
 			public void actionPerformed(ActionEvent e) {
 				if(tr.getEngineFailure()) {
 					tr.setEngineFailure(false);
-					button.setBackground(Color.LIGHT_GRAY);
-					button.setText("On");
+					btnOn.setBackground(Color.LIGHT_GRAY);
+					btnOn.setText("On");
 				}else {
 					tr.setEngineFailure(true);
-					button.setText("Off");
-					button.setBackground(Color.RED);
+					btnOn.setText("Off");
+					btnOn.setBackground(Color.RED);
 				}
 			}
 		});
@@ -627,12 +627,12 @@ public class TrainModelUI extends JFrame implements ActionListener{
 			public void actionPerformed(ActionEvent e) {
 				if(tr.getSignalFailure()) {
 					tr.setSignalFailure(false);
-					button.setBackground(Color.LIGHT_GRAY);
-					button.setText("On");
+					btnOn_1.setBackground(Color.LIGHT_GRAY);
+					btnOn_1.setText("On");
 				}else {
 					tr.setSignalFailure(true);
-					button.setText("Off");
-					button.setBackground(Color.RED);
+					btnOn_1.setText("Off");
+					btnOn_1.setBackground(Color.RED);
 				}
 			}
 		});
@@ -658,12 +658,12 @@ public class TrainModelUI extends JFrame implements ActionListener{
 			public void actionPerformed(ActionEvent e) {
 				if(tr.getPassengerEBrake()) {
 					tr.setPassnegerEBrake(false);
-					button.setBackground(Color.LIGHT_GRAY);
-					button.setText("On");
+					btnOn_2.setBackground(Color.LIGHT_GRAY);
+					btnOn_2.setText("On");
 				}else {
 					tr.setPassnegerEBrake(true);
-					button.setText("Off");
-					button.setBackground(Color.RED);
+					btnOn_2.setText("Off");
+					btnOn_2.setBackground(Color.RED);
 				}
 			}
 		});
@@ -702,14 +702,14 @@ public class TrainModelUI extends JFrame implements ActionListener{
 				lblL_1.setText("Off");
 			}
 			if(tr.getLeftDoor()) {
-				lblLd.setText("On");
+				lblLd.setText("Open");
 			}else {
-				lblLd.setText("Off");
+				lblLd.setText("Closed");
 			}
 			if(tr.getRightDoor()) {
-				lblRd.setText("On");
+				lblRd.setText("Open");
 			}else {
-				lblRd.setText("Off");
+				lblRd.setText("Closed");
 			}
 			
 		}

@@ -102,6 +102,9 @@ public class WaysideController //this class is the logic to decide what to do wi
 	//based on cardinal direction and color (North/South, Green/redO
 	public static void UpdateSwitches()  
 	{
+		NG = new Stack<>();
+		SG = new Stack<>();
+		System.out.print("Stacking up the switches");
 		//stack.toArray(array)
 		//go through all green tracks
 		for (int x = 0; x < 150; x++)
@@ -110,8 +113,11 @@ public class WaysideController //this class is the logic to decide what to do wi
 			int input = 2000 + x;
 			
 			//if the infrastructure at that track is a switch
-			if (load.getInfrastructure(input).equals("swtich"))
+			if (load.getInfrastructure(input).equalsIgnoreCase("Switch"))
 			{
+				TrackModel.TrackModel_setSwitch(input, 1);
+				System.out.println("SWITCH MOVED TO POSITION: " + load.getSwitch(input));
+				System.out.print(input + " | ");
 				//if the switch designation is within these parameters
 				if (input >= 2000 && input <= 2068 || input >= 2110 && input <= 2150)
 				{
@@ -192,14 +198,23 @@ public class WaysideController //this class is the logic to decide what to do wi
 	//takes a moment to decide actions based on occupied tracks
 	public static void UpdateOccupiedTracks(int[] IncomingTrackArray)
 	{
-		
+		StackOfOccupiedTracks = new Stack<>();
 		OccupiedTracks = IncomingTrackArray;
 		TrackPlans = new int[OccupiedTracks.length][];
+		//System.out.print("The following tracks are recognized to be occupied: " );
 		for (int x = 0; x < IncomingTrackArray.length; x++)
 		{
 			StackOfOccupiedTracks.push(IncomingTrackArray[x]);
+			//System.out.print(IncomingTrackArray[x] + " | ");
 			TrackPlansUpdate(IncomingTrackArray[x]);
 		}
+		//System.out.println(" CONCLUDED" );
+		System.out.print("The following tracks are recognized to be occupied: " );
+		for (int x = 0; x < IncomingTrackArray.length; x++)
+		{
+			System.out.print(StackOfOccupiedTracks.get(x) + " | ");
+		}
+		System.out.println(" CONCLUDED" );
 		TrackPlans = new int [IncomingTrackArray.length][];
 		
 		NorthGreenLine();
@@ -247,14 +262,38 @@ public class WaysideController //this class is the logic to decide what to do wi
 	}
 	public static void SouthGreenLine()
 	{
+		System.out.println("XDDDD");
+		for (int x = 0; x < StackOfOccupiedTracks.size(); x++)
+		{
+			if (StackOfOccupiedTracks.get(x) != 0 && SG.size() > 0)
+			{
+				System.out.println("NOPE: " + SG.get(0));
+			
+			
+				for (int y = 0; y<SG.size(); y++)
+				{
+					System.out.println("DISTANCE TO SWITCH: " + Math.abs(StackOfOccupiedTracks.get(x) - SG.get(y)));
+					if (Math.abs(StackOfOccupiedTracks.get(x) - SG.get(y)) == 1)
+					{
+						System.out.println("CAPTAIN, SWITCHBERG ALERT!" + load.getSwitch(SG.get(y)));
+						WaysideFunctionsHub.WaysideController_Switch(SG.get(y));
+						System.out.println("SWITCHBERG CHANGED!" + load.getSwitch(SG.get(y)));
+					}
+				}
+			}
+		}
+		/*
 		for (int x = 0; x < ListOfTrackPlans.size(); x++) //go through all the track plans
 		{
-			if (ListOfTrackPlans.get(x).size() > 1)
+			if (ListOfTrackPlans.get(x).size() > 1) //error catcher in case the track plan unit is empty
 			{
-				if (SG.contains(ListOfTrackPlans.get(x).get(1)))  //if an upcoming track is a switch
+				System.out.println("Approaching: " + ListOfTrackPlans.get(x).get(1));
+				if (SG.contains(ListOfTrackPlans.get(x).get(1)))  //if the switch list contains the upcoming track
 				{
+					System.out.println("CAPTAIN, SWITCHBERG ALERT!");
 					if (ListOfTrackPlans.get(x).get(1) == ListOfTrackPlans.get(x).get(0) + 1 || ListOfTrackPlans.get(x).get(1) == ListOfTrackPlans.get(x).get(0) + 1)  //if the next track is only one off of the previous, it goes in a straight line
 					{
+						System.out.println("I know kung fu");
 						if (ListOfTrackPlans.get(x).get(1) == 1) //if needs to be straight but not straight
 						{
 							//so set switch to straight
@@ -275,7 +314,7 @@ public class WaysideController //this class is the logic to decide what to do wi
 				
 			
 		}
-		
+		*/
 	}
 	public static void NorthRedLine()
 	{
