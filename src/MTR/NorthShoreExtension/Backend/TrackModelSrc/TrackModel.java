@@ -119,6 +119,7 @@ public class TrackModel {
 	}
 	
 	public static void TrackModel_addTrain(int trackid, int trainid) {
+		System.out.println("adding train: "+trainid+" at track: "+trackid);
 		TrackModel.TrainsOperating newTrain = trackmod.new TrainsOperating();
 		newTrain.trainID = trainid; 
 		newTrain.trackOccupying = trackid;
