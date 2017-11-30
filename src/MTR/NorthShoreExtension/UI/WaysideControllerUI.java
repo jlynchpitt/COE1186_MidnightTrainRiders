@@ -149,7 +149,7 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 			  FrameTracker = 1;
 			  f.getContentPane().add(TestPanel);
 			  f.revalidate();
-			  WaysideFunctions.Timer();
+			  //WaysideFunctions.Timer();
 			  //start test
 		  }
 		});
@@ -197,9 +197,9 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 	   if (TablesCreated)
 	   {
 		   //System.out.println(dm.getRowCount());
-		   Object placeholder = dm.getValueAt(x, 4);
-		   dm.setValueAt(dm.getValueAt(x, 3), x,4);
-		   dm.setValueAt(placeholder, x,3);
+		   Object placeholder = dm.getValueAt(x, 3);
+		   dm.setValueAt(dm.getValueAt(x, 2), x,3);
+		   dm.setValueAt(placeholder, x,2);
 	   }
 	   
    }
@@ -286,6 +286,7 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 		   {
 			   if (Integer.parseInt(BlockNumber) == Integer.parseInt((String)(dm.getValueAt(x,1))))
 			   {
+				   System.out.println("BLOCK NUMBER: " + BlockNumber);
 				   SwitchSwitcher(x);
 			   }
 		   }
@@ -313,7 +314,7 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 	   ActionAdder(); 
 	   int GreenTrack = 2001;
 	   int RedTrack = 1001;
-
+	   System.out.println("TEST PANEL SET");
 	   
 	   while (!load.getInfrastructure(GreenTrack).equalsIgnoreCase("none"))
 	   {
