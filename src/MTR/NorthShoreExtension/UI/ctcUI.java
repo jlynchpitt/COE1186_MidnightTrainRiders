@@ -301,6 +301,7 @@ public class ctcUI {
 		trnInfo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				TrainModelUI tmUI= MainMTR.getTrainModelUI();
+		        tmUI.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 				tmUI.setVisible(true);
 			}
 		});
