@@ -233,22 +233,22 @@ public class Train {
 	
 	public void setEngineFailure(boolean b) {
 		this.engineFailure=b;
-		tm.setBrake(true);
+		tm.setBrake(b);
 	}
 	
 	public void setSignalFailure(boolean b) {
 		this.signalFailure=b;
-		tm.setBrake(true);
+		tm.setBrake(b);
 	}
 	
 	public void setBrakeFailure(boolean b) {
 		this.brakeFailure=b;
-		tm.seteBrake(true);
+		tm.seteBrake(b);
 	}
 	
 	public void setPassnegerEBrake(boolean b) {
 		this.passengerEBrake=b;
-		tm.seteBrake(true);
+		tm.seteBrake(b);
 	}
 	
 	public boolean getEngineFailure() {
