@@ -69,7 +69,6 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 	//not sure if correct
 	public static void OccupiedSpeedAuthority(int TrackID, int Speed, int[] Authority) // CTC calls this to send me info
 	{
-		
 		WaysideFunctions.TrackModel_setSpeedAuthority(TrackID, Speed, Authority.length);
 		TrackModel.TrackModel_setSpeedAuthority(TrackID, Speed, Authority); //send the data to track model
 
@@ -89,10 +88,12 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 		{
 			TotalLength += 50;
 		}
-
+		System.out.println("Deus Vult");
+		System.out.println("Dis Track: " + TrackID + " Next Track: " + Authority[0]);
 		if (Authority.length > 1)
 		{
-			WaysideControllerUI.OccupiedTrackAuthoritySpeedUpdater(TrackID, Authority[1], TotalLength);
+			System.out.println("Update chart");
+			WaysideControllerUI.OccupiedTrackAuthoritySpeedUpdater(TrackID, Authority[0], TotalLength);
 		}
 		else
 		{
@@ -164,8 +165,8 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 				   //System.out.println("COLOR: ");
 				   multi[x][0] = LineColor;
 					multi[x][1] = BlockNumber;
-					multi[x][2] = "Placeholder";
-					multi[x][3] = "Placeholder";
+					multi[x][2] = "";
+					multi[x][3] = "";
 					multiList.add(multi[x]);
 			   }
 				
