@@ -26,6 +26,7 @@ public class TrainSchedule {
 	int[] departures = new int [99];
 	static int trainID = 0;
 	static int currLocation = 9999; //9999 represents the Yard
+	static int nextLocation = 8888;
 	
 	
 	public TrainSchedule(String line, int id, int[] listOfStops, int[] departureTimes) {
@@ -37,7 +38,11 @@ public class TrainSchedule {
 			System.out.println(":-: " + authority.get(i));
 		}
 		trackLine = line;
-		//setCurrentLocation(currLocation);
+		if (line.equals("Green")) {
+			nextLocation = 2062;
+		} else {
+			nextLocation = 1001; //replace with appropriate redline start point
+		}
 	}
 	
 	public int getTrainID() {
@@ -61,8 +66,16 @@ public class TrainSchedule {
 		return currLocation;
 	}
 	
+	public int getNextLocation() {
+		return nextLocation;
+	}
+	
 	public void setCurrentLocation(int trackID) {
 		currLocation = trackID;
-		TrainScheduleHelper.trainTracker.set(trainID, trackID);
+		//TrainScheduleHelper.trainTracker.set(trainID, trackID);
+	}
+	
+	public void setNextLocation(int trackID) {
+		nextLocation = trackID;
 	}
 };
