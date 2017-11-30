@@ -419,7 +419,7 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 	   
 	   ActionAdder();
 	   
-	   String[] choices = { "Green Line","Red Line"};
+	   String[] choices = { "South Green Line", "North Green Line", "South Red Line", "North Green Line"};
 	   final JComboBox<String> cb = new JComboBox<String>(choices);
 	   Box ButtonBox;
 	   ButtonBox = Box.createVerticalBox();
