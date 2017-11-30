@@ -16,10 +16,6 @@ import java.awt.event.*;
 import java.awt.event.ActionListener;
 import java.util.Stack;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -75,7 +71,7 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
     
 	  
 	  //public static int[] ProtoArray = {0,1,2,3,4,5,6};
-   public static void main(String[] args) throws IOException //main body
+   public static void main(String[] args) //main body
    {
 	   load = MainMTR.getDBHelper();
 	   //setup panels
@@ -94,7 +90,7 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 	  
    } 
    
-   public static void createAndShowWaysideControlGUI() throws IOException 
+   public static void createAndShowWaysideControlGUI() 
 	{
 	   load = MainMTR.getDBHelper();
        
@@ -306,7 +302,7 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 	   
    }
    //register all panels
-   public static void ComponentAdder() throws IOException
+   public static void ComponentAdder()
    {
 	   
 	   PLCSetup();
@@ -406,9 +402,8 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 	    
    }
  //set up plc panel  
-   public static void PLCSetup() throws IOException
+   public static void PLCSetup()
    {
-	   Reader();
 	   /*
 	   try
        {
@@ -439,14 +434,7 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 	   //f.getContentPane().add(plc);
    }
   
-   public static void Reader()throws IOException
-   {
 
-	   String contents = new String(Files.readAllBytes(Paths.get("C:\\Users\\Owner\\Desktop\\temp.txt")));
-       System.out.println(contents);
-	       
-	   
-   }
 //set up switch panel
   public static void SwitchSetup()
    {
