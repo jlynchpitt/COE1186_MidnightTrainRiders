@@ -556,7 +556,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 			public void actionPerformed(ActionEvent arg0) {
 				if(tr.getBrakeFailure()) {
 					tr.setBrakeFailure(false);
-					button.setBackground(Color.LIGHT_GRAY);
+					button.setBackground(new Color(230,230,230));
 					button.setText("On");
 				}else {
 					tr.setBrakeFailure(true);
@@ -587,7 +587,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 			public void actionPerformed(ActionEvent e) {
 				if(tr.getEngineFailure()) {
 					tr.setEngineFailure(false);
-					btnOn.setBackground(Color.LIGHT_GRAY);
+					btnOn.setBackground(new Color(230,230,230));
 					btnOn.setText("On");
 				}else {
 					tr.setEngineFailure(true);
@@ -627,7 +627,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 			public void actionPerformed(ActionEvent e) {
 				if(tr.getSignalFailure()) {
 					tr.setSignalFailure(false);
-					btnOn_1.setBackground(Color.LIGHT_GRAY);
+					btnOn_1.setBackground(new Color(230,230,230));
 					btnOn_1.setText("On");
 				}else {
 					tr.setSignalFailure(true);
@@ -658,7 +658,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 			public void actionPerformed(ActionEvent e) {
 				if(tr.getPassengerEBrake()) {
 					tr.setPassnegerEBrake(false);
-					btnOn_2.setBackground(Color.LIGHT_GRAY);
+					btnOn_2.setBackground(new Color(230,230,230));
 					btnOn_2.setText("On");
 				}else {
 					tr.setPassnegerEBrake(true);
