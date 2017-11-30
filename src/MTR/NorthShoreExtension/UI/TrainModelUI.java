@@ -702,14 +702,14 @@ public class TrainModelUI extends JFrame implements ActionListener{
 				lblL_1.setText("Off");
 			}
 			if(tr.getLeftDoor()) {
-				lblLd.setText("On");
+				lblLd.setText("Open");
 			}else {
-				lblLd.setText("Off");
+				lblLd.setText("Closed");
 			}
 			if(tr.getRightDoor()) {
-				lblRd.setText("On");
+				lblRd.setText("Open");
 			}else {
-				lblRd.setText("Off");
+				lblRd.setText("Closed");
 			}
 			
 		}
