@@ -69,25 +69,33 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 	//not sure if correct
 	public static void OccupiedSpeedAuthority(int TrackID, int Speed, int[] Authority) // CTC calls this to send me info
 	{
-		WaysideFunctions.TrackModel_setSpeedAuthority(TrackID, Speed, Authority.length);
+		//WaysideFunctions.TrackModel_setSpeedAuthority(TrackID, Speed, Authority.length);
 		TrackModel.TrackModel_setSpeedAuthority(TrackID, Speed, Authority); //send the data to track model
 
 
 		System.out.print("Train on: " + TrackID + " will go at: " + Speed + " down: ");
-		for (int x = 0; x < Authority.length; x++)
+		if (Authority.length > 0)
 		{
-			System.out.print(Authority[x] + " ");
+			for (int x = 0; x < Authority.length; x++)
+			{
+				System.out.print(Authority[x] + " ");
+			}
 		}
+		
 		System.out.println("to reach its destination.");
 		WaysideController.AuthorityArray(TrackID, Authority);
 		
 		
 		//UI stuff------------------------------------------------------------------
 		int TotalLength = 0;
-		for (int x = 0; x < Authority.length; x++)
+		if (Authority.length>0)
 		{
-			TotalLength += 50;
+			for (int x = 0; x < Authority.length; x++)
+			{
+				TotalLength += 50;
+			}
 		}
+		
 		System.out.println("Deus Vult");
 		System.out.println("Dis Track: " + TrackID + " Next Track: " + Authority[0]);
 		if (Authority.length > 1)
@@ -127,7 +135,7 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 		//sends the occupied tracks to the CTC for further information
 	   public static void WaysideController_TrackOccupancy(int[] IncomingTrackOccupancyArray)
 	   {
-		   
+		   WaysideController.UpdateSwitches();
 		   OccupiedTrackArray = IncomingTrackOccupancyArray;
 		   System.out.print("Tracks: ");
 		   for (int x = 0; x < IncomingTrackOccupancyArray.length; x++)
