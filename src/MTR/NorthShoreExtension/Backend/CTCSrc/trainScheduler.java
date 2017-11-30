@@ -39,7 +39,7 @@ public class trainScheduler {
 	//		authority[j] = authority[j-1].nextTrack()
 	//   
 	
-	public static int[] calcAuthority(int[] listOfStops) {
+	public static List<Integer> calcAuthority(int[] listOfStops) {
 		List<Integer> auth = new ArrayList<Integer>();
 		int[] authority = new int[199];
 		int l = 0;
@@ -162,13 +162,13 @@ public class trainScheduler {
 			System.out.println(".: " + authority[k]);
 			k++;
 		}*/
-		authority = new int[auth.size()];
-		for (int r = 0; r < auth.size(); r++) {
+		//authority = new int[auth.size()];
+		/*for (int r = 0; r < auth.size(); r++) {
 			authority[r] = auth.get(r);
-		}
-		System.out.println(auth.size());
+		}*/
+		//System.out.println(auth.size());
 		
-		return authority;
+		return auth;
 	}
 	
 	/*Scheduling helpers CTC_getBrokenTrack(int[] brokenTracks) {	

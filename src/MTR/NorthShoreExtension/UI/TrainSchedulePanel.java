@@ -11,6 +11,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
 
 import MTR.NorthShoreExtension.MainMTR;
 import MTR.NorthShoreExtension.UI.ctcUI; //just for testing time changing function of ctc
@@ -52,10 +54,14 @@ public class TrainSchedulePanel extends JPanel {
 		
 		dispatch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int[] authority = trainScheduler.calcAuthority(ts.getListOfStops());
+				List<Integer> authority = trainScheduler.calcAuthority(ts.getListOfStops());
+				int[] auth = new int[authority.size()];
+				for (int i = 0; i < auth.length; i++) {
+					auth[i] = authority.get(i);
+				}
 				int speed = database.getSpeedLimit(Integer.parseInt(ts.getFirstStop()));
 				//int trackID = Integer.parseInt(ts.getFirstStop());
-				int trackID = authority[0];
+				int trackID = authority.get(0);
 				System.out.println("\n TrackID: " + trackID);
 				System.out.println("\n Speed: " + speed);
 				//System.out.println("\n Authority: ");
@@ -65,9 +71,9 @@ public class TrainSchedulePanel extends JPanel {
 				System.out.println("Adding Train");
 				TrackModel.TrackModel_addTrain(trackID, ts.getTrainID());
 				System.out.println("Train Added");
-				System.out.println("Sending speed and authority");
-				WaysideFunctionsHub.OccupiedSpeedAuthority(trackID, speed, authority);
-				System.out.println("Speed and authority sent!");
+				//System.out.println("Sending speed and authority");
+				//WaysideFunctionsHub.OccupiedSpeedAuthority(trackID, speed, auth);
+				//System.out.println("Speed and authority sent!");
 				dispatch.setEnabled(false);
 			}
 		});

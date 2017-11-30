@@ -12,6 +12,8 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
 
 import MTR.NorthShoreExtension.Backend.CTCSrc.trainScheduler;
 
@@ -19,19 +21,23 @@ public class TrainSchedule {
 	
 	String trackLine = "";
 	static int[] stops = new int[99];
-	int[] authority;
+	//int[] authority;
+	static List<Integer> authority = new ArrayList<Integer>();
 	int[] departures = new int [99];
 	static int trainID = 0;
+	static int currLocation = 9999; //9999 represents the Yard
 	
 	
 	public TrainSchedule(String line, int id, int[] listOfStops, int[] departureTimes) {
 		trainID = id;
+		System.out.println("ID: " + trainID);
 		stops = listOfStops;
 		authority = trainScheduler.calcAuthority(listOfStops);
-		/*for (int i = 0; i < authority.length; i++) {
-			System.out.println(":-: " + authority[i]);
-		}*/
+		for (int i = 0; i < authority.size(); i++) {
+			System.out.println(":-: " + authority.get(i));
+		}
 		trackLine = line;
+		//setCurrentLocation(currLocation);
 	}
 	
 	public int getTrainID() {
@@ -49,5 +55,14 @@ public class TrainSchedule {
 	
 	public int[] getListOfStops() {
 		return stops;
+	}
+	
+	public int getCurrentLocation() {
+		return currLocation;
+	}
+	
+	public void setCurrentLocation(int trackID) {
+		currLocation = trackID;
+		TrainScheduleHelper.trainTracker.set(trainID, trackID);
 	}
 };
