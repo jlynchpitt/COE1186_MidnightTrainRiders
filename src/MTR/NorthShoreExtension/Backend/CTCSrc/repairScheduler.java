@@ -9,10 +9,12 @@ package MTR.NorthShoreExtension.Backend.CTCSrc;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+
+import MTR.NorthShoreExtension.MainMTR;
 import MTR.NorthShoreExtension.Backend.DBHelper;
 
 public class repairScheduler {
-	static DBHelper database;
+	static DBHelper database = MainMTR.getDBHelper();
 	
 	public int checkStatus(int trackID) {
 		int state = 2;
@@ -20,7 +22,7 @@ public class repairScheduler {
 		String status = database.getTrackStatus(trackID);
 		
 		//if the track is in good working condition return 1, otherwise return 0
-		if (status.equals("Operational")) {
+		if (status.equals("No Issues")) {
 			state = 1;
 		} else {
 			state = 0;

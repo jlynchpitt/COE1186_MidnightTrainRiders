@@ -32,9 +32,9 @@ public class TrainSchedulePanel extends JPanel {
 	public TrainSchedulePanel(TrainSchedule ts) {
 
 		trainSchedule = ts;
-		int id = ts.getTrainID();
-		String first = ts.getFirstStop();
-		String line = ts.getLine();
+		int id = trainSchedule.getTrainID();
+		String first = trainSchedule.getFirstStop();
+		String line = trainSchedule.getLine();
 		
 		setBorder(BorderFactory.createTitledBorder("Train: " + id));
 

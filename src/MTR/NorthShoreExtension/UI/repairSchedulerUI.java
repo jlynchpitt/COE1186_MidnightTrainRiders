@@ -33,6 +33,9 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+import MTR.NorthShoreExtension.MainMTR;
+import MTR.NorthShoreExtension.Backend.DBHelper;
+
 public class repairSchedulerUI extends JFrame {
 	
 	private JFrame frame = new JFrame("Schedule A Repair");
@@ -42,15 +45,43 @@ public class repairSchedulerUI extends JFrame {
 	private JButton openBtnRed = new JButton("Open");
 	private JButton openBtnGrn = new JButton("Open");
 	//for demo purposes only, full version will pull from database
-	private String[] greenLineBlocks = {"A1","B1","C1","D1","E1","F1","G1","H1","I1","J1","K1","L1","M1"};
+	private String[] greenLineBlocks = {"A1","B1","C1","D1","E1","F1","G1","H1","I1","J1","K1","L1","M1"}; //fall back data
 	private String[] redLineBlocks = {"A1","B1","C1","D1","E1","F1","G1","H1","I1","J1","K1"};
-	private String[] greenLineSections = {"1","2","3","4","5","6","7","8","9","10","11"};
-	private String[] redLineSections = {"1","2","3","4","5","6","7","8","9","10","11","12","13"};
+	private String[] importedRed = new String[150];
+	private String[] importedGrn = new String[150];
+	//private String[] greenLineSections = {"1","2","3","4","5","6","7","8","9","10","11"};
+	//private String[] redLineSections = {"1","2","3","4","5","6","7","8","9","10","11","12","13"};
 	private String[] repairTypes = {"Broken Rail","Broken Track Heater", "Stuck Train: Engine Failure", "Stuck Train: Break Failure"};
 	private JComboBox<String> blockGrn = new JComboBox(greenLineBlocks);
 	private JComboBox<String> blockRed = new JComboBox(redLineBlocks);
+	private JComboBox<String> grnStopsImported;
+	private JComboBox<String> redStopsImported;
 	private JComboBox<String> repairChoiceRed = new JComboBox(repairTypes);
 	private JComboBox<String> repairChoiceGrn = new JComboBox(repairTypes);
+	static DBHelper database = MainMTR.getDBHelper();
+	boolean loaded = false;
+	
+	public void loadComboBoxes() {
+		//parameters for test.csv
+		int j = 0;
+		int k = 0;
+		for (int i = 0; i < 150; i++) { //change to end of file
+			System.out.println("Loading...");
+			String text = Integer.toString(database.getTrackID(i));
+			String line = database.getColor(i);
+			if (line.equals("green")) {
+				importedGrn[j] = text;
+				System.out.println("ID: " + text);
+				j++;
+			} else if (line.equals("red")) {
+				importedRed[k] = text;
+				k++;
+			}
+		}
+		grnStopsImported = new JComboBox<String>(importedGrn);
+		redStopsImported = new JComboBox<String>(importedRed);
+		loaded = true;
+	}
 	
 	public repairSchedulerUI() {
 		render();
@@ -63,6 +94,7 @@ public class repairSchedulerUI extends JFrame {
 		grnPanel.setLayout(new GridBagLayout());
 		GridBagConstraints gbcRed = new GridBagConstraints();
 		GridBagConstraints gbcGrn = new GridBagConstraints();
+		loadComboBoxes();
 		
 		JLabel redRepairs = new JLabel("Red Line Repairs: ");
 		gbcRed.gridx = 0;
@@ -97,7 +129,11 @@ public class repairSchedulerUI extends JFrame {
 		
 		gbcRed.gridx = 1;
 		gbcRed.gridy = 1;
-		redPanel.add(blockRed,gbcRed);
+		if (loaded == false) {
+			redPanel.add(blockRed,gbcRed);
+		} else {
+			redPanel.add(redStopsImported, gbcRed);
+		}
 		
 		gbcRed.gridx = 0;
 		gbcRed.gridy = 2;
@@ -116,7 +152,11 @@ public class repairSchedulerUI extends JFrame {
 		
 		gbcGrn.gridx = 1;
 		gbcGrn.gridy = 1;
-		grnPanel.add(blockGrn,gbcGrn);
+		if (loaded == false) {
+			grnPanel.add(blockGrn,gbcGrn);
+		} else {
+			grnPanel.add(grnStopsImported, gbcGrn);
+		}
 		
 		gbcGrn.gridx = 0;
 		gbcGrn.gridy = 2;

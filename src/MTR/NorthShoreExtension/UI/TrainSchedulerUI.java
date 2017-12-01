@@ -77,7 +77,7 @@ public class TrainSchedulerUI extends JFrame {
 		//parameters for test.csv
 		int j = 0;
 		int k = 0;
-		for (int i = 0; i < 150; i++) {
+		for (int i = 0; i < 150; i++) { //change to end of file instead of 150
 			String text = Integer.toString(database.getTrackID(i));
 			String line = database.getColor(i);
 			if (line.equals("green")) {
