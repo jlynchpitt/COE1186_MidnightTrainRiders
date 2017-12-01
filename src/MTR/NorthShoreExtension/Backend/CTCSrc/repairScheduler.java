@@ -24,8 +24,10 @@ public class repairScheduler {
 		//if the track is in good working condition return 1, otherwise return 0
 		if (status.equals("No Issues")) {
 			state = 1;
+			System.out.println("No Issues");
 		} else {
 			state = 0;
+			System.out.println("Issue(s) Found");
 		}
 		return state;
 	}
