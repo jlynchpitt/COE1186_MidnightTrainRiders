@@ -72,8 +72,8 @@ public class Train {
 		tc.TrainControl_moveToNextTrack();
 	}
 	
-	public void TrainModel_resendSpeedAuthority(int a) {
-		//tc.TrainControl_setCommandedSpeedAuthority(tm.getVelocity(),a);
+	public void TrainModel_resendSpeedAuthority(int v, int a) {
+		tc.TrainControl_setCommandedSpeedAuthority(v,a);
 	}
 
 	
