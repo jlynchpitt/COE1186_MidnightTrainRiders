@@ -14,7 +14,12 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.event.ActionListener;
+import java.util.Scanner;
 import java.util.Stack;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -36,7 +41,7 @@ import MTR.NorthShoreExtension.UI.TrackModelUI.TrackGraphic;
 public class WaysideControllerUI  //the purpose of this class is to simply display all the information
 {
 	//imports all packages
-	public static String SampleCode = "Int total = 0;\n Public static void main (String [] args)\n{\n    If (traindist <= 100)\n    {\n        Do\n        {\n            Close gate\n            Signal light\n        }\n    }\n    Public boolean distmeas(int trackcount)\n    {\n        For (int x = 0; x < trackcount; x++)\n        {\n            Total += x; \n        }\n        If (total <= standarddist)\n        {\n            Return true;\n        }\n        Else\n        {\n            Return false;\n        ]\n    }\n}";
+	public static String SampleCode;
 	//basic frame and components
 	public static JPanel plc = new JPanel();
 	public static JPanel TI = new JPanel();
@@ -71,8 +76,9 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
     
 	  
 	  //public static int[] ProtoArray = {0,1,2,3,4,5,6};
-   public static void main(String[] args) //main body
+   public static void main(String[] args) throws IOException //main body
    {
+	   //Reader();
 	   load = MainMTR.getDBHelper();
 	   //setup panels
 	   ComponentAdder();
@@ -90,7 +96,7 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 	  
    } 
    
-   public static void createAndShowWaysideControlGUI() 
+   public static void createAndShowWaysideControlGUI() throws IOException 
 	{
 	   load = MainMTR.getDBHelper();
        
@@ -302,7 +308,7 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 	   
    }
    //register all panels
-   public static void ComponentAdder()
+   public static void ComponentAdder() throws IOException
    {
 	   
 	   PLCSetup();
@@ -401,20 +407,31 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 	   //f.getContentPane().add(plc);
 	    
    }
- //set up plc panel  
-   public static void PLCSetup()
+ //set up plc panel
+   public static void Reader() throws IOException
    {
-	   /*
-	   try
-       {
-           FileReader reader = new FileReader( "WaysideController.java" );
-           BufferedReader br = new BufferedReader(reader);
-           Component.read( br, null );
-           br.close();
-           Component.requestFocus();
-       }
-       catch(Exception e2) { System.out.println(e2); }
-	  */
+	   
+	   Scanner scnr = new Scanner(Test.class.getResourceAsStream("temp.txt"));
+       //Scanner scnr = new Scanner(text);
+    
+       //Reading each line of file using Scanner class
+       int lineNumber = 1;
+       SampleCode = "";
+       while(scnr.hasNextLine()){
+    	   
+           String line = scnr.nextLine();
+           SampleCode = SampleCode + line;
+           System.out.println("line " + lineNumber + " :" + line);
+           lineNumber++;
+       }   
+       System.out.println(SampleCode);
+       text = new TextArea(SampleCode);
+   }
+   public static void PLCSetup() throws IOException
+   {
+	   
+	   Reader();
+	   System.out.println("SAMPLE" + SampleCode);
 	   ButtonAdder();
 	   
 	   ActionAdder();
