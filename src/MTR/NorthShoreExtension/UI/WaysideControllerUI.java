@@ -12,12 +12,12 @@ import java.awt.Frame;
 import java.awt.TextArea;
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.filechooser.FileSystemView;
+
 import java.awt.event.*;
 import java.awt.event.ActionListener;
 import java.util.Scanner;
 import java.util.Stack;
-
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -42,6 +42,7 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 {
 	//imports all packages
 	public static String SampleCode;
+	public static String FilePath = "";
 	//basic frame and components
 	public static JPanel plc = new JPanel();
 	public static JPanel TI = new JPanel();
@@ -49,13 +50,14 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 	public static JPanel TestPanel = new JPanel();
 	public static JFrame f = new JFrame("Wayside Controller");  //create frame with frame name
 	public static JFrame frame = new JFrame("Track Model UI");
-	public static Component text = new TextArea(SampleCode);  //create text area
+	public static TextArea text = new TextArea(SampleCode);  //create text area
 	public static JButton SaveButton = new JButton("Save"); //create one of the buttons
 	//public static JButton SaveButton = new JButton("Save");
 	public static JButton SwtchCtrlButton = new JButton("To Switch Control Hub"); //create one of the buttons
 	public static JButton PLCButton = new JButton("To PLC"); //create one of the buttons
 	public static JButton TrackInfoButton = new JButton("To Track Info Hub"); //create one of the buttons
 	public static JButton Test = new JButton ("Tester");
+	public static JButton Browse = new JButton ("Browse");
 	public static int FrameTracker = 0;
 	public static WaysideFunctions obj = new WaysideFunctions();
 	public static DefaultTableModel dm = new DefaultTableModel();
@@ -201,9 +203,40 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 	  }
 	});
 		
+	//button that browses files
+		Browse.addActionListener(new ActionListener()
+		{
+		  public void actionPerformed(ActionEvent e)
+		  {
+
+			  try {
+				Reader();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		  }
+		});	
 		
+		
+		//save button
+		SaveButton.addActionListener(new ActionListener()
+		{
+		  public void actionPerformed(ActionEvent e)
+		  {
+
+			  try {
+				Saver();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		  }
+		});	
 
    }
+  
+   
    public static void SwitchSwitcher(int x)  //switch based on location in the chart
    {
 	   if (TablesCreated)
@@ -216,6 +249,7 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 	   
    }
 
+   //updates the table of occupied tracks
    public static void OccupiedTrackTableUpdater(Object[][] ObjectArray)
    {
 	   System.out.println("DISPLAYING OCCUPIED TRACK");
@@ -247,6 +281,8 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 	   
    }
    
+   
+   //updates occupied tracks with authority 
    public static void OccupiedTrackAuthoritySpeedUpdater(int TrackID, int NextTrack, int AuthorityDist)
    {
 	   if (TablesCreated)
@@ -289,6 +325,8 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 	   
 	   
    }
+   
+   //figures out which position in the switch chart to switch
    public static void SwitchChartUpdater(int ID)  //update with actual information
    {
 	   if (TablesCreated)
@@ -410,28 +448,80 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
  //set up plc panel
    public static void Reader() throws IOException
    {
+	   String Block = "";
+	   JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+		//File text = new File("C:\\Users\\Owner\\Documents\\GitHub\\COE1186_MidnightTrainRiders\\src\\MTR\\NorthShoreExtension\\UI\\TrainControlUI.java");
+		int returnValue = jfc.showOpenDialog(null);
+		// int returnValue = jfc.showSaveDialog(null);
+
+		if (returnValue == JFileChooser.APPROVE_OPTION) {
+			File selectedFile = jfc.getSelectedFile();
+			//File text = new File("C:/temp/test.txt");
+		     
+	        //Creating Scanner instnace to read File in Java
+	        //Scanner scnr = new Scanner(Test.class.getResourceAsStream("temp.txt"));
+	        Scanner scnr = new Scanner(selectedFile);
+	     
+	        //Reading each line of file using Scanner class
+	        int lineNumber = 1;
+	        while(scnr.hasNextLine()){
+	            String line = scnr.nextLine();
+	            Block = Block + line + "\n";
+	            //System.out.println("line " + lineNumber + " :" + line);
+	            lineNumber++;
+	        } 
+			System.out.println(selectedFile.getAbsolutePath());
+			FilePath = selectedFile.getAbsolutePath();
+			//System.out.println(Block);
+			SampleCode = Block;
+			text.setText(SampleCode);
+			//System.out.println(selectedFile.getRelativePath());
+		}
+   }
+   
+   public static void Saver() throws IOException
+   {
+	   //System.out.println(text.getText());
 	   
-	   Scanner scnr = new Scanner(Test.class.getResourceAsStream("temp.txt"));
-       //Scanner scnr = new Scanner(text);
-    
-       //Reading each line of file using Scanner class
-       int lineNumber = 1;
-       SampleCode = "";
-       while(scnr.hasNextLine()){
-    	   
-           String line = scnr.nextLine();
-           SampleCode = SampleCode + line;
-           System.out.println("line " + lineNumber + " :" + line);
-           lineNumber++;
-       }   
-       System.out.println(SampleCode);
-       text = new TextArea(SampleCode);
+	   BufferedWriter bw = null;
+		FileWriter fw = null;
+
+		try {
+
+			String content = text.getText();
+
+			fw = new FileWriter(FilePath);
+			bw = new BufferedWriter(fw);
+			bw.write(content);
+
+			System.out.println("Done");
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+
+		} finally {
+
+			try {
+
+				if (bw != null)
+					bw.close();
+
+				if (fw != null)
+					fw.close();
+
+			} catch (IOException ex) {
+
+				ex.printStackTrace();
+
+			}
+
+		}
+		
    }
    public static void PLCSetup() throws IOException
    {
-	   
-	   Reader();
-	   System.out.println("SAMPLE" + SampleCode);
+	   //System.out.println("SAMPLE" + SampleCode);
 	   ButtonAdder();
 	   
 	   ActionAdder();
@@ -442,6 +532,7 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 	   ButtonBox = Box.createVerticalBox();
 	   ButtonBox.add( Box.createVerticalStrut( 25 ) );
 	   ButtonBox.add(cb, BorderLayout.NORTH);
+	   ButtonBox.add(Browse, BorderLayout.EAST);
 	   ButtonBox.add(SaveButton, BorderLayout.EAST);
 	   ButtonBox.add(SwtchCtrlButton, BorderLayout.EAST);
 	   ButtonBox.add(TrackInfoButton, BorderLayout.EAST);	  //add to frame
@@ -546,6 +637,7 @@ public class WaysideControllerUI  //the purpose of this class is to simply displ
 	   PLCButton = new JButton("To PLC"); //create one of the buttons
 		TrackInfoButton = new JButton("To Track Info Hub"); //create one of the buttons
 		Test = new JButton("Test");
+		Browse = new JButton ("Browse");
    }
 
 
