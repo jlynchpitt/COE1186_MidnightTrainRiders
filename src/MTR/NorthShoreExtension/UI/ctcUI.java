@@ -326,7 +326,12 @@ public class ctcUI {
 		gbc.gridy = 1; //fifth row
 		trkCtrl.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				WaysideControllerUI.createAndShowWaysideControlGUI();
+				try {
+					WaysideControllerUI.createAndShowWaysideControlGUI();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		pane.add(trkCtrl, gbc);
