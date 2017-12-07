@@ -1,6 +1,6 @@
 /* Filename: repairScheduler.java 
  * Author: Matt Snyder
- * Last Edited: 11/14/2017
+ * Last Edited: 12/06/2017
  * File Description: The back-end operations of the Repair Scheduler
  */
  
@@ -16,30 +16,28 @@ import MTR.NorthShoreExtension.Backend.DBHelper;
 public class repairScheduler {
 	static DBHelper database = MainMTR.getDBHelper();
 	
-	public int checkStatus(int trackID) {
-		int state = 2;
-		//fetch the status from the database
-		String status = database.getTrackStatus(trackID);
-		
-		//if the track is in good working condition return 1, otherwise return 0
-		if (status.equals("No Issues")) {
-			state = 1;
-			System.out.println("No Issues");
-		} else {
-			state = 0;
-			System.out.println("Issue(s) Found");
+	//a function for updating the track status in the database. returns 1 on successful operation, 0 on failure
+	public static int openRepairJob(int trackID, String repairType) {
+		int actionComplete = 0;
+		String resulted = database.getTrackStatus(trackID);
+		System.out.println(resulted);
+		database.updateTrackStatus(trackID, repairType);
+		String nexResulted = database.getTrackStatus(trackID);
+		System.out.println(nexResulted);
+		if (nexResulted.equals(repairType)) {
+			actionComplete = 1;
 		}
-		return state;
+		return actionComplete;
 	}
 	
-	//a function for updating the track status in the database and replying with a notification of it's successfulness
-	public int openRepairJob(int trackID, String repairType) {
+	public static int closeRepairJob(int trackID, String repairType) {
 		int actionComplete = 0;
-		database.updateTrackStatus(trackID, repairType);
-		int updated = checkStatus(trackID);
-		if (updated == 1) {
-			actionComplete = 0;
-		} else if (updated == 0) {
+		String resulted = database.getTrackStatus(trackID);
+		System.out.println(resulted);
+		database.updateTrackStatus(trackID, "No Issues");
+		String nexResulted = database.getTrackStatus(trackID);
+		System.out.println(nexResulted);
+		if (nexResulted.equals("No Issues")) {
 			actionComplete = 1;
 		}
 		return actionComplete;

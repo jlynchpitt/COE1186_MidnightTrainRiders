@@ -472,6 +472,34 @@ public class DBHelper {
 		return length;
 	}
 	
+	public int getDatabaseSize() {
+		int size = 0;
+		Connection connection = null;
+		Statement statment = null;
+		ResultSet result = null;
+		
+		try {
+			connection = connect();
+			
+			statment = connection.createStatement();
+			statment.setQueryTimeout(30);
+			
+			result = statment.executeQuery("Select * from TrackInfo");
+			
+			while (result.next()) {
+				size = Integer.parseInt(result.getString("rowID"));
+			}
+		} catch (SQLException e) {
+			System.err.println(e.getMessage()); 
+		 }       
+		finally {         
+			if (result != null) try { result.close(); } catch (SQLException ignore) {}
+	        if (statment != null) try { statment.close(); } catch (SQLException ignore) {}
+	        if (connection != null) try { connection.close(); } catch (SQLException ignore) {}
+		 }
+		return size;
+	}
+	
 	public int schedNextTrack(int trackid, int prevTrack) {
 		int nextTrack = 0;
 		Connection connection = null;

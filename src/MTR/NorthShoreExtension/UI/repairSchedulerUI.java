@@ -30,11 +30,15 @@
 package MTR.NorthShoreExtension.UI;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.awt.TrayIcon.MessageType;
 import java.awt.event.*;
 import javax.swing.*;
 
 import MTR.NorthShoreExtension.MainMTR;
 import MTR.NorthShoreExtension.Backend.DBHelper;
+import MTR.NorthShoreExtension.Backend.CTCSrc.repairScheduler;
 
 public class repairSchedulerUI extends JFrame {
 	
@@ -47,8 +51,10 @@ public class repairSchedulerUI extends JFrame {
 	//for demo purposes only, full version will pull from database
 	private String[] greenLineBlocks = {"A1","B1","C1","D1","E1","F1","G1","H1","I1","J1","K1","L1","M1"}; //fall back data
 	private String[] redLineBlocks = {"A1","B1","C1","D1","E1","F1","G1","H1","I1","J1","K1"};
-	private String[] importedRed = new String[150];
-	private String[] importedGrn = new String[150];
+	private String[] importedRed = new String[1];
+	private String[] importedGrn = new String[1];
+	private List<String> imporRed = new ArrayList<String>();
+	private List<String> imporGrn = new ArrayList<String>();
 	//private String[] greenLineSections = {"1","2","3","4","5","6","7","8","9","10","11"};
 	//private String[] redLineSections = {"1","2","3","4","5","6","7","8","9","10","11","12","13"};
 	private String[] repairTypes = {"Broken Rail","Broken Track Heater", "Stuck Train: Engine Failure", "Stuck Train: Break Failure"};
@@ -65,19 +71,37 @@ public class repairSchedulerUI extends JFrame {
 		//parameters for test.csv
 		int j = 0;
 		int k = 0;
-		for (int i = 0; i < 150; i++) { //change to end of file
+		int dataLength = database.getDatabaseSize();
+		System.out.println("Rows: " + dataLength);
+		for (int i = 0; i < dataLength+1; i++) { //change to end of file?
 			System.out.println("Loading...");
 			String text = Integer.toString(database.getTrackID(i));
 			String line = database.getColor(i);
 			if (line.equals("green")) {
-				importedGrn[j] = text;
+				imporGrn.add(text);
 				System.out.println("ID: " + text);
 				j++;
 			} else if (line.equals("red")) {
-				importedRed[k] = text;
+				imporRed.add(text);
 				k++;
 			}
 		}
+		
+		if (j > 0) {
+			importedGrn = new String[imporGrn.size()];
+		}
+		if (k > 0) {
+			importedRed = new String[imporRed.size()];
+		}
+		
+		for (int y = 0; y < imporGrn.size(); y++) {
+			importedGrn[y] = imporGrn.get(y);
+		}
+		
+		for (int x = 0; x < imporRed.size(); x++) {
+			importedRed[x] = imporRed.get(x);
+		}
+		
 		grnStopsImported = new JComboBox<String>(importedGrn);
 		redStopsImported = new JComboBox<String>(importedRed);
 		loaded = true;
@@ -160,10 +184,56 @@ public class repairSchedulerUI extends JFrame {
 		
 		gbcGrn.gridx = 0;
 		gbcGrn.gridy = 2;
+		closeBtnGrn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int closed = repairScheduler.openRepairJob(Integer.parseInt(grnStopsImported.getSelectedItem().toString()), repairChoiceGrn.getSelectedItem().toString());
+				if (closed == 0) {
+					System.out.println("Already closed");
+				} else if (closed == 1) {
+					System.out.println("Closed succesfully");
+					SystemTray tray = SystemTray.getSystemTray();
+					Image image = Toolkit.getDefaultToolkit().createImage("icon.png");
+					TrayIcon trayIcon = new TrayIcon(image, "Close Track Success");
+					trayIcon.setImageAutoSize(true);
+					trayIcon.setToolTip("Closing of Track ID: " + grnStopsImported.getSelectedItem().toString());
+					try {
+						tray.add(trayIcon);
+					} catch (AWTException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					trayIcon.displayMessage("Track Closed", "Track " + grnStopsImported.getSelectedItem().toString() + " is closed.", MessageType.INFO);
+
+				}
+			}
+		});
 		grnPanel.add(closeBtnGrn,gbcGrn);
 		
 		gbcGrn.gridx = 1;
 		gbcGrn.gridy = 2;
+		openBtnGrn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int opened = repairScheduler.closeRepairJob(Integer.parseInt(grnStopsImported.getSelectedItem().toString()), repairChoiceGrn.getSelectedItem().toString());
+				if (opened == 0) {
+					System.out.println("Already open");
+				} else if (opened == 1) {
+					System.out.println("Opened succesfully");
+					SystemTray tray = SystemTray.getSystemTray();
+					Image image = Toolkit.getDefaultToolkit().createImage("icon.png");
+					TrayIcon trayIcon = new TrayIcon(image, "Open Track Success");
+					trayIcon.setImageAutoSize(true);
+					trayIcon.setToolTip("Openinging of Track ID: " + grnStopsImported.getSelectedItem().toString());
+					try {
+						tray.add(trayIcon);
+					} catch (AWTException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					trayIcon.displayMessage("Track Opened", "Track " + grnStopsImported.getSelectedItem().toString() + " is opened.", MessageType.INFO);
+
+				}
+			}
+		});
 		grnPanel.add(openBtnGrn,gbcGrn);
 		
 		tabbedPane.addTab("Red Line",redPanel);
