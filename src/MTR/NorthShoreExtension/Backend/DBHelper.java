@@ -513,33 +513,44 @@ public class DBHelper {
 			statement.setQueryTimeout(30); //TODO: Is this needed?
 
 			track = statement.executeQuery("SELECT * from TrackInfo WHERE trackID = '"+trackid+"'");
+			//for green line only right now, will need to add/adjust for red line
 			if(prevTrack < trackid) {
-				if(track.getInt("switchPosition")==0) {
+				if(track.getInt("secondSwitch")!=1111) {
 					nextTrack = track.getInt("nextTrack");
-					if(nextTrack == prevTrack) {
-						nextTrack = track.getInt("secondSwitch");
-					}
-				}
-				else {
+				} else {
 					nextTrack = track.getInt("secondSwitch");
-					if(nextTrack == prevTrack) {
-						nextTrack = track.getInt("nextTrack");
-					}
 				}
+//					if(nextTrack == prevTrack) {
+//						nextTrack = track.getInt("secondSwitch");
+//					}
+//				}
+//				else {
+//					nextTrack = track.getInt("secondSwitch");
+//					if(nextTrack == prevTrack) {
+//						nextTrack = track.getInt("nextTrack");
+//					}
+//				}
 			}
-			else if(prevTrack > trackid) {
-				if(track.getInt("switchPosition")==0) {
+			else if(prevTrack > trackid) { //moving on a dual-direction track, "backwards"
+				if(track.getInt("secondSwitch")==0) {  //no switch, just normal movement
 					nextTrack = track.getInt("prevTrack");
-					if(nextTrack == prevTrack) {
-						nextTrack = track.getInt("secondSwitch");
-					}
-				}
-				else {
-					nextTrack = track.getInt("secondSwitch");
-					if(nextTrack == prevTrack) {
+				} else {
+					if (track.getInt("secondSwitch") == prevTrack || track.getInt("secondSwitch") == 2001) { //coming off of a switch or starting the top loop.
 						nextTrack = track.getInt("prevTrack");
+					} else {
+						nextTrack = track.getInt("secondSwitch"); //taking a switch
 					}
 				}
+//					if(nextTrack == prevTrack) {
+//						nextTrack = track.getInt("secondSwitch");
+//					}
+//				}
+//				else {
+//					nextTrack = track.getInt("secondSwitch");
+//					if(nextTrack == prevTrack) {
+//						nextTrack = track.getInt("prevTrack");
+//					}
+//				}
 			}
 
 		}

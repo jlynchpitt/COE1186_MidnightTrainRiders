@@ -60,7 +60,8 @@ public class TrainSchedulerUI extends JFrame {
 	int departGrn[] = new int[150];
 	boolean loaded = false;
 	
-	private JFrame frame = new JFrame("Schedule A Train");
+	private static TrainSchedulerUI trsUI;
+	private static JFrame frame = new JFrame("Schedule A Train");
 	private JTabbedPane tabbedPane = new JTabbedPane();
 	private JButton addStopRed = new JButton("Add A Stop");
 	private JButton addStopGrn = new JButton("Add A Stop");
@@ -115,7 +116,7 @@ public class TrainSchedulerUI extends JFrame {
 	public void render() {
 		JPanel grnTrain = new JPanel();
 		JPanel redTrain = new JPanel();
-		JPanel schedule = new JPanel();
+		//JPanel schedule = new JPanel();
 		grnTrain.setLayout(new GridLayout(1,2));
 		redTrain.setLayout(new GridLayout(1,2));
 		
@@ -386,5 +387,30 @@ public class TrainSchedulerUI extends JFrame {
 				departGrn = new int[150];
 			}
 		});
+	}
+	
+	public static void createAndShowGUI() {
+		if (frame == null) {
+			System.out.println("Creating Scheduler UI");
+			frame = new JFrame("Train Scheduler");
+			frame.setDefaultCloseOperation(HIDE_ON_CLOSE);
+			
+			trsUI = new TrainSchedulerUI();
+			trsUI.tabbedPane.setOpaque(true);
+			frame.setContentPane(trsUI);
+		} else {
+			repaintGUI();
+		}
+	}
+	
+	public static void repaintGUI() {
+		
+		if (trsUI != null && frame != null) {
+			trsUI.render();
+			frame.setContentPane(trsUI.tabbedPane);
+			frame.pack();
+			frame.revalidate();
+			frame.repaint();
+		}
 	}
 }

@@ -139,6 +139,7 @@ public class ctcUI {
 		schedTrain.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFrame schedulerT = new TrainSchedulerUI();
+				TrainSchedulerUI.createAndShowGUI();
 			}
 		});
 		gbc.weightx = 0.0; //sets the width of the segment
