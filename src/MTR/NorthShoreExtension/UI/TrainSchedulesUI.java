@@ -1,6 +1,6 @@
 /* Filename: TrainScheduler.java
 *  Author: Matthew Snyder
-*  Last Edited: 11/18/17
+*  Last Edited: 12/06/17
 *  File Description: This is the UI component of the CTC that displays the list of scheduled trains. It will show the user the train ID, which
 *  line it runs on, and what its first stop will be. It will give the user the option to dispatch or delete the train. It uses TrainSchedulePanel
 *  for each train that is scheduled.
@@ -39,8 +39,6 @@ public class TrainSchedulesUI extends JFrame {
 		for (TrainSchedule ts : ctcUI.tsh.getTrainScheduleList()) {
 			System.out.println("\n creating trainSchedulePanel");
 			System.out.println("\n First Stop: " + ts.getFirstStop() + "\n");
-			//mainPanel.add(button =  new JButton("My Button"));
-			//can create buttons but not TrainSchedulePanels?
 			mainPanel.add(new TrainSchedulePanel(ts));
 			mainPanel.add(Box.createGlue());
 		}
@@ -63,19 +61,17 @@ public class TrainSchedulesUI extends JFrame {
 			System.out.println("creating schedulesUI");
 			frame = new JFrame("Train Schedules");
 			frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-			
-			//error is probably here. it calls a function which call render()
+	
 			tsui = new TrainSchedulesUI();
 			//tsui.makeMainPanel();
 			tsui.mainPanel.setOpaque(true);
-			JScrollPane scroll = new JScrollPane(tsui.mainPanel);
+			JScrollPane scroll = new JScrollPane(tsui.mainPanel); //scroll if gets large
 			frame.setContentPane(scroll);
 		} else {
 			repaintGUI();
 		}
 		
-		frame.setSize(800,400);
-		//frame.pack();
+		frame.pack();
 		frame.setVisible(true);
 	}
 	

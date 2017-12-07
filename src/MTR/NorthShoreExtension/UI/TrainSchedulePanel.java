@@ -1,7 +1,7 @@
 /* 
  * Filename: TrainSchedulePanel.java
  * Author: Matt Snyder
- * Last Edited: 11/24/17
+ * Last Edited: 12/06/17
  * File Description: The sub-panels for the train schedule display.
  */
 
@@ -35,6 +35,7 @@ public class TrainSchedulePanel extends JPanel {
 		int id = trainSchedule.getTrainID();
 		String first = trainSchedule.getFirstStop();
 		String line = trainSchedule.getLine();
+		int spot = trainSchedule.getCurrentLocation();
 		
 		setBorder(BorderFactory.createTitledBorder("Train: " + id));
 
@@ -45,6 +46,10 @@ public class TrainSchedulePanel extends JPanel {
 		JLabel tLine = new JLabel("Line: " + line);
 		tLine.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 		add(tLine);
+		
+		JLabel tSpot = new JLabel("Current Location: " + spot);
+		tSpot.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+		add(tSpot);
 
 		JLabel tFirst = new JLabel("First Stop: " + first);
 		tFirst.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));

@@ -24,8 +24,8 @@ public class TrainScheduleHelper {
 	static List<TrainSchedule> tsl;
 	static List<Integer> occupied = new ArrayList<Integer>();
 	public static List<Integer> trainTracker = new ArrayList<Integer>();
-	static int[] broken = new int [250];
 	static DBHelper database = MainMTR.getDBHelper();
+	static int[] broken = new int [database.getDatabaseSize()+1];
 	static int occUpdatedCounter = 0;
 	
 	public TrainScheduleHelper() {

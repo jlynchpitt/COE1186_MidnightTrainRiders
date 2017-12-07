@@ -18,6 +18,7 @@ import MTR.NorthShoreExtension.MainMTR;
 import MTR.NorthShoreExtension.Backend.DBHelper;
 import MTR.NorthShoreExtension.Backend.CTCSrc.TrainSchedule;
 import MTR.NorthShoreExtension.UI.TrainSchedulePanel;
+import MTR.NorthShoreExtension.UI.TrainSchedulesUI;
 
 
 public class trainScheduler {
@@ -26,8 +27,8 @@ public class trainScheduler {
 	int[] redLine = new int[75];
 	int[] grnLine = new int[150];
 	//import database info for greenline and red line
-	static String[] importedGrn;
-	static String[] importedRed;
+	String[] importedGrn;
+	String[] importedRed;
 	
 	//stop[i]
 	// if stop [0] == first section of track
@@ -48,6 +49,7 @@ public class trainScheduler {
 		int firstSection = 0;
 		int prevSection = 1;
 		int lastSection = 0;
+		
 		if (listOfStops[0] >= 1000 && listOfStops[0] < 2000) {
 			/*firstStop = 1001; //will need to hard-code for red and green lines i guess...
 			System.out.println("M: " + m);
@@ -160,16 +162,8 @@ public class trainScheduler {
 			System.out.println(".:. :" + auth.get(k));
 		}
 		
-		/*while (authority[k] != 0) {
-			System.out.println(".: " + authority[k]);
-			k++;
-		}*/
-		//authority = new int[auth.size()];
-		/*for (int r = 0; r < auth.size(); r++) {
-			authority[r] = auth.get(r);
-		}*/
-		//System.out.println(auth.size());
-		
+		//update the schedules for tracking trains
+		TrainSchedulesUI.repaintGUI();
 		return auth;
 	}
 	

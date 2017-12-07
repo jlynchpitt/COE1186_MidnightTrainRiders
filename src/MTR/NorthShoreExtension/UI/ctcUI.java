@@ -57,6 +57,7 @@ public class ctcUI {
 	private static JFrame frame;
 	public static ctcUI ctc1;
 	public static JTextArea time;
+	public static JTextArea numTrn;
 	
 	int timeMultiplier;
 	TrainControllerHelper tch;
@@ -86,6 +87,7 @@ public class ctcUI {
 	
 	public static void setNumTrains(int trains) {
 		numTrains = trains;
+		numTrn.setText("Trains: " + numTrains);
 	}
 	
 	public int getThroughput() {
@@ -223,7 +225,7 @@ public class ctcUI {
 		//number of trains
 		trainNum = new JPanel();
 		trainNum.setBorder(BorderFactory.createLineBorder(Color.black,1));
-		JTextArea numTrn = new JTextArea(1,10);
+		numTrn = new JTextArea(1,10);
 		numTrn.setEditable(false);
 		numTrn.setText("Trains: " + numTrains);
 		trainNum.add(numTrn);

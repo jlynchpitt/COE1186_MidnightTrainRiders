@@ -1,8 +1,8 @@
 /*
 * Filename: trainScheduler.java
 * Author: Matt Snyder
-* Last Edited: 11/28/2017
-* File Description: This contains the Train Scheduler. 
+* Last Edited: 12/06/2017
+* File Description: This contains the Train Scheduler user interface. 
 * 
 * 
 * 
