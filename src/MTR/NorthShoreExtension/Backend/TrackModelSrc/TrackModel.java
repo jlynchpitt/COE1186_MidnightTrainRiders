@@ -33,6 +33,7 @@ public class TrackModel {
 	static Train train;
 	static Train updateTrains;
 	static int lastTrack = 0;
+	static TrainModelUI tmUI=MainMTR.getTrainModelUI();
 		
 	class Track{
 		String line;
@@ -138,7 +139,7 @@ public class TrackModel {
 		newTrain.trackOccupying = trackid;
 		newTrain.distanceLeft = load.getTrackLength(trackid);
 		trainList.put(trainid, newTrain);
-		trackOccupency[(trackOccupency.length - 1)] = trackid;
+		trackOccupency[trackOccupency.length] = trackid;
 		/*updateTrack = trackList.get(trackid);
 		trackList.remove(trackid);
 		updateTrack.trainOccupying = trainid;
@@ -149,7 +150,6 @@ public class TrackModel {
 		if(MainMTR.fullUI) {
 			wayside.WaysideController_TrackOccupancy(trackOccupency);
 		}
-		TrainModelUI tmUI=MainMTR.getTrainModelUI();
 		tmUI.addTrain();
 	}
 	
