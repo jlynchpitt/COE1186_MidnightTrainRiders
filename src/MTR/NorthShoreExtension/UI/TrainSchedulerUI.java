@@ -32,6 +32,8 @@ package MTR.NorthShoreExtension.UI;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.util.*;
+import java.util.List;
 
 import MTR.NorthShoreExtension.MainMTR;
 import MTR.NorthShoreExtension.Backend.*;
@@ -43,8 +45,10 @@ public class TrainSchedulerUI extends JFrame {
 	
 	String[] grnLineStops = {"2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009"}; //fall-back data in case file doesn't get loaded
 	String[] redLineStops = {"1001", "1002", "1003", "1004", "1005", "1006", "1007", "1008", "1009"};
-	String[] importedRed = new String[75];
-	String[] importedGrn = new String[150];
+	String[] importedRed = new String[1];
+	String[] importedGrn = new String[1];
+	List<String> imporRed = new ArrayList<String>();
+	List<String> imporGrn = new ArrayList<String>();
 	int xRed = 1; //number of grnStops
 	int xGrn = 1;
 	int authRed[] = new int[150];
@@ -77,17 +81,32 @@ public class TrainSchedulerUI extends JFrame {
 		//parameters for test.csv
 		int j = 0;
 		int k = 0;
-		for (int i = 0; i < 150; i++) { //change to end of file instead of 150
+		int dataLength = database.getDatabaseSize();
+		for (int i = 0; i < dataLength+1; i++) { //change to end of file instead of 150
 			String text = Integer.toString(database.getTrackID(i));
 			String line = database.getColor(i);
 			if (line.equals("green")) {
-				importedGrn[j] = text;
+				imporGrn.add(text);
 				j++;
 			} else if (line.equals("red")) {
-				importedRed[k] = text;
+				imporRed.add(text);
 				k++;
 			}
 		}
+		if (j > 0) {
+			importedGrn = new String[imporGrn.size()];
+		}
+		if (k > 0) {
+			importedRed = new String[imporRed.size()];
+		}
+		
+		for (int y = 0; y < imporGrn.size(); y++) {
+			importedGrn[y] = imporGrn.get(y);
+		}
+		for (int x = 0; x < imporRed.size(); x++) {
+			importedRed[x] = imporRed.get(x);
+		}
+		
 		grnStopsImported = new JComboBox<String>(importedGrn);
 		redStopsImported = new JComboBox<String>(importedRed);
 		loaded = true;
@@ -346,6 +365,7 @@ public class TrainSchedulerUI extends JFrame {
 				xRed = 1;
 				authRed = new int[150];
 				departRed = new int[150];
+				schedStopsRed = new int[150];
 			}
 		});
 		
@@ -360,6 +380,7 @@ public class TrainSchedulerUI extends JFrame {
 				schedTrainGrn.setEnabled(true);
 				nextTrainGrn.setEnabled(false);
 				stopRouteGrn.setText("Add a Stop...");
+				schedStopsGrn = new int[150];
 				xGrn = 1;
 				authGrn = new int[150];
 				departGrn = new int[150];
