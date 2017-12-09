@@ -515,8 +515,10 @@ public class DBHelper {
 			track = statement.executeQuery("SELECT * from TrackInfo WHERE trackID = '"+trackid+"'");
 			//for green line only right now, will need to add/adjust for red line
 			if(prevTrack < trackid) {
-				if(track.getInt("secondSwitch")!=1111) {
+				if(track.getInt("secondSwitch")!=1111 && track.getInt("secondSwitch")!=2001) {
 					nextTrack = track.getInt("nextTrack");
+				} else if (track.getInt("secondSwitch")!=1111 && track.getInt("secondSwitch")==2001) {
+					nextTrack = track.getInt("prevTrack"); //needed for handling the awkward track ordering of the north green line loop.
 				} else {
 					nextTrack = track.getInt("secondSwitch");
 				}
@@ -533,10 +535,20 @@ public class DBHelper {
 			}
 			else if(prevTrack > trackid) { //moving on a dual-direction track, "backwards"
 				if(track.getInt("secondSwitch")==0) {  //no switch, just normal movement
-					nextTrack = track.getInt("prevTrack");
-				} else {
-					if (track.getInt("secondSwitch") == prevTrack || track.getInt("secondSwitch") == 2001) { //coming off of a switch or starting the top loop.
+					System.out.println("TrackID: " + trackid + " Next: " + track.getInt("nextTrack") +" Prev: " + track.getInt("prevTrack"));
+					if (track.getInt("prevTrack") < track.getInt("nextTrack") && trackid != 2001) {
 						nextTrack = track.getInt("prevTrack");
+					} else if (track.getInt("prevTrack") < track.getInt("nextTrack") && trackid == 2001) {
+						nextTrack = track.getInt("nextTrack");
+					} else { //moving backwards along the top loop, its a different numbering system :(
+						nextTrack = track.getInt("nextTrack");
+					}
+				} else {
+					//System.out.println("SecondSwitch: " + track.getInt("secondSwitch"));
+					if (track.getInt("secondSwitch") == prevTrack) { //coming off of a switch
+						nextTrack = track.getInt("prevTrack");
+					} else if (track.getInt("secondSwitch") == 2001) { //the top loop uses a different direction flow/numbering system.
+						nextTrack = track.getInt("nextTrack");
 					} else {
 						nextTrack = track.getInt("secondSwitch"); //taking a switch
 					}
