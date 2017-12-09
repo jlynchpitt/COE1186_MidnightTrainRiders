@@ -717,8 +717,8 @@ public class TrainModelUI extends JFrame implements ActionListener{
 	}
 	
 	public void addTrain() {
+		comboBox.setSelectedIndex(-1);
 		tMap=tm.getTrains();
-		
 		SortedSet<Integer> keys = new TreeSet<Integer>(tMap.keySet());
 		Integer[] tarray = new Integer[keys.size()];
 		keys.toArray(tarray);
