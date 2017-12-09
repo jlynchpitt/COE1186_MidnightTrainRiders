@@ -229,34 +229,51 @@ public class WaysideController //this class is the logic to decide what to do wi
 	{
 		
 			
-			for (int x = 0; x < ListOfTrackPlans.size(); x++) //go through all the track plans
-			{
-					if (ListOfTrackPlans.get(x).size() > 1)
+		//look at o4ccupied tracks
+				for (int x = 0; x < StackOfOccupiedTracks.size(); x++)
+				{
+					//System.out.print("OCCUPIED: " + StackOfOccupiedTracks.get(x) + " | ");
+					//get track numbers and if south green switches are added
+					if (StackOfOccupiedTracks.get(x) != 0 && NG.size() > 0)
 					{
-						if (NG.contains(ListOfTrackPlans.get(x).get(1)))  //if an upcoming track is a switch
+						System.out.println("NOPE: " + SG.get(0));
+					
+						//go through south green switches
+						for (int y = 0; y<NG.size(); y++)
 						{
-							if (ListOfTrackPlans.get(x).get(1) == ListOfTrackPlans.get(x).get(0) + 1 || ListOfTrackPlans.get(x).get(1) == ListOfTrackPlans.get(x).get(0) + 1)  //if the next track is only one off of the previous, it goes in a straight line
+							System.out.println("DISTANCE TO SWITCH: " + Math.abs(StackOfOccupiedTracks.get(x) - NG.get(y)));
+							
+							//if train is one track away from switch or less
+							if (Math.abs(StackOfOccupiedTracks.get(x) - NG.get(y)) <= 1)
 							{
-								if (ListOfTrackPlans.get(x).get(1) == 1) //if needs to be straight but not straight
+								System.out.println("Train is on: " + StackOfOccupiedTracks.get(x) + " and headed for switch " + NG.get(y));
+								//if the currently occupied is greater than the switch
+								if (StackOfOccupiedTracks.get(x) > NG.get(y))
 								{
-									//so set switch to straight
-									WaysideFunctionsHub.WaysideController_Switch(ListOfTrackPlans.get(x).get(1));
+									//if switch is not straight
+									if (load.getSwitch(NG.get(y)) != 0)
+									{
+										//straighten switch
+										WaysideFunctionsHub.WaysideController_Switch(NG.get(y));
+									}
 								}
 								
 							}
-							else  //if next track is not one difference, then it takes a diferent switch
+							//if train is over one track away
+							else
 							{
-								if (load.getSwitch(ListOfTrackPlans.get(x).get(1)) == 0)  //if needs to be angled but straight
+								//if switch is not angled
+								if (load.getSwitch(NG.get(y)) != 1)
 								{
-									//so set switch to angle
-									WaysideFunctionsHub.WaysideController_Switch(ListOfTrackPlans.get(x).get(1));
+									//angle switch
+									WaysideFunctionsHub.WaysideController_Switch(NG.get(y));
 								}
 							}
 						}
 					}
-					
-				
-			}
+					//System.out.println("");
+				}
+			
 		
 		
 	}
