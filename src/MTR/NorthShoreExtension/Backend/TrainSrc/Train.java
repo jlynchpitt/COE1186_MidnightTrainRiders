@@ -233,17 +233,17 @@ public class Train {
 	
 	public void setEngineFailure(boolean b) {
 		this.engineFailure=b;
-		tm.setBrake(b);
+		tc.TrainControl_setFaultStatus(1,b);
 	}
 	
 	public void setSignalFailure(boolean b) {
 		this.signalFailure=b;
-		tm.setBrake(b);
+		tc.TrainControl_setFaultStatus(2,b);
 	}
 	
 	public void setBrakeFailure(boolean b) {
 		this.brakeFailure=b;
-		tm.seteBrake(b);
+		tc.TrainControl_setFaultStatus(3,b);
 	}
 	
 	public void setPassnegerEBrake(boolean b) {
