@@ -115,6 +115,7 @@ public class TrackModelUI extends JPanel {
     		@Override
     		public void paintComponent(Graphics g) {
     			super.paintComponent(g);
+    			System.out.println("row: "+numTrack);
     			//draw yard
     			g.setColor(Color.white);
     			//g.fillRoundRect(250,10,735,575,15,15);
