@@ -20,9 +20,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import MTR.NorthShoreExtension.Backend.TrainControllerSrc.DriverTrackInfo;
+import MTR.NorthShoreExtension.Backend.TrainControllerSrc.TrainControllerHelper;
 
 public class StaticTrackDBHelper {
 	//Table names
@@ -369,6 +372,9 @@ public class StaticTrackDBHelper {
 	}
 	
 	public void addTrainStateRecord(int trainID, long time, double powerCmd, int speedCmd, double actualSpeed) {
+		//Adjust time to be number of seconds since the program started
+		time = (time - TrainControllerHelper.programStartTime)/1000;
+		//System.out.println("Time: " + time);
 		Connection connection = null;
 		String query = "";
 		
@@ -413,8 +419,9 @@ public class StaticTrackDBHelper {
    }
    
 
-   public List<Double> getPowerList(int trainID){
-       List<Double> powerList = new ArrayList<>();
+   public Map<Long, Double> getPowerList(int trainID){
+       //List<Double> powerList = new ArrayList<>();
+       Map<Long,Double> powerMap=new HashMap<Long,Double>();  
 
 	   Connection connection = null;
 		Statement statement = null;
@@ -426,16 +433,17 @@ public class StaticTrackDBHelper {
 			statement = connection.createStatement();
 			statement.setQueryTimeout(30); //TODO: Is this needed?
 			
-			String query = "SELECT powerCommand FROM " + TRAIN_CONTROLS_TABLENAME + " WHERE trainID = '" +trainID+ "'";
+			String query = "SELECT powerCommand, time FROM " + TRAIN_CONTROLS_TABLENAME + " WHERE trainID = '" +trainID+ "'";
 		    result = statement.executeQuery(query);  
 		    
 		    while(result.next())
 		    {
 		       // iterate & read the result set
-		    	powerList.add(result.getDouble("powerCommand"));
+		    	//powerList.add(result.getDouble("powerCommand"));
+		    	powerMap.put(result.getLong("time"), result.getDouble("powerCommand"));
 		    }
 		    
-		    return powerList;
+		    return powerMap;
 		}
 		catch(SQLException e){  
 			 System.err.println(e.getMessage()); 
@@ -449,8 +457,9 @@ public class StaticTrackDBHelper {
 		return null;
    }
    
-   public List<Double> getSetSpeedList(int trainID){
-       List<Double> powerList = new ArrayList<>();
+   public Map<Long, Double> getSetSpeedList(int trainID){
+       //List<Double> powerList = new ArrayList<>();
+       Map<Long,Double> speedMap=new HashMap<Long,Double>();  
 
 	   Connection connection = null;
 		Statement statement = null;
@@ -462,16 +471,17 @@ public class StaticTrackDBHelper {
 			statement = connection.createStatement();
 			statement.setQueryTimeout(30); //TODO: Is this needed?
 			
-			String query = "SELECT speedCommand FROM " + TRAIN_CONTROLS_TABLENAME + " WHERE trainID = '" +trainID+ "'";
+			String query = "SELECT speedCommand, time FROM " + TRAIN_CONTROLS_TABLENAME + " WHERE trainID = '" +trainID+ "'";
 		    result = statement.executeQuery(query);  
 		    
 		    while(result.next())
 		    {
 		       // iterate & read the result set
-		    	powerList.add(result.getDouble("speedCommand"));
+		    	//powerList.add(result.getDouble("speedCommand"));
+		    	speedMap.put(result.getLong("time"), result.getDouble("speedCommand"));
 		    }
 		    
-		    return powerList;
+		    return speedMap;
 		}
 		catch(SQLException e){  
 			 System.err.println(e.getMessage()); 
@@ -485,8 +495,9 @@ public class StaticTrackDBHelper {
 		return null;
    }
    
-   public List<Double> getActualSpeedList(int trainID){
-       List<Double> powerList = new ArrayList<>();
+   public Map<Long, Double> getActualSpeedList(int trainID){
+       //List<Double> powerList = new ArrayList<>();
+       Map<Long,Double> speedMap=new HashMap<Long,Double>();  
 
 	   Connection connection = null;
 		Statement statement = null;
@@ -498,16 +509,17 @@ public class StaticTrackDBHelper {
 			statement = connection.createStatement();
 			statement.setQueryTimeout(30); //TODO: Is this needed?
 			
-			String query = "SELECT actualSpeed FROM " + TRAIN_CONTROLS_TABLENAME + " WHERE trainID = '" +trainID+ "'";
+			String query = "SELECT actualSpeed, time FROM " + TRAIN_CONTROLS_TABLENAME + " WHERE trainID = '" +trainID+ "'";
 		    result = statement.executeQuery(query);  
 		    
 		    while(result.next())
 		    {
 		       // iterate & read the result set
-		    	powerList.add(result.getDouble("actualSpeed"));
+		    	//powerList.add(result.getDouble("actualSpeed"));
+		    	speedMap.put(result.getLong("time"), result.getDouble("actualSpeed"));
 		    }
 		    
-		    return powerList;
+		    return speedMap;
 		}
 		catch(SQLException e){  
 			 System.err.println(e.getMessage()); 

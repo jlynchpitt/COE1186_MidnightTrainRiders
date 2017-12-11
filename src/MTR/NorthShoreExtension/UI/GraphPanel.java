@@ -22,6 +22,7 @@ import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -201,8 +202,8 @@ public class GraphPanel extends JPanel {
             scores.add((double) random.nextDouble() * maxScore);
 //            scores.add((double) i);
         }*/
-        List<Double> power = db.getPowerList(0); //TODO: Auto get train id
-        GraphPanel mainPanel = new GraphPanel(power, "Watts", "Time");
+        Map<Integer, Double> power = db.getPowerList(0); //TODO: Auto get train id
+        GraphPanel mainPanel = new GraphPanel(null, "Watts", "Time"); //TODO: This won't work now because no data passed in
         mainPanel.setPreferredSize(new Dimension(1000, 600));
         JFrame frame = new JFrame("DrawGraph");
         frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
