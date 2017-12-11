@@ -160,10 +160,10 @@ public class TrainControlUI implements ActionListener {
         if(e.getSource() == graphButton) {
         	SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
-                   //GraphPanel.createAndShowGui(MainMTR.getStaticTrackDBHelper());
+                   GraphPanel2.createAndShowGui(MainMTR.getStaticTrackDBHelper());
                    
-                   //Below for testing
-                   SwingUtilities.invokeLater(new Runnable() {
+                   //Below for testing - TODO: Remove this
+                   /*SwingUtilities.invokeLater(new Runnable() {
                        public void run() {
                            JFrame frame = new JFrame("Charts");
 
@@ -180,7 +180,7 @@ public class TrainControlUI implements ActionListener {
 
                            frame.getContentPane().add(cp);
                        }
-                   });
+                   });*/
                 }
              });
         }	

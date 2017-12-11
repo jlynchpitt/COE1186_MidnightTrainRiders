@@ -42,10 +42,16 @@ package MTR.NorthShoreExtension.UI;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import org.jfree.chart.ChartFactory;
@@ -55,6 +61,7 @@ import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.chart.renderer.xy.XYSplineRenderer;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.RegularTimePeriod;
@@ -66,62 +73,89 @@ import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
 //import org.jfree.ui.Spacer;
 
+import MTR.NorthShoreExtension.Backend.StaticTrackDBHelper;
+
 /**
  * A demo showing the addition and removal of multiple datasets / renderers.
  */
-public class GraphPanel2 extends ApplicationFrame implements ActionListener {
+public class GraphPanel2 extends JFrame {
 
     /** The plot. */
     private XYPlot plot;
-   
-    /** The index of the last dataset added. */
-    private int datasetIndex = 0;
-    
+       
     /**
      * Constructs a new demonstration application.
      *
      * @param title  the frame title.
      */
-    public GraphPanel2(final String title) {
-    	super(title);
+    public GraphPanel2(final String title, int trainID, StaticTrackDBHelper db) {
+    	super("Train Power/Speed Graph");
     	
-    	//create the series - add some dummy data
-        XYSeries series1 = new XYSeries("series1");
-        XYSeries series2 = new XYSeries("series2");
-        series1.add(1000, 1000);
-        series1.add(1150, 1150);
-        series1.add(1250, 1250);
+        setFont(new Font("Arial", 0, 30));
 
-        series2.add(1000, 111250);
-        series2.add(1150, 211250);
-        series2.add(1250, 311250);
+    	//create the series - add some dummy data
+        XYSeries powerSeries = new XYSeries("Power");
+        XYSeries setSpeedSeries = new XYSeries("Set Speed");
+        XYSeries actualSpeedSeries = new XYSeries("Actual Speed");
+        
+        //Add power data
+        Map<Long, Double> powerMap = db.getPowerList(trainID);
+        
+        for(Long key : powerMap.keySet()) {
+        	//System.out.println("key: " + key + " value: " + powerMap.get(key));
+        	powerSeries.add(key, powerMap.get(key));
+        }
+        
+        //powerSeries.add(1000, 100);
+        
+        //Add setSpeed data
+        Map<Long, Double> setSpeedMap = db.getSetSpeedList(trainID);
+        
+        for(Long key : setSpeedMap.keySet()) {
+        	setSpeedSeries.add(key, setSpeedMap.get(key));
+        }
+        
+        //Add actualSpeed data
+        Map<Long, Double> actualSpeedMap = db.getActualSpeedList(trainID);
+        
+        for(Long key : actualSpeedMap.keySet()) {
+        	actualSpeedSeries.add(key, actualSpeedMap.get(key));
+        }
+        
 
         //create the datasets
-        XYSeriesCollection dataset1 = new XYSeriesCollection();
-        XYSeriesCollection dataset2 = new XYSeriesCollection();
-        dataset1.addSeries(series1);
-        dataset2.addSeries(series2);
+        XYSeriesCollection powerDataset = new XYSeriesCollection();
+        XYSeriesCollection setSpeedDataset = new XYSeriesCollection();
+        XYSeriesCollection actualSpeedDataset = new XYSeriesCollection();
+        powerDataset.addSeries(powerSeries);
+        setSpeedDataset.addSeries(setSpeedSeries);
+        actualSpeedDataset.addSeries(actualSpeedSeries);
 
         //construct the plot
         XYPlot plot = new XYPlot();
-        plot.setDataset(0, dataset1);
-        plot.setDataset(1, dataset2);
+        plot.setDataset(0, powerDataset);
+        plot.setDataset(1, setSpeedDataset);
+        plot.setDataset(2, actualSpeedDataset);
 
         //customize the plot with renderers and axis
         plot.setRenderer(0, new XYSplineRenderer());//use default fill paint for first series
-        XYSplineRenderer splinerenderer = new XYSplineRenderer();
-        splinerenderer.setSeriesFillPaint(0, Color.BLUE);
-        plot.setRenderer(1, splinerenderer);
-        plot.setRangeAxis(0, new NumberAxis("Series 1"));
-        plot.setRangeAxis(1, new NumberAxis("Series 2"));
-        plot.setDomainAxis(new NumberAxis("X Axis"));
+        XYLineAndShapeRenderer linerenderer = new XYLineAndShapeRenderer();
+        linerenderer.setSeriesFillPaint(0, Color.BLUE);
+        plot.setRenderer(1, linerenderer);
+        plot.setRangeAxis(0, new NumberAxis("Power (kWatts)"));
+        plot.setRangeAxis(1, new NumberAxis("Speed (MPH)"));
+        plot.setDomainAxis(new NumberAxis("Time (seconds since program launch)"));
+        XYSplineRenderer splinerenderer2 = new XYSplineRenderer();
+        splinerenderer2.setSeriesFillPaint(0, Color.GREEN);
+        plot.setRenderer(2, splinerenderer2);
 
         //Map the data to the appropriate axis
         plot.mapDatasetToRangeAxis(0, 0);
         plot.mapDatasetToRangeAxis(1, 1);   
+        plot.mapDatasetToRangeAxis(2, 1);   
 
         //generate the chart
-        JFreeChart chart = new JFreeChart("MyPlot", getFont(), plot, true);
+        JFreeChart chart = new JFreeChart(title, getFont(), plot, true);
         chart.setBackgroundPaint(Color.WHITE);
         JPanel chartPanel = new ChartPanel(chart);
         chartPanel.setPreferredSize(new java.awt.Dimension(1000, 540));
@@ -138,19 +172,34 @@ public class GraphPanel2 extends ApplicationFrame implements ActionListener {
         this.plot.setBackgroundPaint(Color.lightGray);
         this.plot.setDomainGridlinePaint(Color.white);
         this.plot.setRangeGridlinePaint(Color.white);
+
+        Font tickFont = new Font("Arial", Font.PLAIN, 16); 
+        Font labelFont = new Font("Arial", Font.BOLD, 20); 
+        //this.plot.getDomainAxis().setLabelFont(font3);
+        //this.plot.getRangeAxis().setLabelFont(font3);
 //        this.plot.setAxisOffset(new Spacer(Spacer.ABSOLUTE, 4, 4, 4, 4));
         final ValueAxis axis = this.plot.getDomainAxis();
         axis.setAutoRange(true);
+        axis.setTickLabelFont(tickFont);
+        axis.setLabelFont(labelFont);
 
         final NumberAxis rangeAxis2 = new NumberAxis("Range Axis 2");
         rangeAxis2.setAutoRangeIncludesZero(false);
+        
+        final ValueAxis yAxis = this.plot.getRangeAxis();
+        yAxis.setTickLabelFont(tickFont);
+        yAxis.setLabelFont(labelFont);
+        
+        final ValueAxis yAxis2 = this.plot.getRangeAxisForDataset(1);
+        yAxis2.setTickLabelFont(tickFont);
+        yAxis2.setLabelFont(labelFont);
         
         final JPanel content = new JPanel(new BorderLayout());
 
         //final ChartPanel chartPanel = new ChartPanel(chart);
         content.add(chartPanel);
         
-        final JButton button1 = new JButton("Add Dataset");
+        /*final JButton button1 = new JButton("Add Dataset");
         button1.setActionCommand("ADD_DATASET");
         button1.addActionListener(this);
         
@@ -162,10 +211,10 @@ public class GraphPanel2 extends ApplicationFrame implements ActionListener {
         buttonPanel.add(button1);
         buttonPanel.add(button2);
         
-        content.add(buttonPanel, BorderLayout.SOUTH);
+        content.add(buttonPanel, BorderLayout.SOUTH);*/
         chartPanel.setPreferredSize(new java.awt.Dimension(1000, 540));
         setContentPane(content);
-
+        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
     }
 
     /**
@@ -198,30 +247,14 @@ public class GraphPanel2 extends ApplicationFrame implements ActionListener {
     // * support us so that we can continue developing free software.             *
     // ****************************************************************************
     
-    /**
-     * Handles a click on the button by adding new (random) data.
-     *
-     * @param e  the action event.
-     */
-    public void actionPerformed(final ActionEvent e) {
-       
-        if (e.getActionCommand().equals("ADD_DATASET")) {
-            if (this.datasetIndex < 20) {
-                this.datasetIndex++;
-                this.plot.setDataset(
-                    this.datasetIndex, createRandomDataset("S" + this.datasetIndex)
-                );
-                this.plot.setRenderer(this.datasetIndex, new StandardXYItemRenderer());
-            }
-        }
-        else if (e.getActionCommand().equals("REMOVE_DATASET")) {
-            if (this.datasetIndex >= 1) {
-                this.plot.setDataset(this.datasetIndex, null);
-                this.plot.setRenderer(this.datasetIndex, null);
-                this.datasetIndex--;
-            }
-        }
-        
+   
+    
+    public static void createAndShowGui(StaticTrackDBHelper db) {
+    	final GraphPanel2 demo = new GraphPanel2("Multiple Dataset Demo 1", 123, db); //TODO: Auto grab train id
+        //demo.setSize(d);
+        demo.pack();
+        RefineryUtilities.centerFrameOnScreen(demo);
+        demo.setVisible(true);
     }
 
     /**
@@ -229,14 +262,14 @@ public class GraphPanel2 extends ApplicationFrame implements ActionListener {
      *
      * @param args  ignored.
      */
-    public static void main(final String[] args) {
+    /*public static void main(final String[] args) {
 
-        final GraphPanel2 demo = new GraphPanel2("Multiple Dataset Demo 1");
+        final GraphPanel2 demo = new GraphPanel2("Multiple Dataset Demo 1", 1);
         //demo.setSize(d);
         demo.pack();
         RefineryUtilities.centerFrameOnScreen(demo);
         demo.setVisible(true);
 
-    }
+    }*/
 
 }

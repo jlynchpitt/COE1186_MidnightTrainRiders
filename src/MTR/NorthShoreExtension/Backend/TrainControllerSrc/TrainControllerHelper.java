@@ -48,9 +48,11 @@ public class TrainControllerHelper {
 	private ctcUI ctc_ui = null;
 	private final int timeBetweenRedraw = 3000;
 	private long lastRedrawTime = 0;
+	public static long programStartTime = System.currentTimeMillis();
 	
 	public TrainControllerHelper(){
-		System.out.println("TCH initialized");
+		//System.out.println("TCH initialized");
+		System.out.println("Start Time: " + programStartTime);
 		//Initialize Timer - Timer controls updating the commanded power every second
 		powerTimerTask = new PowerTimerTask();
 		/*powerTimerTask = new TimerTask() {
