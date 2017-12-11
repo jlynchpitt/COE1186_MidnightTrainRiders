@@ -67,6 +67,7 @@ public class ctcUI {
 	static int tempF = 0;
 	static int numTrains = 0;
 	static int throughput = 0;
+	static int runMode = 0; //0 for manual, 1 for automatic
 	public static TrainScheduleHelper tsh;
 	
 	public static TrainScheduleHelper getTrainScheduleHelper() {
@@ -138,8 +139,14 @@ public class ctcUI {
 		schedTrain.setActionCommand("schedTrain");
 		schedTrain.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFrame schedulerT = new TrainSchedulerUI();
-				TrainSchedulerUI.createAndShowGUI();
+				if (runMode == 1) { //Automatic mode
+					JFrame schedulerT = new TrainSchedulerUI();
+					//TrainSchedulerUI.createAndShowGUI();
+				} else if (runMode == 0) { //Manual mode
+					System.out.println("Manual mode");
+					JFrame schedulerT = new TrainSchedulerManualUI();
+					//TrainSchedulerManualUI.createAndShowGUI();
+				}
 			}
 		});
 		gbc.weightx = 0.0; //sets the width of the segment
