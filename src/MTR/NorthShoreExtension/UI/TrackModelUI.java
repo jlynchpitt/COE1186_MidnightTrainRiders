@@ -116,7 +116,7 @@ public class TrackModelUI extends JPanel {
     		public void paintComponent(Graphics g1) {
     			Graphics2D g = (Graphics2D)g1.create();
     			super.paintComponent(g);
-    			System.out.println("row: "+numTrack);
+    			//System.out.println("row: "+numTrack);
     			//draw yard
     			g.setColor(Color.white);
     			//g.fillRoundRect(250,10,735,575,15,15);
