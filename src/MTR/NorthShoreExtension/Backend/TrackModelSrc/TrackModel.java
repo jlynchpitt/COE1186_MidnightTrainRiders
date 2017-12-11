@@ -139,7 +139,7 @@ public class TrackModel {
 		newTrain.trackOccupying = trackid;
 		newTrain.distanceLeft = load.getTrackLength(trackid);
 		trainList.put(trainid, newTrain);
-		trackOccupency[trackOccupency.length] = trackid;
+		trackOccupency[trackOccupency.length-1] = trackid;
 		/*updateTrack = trackList.get(trackid);
 		trackList.remove(trackid);
 		updateTrack.trainOccupying = trainid;
