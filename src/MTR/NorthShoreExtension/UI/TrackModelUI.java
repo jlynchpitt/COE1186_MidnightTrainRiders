@@ -125,36 +125,68 @@ public class TrackModelUI extends JPanel {
     			//"Grade(%)", "Speed Limit (km/hr)","Infrastructre", "Elevation(m)",
     			//"Cumlative Elevation", "Track Status", "Heater"
     			g.setColor(Color.black);
-    			g.drawString("Line:", 10, 20);
-    			g.drawString("Occupied:", 10, 50);
-    			g.drawString("Speed:", 10, 80);
-    			g.drawString("Authority:", 10, 110);
-    			g.drawString("Section:", 10, 140);
-    			g.drawString("Block:", 10, 170);
-    			g.drawString("Length(m):", 10, 200);
-    			g.drawString("Grade(%):", 10, 230);
-    			g.drawString("Speed Lm.(km/hr):", 10, 260);
-    			g.drawString("Elevation(m):", 10, 290);
-    			g.drawString("Tot. El.:", 10, 320);
-    			g.drawString("Status:", 10, 350);
-    			g.drawString("Heater:", 10, 380);
-    			g.drawString("Infrastructure:", 10, 410);
-    			g.drawString(showLine, 140, 20);
-    			g.drawString(showStatus, 140, 50);
-    			g.drawString(showSpeed, 140, 80);
-    			g.drawString(showAuth, 140, 110);
-    			g.drawString(showSect, 140, 140);
-    			g.drawString(showBlock, 140, 170);
-    			g.drawString(showLength, 140, 200);
-    			g.drawString(showGrade, 140, 230);
-    			g.drawString(showLimit, 140, 260);
-    			g.drawString(showEl, 140, 290);
-    			g.drawString(showCEl, 140, 320);
-    			g.drawString(showBroken, 140, 350);
-    			g.drawString(showHeater, 140, 380);
+    			g.drawString("Click on a track to view information:", 10, 20);
+    			g.drawString("Line:", 10, 50);
+    			g.drawString("Occupied:", 10, 80);
+    			g.drawString("Speed:", 10, 110);
+    			g.drawString("Authority:", 10, 140);
+    			g.drawString("Section:", 10, 170);
+    			g.drawString("Block:", 10, 200);
+    			g.drawString("Length(m):", 10, 230);
+    			g.drawString("Grade(%):", 10, 260);
+    			g.drawString("Speed Lm.(km/hr):", 10, 290);
+    			g.drawString("Elevation(m):", 10, 320);
+    			g.drawString("Tot. El.:", 10, 350);
+    			g.drawString("Status:", 10, 380);
+    			g.drawString("Heater:", 10, 410);
+    			g.drawString("Infrastructure:", 10, 440);
+    			g.drawString(showLine, 140, 50);
+    			g.drawString(showStatus, 140, 80);
+    			g.drawString(showSpeed, 140, 110);
+    			g.drawString(showAuth, 140, 140);
+    			g.drawString(showSect, 140, 170);
+    			g.drawString(showBlock, 140, 200);
+    			g.drawString(showLength, 140, 230);
+    			g.drawString(showGrade, 140, 260);
+    			g.drawString(showLimit, 140, 290);
+    			g.drawString(showEl, 140, 320);
+    			g.drawString(showCEl, 140, 350);
+    			g.drawString(showBroken, 140, 380);
+    			g.drawString(showHeater, 140, 410);
     			showInf=showInf.replaceAll(";", "\n");
-    			drawString(g, showInf, 140, 395);
+    			drawString(g, showInf, 140, 325);
     			//g.drawString(showInf, 150, 410);
+    			g.drawLine(10, 700, 180, 700);
+    			g.drawLine(180, 510, 180, 700);
+    			g.drawLine(10, 510, 10, 700);
+    			g.drawLine(10, 510, 180, 510);
+    			g.drawString("Key", 85, 530);
+    			g.drawString("Light: ", 20,560);
+    			g.drawString("Switch: ", 20,590);
+    			g.drawString("Train: ", 20,620);
+    			g.drawString("Station: ", 20,650);
+    			g.drawString("Broken Track", 20, 680);
+    			g.setColor(Color.green);
+				g.fillRect(140, 580, 10, 10);
+    			g.setColor(Color.gray);
+			      g.fillOval(140, 640, 15, 10);
+			    g.setColor(Color.blue);
+	    	      g.fillRect(140, 610, 20, 10);
+	    	    g.setColor(Color.green);
+				  g.fillOval(140, 550, 8, 8);
+				g.setColor(Color.red);
+				g.drawLine(140, 670, 150, 680);
+	    	      g.drawLine(150, 670, 140, 680);
+	    	    g.setColor(Color.gray);
+	    	    g.fillRect(1200, 250, 200, 100);
+	    	    g.setStroke(new BasicStroke(3));
+	    	    g.setColor(Color.white);
+	    	    g.drawString("YARD", 1200, 250);
+	    	    g.setColor(Color.red);
+	    	    g.drawLine(1350, 250, 1280, 65);
+	    	    g.setColor(Color.green);
+	    	    g.drawLine(1250, 350, 1120, 495);
+	    	    g.drawLine(1350, 350, 1295, 550);
     			for(int i=0;i<numTrack;i++) {
     				g.setStroke(new BasicStroke(3));
     				//System.out.println("rowid:"+i);
@@ -214,13 +246,17 @@ public class TrackModelUI extends JPanel {
     					if(inf.equals("SWITCH TO/FROM YARD") || inf.equals("SWITCH") || inf.equals("SWITCH; UNDERGROUND") ||
     							inf.equals("SWITCH TO YARD") || inf.equals("SWITCH FROM YARD")) {
     						g.setColor(Color.green);
-        					g.fillRect((drawArray[2]+5), (drawArray[3]+5), 10, 10);
+    						if(position == 1) {
+    							g.setColor(Color.red);
+    						}
+        					g.fillRect((drawArray[2]-5), (drawArray[3]+5), 10, 10);
     					}
     					if(inf.equals("RAILWAY CROSSING")) {
     						//draw railway crossing
     					}
     					if(stat.equals("Broken - Power Failure") || stat.equals("Broken - Broken Rail") || stat.equals("Broken - Track Circuit Failure")) {
     						//draw x
+    						g.setColor(Color.red);
     						g.drawLine(drawArray[0]-5, drawArray[1]-5, drawArray[0]+5, drawArray[1]+1);
     			    	  		g.drawLine(drawArray[0]-5, drawArray[1]+1, drawArray[0]+5, drawArray[1]-5);
     					}
