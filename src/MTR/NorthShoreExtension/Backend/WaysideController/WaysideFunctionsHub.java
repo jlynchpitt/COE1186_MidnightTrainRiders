@@ -120,8 +120,7 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 		int returner = 0;
 		//System.out.println("Switch ID: " + SwitchID);
 		//check to see if conditions are safe
-		if (load.getTrackOccupied(SwitchID) != 1 && load.getTrackOccupied(SwitchID - 1) != 1 && load.getTrackOccupied(SwitchID + 1) != 1)
-		{
+		
 			if (load.getSwitch(SwitchID) == 0)	
 			{
 				TrackModel.TrackModel_setSwitch(SwitchID, 1);
@@ -133,7 +132,7 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 			
 			WaysideControllerUI.SwitchChartUpdater(SwitchID);
 			returner = 1;
-		}
+		
 		
 		return returner;
 		   //update switch
