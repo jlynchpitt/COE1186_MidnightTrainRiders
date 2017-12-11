@@ -170,17 +170,19 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		
 		comboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String str = (String)comboBox.getSelectedItem();
-				String delim = " ";
-				String[] tokens = str.split(delim);
-				System.out.println("Print:"+Integer.valueOf(tokens[1]));
-				tr=tMap.get(Integer.valueOf(tokens[1]));
-				updateGUI();
-				lblM.setText(String.format("%.2f",tr.getTrainMass())+" kg");
-				lblH.setText(String.format("%.2f",tr.getHeight())+" m");
-				lblW.setText(String.format("%.2f",tr.getWidth())+" m");
-				lblL.setText(String.format("%.2f",tr.getLength())+" m");
-				lblC.setText(tr.getCars()+"");
+				if(comboBox.getSelectedIndex()>=0&&comboBox.getSelectedIndex()<tMap.size()) {
+					String str = (String)comboBox.getSelectedItem();
+					String delim = " ";
+					String[] tokens = str.split(delim);
+					System.out.println("Print:"+Integer.valueOf(tokens[1]));
+					tr=tMap.get(Integer.valueOf(tokens[1]));
+					updateGUI();
+					lblM.setText(String.format("%.2f",tr.getTrainMass())+" kg");
+					lblH.setText(String.format("%.2f",tr.getHeight())+" m");
+					lblW.setText(String.format("%.2f",tr.getWidth())+" m");
+					lblL.setText(String.format("%.2f",tr.getLength())+" m");
+					lblC.setText(tr.getCars()+"");
+				}
 			}
 		});
 		
@@ -731,7 +733,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		
 	
 		
-		if(tnames.length > 0 && comboBox.getSelectedIndex()==-1) {
+		if(tnames.length > 0) {
 			comboBox.setSelectedIndex(0);
 			String str = (String)comboBox.getSelectedItem();
 			String delim = " ";
