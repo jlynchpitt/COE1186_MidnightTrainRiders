@@ -113,7 +113,8 @@ public class TrackModelUI extends JPanel {
     		}
 
     		@Override
-    		public void paintComponent(Graphics g) {
+    		public void paintComponent(Graphics g1) {
+    			Graphics2D g = (Graphics2D)g1.create();
     			super.paintComponent(g);
     			System.out.println("row: "+numTrack);
     			//draw yard
@@ -155,6 +156,7 @@ public class TrackModelUI extends JPanel {
     			drawString(g, showInf, 140, 395);
     			//g.drawString(showInf, 150, 410);
     			for(int i=0;i<numTrack;i++) {
+    				g.setStroke(new BasicStroke(3));
     				//System.out.println("rowid:"+i);
     				color = load.getColor(i);
     				if(color.equals("green")) {
