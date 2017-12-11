@@ -54,6 +54,20 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 
+//For testing new graph
+
+import java.util.HashSet;
+
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.xy.DefaultXYDataset;
+import org.jfree.data.xy.XYDataset;
+
 public class TrainControlUI implements ActionListener {
 	//Specify the look and feel to use.  Valid values:
     //null (use the default), "Metal", "System", "Motif", "GTK+"
@@ -146,7 +160,27 @@ public class TrainControlUI implements ActionListener {
         if(e.getSource() == graphButton) {
         	SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
-                   GraphPanel.createAndShowGui(MainMTR.getStaticTrackDBHelper());
+                   //GraphPanel.createAndShowGui(MainMTR.getStaticTrackDBHelper());
+                   
+                   //Below for testing
+                   SwingUtilities.invokeLater(new Runnable() {
+                       public void run() {
+                           JFrame frame = new JFrame("Charts");
+
+                           frame.setSize(1200, 800);
+                           frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+                           frame.setVisible(true);
+
+                           XYDataset ds = createDataset();
+                           JFreeChart chart = ChartFactory.createXYLineChart("Test Chart",
+                                   "x", "y", ds, PlotOrientation.VERTICAL, true, true,
+                                   false);
+
+                           ChartPanel cp = new ChartPanel(chart);
+
+                           frame.getContentPane().add(cp);
+                       }
+                   });
                 }
              });
         }	
@@ -204,5 +238,17 @@ public class TrainControlUI implements ActionListener {
                 createAndShowTrainControlGUI(tcHelper);
             }
         });
+    }
+    
+    //TODO: Remove this for testing only
+    private static XYDataset createDataset() {
+
+        DefaultXYDataset ds = new DefaultXYDataset();
+
+        double[][] data = { {0.1, 0.2, 0.3}, {1, 2, 3} };
+
+        ds.addSeries("series1", data);
+
+        return ds;
     }
 }
