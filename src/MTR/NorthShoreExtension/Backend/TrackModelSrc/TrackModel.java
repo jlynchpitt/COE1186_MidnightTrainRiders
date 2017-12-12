@@ -33,7 +33,6 @@ public class TrackModel {
 	static Train train;
 	static Train updateTrains;
 	static int lastTrack = 0;
-	static TrainModelUI tmUI=MainMTR.getTrainModelUI();
 		
 	class Track{
 		String line;
@@ -150,7 +149,7 @@ public class TrackModel {
 		if(MainMTR.fullUI) {
 			wayside.WaysideController_TrackOccupancy(trackOccupency);
 		}
-		tmUI.addTrain();
+		MainMTR.getTrainModelUI().addTrain();
 	}
 	
 	public static void sellTicket(int trackid) {

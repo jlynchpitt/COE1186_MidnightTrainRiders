@@ -71,6 +71,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 	 * @throws InterruptedException 
 	 */
 	public TrainModelUI() {
+		System.out.println("HI YOU'RE RUNNING TRAINMODEL UI");
 		tMap=tm.getTrains();
 		
 		
@@ -154,6 +155,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		Integer[] tarray = new Integer[keys.size()];
 		keys.toArray(tarray);
 		String[] tnames = new String[keys.size()];
+		System.out.println("Number of trains:" +tnames.length);
 		for (int i=0;i<tnames.length;i++) {
 			tnames[i]="Train "+tarray[i];
 		}
@@ -527,7 +529,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		gbc_separator_1.fill = GridBagConstraints.HORIZONTAL;
 		gbc_separator_1.ipady = 1;
 		gbc_separator_1.ipadx = 1;
-		gbc_separator_1.gridwidth = 4;
+		gbc_separator_1.gridwidth = 8;
 		gbc_separator_1.insets = new Insets(0, 0, 5, 5);
 		gbc_separator_1.gridx = 3;
 		gbc_separator_1.gridy = 8;
@@ -542,6 +544,15 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		gbc_lblFailureModes.gridx = 3;
 		gbc_lblFailureModes.gridy = 9;
 		contentPane.add(lblFailureModes, gbc_lblFailureModes);
+		
+		JLabel lblNextStop = new JLabel("Railway Info:");
+		lblNextStop.setFont(new Font("Arial", Font.BOLD, 18));
+		GridBagConstraints gbc_lblNextStop = new GridBagConstraints();
+		gbc_lblNextStop.gridwidth = 2;
+		gbc_lblNextStop.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNextStop.gridx = 7;
+		gbc_lblNextStop.gridy = 9;
+		contentPane.add(lblNextStop, gbc_lblNextStop);
 		
 		JLabel lblBrakeFailure = new JLabel("Brake Failure:");
 		lblBrakeFailure.setFont(new Font("Tahoma", Font.PLAIN, 18));
@@ -726,9 +737,12 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		keys.toArray(tarray);
 		String[] tnames = new String[keys.size()];
 		comboBox.removeAllItems();
+		System.out.println("Add Train: Number of trains:" +tnames.length);
+		lblV.setText("PENIS");
 		for (int i=0;i<tnames.length;i++) {
 			tnames[i]="Train "+tarray[i];
 			comboBox.addItem(tnames[i]);
+			System.out.println("Added "+tnames[i]+" to combobox");
 		}
 		
 	
@@ -749,7 +763,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		
 	}
 	
-	
+	/*
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -763,5 +777,6 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		});
 		
 	}
+	*/
 	
 }
