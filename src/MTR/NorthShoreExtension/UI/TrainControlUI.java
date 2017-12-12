@@ -183,7 +183,13 @@ public class TrainControlUI implements ActionListener {
         if(e.getSource() == graphButton) {
         	SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
-                   GraphPanel2.createAndShowGui(MainMTR.getStaticTrackDBHelper(), 123);
+                	Object trainIDO = trainIDComboBox.getSelectedItem();
+                	int trainID = 0;
+                	if(trainIDO != null && trainIDO instanceof Integer) {
+                		trainID = (Integer) trainIDO;
+                	}
+                	
+                    GraphPanel2.createAndShowGui(MainMTR.getStaticTrackDBHelper(), trainID);
                 }
              });
         }	

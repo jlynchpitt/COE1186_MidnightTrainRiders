@@ -250,7 +250,8 @@ public class GraphPanel2 extends JFrame {
    
     
     public static void createAndShowGui(StaticTrackDBHelper db, int trainID) {
-    	final GraphPanel2 demo = new GraphPanel2("Multiple Dataset Demo 1", trainID, db); //TODO: Auto grab train id
+    	String title = "Power and Speed Graph for Train " + trainID;
+    	final GraphPanel2 demo = new GraphPanel2(title, trainID, db); //TODO: Auto grab train id
         //demo.setSize(d);
         demo.pack();
         RefineryUtilities.centerFrameOnScreen(demo);
