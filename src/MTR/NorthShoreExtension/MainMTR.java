@@ -74,9 +74,13 @@ public class MainMTR {
 		}
 		else {
 			staticDBHelper = new StaticTrackDBHelper();
-			staticDBHelper.loadFileIntoDB("green_staticTrackInfo.csv");
-			//staticDBHelper.loadFileIntoDB("red_staticTrackInfo.csv"); //Causes read in error - array out of bounds
-			//staticDBHelper.loadFileIntoDB("test_staticTrackInfo.csv");
+			if(fullUI) {
+				staticDBHelper.loadFileIntoDB("green_staticTrackInfo.csv");
+				//staticDBHelper.loadFileIntoDB("red_staticTrackInfo.csv"); //Causes read in error - array out of bounds
+			}
+			else{
+				staticDBHelper.loadFileIntoDB("test_staticTrackInfo.csv");
+			}
 			return staticDBHelper;
 		}
 	}	
