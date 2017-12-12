@@ -277,10 +277,14 @@ public class TrainControlPanel extends JPanel
         	case TRACK_INFO:
         		DriverTrackInfo track = trainController.getCurrentTrackInfo();
         		boolean direction = trainController.calculateTravelDirection();
-        		currentSpeedLimitLabel.setText(Integer.toString(track.speedLimit));
-        		nextSpeedLimitLabel.setText(Integer.toString(direction ? track.nextSpeedLimit : track.prevSpeedLimit));
-        		currentTrackLengthLabel.setText(Integer.toString(track.length));
-        		nextTrackLengthLabel.setText(Integer.toString(direction ? track.nextLength : track.prevLength));
+        		//currentSpeedLimitLabel.setText(Integer.toString(track.speedLimit));
+        		updateUIIntSpeed_convert(currentSpeedLimitLabel, track.speedLimit);
+        		//nextSpeedLimitLabel.setText(Integer.toString(direction ? track.nextSpeedLimit : track.prevSpeedLimit));
+        		updateUIIntSpeed_convert(nextSpeedLimitLabel, direction ? track.nextSpeedLimit : track.prevSpeedLimit);
+        		//currentTrackLengthLabel.setText(Integer.toString(track.length));
+        		updateUILength_convert(currentTrackLengthLabel, track.length);
+        		//nextTrackLengthLabel.setText(Integer.toString(direction ? track.nextLength : track.prevLength));
+        		updateUILength_convert(nextTrackLengthLabel, direction ? track.nextLength : track.prevLength);
         		stationLabel.setText(track.isStation ? "Yes" : "No");
         		switchLabel.setText(track.isSwitch ? "Yes" : "No");
         		undergroundLabel.setText(track.isUnderground ? "Yes" : "No");
@@ -366,6 +370,17 @@ public class TrainControlPanel extends JPanel
     	}
     }
     
+    /*
+     * Converts length from m to feet before being displayed in the UI
+     * Used for any label that displays a short length (in m not km)
+     */
+    private void updateUILength_convert(JLabel label, int length_m) {
+    	double length_ft = UnitConverter.metersToFeet(length_m);
+    	
+    	if(label != null) {
+    		label.setText(String.format("%.2f feet", length_ft));
+    	}
+    }
     /*
      * Converts speed from km/h to mph before being displayed in the UI
      * Used for any label that displays a double based speed

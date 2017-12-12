@@ -247,8 +247,6 @@ public class GraphPanel2 extends JFrame {
     // * support us so that we can continue developing free software.             *
     // ****************************************************************************
     
-   
-    
     public static void createAndShowGui(StaticTrackDBHelper db, int trainID) {
     	String title = "Power and Speed Graph for Train " + trainID;
     	final GraphPanel2 demo = new GraphPanel2(title, trainID, db); //TODO: Auto grab train id

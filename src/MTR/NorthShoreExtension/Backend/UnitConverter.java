@@ -66,6 +66,10 @@ public class UnitConverter {
 		return distance*FEET_PER_METER;
 	}
 	
+	/*public static double metersToFeet(int distance) {
+		return distance*FEET_PER_METER;
+	}*/
+	
 	/**
 	 * Convert kilometers to miles
 	 * 
