@@ -160,7 +160,7 @@ public class TrainControlUI implements ActionListener {
         if(e.getSource() == graphButton) {
         	SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
-                   GraphPanel2.createAndShowGui(MainMTR.getStaticTrackDBHelper());
+                   GraphPanel2.createAndShowGui(MainMTR.getStaticTrackDBHelper(), 123);
                    
                    //Below for testing - TODO: Remove this
                    /*SwingUtilities.invokeLater(new Runnable() {
