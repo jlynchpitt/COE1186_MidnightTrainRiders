@@ -20,6 +20,7 @@ import MTR.NorthShoreExtension.Backend.TrackModelSrc.TrackModel;
 import MTR.NorthShoreExtension.Backend.TrainSrc.Train;
 import MTR.NorthShoreExtension.UI.TrackModelUI;
 import MTR.NorthShoreExtension.UI.TrackModelUI.TrackGraphic;
+import MTR.NorthShoreExtension.UI.TrainModelUI;
 import MTR.NorthShoreExtension.UI.ctcUI;
 
 
@@ -169,7 +170,11 @@ public class TrainControllerHelper {
 				lastRedrawTime = simulatedClockTime;
 				TrackModelUI.trackGraphic.actionPerformed(new ActionEvent(this, 1, ""));
 			}
-			MainMTR.getTrainModelUI().actionPerformed(new ActionEvent(this, 1, ""));
+			
+			TrainModelUI tm = MainMTR.getTrainModelUI();
+			if(tm != null) {
+				tm.actionPerformed(new ActionEvent(this, 1, ""));
+			}
 		}
 	}
 	

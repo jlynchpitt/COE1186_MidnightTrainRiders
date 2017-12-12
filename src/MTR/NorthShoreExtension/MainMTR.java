@@ -27,14 +27,14 @@ public class MainMTR {
 	public static boolean fullUI = false;
 	private static DBHelper dbHelper = null;
 	private static StaticTrackDBHelper staticDBHelper = null;
-	private static TrainModelUI trainModelUI = new TrainModelUI();
+	private static TrainModelUI trainModelUI; // = new TrainModelUI();
 	
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		fullUI = true;
-		//trainModelUI = new TrainModelUI();
+		trainModelUI = new TrainModelUI();
 		
 		tcHelper = new TrainControllerHelper();
 		

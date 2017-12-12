@@ -47,16 +47,18 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 import MTR.NorthShoreExtension.MainMTR;
+import MTR.NorthShoreExtension.Backend.StaticTrackDBHelper;
 import MTR.NorthShoreExtension.Backend.TrainControllerSrc.TrainController;
 import MTR.NorthShoreExtension.Backend.TrainControllerSrc.TrainControllerHelper;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
 
 //For testing new graph
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
-import java.util.HashSet;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -77,6 +79,8 @@ public class TrainControlUI implements ActionListener {
     private static TrainControlUI tcUI = null;
     private JPanel mainPane;
     private JButton graphButton;
+    private JComboBox trainIDComboBox;
+    private StaticTrackDBHelper db = null;
     public static TrainControllerHelper tch;
     
     public TrainControlUI() {
@@ -84,6 +88,10 @@ public class TrainControlUI implements ActionListener {
     }
     
     protected void createMainPanel() {
+    	db = MainMTR.getStaticTrackDBHelper();
+    	
+    	System.out.println("creating main panel");
+    	
         mainPane = new JPanel();
         mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.Y_AXIS));
         mainPane.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
@@ -93,6 +101,21 @@ public class TrainControlUI implements ActionListener {
         buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(0,0,10,0));
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+        
+        List<Integer> trainIDList = new ArrayList<>();
+        trainIDList.add(2);
+        if(db != null) {
+        	trainIDList = db.getTrainIDList();
+        }
+
+        trainIDComboBox = new JComboBox(trainIDList.toArray());
+        if(trainIDComboBox.getItemCount() > 0) {
+        	trainIDComboBox.setSelectedIndex(0);
+        }
+        //trainIDComboBox.addActionListener(this);
+        trainIDComboBox.setSize(300, trainIDComboBox.getPreferredSize().height);
+        buttonPanel.add(new JLabel("Train ID: "));
+        buttonPanel.add(trainIDComboBox);
         
         graphButton = new JButton("Open Train Graph");
         graphButton.addActionListener(this);
@@ -161,26 +184,6 @@ public class TrainControlUI implements ActionListener {
         	SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
                    GraphPanel2.createAndShowGui(MainMTR.getStaticTrackDBHelper(), 123);
-                   
-                   //Below for testing - TODO: Remove this
-                   /*SwingUtilities.invokeLater(new Runnable() {
-                       public void run() {
-                           JFrame frame = new JFrame("Charts");
-
-                           frame.setSize(1200, 800);
-                           frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-                           frame.setVisible(true);
-
-                           XYDataset ds = createDataset();
-                           JFreeChart chart = ChartFactory.createXYLineChart("Test Chart",
-                                   "x", "y", ds, PlotOrientation.VERTICAL, true, true,
-                                   false);
-
-                           ChartPanel cp = new ChartPanel(chart);
-
-                           frame.getContentPane().add(cp);
-                       }
-                   });*/
                 }
              });
         }	

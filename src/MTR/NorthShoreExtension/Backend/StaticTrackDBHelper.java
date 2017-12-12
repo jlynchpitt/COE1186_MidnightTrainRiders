@@ -313,21 +313,25 @@ public class StaticTrackDBHelper {
 		    trackInfo.nextSpeedLimit = nextResult.getInt("speedLimit");
 		    trackInfo.nextLength = nextResult.getInt("length");
 		    
-		    /* Get safest previous track */
-		    String prevQuery = "";
-		    if(secondaryPrevTrack > 0) {
-		    	prevQuery = "SELECT *, min(speedLimit) as minSpeedLimit FROM "
-		    			+ "(SELECT * FROM " + TRACK_INFO_TABLENAME + " WHERE trackID = '"+ primaryPrevTrack +"' or trackID = '"+ secondaryPrevTrack +"')";
-		    }
-		    else {
-		    	prevQuery = "SELECT * FROM " + TRACK_INFO_TABLENAME + " WHERE trackID = '"+primaryPrevTrack+"'";
-		    }
-		    
-		    prevResult = statement.executeQuery(prevQuery);   
-
-		    trackInfo.prevTrackID = prevResult.getInt("trackID");
-		    trackInfo.prevSpeedLimit = prevResult.getInt("speedLimit");
-		    trackInfo.prevLength = prevResult.getInt("length");
+		    /* Get safest previous track
+		     * 		NOTE: Only execute the query if primaryPrevTrack valid
+		     */
+		    if(primaryPrevTrack > 0) {
+			    String prevQuery = "";
+			    if(secondaryPrevTrack > 0) {
+			    	prevQuery = "SELECT *, min(speedLimit) as minSpeedLimit FROM "
+			    			+ "(SELECT * FROM " + TRACK_INFO_TABLENAME + " WHERE trackID = '"+ primaryPrevTrack +"' or trackID = '"+ secondaryPrevTrack +"')";
+			    }
+			    else {
+			    	prevQuery = "SELECT * FROM " + TRACK_INFO_TABLENAME + " WHERE trackID = '"+primaryPrevTrack+"'";
+			    }
+			    
+			    prevResult = statement.executeQuery(prevQuery);   
+	
+			    trackInfo.prevTrackID = prevResult.getInt("trackID");
+			    trackInfo.prevSpeedLimit = prevResult.getInt("speedLimit");
+			    trackInfo.prevLength = prevResult.getInt("length");
+		    }		    	
 		}
 		catch(SQLException e){  
 			 System.err.println("getTrackInfo: " + e.getMessage()); 
@@ -520,6 +524,43 @@ public class StaticTrackDBHelper {
 		    }
 		    
 		    return speedMap;
+		}
+		catch(SQLException e){  
+			 System.err.println(e.getMessage()); 
+		}       
+		finally {         
+			if (result != null) try { result.close(); } catch (SQLException ignore) {}
+	        if (statement != null) try { statement.close(); } catch (SQLException ignore) {}
+	        if (connection != null) try { connection.close(); } catch (SQLException ignore) {}
+		 }
+		
+		return null;
+   }
+   
+   public List<Integer> getTrainIDList(){
+       List<Integer> trainIDList = new ArrayList<>();
+
+       Connection connection = null;
+		Statement statement = null;
+		ResultSet result = null;
+		
+		try {
+			connection = connect();
+			
+			statement = connection.createStatement();
+			statement.setQueryTimeout(30); //TODO: Is this needed?
+			
+			String query = "SELECT DISTINCT trainID from " + TRAIN_CONTROLS_TABLENAME + " ORDER BY trainID";
+
+		    result = statement.executeQuery(query);  
+		    
+		    while(result.next())
+		    {
+		       // iterate & read the result set
+		    	trainIDList.add(result.getInt("trainID"));
+		    }
+		    
+		    return trainIDList;
 		}
 		catch(SQLException e){  
 			 System.err.println(e.getMessage()); 
