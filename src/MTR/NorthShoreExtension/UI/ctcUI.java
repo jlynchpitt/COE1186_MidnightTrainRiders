@@ -67,8 +67,12 @@ public class ctcUI {
 	static int tempF = 0;
 	static int numTrains = 0;
 	static int throughput = 0;
-	static int runMode = 0; //0 for manual, 1 for automatic
+	public static int runModeSwitch = 0; //0 for manual, 1 for automatic
 	public static TrainScheduleHelper tsh;
+	
+	public static int getRunMode() {
+		return runModeSwitch;
+	}
 	
 	public static TrainScheduleHelper getTrainScheduleHelper() {
 		return tsh;
@@ -139,10 +143,13 @@ public class ctcUI {
 		schedTrain.setActionCommand("schedTrain");
 		schedTrain.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (runMode == 1) { //Automatic mode
+				int running = ctcUI.getRunMode();
+				System.out.println("Run Mode: " + running);
+				if (running == 1) { //Automatic mode
+					System.out.println("Automatic mode");
 					JFrame schedulerT = new TrainSchedulerUI();
 					//TrainSchedulerUI.createAndShowGUI();
-				} else if (runMode == 0) { //Manual mode
+				} else if (running == 0) { //Manual mode
 					System.out.println("Manual mode");
 					JFrame schedulerT = new TrainSchedulerManualUI();
 					//TrainSchedulerManualUI.createAndShowGUI();
@@ -199,10 +206,24 @@ public class ctcUI {
 
 		man.setMnemonic(KeyEvent.VK_M);
 		man.setActionCommand("manual");
+		man.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)  {
+				System.out.println("Das Manual Mode");
+				runModeSwitch = 0;
+				System.out.println(runModeSwitch);
+			}
+		});
 		man.setSelected(true);
 		
 		auto.setMnemonic(KeyEvent.VK_A);
 		auto.setActionCommand("automatic");
+		auto.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Das Auto Mode");
+				runModeSwitch = 1;
+				System.out.println(runModeSwitch);
+			}
+		});
 		
 		runningMode.add(auto);
 		runningMode.add(man);

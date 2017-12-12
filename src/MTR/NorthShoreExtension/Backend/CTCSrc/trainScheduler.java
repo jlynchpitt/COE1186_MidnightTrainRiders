@@ -19,11 +19,12 @@ import MTR.NorthShoreExtension.Backend.DBHelper;
 import MTR.NorthShoreExtension.Backend.CTCSrc.TrainSchedule;
 import MTR.NorthShoreExtension.UI.TrainSchedulePanel;
 import MTR.NorthShoreExtension.UI.TrainSchedulesUI;
+import MTR.NorthShoreExtension.UI.ctcUI;
 
 
 public class trainScheduler {
 	static DBHelper database = MainMTR.getDBHelper();
-	
+	int runMode = ctcUI.getRunMode();
 	int[] redLine = new int[75];
 	int[] grnLine = new int[150];
 	//import database info for greenline and red line

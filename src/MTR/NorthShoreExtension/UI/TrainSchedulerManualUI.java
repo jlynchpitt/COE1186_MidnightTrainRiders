@@ -141,30 +141,38 @@ public class TrainSchedulerManualUI extends JFrame {
 		grnLeft.add(stopRouteGrn);
 		
 		//Create the interactive scheduling portion
-		JPanel grnStopChoice = new JPanel(new GridLayout(2,1));
-		JLabel grnChoice = new JLabel("Choose a stop: ");
+		JPanel grnStopChoice = new JPanel(new GridLayout(3,1));
+		JLabel grnChoice = new JLabel("Enter the authority chain: ");
 		grnStopChoice.add(grnChoice);
-		if (loaded == false) {
-			grnStopChoice.add(grnStops);
-		} else {
-			grnStopChoice.add(grnStopsImported);
-		}
+		JTextField travelGrn = new JTextField();
+		grnStopChoice.add(travelGrn);
+		JTextArea grnNote = new JTextArea(40, 30);
+		grnNote.setText("Note: Green Line Track sections are in the format 2XXX where XXX is the three digit code representing the track section and the 2 representing the Green line. The first block out from the Yard is 2062. ");
+		grnNote.setLineWrap(true);
+		grnNote.setWrapStyleWord(true);
+		grnNote.setFont(new Font("Serif", Font.PLAIN, 11));
+		grnNote.setEditable(false);
+		grnStopChoice.add(grnNote);
 		grnRght.add(grnStopChoice);
 		
-		JPanel redStopChoice = new JPanel(new GridLayout(2,1));
-		JLabel redChoice = new JLabel("Choose a stop: ");
+		JPanel redStopChoice = new JPanel(new GridLayout(3,1));
+		JLabel redChoice = new JLabel("Enter the authority chain: ");
 		redStopChoice.add(redChoice);
-		if (loaded == false) {
-			redStopChoice.add(redStops);
-		} else {
-			redStopChoice.add(redStopsImported);
-		}
+		JTextField travelRed = new JTextField();
+		redStopChoice.add(travelRed);
+		JTextArea redNote = new JTextArea(40, 30);
+		redNote.setText("Note: Red Line Track sections are in the format 10XX where XX is the two digit code representing the track section and the 2 representing the Red line. The first block out from the Yard is 1009. ");
+		redNote.setLineWrap(true);
+		redNote.setWrapStyleWord(true);
+		redNote.setFont(new Font("Serif", Font.PLAIN, 11));
+		redNote.setEditable(false);
+		redStopChoice.add(redNote);
 		redRght.add(redStopChoice);
 		
 		//Add departure time segment, Green Line
 		JPanel grnDepart = new JPanel(new GridBagLayout());
 		GridBagConstraints grnGBC = new GridBagConstraints();
-		JLabel grnDepartLabel = new JLabel("Travel Speed: ");
+		JLabel grnDepartLabel = new JLabel("Travel Speed (MPH): ");
 		grnGBC.gridx = 0;
 		grnGBC.gridy = 0;
 		grnGBC.fill = GridBagConstraints.HORIZONTAL;
@@ -178,11 +186,6 @@ public class TrainSchedulerManualUI extends JFrame {
 		grnDepart.add(speedGrn, grnGBC);
 		grnRght.add(grnDepart);
 		
-		JLabel mph = new JLabel(" MPH");
-		grnGBC.gridx = 1;
-		grnGBC.gridy = 1;
-		grnRght.add(grnDepart, grnGBC);
-		
 		grnRght.add(addStopGrn);
 		grnRght.add(schedTrainGrn);
 		grnRght.add(nextTrainGrn);
@@ -192,7 +195,7 @@ public class TrainSchedulerManualUI extends JFrame {
 		//Add departure time segment, Red Line
 		JPanel redDepart = new JPanel(new GridBagLayout());
 		GridBagConstraints redGBC = new GridBagConstraints();
-		JLabel redDepartLabel = new JLabel("Travel Speed: ");
+		JLabel redDepartLabel = new JLabel("Travel Speed (MPH): ");
 		redGBC.gridx = 0;
 		redGBC.gridy = 0;
 		redGBC.fill = GridBagConstraints.HORIZONTAL;
@@ -205,6 +208,7 @@ public class TrainSchedulerManualUI extends JFrame {
 		redGBC.gridy = 1;
 		redDepart.add(speedRed, redGBC);
 		redRght.add(redDepart);
+		
 		nextTrainRed.setEnabled(false);
 		
 		redRght.add(addStopRed);
