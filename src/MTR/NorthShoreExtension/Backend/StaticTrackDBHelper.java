@@ -1,11 +1,14 @@
 /*
- * Filename: DBHelper.java
+ * Filename: StaticDBHelper.java
  * Author: Joe Lynch
  * Date Created: 10/26/2017
  * File Description: This is the class that handles all interactions
- * 			with the SQLite database. This includes creating the 
- * 			database as well as functions to load/update new data
+ * 			with the static track SQLite database used by the train controller. 
+ * 			This includes creating the database as well as functions to load/update new data
  * 			and query data from the database.
+ * 			Since this database only uses the static track and data that is calculated
+ * 			within the train controller it is the equivalent of the track being loaded
+ * 			onto the train controller when it is in the yard.
  */
 
 package MTR.NorthShoreExtension.Backend;
@@ -378,6 +381,10 @@ public class StaticTrackDBHelper {
 	public void addTrainStateRecord(int trainID, long time, double powerCmd, int speedCmd, double actualSpeed) {
 		//Adjust time to be number of seconds since the program started
 		time = (time - TrainControllerHelper.programStartTime)/1000;
+		
+		//Convert units of speed from km/h to MPH
+		speedCmd = (int) UnitConverter.kilometersToMiles(speedCmd);
+		actualSpeed = (int) UnitConverter.kilometersToMiles(actualSpeed);
 		//System.out.println("Time: " + time);
 		Connection connection = null;
 		String query = "";
