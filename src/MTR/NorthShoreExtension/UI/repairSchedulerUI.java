@@ -161,10 +161,56 @@ public class repairSchedulerUI extends JFrame {
 		
 		gbcRed.gridx = 0;
 		gbcRed.gridy = 2;
+		closeBtnRed.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int closed = repairScheduler.openRepairJob(Integer.parseInt(redStopsImported.getSelectedItem().toString()), repairChoiceRed.getSelectedItem().toString());
+				if (closed == 0) {
+					System.out.println("Already closed");
+				} else if (closed == 1) {
+					System.out.println("Closed succesfully");
+					SystemTray tray = SystemTray.getSystemTray();
+					Image image = Toolkit.getDefaultToolkit().createImage("icon.png");
+					TrayIcon trayIcon = new TrayIcon(image, "Close Track Success");
+					trayIcon.setImageAutoSize(true);
+					trayIcon.setToolTip("Closing of Track ID: " + redStopsImported.getSelectedItem().toString());
+					try {
+						tray.add(trayIcon);
+					} catch (AWTException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					trayIcon.displayMessage("Track Closed", "Track " + redStopsImported.getSelectedItem().toString() + " is closed.", MessageType.INFO);
+
+				}
+			}			
+		});
 		redPanel.add(closeBtnRed,gbcRed);
 		
 		gbcRed.gridx = 1;
 		gbcRed.gridy = 2;
+		openBtnRed.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int opened = repairScheduler.closeRepairJob(Integer.parseInt(redStopsImported.getSelectedItem().toString()), repairChoiceRed.getSelectedItem().toString());
+				if (opened == 0) {
+					System.out.println("Already open");
+				} else if (opened == 1) {
+					System.out.println("Opened succesfully");
+					SystemTray tray = SystemTray.getSystemTray();
+					Image image = Toolkit.getDefaultToolkit().createImage("icon.png");
+					TrayIcon trayIcon = new TrayIcon(image, "Open Track Success");
+					trayIcon.setImageAutoSize(true);
+					trayIcon.setToolTip("Openinging of Track ID: " + redStopsImported.getSelectedItem().toString());
+					try {
+						tray.add(trayIcon);
+					} catch (AWTException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					trayIcon.displayMessage("Track Opened", "Track " + redStopsImported.getSelectedItem().toString() + " is opened.", MessageType.INFO);
+
+				}
+			}
+		});
 		redPanel.add(openBtnRed,gbcRed);
 		//////////////////////////////////////////////
 		
