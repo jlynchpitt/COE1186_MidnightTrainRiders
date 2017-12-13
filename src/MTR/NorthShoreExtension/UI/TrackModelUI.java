@@ -254,7 +254,7 @@ public class TrackModelUI extends JPanel {
     					if(inf.equals("RAILWAY CROSSING")) {
     						//draw railway crossing
     						g.setColor(Color.gray);
-    						if(position == 1) {
+    						if(occupied != 0) {
     							g.setColor(Color.yellow);
     						}
     						g.drawLine(drawArray[0]-15, drawArray[1]-5, drawArray[0]-10, drawArray[1]+1);
