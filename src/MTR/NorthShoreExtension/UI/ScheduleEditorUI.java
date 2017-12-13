@@ -62,6 +62,7 @@ public class ScheduleEditorUI {
 		mainPanel.add(updateSpeed, gbc);
 		
 		update  = new JButton("Update Schedule");
+		update.setEnabled(true);
 		gbc.gridwidth = 2;
 		gbc.gridx = 0;
 		gbc.gridy = 2;
@@ -71,6 +72,7 @@ public class ScheduleEditorUI {
 				int[] nextStops = new int[updatedStops.length];
 				for (int x = 0; x < updatedStops.length; x++) {
 					nextStops[x] = Integer.parseInt(updatedStops[x]);
+					update.setEnabled(false);
 				}
 				ts.updateAuthority(nextStops);
 			}

@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 import MTR.NorthShoreExtension.Backend.CTCSrc.trainScheduler;
+import MTR.NorthShoreExtension.UI.ctcUI;
 
 public class TrainSchedule {
 	
@@ -28,6 +29,7 @@ public class TrainSchedule {
 	int currLocation = 999; //999 represents the Yard
 	int nextLocation = 888;
 	int setSpeed = 0;
+	int runMode = 0;
 	
 	
 	public TrainSchedule(String line, int id, int[] listOfStops, int[] departureTimes, int speed) {
@@ -52,7 +54,15 @@ public class TrainSchedule {
 	}
 	
 	public String getFirstStop() {
-		String first = Integer.toString(stops[0]);
+		String first = "";
+		runMode = ctcUI.getRunMode();
+		if (runMode == 1) {
+			first = Integer.toString(stops[0]);
+		} else if (runMode == 0) {
+			first = Integer.toString(stops[stops.length-1]);
+		} else {
+			System.out.println("Running in neither manual nor automatic?");
+		}
 		return first;
 	}
 	

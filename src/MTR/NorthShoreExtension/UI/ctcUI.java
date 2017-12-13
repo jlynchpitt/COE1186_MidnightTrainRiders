@@ -57,7 +57,9 @@ public class ctcUI {
 	private static JFrame frame;
 	public static ctcUI ctc1;
 	public static JTextArea time;
+	public static JTextArea ambTemp;
 	public static JTextArea numTrn;
+	public static JPanel ambientTemp;
 	
 	int timeMultiplier;
 	TrainControllerHelper tch;
@@ -69,6 +71,7 @@ public class ctcUI {
 	static int throughput = 0;
 	public static int runModeSwitch = 0; //0 for manual, 1 for automatic
 	public static TrainScheduleHelper tsh;
+	static int tempTracker = 0;
 	
 	public static int getRunMode() {
 		return runModeSwitch;
@@ -109,6 +112,26 @@ public class ctcUI {
 		if(time != null) {
 			time.setText(simulationTime);
 		}
+		//have temperature change every 5 minutes
+		if (tempTracker < 300 ) {
+			tempTracker++;
+		} else {
+			Random rand = new Random();
+			int randvalue = rand.nextInt(7);
+			int adjuster = 3 - randvalue;
+			System.out.println("Change in Temp: " + adjuster);
+			tempF = tempF + adjuster;
+			System.out.println("New Temp: " + tempF);
+			tempTracker = 0;
+			ambTemp.setText(tempF + " F");
+			if (tempF <= 39) {
+				ambTemp.setBackground(Color.red);
+				ambientTemp.setBackground(Color.red);
+			} else if (tempF >= 40) {
+				ambTemp.setBackground(Color.green);
+				ambientTemp.setBackground(Color.green);
+			}
+		}
 	}
 	
 	//public static void ctcUI(Container pane) {
@@ -122,7 +145,7 @@ public class ctcUI {
 		String currentTime = sdf.format(cal.getTime());*/
 		
 		JButton schedTrain, schedRepair, reporting, trnInfo, trnCtrl, trkCtrl, timeMult, switchTest, schedules, engineerCtrls;
-		JPanel runningMode, thrput, trainNum, ambientTemp, currTime, trkModel;
+		JPanel runningMode, thrput, trainNum, currTime, trkModel;
 		tempF = 56;
 		numTrains = 0;
 		throughput = 0;
@@ -282,7 +305,7 @@ public class ctcUI {
 		//temperature
 		ambientTemp = new JPanel();
 		ambientTemp.setBorder(BorderFactory.createLineBorder(Color.black,1));
-		JTextArea ambTemp = new JTextArea(1,5);
+		ambTemp = new JTextArea(1,5);
 		ambTemp.setEditable(false);
 		ambTemp.setText(tempF + " F");
 		if (tempF <= 39) {
