@@ -149,7 +149,9 @@ public class TrackModel {
 		if(MainMTR.fullUI) {
 			wayside.WaysideController_TrackOccupancy(trackOccupency);
 		}
-		MainMTR.getTrainModelUI().addTrain();
+		if(MainMTR.getTrainModelUI()!=null) {
+			MainMTR.getTrainModelUI().addTrain();
+		}
 	}
 	
 	public static void sellTicket(int trackid) {

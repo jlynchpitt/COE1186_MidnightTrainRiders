@@ -331,9 +331,11 @@ public class ctcUI {
 		gbc.gridy = 1; // 5th row
 		trnInfo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				TrainModelUI tmUI= MainMTR.getTrainModelUI();
-		        tmUI.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-				tmUI.setVisible(true);
+				if(MainMTR.getTrainModelUI()!=null) {
+					TrainModelUI tmUI= MainMTR.getTrainModelUI();
+			        tmUI.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+					tmUI.setVisible(true);
+				}
 			}
 		});
 		pane.add(trnInfo, gbc);
