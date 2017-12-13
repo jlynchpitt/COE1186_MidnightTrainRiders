@@ -32,4 +32,8 @@ public class Passengers {
 	public double getPassengerWeight() {
 		return(passengerWeight);
 	}
+	
+	public int getTotalPassengers() {
+		return totalPassengers;
+	}
 }

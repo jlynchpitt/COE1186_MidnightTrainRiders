@@ -88,6 +88,12 @@ public class Train {
 		this.authority=a;
 		tc.TrainControl_setCommandedSpeedAuthority(v,a);
 	}
+	
+	public void TrainModel_stoppedAtStation() {
+		if(p.)
+		p.passengersIn();
+		p.passengersOut();
+	}
 
 	
 	public double getAcceleration() {
