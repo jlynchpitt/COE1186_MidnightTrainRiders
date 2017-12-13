@@ -248,7 +248,9 @@ public class Train {
 	
 	public void setPassnegerEBrake(boolean b) {
 		this.passengerEBrake=b;
-		tm.seteBrake(b);
+		if(b) {
+			tc.TrainControl_setPassengerEBrake();
+		}
 	}
 	
 	public boolean getEngineFailure() {
