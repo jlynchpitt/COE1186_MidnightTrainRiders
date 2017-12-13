@@ -33,6 +33,7 @@ public class Train {
 		leftdoor=false;
 		rightdoor=false;
 		trainID=t;
+		p.passengersIn();
 	}
 	
 	public int getTrainID() {
@@ -89,10 +90,17 @@ public class Train {
 		tc.TrainControl_setCommandedSpeedAuthority(v,a);
 	}
 	
+	public void TrainModel_sendBeacon(int beacon) {
+		tc.TrainControl_sendBeaconInfo(beacon);
+	}
+	
 	public void TrainModel_stoppedAtStation() {
-		if(p.)
-		p.passengersIn();
-		p.passengersOut();
+		if(p.getTotalPassengers()!=0) {
+			p.passengersOut();
+			p.passengersIn();
+		}else {
+			p.passengersIn();
+		}
 	}
 
 	
