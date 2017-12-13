@@ -257,8 +257,8 @@ public class TrackModelUI extends JPanel {
     						if(occupied != 0) {
     							g.setColor(Color.yellow);
     						}
-    						g.drawLine(drawArray[0]-15, drawArray[1]-5, drawArray[0]-10, drawArray[1]+1);
-			    	  		g.drawLine(drawArray[0]-15, drawArray[1]+1, drawArray[0]-10, drawArray[1]-5);
+    						g.drawLine(drawArray[0]-20, drawArray[1]-5, drawArray[0]-15, drawArray[1]+1);
+			    	  		g.drawLine(drawArray[0]-20, drawArray[1]+1, drawArray[0]-15, drawArray[1]-5);
     						
     					}
     					if(stat.equals("Broken - Power Failure") || stat.equals("Broken - Broken Rail") || stat.equals("Broken - Track Circuit Failure")) {
