@@ -110,10 +110,10 @@ public class TrackModel {
 			if(MainMTR.fullUI) {
 				wayside.WaysideController_TrackOccupancy(trackOccupency);
 			}
+			sendBeacon(update.trackOccupying, update.trainID);
 		}
 		//System.out.println("Difference: "+difference);
 		sellTicket(update.trackOccupying);
-		sendBeacon(update.trackOccupying, update.trainID);
 	}
 	
 	public static void breakTrack(int id, String status) {
@@ -156,6 +156,7 @@ public class TrackModel {
 	
 	public static void sellTicket(int trackid) {
 		String type = load.getInfrastructure(trackid);
+		int peopleOn = 0;
 		if(type.equals("STATION") || type.equals("STATION; PIONEER") || 
 				type.equals("STATION; EDGEBROOK") || type.equals("STATION; WHITED") || 
 				type.equals("STATION; SOUTH BANK") || type.equals("STATION; CENTRAL; UNDERDROUND") ||
@@ -168,6 +169,7 @@ public class TrackModel {
 				type.equals("STATION; STATION SQUARE") || type.equals("STATION; SOUTH HILLS JUNCTION") ||
 				type.equals("STATION; POPLAR")) {
 			soldTicket += rand.nextInt(50) + 1;
+			peopleOn = rand.nextInt(soldTicket)+1;
 		}
 		else {
 			soldTicket = soldTicket + 0;
