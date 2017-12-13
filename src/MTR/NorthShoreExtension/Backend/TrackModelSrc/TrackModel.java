@@ -211,6 +211,8 @@ public class TrackModel {
 	
 	public static void sendBeacon(int trackid, int trainid) {
 		String type = load.getInfrastructure(trackid);
+		Train sendBeacon = officialTrains.get(trainid);
+		int beacon = 0;
 		if(type.equals("STATION") || type.equals("STATION; PIONEER") || 
 				type.equals("STATION; EDGEBROOK") || type.equals("STATION; WHITED") || 
 				type.equals("STATION; SOUTH BANK") || type.equals("STATION; CENTRAL; UNDERDROUND") ||
@@ -229,6 +231,7 @@ public class TrackModel {
 				type.equals("SWITCH TO YARD") || type.equals("SWITCH FROM YARD")) {
 			    //set beacon here
 		}
+		sendBeacon.TrainModel_sendBeacon(beacon);
 	}
 
 }
