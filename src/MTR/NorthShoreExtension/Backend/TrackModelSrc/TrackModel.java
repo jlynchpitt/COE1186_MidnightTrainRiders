@@ -110,10 +110,10 @@ public class TrackModel {
 			if(MainMTR.fullUI) {
 				wayside.WaysideController_TrackOccupancy(trackOccupency);
 			}
+			sendBeacon(update.trackOccupying, update.trainID);
 		}
 		//System.out.println("Difference: "+difference);
 		sellTicket(update.trackOccupying);
-		sendBeacon(update.trackOccupying, update.trainID);
 	}
 	
 	public static void breakTrack(int id, String status) {
