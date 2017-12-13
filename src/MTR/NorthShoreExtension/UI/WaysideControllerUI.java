@@ -84,6 +84,7 @@ public class WaysideControllerUI {
 	public static DefaultTableModel am = new DefaultTableModel();
 	public static DefaultTableModel dm1 = new DefaultTableModel();
 	public static boolean TablesCreated = false;
+	public static boolean OccupiedTablesCreated = false;
 	public static JTable table1;
 	public static JTable table;
 	public static JScrollPane scroll1;
@@ -135,6 +136,12 @@ public class WaysideControllerUI {
 	  
    }
     
+    
+    public static void OccupiedTrackChartManager()
+    {
+    	
+    }
+    
     public static void SwitchSwitcher(int x)  //switch based on location in the chart
     {
  	   if (TablesCreated)
@@ -150,42 +157,56 @@ public class WaysideControllerUI {
     //updates the table of occupied tracks
     public static void OccupiedTrackTableUpdater(Object[][] ObjectArray)
     {
+    	
  	   System.out.println("DISPLAYING OCCUPIED TRACK");
- 	   if (TablesCreated)
+ 	   if (OccupiedTablesCreated)
  	   {
+ 		   
  		   System.out.println("TABLE HAS BEEN MADE");
+ 		   //go through each train on the track
  		   for (int x = 0; x < ObjectArray.length; x++)
  		   {
+ 		   	
  			   //dm1.addRow(ObjectArray[x]);
  			   
  			   for (int y = 0; y < ObjectArray[x].length-2; y++)
  			   {
+ 				   
  				   if (x > dm1.getRowCount()-1)
  				   {
  					   dm1.addRow(ObjectArray[x]);
  				   }
+ 				   
  				   else
  				   {
  					   dm1.setValueAt(ObjectArray[x][y], x, y);
  				   }
+ 				   /*
  				   Scroll1Height = dm1.getRowCount()*(20); 
  				   scroll1.setPreferredSize(new Dimension(500, Scroll1Height));
  				   //System.out.println(Scroll1Height);
+ 			   */
  			   }
  			   
  			   
  				   //System.out.println(x);
+ 				    
  		   }
+ 		   
  	   }
  	   
+ 	 
     }
     
     
     //updates occupied tracks with authority 
     public static void OccupiedTrackAuthoritySpeedUpdater(int TrackID, int NextTrack, int AuthorityDist)
     {
- 	   if (TablesCreated)
+ 	   if (!OccupiedTablesCreated)
  	   {
+ 		  dm1.setDataVector(new Object[][] { { "Color", "Black", "Track", "length" }}, new Object[] { "Line", "Occupied Track", "Dest Track", "Athrty" });
+ 		  OccupiedTablesCreated = true;
+ 	   }
  		   String LineColor = null;
  		   String BlockNumber =  Integer.toString(TrackID).substring(1);
  		   int firstDigit = Character.getNumericValue(Integer.toString(TrackID).charAt(0));
@@ -198,7 +219,10 @@ public class WaysideControllerUI {
  		   {
  			   LineColor = "Green";
  		   }
+ 		   //gets color
  		   System.out.println("COLOR: " + LineColor + " BLOCKS: " + BlockNumber + " NEXT TRACK: " + NextTrack);
+ 		   
+ 		   //go through all the rows
  		   for (int x = 0; x < dm1.getRowCount(); x++)
  		   {
  			   System.out.println("CHECKING TABLE FOR UPDATE");
@@ -217,7 +241,7 @@ public class WaysideControllerUI {
  			   }
  			   
  		   }
- 	   }
+ 	   
  		   
  		   
  	   
@@ -437,7 +461,12 @@ public class WaysideControllerUI {
       	//Track Info	
       	//---------------------------------------------------------------------------------------------------------------------------------        
             JPanel TI = new JPanel();
-            dm1.setDataVector(new Object[][] { { "Color", "Black", "Track", "length" }}, new Object[] { "Line", "Occupied Track", "Dest Track", "Athrty" });
+            if (!OccupiedTablesCreated)
+            {
+            	dm1.setDataVector(new Object[][] { { "Color", "Black", "Track", "length" }}, new Object[] { "Line", "Occupied Track", "Dest Track", "Athrty" });
+            	OccupiedTablesCreated = true;
+            }
+            
 
     	    table1 = new JTable(dm1);
 
