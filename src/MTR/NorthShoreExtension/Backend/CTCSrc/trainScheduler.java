@@ -24,7 +24,7 @@ import MTR.NorthShoreExtension.UI.ctcUI;
 
 public class trainScheduler {
 	static DBHelper database = MainMTR.getDBHelper();
-	int runMode = ctcUI.getRunMode();
+	static int runMode = ctcUI.getRunMode();
 	int[] redLine = new int[75];
 	int[] grnLine = new int[150];
 	//import database info for greenline and red line
@@ -50,9 +50,11 @@ public class trainScheduler {
 		int firstSection = 0;
 		int prevSection = 1;
 		int lastSection = 0;
-		
-		if (listOfStops[0] >= 1000 && listOfStops[0] < 2000) {
-			/*firstStop = 1001; //will need to hard-code for red and green lines i guess...
+		System.out.println("run mode is: " + runMode);
+		//begin automode
+		if (runMode == 1) {
+			if (listOfStops[0] >= 1000 && listOfStops[0] < 2000) {
+				/*firstStop = 1001; //will need to hard-code for red and green lines i guess...
 			System.out.println("M: " + m);
 			System.out.println("L: " + l);
 			System.out.println("Authority[0]: " + authority[0]);
@@ -92,8 +94,8 @@ public class trainScheduler {
 				System.out.println("M: " + m);
 				System.out.println("L: " + l);
 				do {
-					 
-					
+
+
 					//System.out.println("\n NextTrack: " + authority[m]
 					//next track section to stop
 					m++;
@@ -102,61 +104,69 @@ public class trainScheduler {
 				//Next Stop
 				l++;
 			}*/
-		} else if (listOfStops[0] >= 2000 && listOfStops[0] < 2151) {
-			System.out.println("scheduling green line");
-			firstSection = 2062;
-			prevSection = 2061;
-			lastSection = 2058;
-			//authority[0] = firstSection; //replace with first section from yard
-			auth.add(0, firstSection);
-			if (listOfStops[0] != firstSection || listOfStops[1] > 0) {
-				//System.out.println("yes");
-				//authority[1] = database.schedNextTrack(firstSection, prevSection);
-				auth.add(1, database.schedNextTrack(firstSection, prevSection));
-			}
-			//database.showTrackTest();
-			//System.out.println("Auth: " + authority[0] + " " + authority[1]);
-			//System.out.println("L: " + l);
-			//System.out.println("M: " + m);
-			if (listOfStops[0] == firstSection) {
-				l++;
-			} else if (listOfStops[0] == authority[1]) {
-				System.out.println(authority[m]);
-				//m++; //this could be the issue //yeah pretty sure it waas this guy
-				l++;
-			} else {
-				while (listOfStops[l] != auth.get(m)) {
-					m++;
-					if (m == 1) {
-						//authority[m] = database.schedNextTrack(firstSection, (firstSection-1));
-						//System.out.println("" + m + ": " + authority[m]);
-						auth.add(m, database.schedNextTrack(firstSection, (firstSection-1)));
-					} else {
+			} else if (listOfStops[0] >= 2000 && listOfStops[0] < 2151) {
+				System.out.println("scheduling green line");
+				firstSection = 2062;
+				prevSection = 2061;
+				lastSection = 2058;
+				//authority[0] = firstSection; //replace with first section from yard
+				auth.add(0, firstSection);
+				if (listOfStops[0] != firstSection || listOfStops[1] > 0) {
+					//System.out.println("yes");
+					//authority[1] = database.schedNextTrack(firstSection, prevSection);
+					auth.add(1, database.schedNextTrack(firstSection, prevSection));
+				}
+				//database.showTrackTest();
+				//System.out.println("Auth: " + authority[0] + " " + authority[1]);
+				//System.out.println("L: " + l);
+				//System.out.println("M: " + m);
+				if (listOfStops[0] == firstSection) {
+					l++;
+				} else if (listOfStops[0] == authority[1]) {
+					System.out.println(authority[m]);
+					//m++; //this could be the issue //yeah pretty sure it waas this guy
+					l++;
+				} else {
+					while (listOfStops[l] != auth.get(m)) {
+						m++;
+						if (m == 1) {
+							//authority[m] = database.schedNextTrack(firstSection, (firstSection-1));
+							//System.out.println("" + m + ": " + authority[m]);
+							auth.add(m, database.schedNextTrack(firstSection, (firstSection-1)));
+						} else {
+							//authority[m] = database.schedNextTrack(authority[m-1], authority[m-2]);
+							//System.out.println("" + m + ": " + authority[m]);
+							auth.add(m, database.schedNextTrack(auth.get(m-1), auth.get(m-2)));
+						}
+					}
+					l++;
+				}
+				System.out.println("L: " + l);
+				System.out.println("M: " + m);
+
+				//remaining stops
+				//loop through all of the stops
+				while (listOfStops[l] != 0) {
+					while (listOfStops[l] != auth.get(m)) { 
+						m++;
 						//authority[m] = database.schedNextTrack(authority[m-1], authority[m-2]);
 						//System.out.println("" + m + ": " + authority[m]);
 						auth.add(m, database.schedNextTrack(auth.get(m-1), auth.get(m-2)));
 					}
+					l++;
 				}
-				l++;
+
+				System.out.println("L: " + l);
+				System.out.println("M: " + m);
+			}//end of the line specific
+
+		} else if (runMode == 0) {
+			System.out.println(listOfStops.length);
+			int r = 0;
+			for (r = 0; r < listOfStops.length; r++) {
+				auth.add(r, listOfStops[r]);
 			}
-			System.out.println("L: " + l);
-			System.out.println("M: " + m);
-			
-			//remaining stops
-			//loop through all of the stops
-			while (listOfStops[l] != 0) {
-				while (listOfStops[l] != auth.get(m)) { //error throws here?
-					m++;
-					//authority[m] = database.schedNextTrack(authority[m-1], authority[m-2]);
-					//System.out.println("" + m + ": " + authority[m]);
-					auth.add(m, database.schedNextTrack(auth.get(m-1), auth.get(m-2)));
-				}
-				l++;
-			}
-			
-			System.out.println("L: " + l);
-			System.out.println("M: " + m);
-		}
+		} //end of the manual/auto mode
 		
 		int k = 0;
 		for (k = 0; k < auth.size(); k++) {
@@ -166,14 +176,9 @@ public class trainScheduler {
 		//update the schedules for tracking trains
 		TrainSchedulesUI.repaintGUI();
 		return auth;
+		
+		//close calcAuthority
 	}
 	
-	/*Scheduling helpers CTC_getBrokenTrack(int[] brokenTracks) {	
-	
-		}
-	*/
-	
-	//Functions for setting speed and authority
-	//WaysideFunctionsHub.WaysideController_Authority(int[] authority);
-	//WaysideFunctionsHub.WaysideController_Speed(int[] speed);
+//close trainScheduler class
 }

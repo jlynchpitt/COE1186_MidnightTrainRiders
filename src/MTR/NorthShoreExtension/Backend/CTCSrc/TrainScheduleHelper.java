@@ -94,53 +94,6 @@ public class TrainScheduleHelper {
 			}
 		}
 		
-		
-		
-		/*
-		for (int j = 0; j < tsl.size(); j++) { //check each train schedule to see if 
-			System.out.println("Checking train: " + j);
-			System.out.println("Holding: " + j + " : " + trainTracker.get(j));
-			if (occupied.contains(trainTracker.get(j))) {
-				//Train at J didn't move, do nothing
-				System.out.println("Train didn't move");
-			} else {
-				//train at J did move
-				if (trainTracker.get(j) == 9999) {
-					//train left the yard, set location to first section of track
-					//trainTracker.set(j, tsl.get(j).authority.get(1)); //may have had an issue here, was using 0 instead of 1
-					System.out.println("Left Yard for: " + trainTracker.get(j));
-					int currTrack = tsl.get(j).authority.get(0);
-					tsl.get(j).authority.remove(0);
-					tsl.get(j).setCurrentLocation(tsl.get(j).authority.get(0));
-					int[] auth = new int[tsl.get(j).authority.size()];
-					for (int i = 0; i < auth.length; i++) {
-						auth[i] = tsl.get(j).authority.get(i);
-					}
-					WaysideFunctionsHub.OccupiedSpeedAuthority(currTrack, database.getSpeedLimit(tsl.get(j).authority.get(j)), auth);
-					System.out.println("New Speed and Authority sent: " + database.getSpeedLimit(tsl.get(j).authority.get(j)) + " : " + tsl.get(j).authority.get(0));
-				} else {
-					//train moved forward, set location to next section of track
-					//trainTracker.set(j, tsl.get(j).authority.get(1));
-					System.out.println("Moved to: " + trainTracker.get(j));
-					int currTrack = tsl.get(j).authority.get(0);
-					tsl.get(j).authority.remove(0);
-					tsl.get(j).setCurrentLocation(tsl.get(j).authority.get(0));
-					int[] auth = new int[tsl.get(j).authority.size()];
-					for (int i = 0; i < auth.length; i++) {
-						auth[i] = tsl.get(j).authority.get(i);
-					}
-					WaysideFunctionsHub.OccupiedSpeedAuthority(currTrack, database.getSpeedLimit(tsl.get(j).authority.get(j)), auth);
-					System.out.println("Next Speed and Authority sent: " + database.getSpeedLimit(tsl.get(j).authority.get(j)) + " : " + tsl.get(j).authority.get(0));
-				}
-				
-			}
-		}
-		//from start of occupied array until end of it
-			//loop: compare with xth train's currLocation
-			//determine which train(s) moved, remove appropriate section from the authority list
-			//resend the authority and speed
-			 * 
-			 * */
 		occUpdatedCounter++;
 	
 	}
