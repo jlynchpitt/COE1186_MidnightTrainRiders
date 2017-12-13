@@ -1,7 +1,7 @@
 /* 
  * Filename: TrainSchedulePanel.java
  * Author: Matt Snyder
- * Last Edited: 12/06/17
+ * Last Edited: 12/13/17
  * File Description: The sub-panels for the train schedule display.
  */
 
@@ -25,6 +25,7 @@ public class TrainSchedulePanel extends JPanel {
 	JPanel overall;
 	JButton dispatch;
 	JButton delete;
+	JButton edit;
 	static DBHelper database = MainMTR.getDBHelper();
 	
 	TrainSchedule trainSchedule;
@@ -54,6 +55,14 @@ public class TrainSchedulePanel extends JPanel {
 		JLabel tFirst = new JLabel("First Stop: " + first);
 		tFirst.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 		add(tFirst);
+		
+		edit = new JButton("Edit");
+		edit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ScheduleEditorUI.createAndShowGUI(ts);
+			}
+		});
+		add(edit);
 		
 		dispatch = new JButton("Dispatch");
 		

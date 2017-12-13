@@ -1,7 +1,7 @@
 /*
  * Filename: TrainScheduleHelper.java
  * Author: Matt Snyder
- * Last Edited: 11/22/17
+ * Last Edited: 12/13/17
  * File Description: A helper class for managing train schedules 
  */
 package MTR.NorthShoreExtension.Backend.CTCSrc;
@@ -32,8 +32,8 @@ public class TrainScheduleHelper {
 		tsl = new ArrayList<TrainSchedule>();
 	}
 	
-	public void addNewTrainSchedule(String line, int id, int[] stops, int[] departures) {
-		TrainSchedule ts = new TrainSchedule(line, id, stops, departures);
+	public void addNewTrainSchedule(String line, int id, int[] stops, int[] departures, int speed) {
+		TrainSchedule ts = new TrainSchedule(line, id, stops, departures, speed);
 		//System.out.println("\n Line: " + line + " id: " + id + "First stop: " + stops[0]);
 		//System.out.println("\n Line: " + ts.getLine() + "id: " + ts.getTrainID() + " First stop: " + ts.getFirstStop());
 		tsl.add(ts);
@@ -85,7 +85,7 @@ public class TrainScheduleHelper {
 					for (int i = 0; i < auth.length; i++) {
 						auth[i] = tsl.get(j).authority.get(i);
 					}
-					WaysideFunctionsHub.OccupiedSpeedAuthority(tsl.get(j).getCurrentLocation(), database.getSpeedLimit(tsl.get(j).getCurrentLocation()), auth);
+					WaysideFunctionsHub.OccupiedSpeedAuthority(tsl.get(j).getCurrentLocation(), tsl.get(j).getSetSpeed(), auth);
 					System.out.println("Train " + j + " has moved");
 				} else {
 					//Your train just vanished!!!!

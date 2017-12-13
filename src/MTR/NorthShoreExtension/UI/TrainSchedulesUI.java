@@ -1,6 +1,6 @@
 /* Filename: TrainScheduler.java
 *  Author: Matthew Snyder
-*  Last Edited: 12/06/17
+*  Last Edited: 12/13/17
 *  File Description: This is the UI component of the CTC that displays the list of scheduled trains. It will show the user the train ID, which
 *  line it runs on, and what its first stop will be. It will give the user the option to dispatch or delete the train. It uses TrainSchedulePanel
 *  for each train that is scheduled.

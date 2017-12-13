@@ -1,5 +1,5 @@
 /*
-* Filename: trainScheduler.java
+* Filename: TrainSchedulerUI.java
 * Author: Matt Snyder
 * Last Edited: 12/06/2017
 * File Description: This contains the Train Scheduler user interface. 
@@ -58,6 +58,8 @@ public class TrainSchedulerUI extends JFrame {
 	int trainID = 0;
 	int departRed[] = new int[150];
 	int departGrn[] = new int[150];
+	int speedGrnSched = 0;
+	int speedRedSched = 0;
 	boolean loaded = false;
 	
 	private static TrainSchedulerUI trsUI;
@@ -287,6 +289,7 @@ public class TrainSchedulerUI extends JFrame {
 				stopRouteRed.setText(redPrevious + "\n\n" + redNextStop);
 				int departureRed = Integer.parseInt(redHour1.getText())*1000 + Integer.parseInt(redHour0.getText())*100 + Integer.parseInt(redMins1.getText())*10 + Integer.parseInt(redMins0.getText());
 				departRed[xRed - 1] = departureRed;
+				speedRedSched = database.getSpeedLimit(stopAsInt);
 				xRed++;
 			}
 		});
@@ -309,6 +312,7 @@ public class TrainSchedulerUI extends JFrame {
 				stopRouteGrn.setText(grnPrevious + "\n\n" + grnNextStop);
 				int departureGrn = Integer.parseInt(grnHour1.getText())*1000 + Integer.parseInt(grnHour0.getText())*100 + Integer.parseInt(grnMins1.getText())*10 + Integer.parseInt(grnMins0.getText());
 				departGrn[xGrn - 1] = departureGrn;
+				speedGrnSched = database.getSpeedLimit(stopAsInt);
 				xGrn++;
 			}
 		});
@@ -327,7 +331,7 @@ public class TrainSchedulerUI extends JFrame {
 				schedTrainRed.setEnabled(false);
 				nextTrainRed.setEnabled(true);
 				
-				ctcUI.tsh.addNewTrainSchedule("Red", trainID, schedStopsRed, departRed);
+				ctcUI.tsh.addNewTrainSchedule("Red", trainID, schedStopsRed, departRed, speedRedSched);
 				trainID++;
 			}
 		});
@@ -346,7 +350,7 @@ public class TrainSchedulerUI extends JFrame {
 				schedTrainGrn.setEnabled(false);
 				nextTrainGrn.setEnabled(true);
 				TrainScheduleHelper.trainTracker.add(trainID, 9999);
-				ctcUI.tsh.addNewTrainSchedule("Green", trainID, schedStopsGrn, departGrn);
+				ctcUI.tsh.addNewTrainSchedule("Green", trainID, schedStopsGrn, departGrn, speedGrnSched);
 				TrainSchedulesUI.repaintGUI();
 				trainID++;
 			}

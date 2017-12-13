@@ -1,7 +1,7 @@
 /*
-* Filename: trainScheduler.java
+* Filename: TrainSchedulerManualUI.java
 * Author: Matt Snyder
-* Last Edited: 12/06/2017
+* Last Edited: 12/12/2017
 * File Description: This contains the Train Scheduler user interface for use in Manual mode.  
 * It allows the user to enter the authority and speed manually instead of them being calculated
 * based upon the stops that are entered.. 
@@ -44,11 +44,7 @@ import MTR.NorthShoreExtension.Backend.CTCSrc.*;
 public class TrainSchedulerManualUI extends JFrame {
 	//create two arrays for demo purpose. actual will have the list imported from the database
 	static DBHelper database = MainMTR.getDBHelper();
-	
-	//String[] grnLineStops = {"2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009"}; //fall-back data in case file doesn't get loaded
-	//String[] redLineStops = {"1001", "1002", "1003", "1004", "1005", "1006", "1007", "1008", "1009"}; //from auto mode
-	//String[] importedRed = new String[1];//from auto mode
-	//String[] importedGrn = new String[1];
+
 	String[] travelingRed;
 	String[] travelingGrn;
 	List<String> redInput = new ArrayList();
@@ -57,13 +53,15 @@ public class TrainSchedulerManualUI extends JFrame {
 	List<String> imporGrn = new ArrayList<String>();
 	int xRed = 1; //number of grnStops
 	int xGrn = 1;
-	int authRed[] = new int[150];
-	int authGrn[] = new int[150];
+	//int authRed[] = new int[150];
+	//int authGrn[] = new int[150];
 	int schedStopsRed[] = new int[150];
 	int schedStopsGrn[] = new int[150];
 	int trainID = 0;
 	int departRed[] = new int[150];
 	int departGrn[] = new int[150];
+	int speedRedSched = 0; 
+	int speedGrnSched = 0;
 	boolean loaded = false;
 	
 	private static TrainSchedulerManualUI trsUI;
@@ -86,45 +84,9 @@ public class TrainSchedulerManualUI extends JFrame {
 		render();
 	}
 	
-	/*public void loadComboBoxes() {
-		//parameters for test.csv
-		int j = 0;
-		int k = 0;
-		int dataLength = database.getDatabaseSize();
-		for (int i = 0; i < dataLength+1; i++) { //change to end of file instead of 150
-			String text = Integer.toString(database.getTrackID(i));
-			String line = database.getColor(i);
-			if (line.equals("green")) {
-				imporGrn.add(text);
-				j++;
-			} else if (line.equals("red")) {
-				imporRed.add(text);
-				k++;
-			}
-		}
-		if (j > 0) {
-			importedGrn = new String[imporGrn.size()];
-		}
-		if (k > 0) {
-			importedRed = new String[imporRed.size()];
-		}
-		
-		for (int y = 0; y < imporGrn.size(); y++) {
-			importedGrn[y] = imporGrn.get(y);
-		}
-		for (int x = 0; x < imporRed.size(); x++) {
-			importedRed[x] = imporRed.get(x);
-		}
-		
-		grnStopsImported = new JComboBox<String>(importedGrn);
-		redStopsImported = new JComboBox<String>(importedRed);
-		loaded = true;
-	}*/
-	
 	public void render() {
 		JPanel grnTrain = new JPanel();
 		JPanel redTrain = new JPanel();
-		//JPanel schedule = new JPanel();
 		grnTrain.setLayout(new GridLayout(1,2));
 		redTrain.setLayout(new GridLayout(1,2));
 		
@@ -132,8 +94,6 @@ public class TrainSchedulerManualUI extends JFrame {
 		JPanel grnRght = new JPanel(new GridLayout(5,1));
 		JPanel redLeft = new JPanel();
 		JPanel redRght = new JPanel(new GridLayout(5,1));
-		//TODO: create some logic for checking that a db has been loaded
-		//loadComboBoxes();
 		
 		//Set up the Routing lists
 		JTextArea stopRouteRed = new JTextArea(50, 40);
@@ -230,7 +190,6 @@ public class TrainSchedulerManualUI extends JFrame {
 		
 		tabbedPane.addTab("Red Line", redTrain);
 		tabbedPane.addTab("Green Line", grnTrain);
-		//tabbedPane.addTab("Schedules", schedule);
 		
 		//add it all together and make it visible
 		frame.add(tabbedPane);
@@ -247,7 +206,7 @@ public class TrainSchedulerManualUI extends JFrame {
 				for (int a = 0; a < travelingRed.length; a++) {
 					travelingRed[a] = redInput.get(a);
 				}
-				//String redStop = redStops.getSelectedItem().toString();
+
 				String setSpeedRed = speedRed.getText().toString();
 				String redNextStop = "Stop " + xRed + ": \n " + redLine + ": " + travelingRed[travelingRed.length-1] +  "\n Authority: " + travelingRed.length + "\n Set Speed: " + setSpeedRed;
 				String redPrevious = stopRouteRed.getText();
@@ -257,7 +216,7 @@ public class TrainSchedulerManualUI extends JFrame {
 				for (int c = 0; c < travelingRed.length; c++) {
 					schedStopsRed[c] = Integer.parseInt(travelingRed[c]);
 				}
-				
+				speedRedSched = Integer.parseInt(setSpeedRed);
 				xRed++;
 			}
 		});
@@ -279,7 +238,7 @@ public class TrainSchedulerManualUI extends JFrame {
 				for (int d = 0; d < travelingGrn.length; d++) {
 					schedStopsGrn[d] = Integer.parseInt(travelingGrn[d]);
 				}
-			
+				speedGrnSched = Integer.parseInt(setSpeedGrn);
 				xGrn++;
 			}
 		});
@@ -290,12 +249,11 @@ public class TrainSchedulerManualUI extends JFrame {
 				String redToWrite = redWrit + "\n\n Scheduling Train...!";
 				stopRouteRed.setText(redToWrite);
 				
-				//redStops.setEnabled(false);
 				addStopRed.setEnabled(false);
 				schedTrainRed.setEnabled(false);
 				nextTrainRed.setEnabled(true);
 				
-				ctcUI.tsh.addNewTrainSchedule("Red", trainID, schedStopsRed, departRed);
+				ctcUI.tsh.addNewTrainSchedule("Red", trainID, schedStopsRed, departRed, speedRedSched);
 				trainID++;
 			}
 		});
@@ -305,12 +263,12 @@ public class TrainSchedulerManualUI extends JFrame {
 				String grnWrit = stopRouteGrn.getText();
 				String grnToWrite = grnWrit + "\n\n Scheduling Train...!";
 				stopRouteGrn.setText(grnToWrite);
-				//grnStops.setEnabled(false);
+
  				addStopGrn.setEnabled(false);
 				schedTrainGrn.setEnabled(false);
 				nextTrainGrn.setEnabled(true);
 				TrainScheduleHelper.trainTracker.add(trainID, 9999);
-				ctcUI.tsh.addNewTrainSchedule("Green", trainID, schedStopsGrn, departGrn);
+				ctcUI.tsh.addNewTrainSchedule("Green", trainID, schedStopsGrn, departGrn, speedGrnSched);
 				TrainSchedulesUI.repaintGUI();
 				trainID++;
 			}
@@ -318,13 +276,13 @@ public class TrainSchedulerManualUI extends JFrame {
 		
 		nextTrainRed.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//redStops.setEnabled(true);
+
 				addStopRed.setEnabled(true);
 				schedTrainRed.setEnabled(true);
 				nextTrainRed.setEnabled(false);
 				stopRouteRed.setText("Add a Stop...");
 				xRed = 1;
-				authRed = new int[150];
+				//authRed = new int[150];
 				departRed = new int[150];
 				schedStopsRed = new int[150];
 			}
@@ -332,14 +290,14 @@ public class TrainSchedulerManualUI extends JFrame {
 		
 		nextTrainGrn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//grnStops.setEnabled(true);
+
  				addStopGrn.setEnabled(true);
 				schedTrainGrn.setEnabled(true);
 				nextTrainGrn.setEnabled(false);
 				stopRouteGrn.setText("Add a Stop...");
 				schedStopsGrn = new int[150];
 				xGrn = 1;
-				authGrn = new int[150];
+				//authGrn = new int[150];
 				departGrn = new int[150];
 			}
 		});

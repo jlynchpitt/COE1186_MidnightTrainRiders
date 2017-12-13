@@ -1,7 +1,7 @@
 /*
 * Filename: ctcUI.java
 * Author: Matt Snyder
-* Last Edited: 11/27/2017
+* Last Edited: 12/12/2017
 * File Description: This contains the main frame for the CTC GUI. 
 * 
 * 

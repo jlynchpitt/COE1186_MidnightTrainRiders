@@ -1,6 +1,6 @@
 /* Filename: TrainSchedule.java
  * Author: Matt Snyder
- * Last Edited: 11/24/17
+ * Last Edited: 12/13/17
  * File Description: The back-end object for containing the train schedules. One will be created for each train that is scheduled.
  * Its main function is to hold the information for each train's list of stops, the planned departures time for each stop, and the
  * line that it is on.  
@@ -27,10 +27,12 @@ public class TrainSchedule {
 	int trainID = 0;
 	int currLocation = 999; //999 represents the Yard
 	int nextLocation = 888;
+	int setSpeed = 0;
 	
 	
-	public TrainSchedule(String line, int id, int[] listOfStops, int[] departureTimes) {
+	public TrainSchedule(String line, int id, int[] listOfStops, int[] departureTimes, int speed) {
 		trainID = id;
+		setSpeed = speed;
 		System.out.println("ID: " + trainID);
 		stops = listOfStops;
 		authority = trainScheduler.calcAuthority(listOfStops);
@@ -41,7 +43,7 @@ public class TrainSchedule {
 		if (line.equals("Green")) {
 			nextLocation = 2062;
 		} else {
-			nextLocation = 1001; //replace with appropriate redline start point
+			nextLocation = 1009; //replace with appropriate redline start point
 		}
 	}
 	
@@ -52,6 +54,10 @@ public class TrainSchedule {
 	public String getFirstStop() {
 		String first = Integer.toString(stops[0]);
 		return first;
+	}
+	
+	public void updateAuthority(int[] listOfStops) {
+		authority = trainScheduler.calcAuthority(listOfStops);
 	}
 	
 	public String getLine() {
@@ -77,5 +83,13 @@ public class TrainSchedule {
 	
 	public void setNextLocation(int trackID) {
 		nextLocation = trackID;
+	}
+	
+	public int getSetSpeed() {
+		return setSpeed;
+	}
+	
+	public void setSetSpeed(int speed) {
+		setSpeed = speed;
 	}
 };
