@@ -243,6 +243,11 @@ public class TrainController {
 	public void operateEmergencyBrake(boolean applied) {
 		eBrakeApplied = applied;
 		
+		/*if(applied) {
+			driverCommandedSetSpeed = 0;
+			updateUI(TrainControlPanel.DRIVER_SET_SPEED);
+		}*/
+		
 		if(trainModel != null) {
 			trainModel.TrainModel_setEBrake(applied);
 		}

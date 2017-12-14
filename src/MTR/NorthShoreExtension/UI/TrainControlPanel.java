@@ -64,6 +64,7 @@ public class TrainControlPanel extends JPanel
 	public static final String BRAKES = "brakes";
 	public static final String ANNOUNCEMENT = "announcement";
 	public static final String FAULT = "trainFault";
+	public static final String DRIVER_SET_SPEED = "driverSetSpeed";
     
 	TrainController trainController;
     NumberFormat numberFormat;
@@ -293,6 +294,9 @@ public class TrainControlPanel extends JPanel
         		break;
         	case TEMPERATURE:
         		internalTemp.setText(Double.toString(trainController.getInternalTemp()));
+        		break;
+        	case DRIVER_SET_SPEED:
+        		driverSetSpeed.setText("0");
         		break;
         	case DOORS:
         		boolean rOpen = trainController.isRightDoorOpen();
