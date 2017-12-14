@@ -231,31 +231,34 @@ public class WaysideController //this class is the logic to decide what to do wi
 	{
 		
 			
-		//look at o4ccupied tracks
 		for (int x = 0; x < ListOfTrackPlans.size(); x++) //go through all the track plans
 		{
 			if (ListOfTrackPlans.get(x).size() > 1)
 			{
+				System.out.println(ListOfTrackPlans.get(x).get(0) + " to " + ListOfTrackPlans.get(x).get(1));
 				if (NG.contains(ListOfTrackPlans.get(x).get(1)))  //if an upcoming track is a switch
 				{
-					if (ListOfTrackPlans.get(x).get(1) == ListOfTrackPlans.get(x).get(0) + 1 || ListOfTrackPlans.get(x).get(1) == ListOfTrackPlans.get(x).get(0) - 1)  //if the next track is only one off of the previous, it goes in a straight line
+					if (ListOfTrackPlans.get(x).get(1) == ListOfTrackPlans.get(x).get(0) + 1 || ListOfTrackPlans.get(x).get(1) == ListOfTrackPlans.get(x).get(0) - 1)  //if the next track is only one off of the previous
 					{
-						if (ListOfTrackPlans.get(x).get(1) == 0) //if needs to be straight but not straight
+						if (Math.abs(ListOfTrackPlans.get(x).get(1)-ListOfTrackPlans.get(x).get(2)) == 1) //if needs to be straight 
 						{
-							//so set switch to straight
-							WaysideFunctionsHub.WaysideController_Switch(ListOfTrackPlans.get(x).get(1));
+							if (load.getSwitch(ListOfTrackPlans.get(x).get(1)) != 0) //if it is not straight
+							{
+								WaysideFunctionsHub.WaysideController_Switch(ListOfTrackPlans.get(x).get(1)); //switch to straight
+							}
+							
 						}
-						
-					}
-					else  //if next track is not one difference, then it takes a diferent switch
-					{
-						if (load.getSwitch(ListOfTrackPlans.get(x).get(1)) == 1)  //if needs to be angled but straight
+						else  //if 
 						{
-							//so set switch to angle
-							WaysideFunctionsHub.WaysideController_Switch(ListOfTrackPlans.get(x).get(1));
+							if (load.getSwitch(ListOfTrackPlans.get(x).get(1)) != 1)  //if it is not angled
+							{
+								//so set switch to angle
+								WaysideFunctionsHub.WaysideController_Switch(ListOfTrackPlans.get(x).get(1));
+							}
 						}
 					}
 				}
+					
 			}
 				
 			
@@ -272,24 +275,27 @@ public class WaysideController //this class is the logic to decide what to do wi
 			{
 				if (SG.contains(ListOfTrackPlans.get(x).get(1)))  //if an upcoming track is a switch
 				{
-					if (ListOfTrackPlans.get(x).get(1) == ListOfTrackPlans.get(x).get(0) + 1 || ListOfTrackPlans.get(x).get(1) == ListOfTrackPlans.get(x).get(0) - 1)  //if the next track is only one off of the previous, it goes in a straight line
+					if (ListOfTrackPlans.get(x).get(1) == ListOfTrackPlans.get(x).get(0) + 1 || ListOfTrackPlans.get(x).get(1) == ListOfTrackPlans.get(x).get(0) - 1)  //if the next track is only one off of the previous
 					{
-						if (ListOfTrackPlans.get(x).get(1) == 1) //if needs to be straight but not straight
+						if (Math.abs(ListOfTrackPlans.get(x).get(1)-ListOfTrackPlans.get(x).get(2)) == 1) //if needs to be straight 
 						{
-							//so set switch to straight
-							WaysideFunctionsHub.WaysideController_Switch(ListOfTrackPlans.get(x).get(1));
+							if (load.getSwitch(ListOfTrackPlans.get(x).get(1)) != 0) //if it is not straight
+							{
+								WaysideFunctionsHub.WaysideController_Switch(ListOfTrackPlans.get(x).get(1)); //switch to straight
+							}
+							
 						}
-						
-					}
-					else  //if next track is not one difference, then it takes a diferent switch
-					{
-						if (load.getSwitch(ListOfTrackPlans.get(x).get(1)) == 0)  //if needs to be angled but straight
+						else  //if 
 						{
-							//so set switch to angle
-							WaysideFunctionsHub.WaysideController_Switch(ListOfTrackPlans.get(x).get(1));
+							if (load.getSwitch(ListOfTrackPlans.get(x).get(1)) != 1)  //if it is not angled
+							{
+								//so set switch to angle
+								WaysideFunctionsHub.WaysideController_Switch(ListOfTrackPlans.get(x).get(1));
+							}
 						}
 					}
 				}
+					
 			}
 				
 			
