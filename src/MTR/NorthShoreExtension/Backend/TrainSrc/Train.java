@@ -276,6 +276,7 @@ public class Train {
 		tc.TrainControl_setFaultStatus(3,b);
 	}
 	
+	
 	public void setPassnegerEBrake(boolean b) {
 		this.passengerEBrake=b;
 		if(b) {
@@ -319,5 +320,13 @@ public class Train {
 
 	public void setAnnouncement(String announcement) {
 		this.announcement = announcement;
+	}
+	
+	public boolean getBrake() {
+		return tm.getBrake();
+	}
+	
+	public boolean getEBrake() {
+		return tm.geteBrake();
 	}
 }

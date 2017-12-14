@@ -131,4 +131,12 @@ public class TrainMovement {
 	public void seteBrake(boolean b) {
 		this.eBrake=b;	
 	}
+	
+	public boolean getBrake() {
+		return brake;
+	}
+	
+	public boolean geteBrake() {
+		return eBrake;
+	}
 }
