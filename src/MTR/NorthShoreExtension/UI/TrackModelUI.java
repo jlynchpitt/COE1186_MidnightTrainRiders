@@ -154,18 +154,19 @@ public class TrackModelUI extends JPanel {
     			g.drawString(showBroken, 140, 380);
     			g.drawString(showHeater, 140, 410);
     			showInf=showInf.replaceAll(";", "\n");
-    			drawString(g, showInf, 140, 325);
+    			drawString(g, showInf, 140, 445);
     			//g.drawString(showInf, 150, 410);
-    			g.drawLine(10, 700, 180, 700);
-    			g.drawLine(180, 510, 180, 700);
-    			g.drawLine(10, 510, 10, 700);
+    			g.drawLine(10, 730, 180, 730);
+    			g.drawLine(180, 510, 180, 730);
+    			g.drawLine(10, 510, 10, 730);
     			g.drawLine(10, 510, 180, 510);
     			g.drawString("Key", 85, 530);
     			g.drawString("Light: ", 20,560);
     			g.drawString("Switch: ", 20,590);
     			g.drawString("Train: ", 20,620);
     			g.drawString("Station: ", 20,650);
-    			g.drawString("Broken Track", 20, 680);
+    			g.drawString("Broken Track:", 20, 680);
+    			g.drawString("Crossing:", 20, 710);
     			g.setColor(Color.green);
 				g.fillRect(140, 580, 10, 10);
     			g.setColor(Color.gray);
@@ -179,6 +180,8 @@ public class TrackModelUI extends JPanel {
 	    	      g.drawLine(150, 670, 140, 680);
 	    	    g.setColor(Color.gray);
 	    	    g.fillRect(1200, 250, 200, 100);
+	    	    g.drawLine(140, 700, 150, 710);
+    	  		g.drawLine(150, 700, 140, 710);
 	    	    g.setStroke(new BasicStroke(3));
 	    	    g.setColor(Color.white);
 	    	    g.drawString("YARD", 1200, 250);
@@ -257,8 +260,8 @@ public class TrackModelUI extends JPanel {
     						if(occupied != 0) {
     							g.setColor(Color.yellow);
     						}
-    						g.drawLine(drawArray[0]-20, drawArray[1]-5, drawArray[0]-15, drawArray[1]+1);
-			    	  		g.drawLine(drawArray[0]-20, drawArray[1]+1, drawArray[0]-15, drawArray[1]-5);
+    						g.drawLine(drawArray[0]-20, drawArray[1]-25, drawArray[0]-15, drawArray[1]-14);
+			    	  		g.drawLine(drawArray[0]-20, drawArray[1]-14, drawArray[0]-15, drawArray[1]-25);
     						
     					}
     					if(stat.equals("Broken - Power Failure") || stat.equals("Broken - Broken Rail") || stat.equals("Broken - Track Circuit Failure")) {
