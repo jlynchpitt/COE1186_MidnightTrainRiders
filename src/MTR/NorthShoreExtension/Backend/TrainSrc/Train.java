@@ -32,12 +32,13 @@ public class Train {
 		
 		int line=(int) Math.floor(trackID / Math.pow(10, Math.floor(Math.log10(trackID))));
 		if(line==1) {
-			tch.addNewTrainController(t, "Green", this);
+			tc=tch.addNewTrainController(t, "Green", this);
 			trainLine="Green";
 		}else {
-			tch.addNewTrainController(t, "Red", this);
+			tc=tch.addNewTrainController(t, "Red", this);
 			trainLine="Red";
 		}
+	
 		p = new Passengers();
 		leftdoor=false;
 		rightdoor=false;
