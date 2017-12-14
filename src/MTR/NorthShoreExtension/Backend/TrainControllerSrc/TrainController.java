@@ -55,7 +55,7 @@ public class TrainController {
 	
 	/* Non-Vital Train Info */
 	private String trainFaults = "none"; //TODO: Possibly change to enumerated type
-	private String announcements = "at Steel Plaza";
+	private String announcements = "";
 	
 	//non-vital train controls
 	private boolean rightDoorOpen = false;
@@ -166,6 +166,34 @@ public class TrainController {
 		
 		updateUI(TrainControlPanel.VITAL);
 		
+		if(manualMode == false) {
+			//Auto mode - check status of lights + doors
+			if(currentTrackInfo.isUnderground) {
+				operateLights(true);
+			}
+			else {
+				operateLights(false);
+			}
+			
+			if(currentTrackInfo.isStation && actualSpeed < 0.1) {
+				//open doors - TODO: open correct side door only
+				boolean stationOnRight = db.isStationOnRight(currentTrackInfo.trackID);
+				
+				if(!calculateTravelDirection()) {
+					//If going the opposite direction switch the location of the station
+					stationOnRight = !stationOnRight;
+				}
+				
+				operateRightDoor(stationOnRight);
+				operateLeftDoor(!stationOnRight);
+			}
+			else {
+				//close all doors
+				operateRightDoor(false);
+				operateLeftDoor(false);
+			}
+		}
+		
 		//Send to train model and test bench
 		if(trainModel != null) {
 			trainModel.TrainModel_setPower(powerCommand);
@@ -224,35 +252,45 @@ public class TrainController {
 	
 	/* Functions for non-vital user inputs */
 	public void operateRightDoor(boolean open) {
-		rightDoorOpen = open;
-		
-		if(trainModel != null) {
-			trainModel.TrainModel_openRightDoor(open);
-		}
-		if(testBench != null) {
-			testBench.TrainModel_openRightDoor(open);
+		if(open != rightDoorOpen) {
+			rightDoorOpen = open;
+			
+			if(trainModel != null) {
+				trainModel.TrainModel_openRightDoor(open);
+			}
+			if(testBench != null) {
+				testBench.TrainModel_openRightDoor(open);
+			}
+			
+			updateUI(TrainControlPanel.DOORS);
 		}
 	}
 	
 	public void operateLeftDoor(boolean open) {
-		leftDoorOpen = open;
-		
-		if(trainModel != null) {
-			trainModel.TrainModel_openLeftDoor(open);
-		}
-		if(testBench != null) {
-			testBench.TrainModel_openLeftDoor(open);
+		if(open != leftDoorOpen) {
+			leftDoorOpen = open;
+			
+			if(trainModel != null) {
+				trainModel.TrainModel_openLeftDoor(open);
+			}
+			if(testBench != null) {
+				testBench.TrainModel_openLeftDoor(open);
+			}
+			updateUI(TrainControlPanel.DOORS);
 		}
 	}
 	
 	public void operateLights(boolean on) {
-		lightsOn = on;
-		
-		if(trainModel != null) {
-			trainModel.TrainModel_turnLightsOn(on);
-		}
-		if(testBench != null) {
-			testBench.TrainModel_turnLightsOn(on);
+		if(lightsOn != on) {
+			lightsOn = on;
+			
+			if(trainModel != null) {
+				trainModel.TrainModel_turnLightsOn(on);
+			}
+			if(testBench != null) {
+				testBench.TrainModel_turnLightsOn(on);
+			}
+			updateUI(TrainControlPanel.LIGHTS);
 		}
 	}
 	
@@ -294,20 +332,49 @@ public class TrainController {
 		//translate beacon - TODO: 
 		if(!signalPickupFailed) {
 			int trackID = (beacon & 0x1FE00000) >> 21;
-			trackID += 2000; //green line
+			boolean isGreenLine = (beacon & 0x20000000) > 0; //Bit 29 1 if green line
+			boolean isSwitch = (beacon & 0x40000000) > 0; //Bit 30 1 if switch
+			
+			//bits 20 19 18 17 primary next station
+			int primaryNextStation = (beacon & 0x1E0000) >> 17;
+			//bits 16 15 14 13 secondary next station
+			int secondaryNextStation = (beacon & 0x1E000) >> 13;
+			
+			//System.out.println("id: " + trackID + " green: " + isGreenLine + " switch: " + isSwitch + " next station: " + primaryNextStation);
+			
+			if(isGreenLine) {
+				trackID += 2000; //green line
+			}
+			else {
+				trackID += 1000; //red line
+			}
+			
+			if(!isSwitch) {
+				//Station - update announcements
+				String stationName = "";
+				if(primaryNextStation != 0) {
+					stationName = db.getStationName(primaryNextStation);
+				}
+				else {
+					stationName = db.getStationName(secondaryNextStation);					
+				}
+				
+				announcements = "Approaching " + stationName;
+				if(trainModel != null) {
+					//trainModel.TrainModel_sendAnnouncement(announcements);
+				}
+				if(testBench != null) {
+					//testBench.TrainModel_setAnnouncement(announcements);
+				}
+				updateUI(TrainControlPanel.ANNOUNCEMENT);
+			}
 			
 			if(currentTrackInfo != null && trackID != currentTrackInfo.trackID) {
-				//TODO: Properly handle previous track and travel direction
-				/*boolean travelDirection = calculateTravelDirection();
-				if(currentTrackInfo != null) {
-					previousTrackInfo = currentTrackInfo.copy();
-					//previousTrackInfo = new DriverTrackInfo();
-					//previousTrackInfo.trackID = currentTrackInfo.trackID;
-				}*/
-				currentTrackInfo = db.getTrackInfo(trackID);
 				
+				currentTrackInfo = db.getTrackInfo(trackID);
 				updateUI(TrainControlPanel.TRACK_INFO);
 			}
+			//System.out.println("announcement: " + announcements);
 		}
 	}
 	

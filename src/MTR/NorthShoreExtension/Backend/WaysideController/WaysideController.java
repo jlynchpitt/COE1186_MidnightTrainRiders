@@ -238,10 +238,11 @@ public class WaysideController //this class is the logic to decide what to do wi
 				System.out.println(ListOfTrackPlans.get(x).get(0) + " to " + ListOfTrackPlans.get(x).get(1));
 				if (NG.contains(ListOfTrackPlans.get(x).get(1)))  //if an upcoming track is a switch
 				{
-					if (ListOfTrackPlans.get(x).get(1) == ListOfTrackPlans.get(x).get(0) + 1 || ListOfTrackPlans.get(x).get(1) == ListOfTrackPlans.get(x).get(0) - 1)  //if the next track is only one off of the previous
-					{
+					System.out.println("CAPTAIN SWITCHBERG ALERT " + ListOfTrackPlans.get(x).get(1) + " is set at " + load.getSwitch(ListOfTrackPlans.get(x).get(1)) + " so it will go to " + load.schedNextTrack(ListOfTrackPlans.get(x).get(0),  ListOfTrackPlans.get(x).get(1))+ " or " + load.getNextTrack(ListOfTrackPlans.get(x).get(0),  ListOfTrackPlans.get(x).get(1)));
+					System.out.println("TESTING [" + ListOfTrackPlans.get(x).get(1) + " " + ListOfTrackPlans.get(x).get(2));
 						if (Math.abs(ListOfTrackPlans.get(x).get(1)-ListOfTrackPlans.get(x).get(2)) == 1) //if needs to be straight 
 						{
+							
 							if (load.getSwitch(ListOfTrackPlans.get(x).get(1)) != 0) //if it is not straight
 							{
 								WaysideFunctionsHub.WaysideController_Switch(ListOfTrackPlans.get(x).get(1)); //switch to straight
@@ -252,11 +253,23 @@ public class WaysideController //this class is the logic to decide what to do wi
 						{
 							if (load.getSwitch(ListOfTrackPlans.get(x).get(1)) != 1)  //if it is not angled
 							{
+								System.out.println("SWITCH From direct contact");
 								//so set switch to angle
 								WaysideFunctionsHub.WaysideController_Switch(ListOfTrackPlans.get(x).get(1));
 							}
 						}
+					
+				}
+				else if (NG.contains(ListOfTrackPlans.get(x).get(1)+1) && ListOfTrackPlans.get(x).get(1)+1 != ListOfTrackPlans.get(x).get(0))  //if an upcoming track is a switch
+				{
+					if (load.getSwitch(ListOfTrackPlans.get(x).get(1)+1) != 1)  //if it is not angled
+					{
+						System.out.println("SWITCH THROUGH INDIRECT CONTACT");
+						//so set switch to angle
+						WaysideFunctionsHub.WaysideController_Switch(ListOfTrackPlans.get(x).get(1)+1);
 					}
+						
+					
 				}
 					
 			}
@@ -275,25 +288,37 @@ public class WaysideController //this class is the logic to decide what to do wi
 			{
 				if (SG.contains(ListOfTrackPlans.get(x).get(1)))  //if an upcoming track is a switch
 				{
-					if (ListOfTrackPlans.get(x).get(1) == ListOfTrackPlans.get(x).get(0) + 1 || ListOfTrackPlans.get(x).get(1) == ListOfTrackPlans.get(x).get(0) - 1)  //if the next track is only one off of the previous
+				
+					if (Math.abs(ListOfTrackPlans.get(x).get(1)-ListOfTrackPlans.get(x).get(2)) == 1) //if needs to be straight 
 					{
-						if (Math.abs(ListOfTrackPlans.get(x).get(1)-ListOfTrackPlans.get(x).get(2)) == 1) //if needs to be straight 
+						if (load.getSwitch(ListOfTrackPlans.get(x).get(1)) != 0) //if it is not straight
 						{
-							if (load.getSwitch(ListOfTrackPlans.get(x).get(1)) != 0) //if it is not straight
-							{
-								WaysideFunctionsHub.WaysideController_Switch(ListOfTrackPlans.get(x).get(1)); //switch to straight
-							}
-							
+							WaysideFunctionsHub.WaysideController_Switch(ListOfTrackPlans.get(x).get(1)); //switch to straight
 						}
-						else  //if 
+						
+					}
+					else  //if it needs to be angled
+					{
+						if (load.getSwitch(ListOfTrackPlans.get(x).get(1)) != 1)  //if it is not angled
 						{
-							if (load.getSwitch(ListOfTrackPlans.get(x).get(1)) != 1)  //if it is not angled
-							{
-								//so set switch to angle
-								WaysideFunctionsHub.WaysideController_Switch(ListOfTrackPlans.get(x).get(1));
-							}
+							//so set switch to angle
+							WaysideFunctionsHub.WaysideController_Switch(ListOfTrackPlans.get(x).get(1));
 						}
 					}
+					
+				}
+				
+				else if (SG.contains(ListOfTrackPlans.get(x).get(1)+1))  //if an upcoming track is a switch
+				{
+					System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHH");
+					/*
+					if (load.getSwitch(ListOfTrackPlans.get(x).get(1)+1) != 1)  //if it is not angled
+					{
+						//so set switch to angle
+						WaysideFunctionsHub.WaysideController_Switch(ListOfTrackPlans.get(x).get(1));
+					}
+					*/
+					
 				}
 					
 			}
