@@ -8,6 +8,7 @@ package MTR.NorthShoreExtension.UI;
 
 import java.awt.*;
 
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
@@ -57,7 +58,7 @@ import MTR.NorthShoreExtension.Backend.DBHelper;
 import MTR.NorthShoreExtension.Backend.WaysideController.WaysideFunctions;
 import MTR.NorthShoreExtension.UI.TrackModelUI.TrackGraphic;
  
-public class WaysideControllerUI {
+public class WaysideControllerUI extends JFrame{
 	public static String SampleCode;
 	public static String FilePath = "";
 	//basic frame and components
@@ -229,16 +230,39 @@ public class WaysideControllerUI {
  			   {
  				   System.out.println("COLOR FOUND");
  				  System.out.println(dm1.getValueAt(x, 1) + " to " + TrackID);
- 				   if (dm1.getValueAt(x, 2).equals(TrackID) || dm1.getValueAt(x, 1).equals("Black"))
+ 				   if (dm1.getValueAt(x, 2).equals(Integer.toString(TrackID).substring(1)) || dm1.getValueAt(x, 1).equals("Black"))
  				   {
  					   System.out.println("NUMBER FOUND");
- 					   dm1.setValueAt(NextTrack, x, 2);
- 					   dm1.setValueAt(AuthorityDist, x, 3);
+ 					   dm1.setValueAt(Integer.toString(NextTrack).substring(1), x, 2);
+ 					   dm1.setValueAt(Math.round((AuthorityDist * 0.3048) * 100) / 100, x, 3);
  				   }
  				   
  			   }
  			   
  		   }
+ 		   
+ 		  for (int y = 0; y < am.getRowCount(); y++)
+		   {
+
+			   am.setValueAt("Green", y, 0);
+				  	//System.out.println("CASH ME OUTSIDE!!!!");
+			   
+		   }
+ 		   for (int x = 0; x < dm1.getRowCount(); x++)
+		   {
+ 			   for (int y = 0; y < am.getRowCount(); y++)
+ 			   {
+ 				   if (dm1.getValueAt(x, 2).equals(am.getValueAt(y, 2)) && dm1.getValueAt(x, 0).equals(am.getValueAt(y, 1)))
+				   {
+ 					   am.setValueAt("Red", y, 0);
+	 				  	//System.out.println("CASH ME OUTSIDE!!!!");
+				   }
+ 			   }
+ 			  //System.out.println("I know Kung FU: " + dm1.getValueAt(x, 2) + " || Lights: " + am.getValueAt(0, 2));
+ 			  //System.out.println("EAT THIS!: " + dm1.getValueAt(x, 0) + " || Lights: " + am.getValueAt(0, 1));
+ 			 
+		   }
+ 		   
  	   
  		   
  		   
@@ -271,6 +295,8 @@ public class WaysideControllerUI {
     
     public static void ActionAdder()
     {
+    	frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        
  	//button that browses files
  		Browse.addActionListener(new ActionListener()
  		{
@@ -441,15 +467,33 @@ public class WaysideControllerUI {
 	   {
 		   
 		   String Color = Integer.toString(obj).substring(1,4);
-		   Object[] Switches = {"Red", Color, load.getNextTrack(obj, obj+1), load.getAltTrack(obj)};
-		   dm.addRow(Switches);
+		   Object[] Switches = {"Red", Color, Integer.toString(load.getNextTrack(obj, obj+1)).substring(1), Integer.toString(load.getAltTrack(obj)).substring(1)};
+		   Object[] Switches2 = {"Red", Color, Integer.toString(load.schedNextTrack(obj, obj+1)).substring(1), Integer.toString(load.getAltTrack(obj)).substring(1)};
+		   Object[] DUMDUM = Switches;
+		   if(load.getNextTrack(obj, obj+1) == load.getAltTrack(obj)) 
+		   {
+			   DUMDUM = Switches2;
+		   }
+		   
+
+		   
+		   dm.addRow(DUMDUM);
 	       //System.out.println(load.getInfrastructure(obj) + ": " + obj + " at " + load.getSwitch(obj) + " With the Next: " + load.getNextTrack(obj, obj+1) + " or " + load.getAltTrack(obj));
 	   }
 	   for(Integer obj : GreenSwitch)
 	   {
 		   String Color = Integer.toString(obj).substring(1,4);
-		   Object[] Switches = {"Green", Color, load.getNextTrack(obj, obj+1), load.getAltTrack(obj)};
-		   dm.addRow(Switches);
+		   Object[] Switches = {"Green", Color, Integer.toString(load.getNextTrack(obj, obj+1)).substring(1), Integer.toString(load.getAltTrack(obj)).substring(1)};
+		   Object[] Switches2 = {"Green", Color, Integer.toString(load.schedNextTrack(obj, obj+1)).substring(1), Integer.toString(load.getAltTrack(obj)).substring(1)};
+		   Object[] DUMDUM = Switches;
+		   if(load.getNextTrack(obj, obj+1) == load.getAltTrack(obj)) 
+		   {
+			   DUMDUM = Switches2;
+		   }
+		   
+
+		   
+		   dm.addRow(DUMDUM);
 	       //System.out.println(load.getInfrastructure(obj) + ": " + obj + " at " + load.getSwitch(obj) + " With the Next: " + load.getNextTrack(obj, obj+1) + " or " + load.getAltTrack(obj));
 	   }
 	   /*
@@ -476,20 +520,70 @@ public class WaysideControllerUI {
       	//---------------------------------------------------------------------------------------------------------------------------------        
             JPanel TI = new JPanel();
             OccupiedTrackChartManager();
-            
+            	
+            Stack<Integer> Lights = new Stack<>();
+     	   int GreenLights = 2001;
+     	   int RedLights = 1001;
+     	   System.out.println("TEST PANEL SET");
+     	   
+     	   while (!load.getInfrastructure(GreenLights).equalsIgnoreCase("none"))
+     	   {
+     		   if (load.getInfrastructure(GreenLights).equalsIgnoreCase("RAILWAY CROSSING"))
+     		   {
+     			   
+     			   //System.out.println(GreenTrack);
+     			   Lights.push(GreenLights);
+     		   }
+     		   
+     		   GreenLights++;		   
+     	   }
+     	  while (!load.getInfrastructure(RedLights).equalsIgnoreCase("none"))
+    	   {
+    		   if (load.getInfrastructure(RedLights).equalsIgnoreCase("RAILWAY CROSSING"))
+    		   {
+    			   
+    			   //System.out.println(GreenTrack);
+    			   Lights.push(RedLights);
+    		   }
+    		   
+    		   RedLights++;		   
+    	   }
+     	  
+     	 am.setDataVector(new Object[][] { }, new Object[] { "Color", "Line", "Track"});
+  	   for(Integer obj : Lights)
+  	   {
+  		   //System.out.println("LIGHTS: " + Integer.toString(obj));
+  		   String ColorLine = "Green";
+  		   int Digit = Character.getNumericValue(Integer.toString(obj).charAt(0));
+		   
+		   if (Digit == 1)
+		   {
+			   ColorLine = "Red";
+		   }
+		   if (Digit == 2)
+		   {
+			   ColorLine = "Green";
+		   }
+  		   Object[] LightChart = {"Green",ColorLine,Integer.toString(obj).substring(1)};
 
-    	    table1 = new JTable(dm1);
+  		   
 
-	
+  		   
+  		  am.addRow(LightChart);
+  	       //System.out.println(load.getInfrastructure(obj) + ": " + obj + " at " + load.getSwitch(obj) + " With the Next: " + load.getNextTrack(obj, obj+1) + " or " + load.getAltTrack(obj));
+  	   }
+
+  	 table1 = new JTable(dm1);
+  	 	/*
     		DefaultTableModel am = new DefaultTableModel();
     	    am.setDataVector(new Object[][] { { "Green", "E3" },
     	        { "Red", "I2" } }, new Object[] { "Xing", "Line"});
-
+*/
     	    JTable lighttable = new JTable(am);
     	    scroll1 = new JScrollPane(table1);
     		scroll2 = new JScrollPane(lighttable);
     		scroll1.setPreferredSize(new Dimension(500,Scroll1Height));
-    		scroll2.setPreferredSize(new Dimension(100,75));
+    		scroll2.setPreferredSize(new Dimension(250,Scroll1Height));
 
     	TI.add(scroll1, BorderLayout.WEST);
     	TI.add(scroll2, BorderLayout.EAST);
@@ -514,7 +608,6 @@ public class WaysideControllerUI {
     	tabbedPane.addTab(PLCPANEL, plc);
         tabbedPane.addTab(SWITCHPANEL, SC);
         tabbedPane.addTab(TRACKINFO, TI);
-        tabbedPane.addTab(TESTPan, TestPanel);
         pane.add(tabbedPane, BorderLayout.CENTER);
     }
  
@@ -524,9 +617,10 @@ public class WaysideControllerUI {
      * event dispatch thread.
      */
     private static void createAndShowGUI() {
+    	//System.out.println(load.getInfrastructure(2012) + ": " + load.getSwitch(2012) + " Dest: " + load.schedNextTrack(2012, 2011) + " OR: " + load.schedNextTrack(2012, 2013)+ "ALT: " + load.getAltTrack(2012));
         //Create and set up the window.
-        JFrame frame = new JFrame("TabDemo");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JFrame frame = new JFrame("Wayside Controller");
+    
  
         //Create and set up the content pane.
         WaysideControllerUI demo = new WaysideControllerUI();
@@ -546,15 +640,17 @@ class CustomRenderer extends DefaultTableCellRenderer
 {
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
     {
+    	Color lightred = new Color(255, 102, 102);
+    	Color lightgreen = new Color(102, 255, 102);
     	System.out.println("TEST TEST TEST");
         Component cellComponent = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
         cellComponent.setBackground(Color.YELLOW);
         
         
         if(table.getValueAt(row, column).equals("Red")){
-            cellComponent.setBackground(Color.RED);
+            cellComponent.setBackground(lightred);
         } else if(table.getValueAt(row, column).equals("Green")){
-            cellComponent.setBackground(Color.GREEN);
+            cellComponent.setBackground(lightgreen);
         }
         
         return cellComponent;
