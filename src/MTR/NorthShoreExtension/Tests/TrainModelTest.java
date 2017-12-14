@@ -33,8 +33,8 @@ import MTR.NorthShoreExtension.Backend.TrainSrc.Train;
 public class TrainModelTest extends JFrame implements ActionListener{
 
 	private JPanel contentPane;
-	private static Map<Integer,Train> tMap = new HashMap<Integer,Train>();
-	private Train tr;
+	private static Map<Integer,TrainTest> tMap = new HashMap<Integer,TrainTest>();
+	private TrainTest tr;
 	private double p;
 	private JTextField txtAcc;
 	private JLabel lblV, lblAcc, lblLd,lblRd, lblL_1;
@@ -53,6 +53,12 @@ public class TrainModelTest extends JFrame implements ActionListener{
 	private JLabel lblC;
 	private JLabel lblD;
 	private JLabel lblCd;
+	private JTextField textField;
+	private JTextField textField_1;
+	private static double[] grade = {0, 0, 0, 0, 0};
+	private static double[] powar = {10, 10, 10, 10, 10};
+	private static int[] pass= {148,148, 148, 0, 0};
+	private JTextField textField_2;
 
 	/**
 	 * Launch the application.
@@ -75,7 +81,7 @@ public class TrainModelTest extends JFrame implements ActionListener{
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
-		gbl_contentPane.columnWidths = new int[]{0, 200, 20, 100, 100, 100, 100, 100, 100, 100, 100, 0};
+		gbl_contentPane.columnWidths = new int[]{0, 200, 20, 100, 100, 100, 100, 100, 200, 100, 100, 0};
 		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gbl_contentPane.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
@@ -556,15 +562,6 @@ public class TrainModelTest extends JFrame implements ActionListener{
 		gbc_lblFailureModes.gridy = 9;
 		contentPane.add(lblFailureModes, gbc_lblFailureModes);
 		
-		JLabel lblNextStop = new JLabel("Railway Info:");
-		lblNextStop.setFont(new Font("Arial", Font.BOLD, 18));
-		GridBagConstraints gbc_lblNextStop = new GridBagConstraints();
-		gbc_lblNextStop.gridwidth = 2;
-		gbc_lblNextStop.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNextStop.gridx = 7;
-		gbc_lblNextStop.gridy = 9;
-		contentPane.add(lblNextStop, gbc_lblNextStop);
-		
 		JLabel lblBrakeFailure = new JLabel("Brake Failure:");
 		lblBrakeFailure.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblBrakeFailure = new GridBagConstraints();
@@ -596,21 +593,27 @@ public class TrainModelTest extends JFrame implements ActionListener{
 		gbc_button.gridy = 10;
 		contentPane.add(button, gbc_button);
 		
-		JLabel lblAnnoucement = new JLabel("Annoucement:");
-		lblAnnoucement.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		GridBagConstraints gbc_lblAnnoucement = new GridBagConstraints();
-		gbc_lblAnnoucement.anchor = GridBagConstraints.WEST;
-		gbc_lblAnnoucement.insets = new Insets(0, 0, 5, 5);
-		gbc_lblAnnoucement.gridx = 7;
-		gbc_lblAnnoucement.gridy = 10;
-		contentPane.add(lblAnnoucement, gbc_lblAnnoucement);
+		textField = new JTextField();
+		GridBagConstraints gbc_textField = new GridBagConstraints();
+		gbc_textField.insets = new Insets(0, 0, 5, 5);
+		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textField.gridx = 8;
+		gbc_textField.gridy = 10;
+		contentPane.add(textField, gbc_textField);
+		textField.setColumns(10);
 		
-		JLabel lblAnn = new JLabel("");
-		GridBagConstraints gbc_lblAnn = new GridBagConstraints();
-		gbc_lblAnn.insets = new Insets(0, 0, 5, 5);
-		gbc_lblAnn.gridx = 8;
-		gbc_lblAnn.gridy = 10;
-		contentPane.add(lblAnn, gbc_lblAnn);
+		JButton btnEnterPower = new JButton("Enter Power");
+		btnEnterPower.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				double z=Double.parseDouble(textField.getText());
+				powar[comboBox.getSelectedIndex()]=z;
+			}
+		});
+		GridBagConstraints gbc_btnEnterPower = new GridBagConstraints();
+		gbc_btnEnterPower.insets = new Insets(0, 0, 5, 5);
+		gbc_btnEnterPower.gridx = 9;
+		gbc_btnEnterPower.gridy = 10;
+		contentPane.add(btnEnterPower, gbc_btnEnterPower);
 		
 		JLabel lblEngineFailure = new JLabel("Engine Failure:");
 		lblEngineFailure.setFont(new Font("Tahoma", Font.PLAIN, 18));
@@ -643,21 +646,27 @@ public class TrainModelTest extends JFrame implements ActionListener{
 		gbc_btnOn.gridy = 11;
 		contentPane.add(btnOn, gbc_btnOn);
 		
-		JLabel lblGreenLine = new JLabel("Line:");
-		lblGreenLine.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		GridBagConstraints gbc_lblGreenLine = new GridBagConstraints();
-		gbc_lblGreenLine.anchor = GridBagConstraints.WEST;
-		gbc_lblGreenLine.insets = new Insets(0, 0, 5, 5);
-		gbc_lblGreenLine.gridx = 7;
-		gbc_lblGreenLine.gridy = 11;
-		contentPane.add(lblGreenLine, gbc_lblGreenLine);
+		textField_1 = new JTextField();
+		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
+		gbc_textField_1.insets = new Insets(0, 0, 5, 5);
+		gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textField_1.gridx = 8;
+		gbc_textField_1.gridy = 11;
+		contentPane.add(textField_1, gbc_textField_1);
+		textField_1.setColumns(10);
 		
-		JLabel lblLine = new JLabel("");
-		GridBagConstraints gbc_lblLine = new GridBagConstraints();
-		gbc_lblLine.insets = new Insets(0, 0, 5, 5);
-		gbc_lblLine.gridx = 8;
-		gbc_lblLine.gridy = 11;
-		contentPane.add(lblLine, gbc_lblLine);
+		JButton btnEnterGrade = new JButton("Enter Grade");
+		btnEnterGrade.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				double g=Double.parseDouble(textField_1.getText());
+				grade[comboBox.getSelectedIndex()]=g;
+			}
+		});
+		GridBagConstraints gbc_btnEnterGrade = new GridBagConstraints();
+		gbc_btnEnterGrade.insets = new Insets(0, 0, 5, 5);
+		gbc_btnEnterGrade.gridx = 9;
+		gbc_btnEnterGrade.gridy = 11;
+		contentPane.add(btnEnterGrade, gbc_btnEnterGrade);
 		
 		JLabel lblSignalPickupFailure = new JLabel("Signal Pickup Failure: ");
 		lblSignalPickupFailure.setFont(new Font("Tahoma", Font.PLAIN, 18));
@@ -698,6 +707,28 @@ public class TrainModelTest extends JFrame implements ActionListener{
 		gbc_btnOn_1.gridx = 6;
 		gbc_btnOn_1.gridy = 12;
 		contentPane.add(btnOn_1, gbc_btnOn_1);
+		
+		textField_2 = new JTextField();
+		GridBagConstraints gbc_textField_2 = new GridBagConstraints();
+		gbc_textField_2.insets = new Insets(0, 0, 5, 5);
+		gbc_textField_2.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textField_2.gridx = 8;
+		gbc_textField_2.gridy = 12;
+		contentPane.add(textField_2, gbc_textField_2);
+		textField_2.setColumns(10);
+		
+		JButton btnEnterPassengers = new JButton("Enter Passengers");
+		btnEnterPassengers.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int g=Integer.parseInt(textField_2.getText());
+				pass[comboBox.getSelectedIndex()]=g;
+			}
+		});
+		GridBagConstraints gbc_btnEnterPassengers = new GridBagConstraints();
+		gbc_btnEnterPassengers.insets = new Insets(0, 0, 5, 5);
+		gbc_btnEnterPassengers.gridx = 9;
+		gbc_btnEnterPassengers.gridy = 12;
+		contentPane.add(btnEnterPassengers, gbc_btnEnterPassengers);
 		
 		JLabel lblPassengerEmergencyBrake = new JLabel("Passenger Emergency Brake:");
 		lblPassengerEmergencyBrake.setFont(new Font("Tahoma", Font.PLAIN, 18));
@@ -808,26 +839,24 @@ public class TrainModelTest extends JFrame implements ActionListener{
 		
 		
 		for(int i=0;i<5;i++) {
-			Train s= new Train(i,10001);
+			TrainTest s= new TrainTest(i,10001);
 			tMap.put(i,s);
 		}
 		
 		TrainModelTest frame = new TrainModelTest();
 		frame.addTrain();
 		frame.setVisible(true);
-		double[] grade = {-6, 6, 0, 0, 0};
-		double[] temp = {10, 10, 10, 10, 10};
-		int[] p= {148,148, 148, 200, -5};
+		
 		do {
 			long millis = System.currentTimeMillis();
 		    //code to run
 			for(int i=0;i<5;i++) {
-				tMap.get(i).setPassengers(p[i]);
+				tMap.get(i).setPassengers(pass[i]);
 				tMap.get(i).setGrade(grade[i]);
-				tMap.get(i).TrainModel_setPower(temp[i]); 
+				tMap.get(i).TrainModel_setPower(powar[i]); 
 			}
 			frame.updateGUI();
-		    //sThread.sleep(1000 - millis % 1000);
+		    Thread.sleep(1000 - millis % 1000);
 		}while(true);
 		
 	}
