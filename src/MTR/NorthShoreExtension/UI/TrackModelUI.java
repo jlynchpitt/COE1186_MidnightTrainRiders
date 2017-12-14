@@ -186,7 +186,7 @@ public class TrackModelUI extends JPanel {
 	    	    	    g.setColor(Color.red);
 	    	        	g.fillRect(20, 800, 150, 20);
 	  		      g.setColor(Color.black);
-	  		      g.drawString("Additional Testing", 40, 60);
+	  		      g.drawString("Additional Testing", 40, 820);
 	    	    }
 	    	    g.setStroke(new BasicStroke(3));
 	    	    g.setColor(Color.white);
