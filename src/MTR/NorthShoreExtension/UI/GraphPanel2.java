@@ -1,4 +1,13 @@
-/* ===========================================================
+/* 
+ * Filename: GraphPanel2.java
+ * Author: Joe Lynch
+ * Date Created: 12/10/2017
+ * File Description: This is a user interface panel for a basic graph.
+ * 			This is open source code. See below for references
+ * 
+ * 
+ * 
+ * ===========================================================
  * JFreeChart : a free chart library for the Java(tm) platform
  * ===========================================================
  *

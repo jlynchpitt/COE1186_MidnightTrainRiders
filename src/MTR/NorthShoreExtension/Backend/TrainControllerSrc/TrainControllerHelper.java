@@ -20,6 +20,7 @@ import MTR.NorthShoreExtension.Backend.TrackModelSrc.TrackModel;
 import MTR.NorthShoreExtension.Backend.TrainSrc.Train;
 import MTR.NorthShoreExtension.UI.TrackModelUI;
 import MTR.NorthShoreExtension.UI.TrackModelUI.TrackGraphic;
+import MTR.NorthShoreExtension.UI.TrainControlUI;
 import MTR.NorthShoreExtension.UI.TrainModelUI;
 import MTR.NorthShoreExtension.UI.ctcUI;
 
@@ -140,6 +141,23 @@ public class TrainControllerHelper {
 		powerTimer.scheduleAtFixedRate(new PowerTimerTask(), 0, 1000/clockMultiplier);
 	}
 	
+	public void removeTrain(int trainID) {
+		if(getTrainIDList().contains(trainID)) {
+			//Train exists - remove it from both lists
+			idList.remove(idList.indexOf(trainID));
+			int tcIndex = -1;
+			for(TrainController tc : tcList) {
+				if(trainID == tc.getTrainID()) {
+					tcIndex = tcList.indexOf(tc);
+					break;
+				}
+			}
+			if(tcIndex != -1) {
+				tcList.remove(tcIndex);
+			}
+			TrainControlUI.reloadGUI();
+		}
+	}
 
 	public long getTime() {
 		return simulatedClockTime;
