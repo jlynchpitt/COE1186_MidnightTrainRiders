@@ -243,7 +243,7 @@ public class WaysideControllerUI {
  		   
  		   
  	   
- 		  table.getColumnModel().getColumn(0).setCellRenderer(new CustomRenderer());
+ 		  //table.getColumnModel().getColumn(0).setCellRenderer(new CustomRenderer());
  	   
     }
     
