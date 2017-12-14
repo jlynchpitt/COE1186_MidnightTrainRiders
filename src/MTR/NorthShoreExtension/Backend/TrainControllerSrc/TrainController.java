@@ -166,6 +166,27 @@ public class TrainController {
 		
 		updateUI(TrainControlPanel.VITAL);
 		
+		if(manualMode == false) {
+			//Auto mode - check status of lights + doors
+			if(currentTrackInfo.isUnderground) {
+				operateLights(true);
+			}
+			else {
+				operateLights(false);
+			}
+			
+			if(currentTrackInfo.isStation && actualSpeed < 0.1) {
+				//open doors - TODO: open correct side door only
+				operateRightDoor(true);
+				operateLeftDoor(true);
+			}
+			else {
+				//close all doors
+				operateRightDoor(false);
+				operateLeftDoor(false);
+			}
+		}
+		
 		//Send to train model and test bench
 		if(trainModel != null) {
 			trainModel.TrainModel_setPower(powerCommand);
@@ -224,35 +245,45 @@ public class TrainController {
 	
 	/* Functions for non-vital user inputs */
 	public void operateRightDoor(boolean open) {
-		rightDoorOpen = open;
-		
-		if(trainModel != null) {
-			trainModel.TrainModel_openRightDoor(open);
-		}
-		if(testBench != null) {
-			testBench.TrainModel_openRightDoor(open);
+		if(open != rightDoorOpen) {
+			rightDoorOpen = open;
+			
+			if(trainModel != null) {
+				trainModel.TrainModel_openRightDoor(open);
+			}
+			if(testBench != null) {
+				testBench.TrainModel_openRightDoor(open);
+			}
+			
+			updateUI(TrainControlPanel.DOORS);
 		}
 	}
 	
 	public void operateLeftDoor(boolean open) {
-		leftDoorOpen = open;
-		
-		if(trainModel != null) {
-			trainModel.TrainModel_openLeftDoor(open);
-		}
-		if(testBench != null) {
-			testBench.TrainModel_openLeftDoor(open);
+		if(open != leftDoorOpen) {
+			leftDoorOpen = open;
+			
+			if(trainModel != null) {
+				trainModel.TrainModel_openLeftDoor(open);
+			}
+			if(testBench != null) {
+				testBench.TrainModel_openLeftDoor(open);
+			}
+			updateUI(TrainControlPanel.DOORS);
 		}
 	}
 	
 	public void operateLights(boolean on) {
-		lightsOn = on;
-		
-		if(trainModel != null) {
-			trainModel.TrainModel_turnLightsOn(on);
-		}
-		if(testBench != null) {
-			testBench.TrainModel_turnLightsOn(on);
+		if(lightsOn != on) {
+			lightsOn = on;
+			
+			if(trainModel != null) {
+				trainModel.TrainModel_turnLightsOn(on);
+			}
+			if(testBench != null) {
+				testBench.TrainModel_turnLightsOn(on);
+			}
+			updateUI(TrainControlPanel.LIGHTS);
 		}
 	}
 	
