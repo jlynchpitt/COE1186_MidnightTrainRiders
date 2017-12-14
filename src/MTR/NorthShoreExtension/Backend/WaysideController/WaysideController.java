@@ -240,7 +240,7 @@ public class WaysideController //this class is the logic to decide what to do wi
 				{
 					if (ListOfTrackPlans.get(x).get(1) == ListOfTrackPlans.get(x).get(0) + 1 || ListOfTrackPlans.get(x).get(1) == ListOfTrackPlans.get(x).get(0) - 1)  //if the next track is only one off of the previous, it goes in a straight line
 					{
-						if (ListOfTrackPlans.get(x).get(1) == 1) //if needs to be straight but not straight
+						if (ListOfTrackPlans.get(x).get(1) == 0) //if needs to be straight but not straight
 						{
 							//so set switch to straight
 							WaysideFunctionsHub.WaysideController_Switch(ListOfTrackPlans.get(x).get(1));
@@ -249,7 +249,7 @@ public class WaysideController //this class is the logic to decide what to do wi
 					}
 					else  //if next track is not one difference, then it takes a diferent switch
 					{
-						if (load.getSwitch(ListOfTrackPlans.get(x).get(1)) == 0)  //if needs to be angled but straight
+						if (load.getSwitch(ListOfTrackPlans.get(x).get(1)) == 1)  //if needs to be angled but straight
 						{
 							//so set switch to angle
 							WaysideFunctionsHub.WaysideController_Switch(ListOfTrackPlans.get(x).get(1));
