@@ -18,6 +18,7 @@ public class Train {
 	private int authority;
 	private double maxacceleration, maxvelocity, nextpower;
 	private int maxpassengers, trainID;
+	private int commandedSpeed;
 	private boolean engineFailure, signalFailure, brakeFailure, passengerEBrake;
 	private String trainLine;
 	private TrackModel tkm;
@@ -31,7 +32,7 @@ public class Train {
 		TrainControllerHelper tch = MainMTR.getTrainControllerHelper();
 		
 		int line=(int) Math.floor(trackID / Math.pow(10, Math.floor(Math.log10(trackID))));
-		System.out.println("Line "+line);
+		System.out.println("tid "+t);
 		if(line==2) {
 			tc=tch.addNewTrainController(t, "Green", this);
 			trainLine="Green";
@@ -101,6 +102,9 @@ public class Train {
 		tc.TrainControl_setCommandedSpeedAuthority(v,a);
 	}
 	
+	public void TrainModel_resendSpeedAuthority() {
+		tc.TrainControl_setCommandedSpeedAuthority(commandedSpeed, authority);
+	}
 	public void TrainModel_sendBeacon(int beacon) {
 		tc.TrainControl_sendBeaconInfo(beacon);
 	}
