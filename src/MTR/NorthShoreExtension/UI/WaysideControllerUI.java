@@ -82,22 +82,28 @@ public class WaysideControllerUI extends JFrame{
 	public static DefaultTableModel om = new DefaultTableModel();
 	public static DefaultTableModel am = new DefaultTableModel();
 	public static DefaultTableModel dm1 = new DefaultTableModel();
+	public static DefaultTableModel bm = new DefaultTableModel();
 	public static boolean TablesCreated = false;
 	public static boolean OccupiedTablesCreated = false;
 	public static JTable table1;
 	public static JTable table;
+	public static JTable BrokenTracksTable;
+	public static JTable lighttable = new JTable(am);
 	public static JScrollPane scroll1;
 	public static JScrollPane scroll;
 	public static JScrollPane scroll2;
+	public static JScrollPane scroll3;
 	public static int Scroll1Height = 75;
 	static DBHelper load;
 	static TrackModelUI instance;
+	
+	
 	public static TrackGraphic trackGraphic = null;
 	
     final static String BUTTONPANEL = "Tab with JButtons";
     final static String TEXTPANEL = "Tab with JTextField";
     final static String PLCPANEL = "PLC";
-    final static String SWITCHPANEL = "Switch Controller";
+    final static String SWITCHPANEL = "Switch Ctrl Hub";
     final static String TRACKINFO = "Track Info";
     final static String TESTPan = "Test Panel";
     final static int extraWindowWidth = 100;
@@ -140,7 +146,7 @@ public class WaysideControllerUI extends JFrame{
     {
     	if (!OccupiedTablesCreated)
   	   {
-  		  dm1.setDataVector(new Object[][] { { "Color", "Black", "Track", "length" }}, new Object[] { "Line", "Occupied Track", "Dest Track", "Athrty" });
+  		  dm1.setDataVector(new Object[][] { { "Color", "Black", "Track", "length", "speed" }}, new Object[] { "Line", "Occupied Track", "Dest Track", "Athrty", "Speed" });
   		  OccupiedTablesCreated = true;
   	   }
     }
@@ -203,7 +209,7 @@ public class WaysideControllerUI extends JFrame{
     
     
     //updates occupied tracks with authority 
-    public static void OccupiedTrackAuthoritySpeedUpdater(int TrackID, int NextTrack, int AuthorityDist)
+    public static void OccupiedTrackAuthoritySpeedUpdater(int TrackID, int NextTrack, int AuthorityDist, int Speed)
     {
     		OccupiedTrackChartManager();
  		   String LineColor = null;
@@ -235,16 +241,17 @@ public class WaysideControllerUI extends JFrame{
  					   System.out.println("NUMBER FOUND");
  					   dm1.setValueAt(Integer.toString(NextTrack).substring(1), x, 2);
  					   dm1.setValueAt(Math.round((AuthorityDist * 0.3048) * 100) / 100, x, 3);
+ 					   dm1.setValueAt(Speed, x, 4);
  				   }
  				   
  			   }
  			   
  		   }
- 		   
+ 		  table1.getColumnModel().getColumn(0).setCellRenderer(new CustomRenderer());
  		  for (int y = 0; y < am.getRowCount(); y++)
 		   {
 
-			   am.setValueAt("Green", y, 0);
+			   am.setValueAt("GREEN", y, 0);
 				  	//System.out.println("CASH ME OUTSIDE!!!!");
 			   
 		   }
@@ -252,9 +259,9 @@ public class WaysideControllerUI extends JFrame{
 		   {
  			   for (int y = 0; y < am.getRowCount(); y++)
  			   {
- 				   if (dm1.getValueAt(x, 2).equals(am.getValueAt(y, 2)) && dm1.getValueAt(x, 0).equals(am.getValueAt(y, 1)))
+ 				   if (dm1.getValueAt(x, 1).equals(am.getValueAt(y, 2)) && dm1.getValueAt(x, 0).equals(am.getValueAt(y, 1)))
 				   {
- 					   am.setValueAt("Red", y, 0);
+ 					   am.setValueAt("RED", y, 0);
 	 				  	//System.out.println("CASH ME OUTSIDE!!!!");
 				   }
  			   }
@@ -262,6 +269,7 @@ public class WaysideControllerUI extends JFrame{
  			  //System.out.println("EAT THIS!: " + dm1.getValueAt(x, 0) + " || Lights: " + am.getValueAt(0, 1));
  			 
 		   }
+ 		  lighttable.getColumnModel().getColumn(0).setCellRenderer(new CustomRenderer());
  		   
  	   
  		   
@@ -410,6 +418,16 @@ public class WaysideControllerUI extends JFrame{
 		return load;
 	}
 
+	public static void UpdateBrokenTracks(int [] BrokenTrackArray)
+	{
+		bm.setDataVector(new Object[][] { }, new Object[] { "Broken Tracks"});
+		for (int x = 0; x < BrokenTrackArray.length; x++)
+		{
+			Object[] Tracks = {BrokenTrackArray[x]};
+			bm.addRow(Tracks);
+		}
+	}
+	
     public void addComponentToPane(Container pane) {
     	ActionAdder();
     	//----------------------------------------------
@@ -421,10 +439,10 @@ public class WaysideControllerUI extends JFrame{
         String[] choices = { "South Green Line", "North Green Line", "South Red Line", "North Green Line"};
         Box ButtonBox;
  	   	
-        final JComboBox<String> cb = new JComboBox<String>(choices);
+        //final JComboBox<String> cb = new JComboBox<String>(choices);
         ButtonBox = Box.createVerticalBox();
         ButtonBox.add( Box.createVerticalStrut( 25 ) );
-        ButtonBox.add(cb, BorderLayout.NORTH);
+        //ButtonBox.add(cb, BorderLayout.NORTH);
         ButtonBox.add(Browse, BorderLayout.EAST);
         ButtonBox.add(SaveButton, BorderLayout.EAST);
  	   	plc.add(text, BorderLayout.WEST);  //add tframo e 
@@ -496,15 +514,7 @@ public class WaysideControllerUI extends JFrame{
 		   dm.addRow(DUMDUM);
 	       //System.out.println(load.getInfrastructure(obj) + ": " + obj + " at " + load.getSwitch(obj) + " With the Next: " + load.getNextTrack(obj, obj+1) + " or " + load.getAltTrack(obj));
 	   }
-	   /*
-	   BufferedImage image;
-		try {
-			image = ImageIO.read(new File("TrackLayout.png"));
-		} catch (IOException ex) {
-			image = null;
-		}
-		*/
-		//JLabel picLabel = new JLabel(new ImageIcon(image));
+
 		
 	   Color red = new Color(255, 0, 0);
 	   Color ivory = new Color(255, 255, 208);
@@ -564,7 +574,7 @@ public class WaysideControllerUI extends JFrame{
 		   {
 			   ColorLine = "Green";
 		   }
-  		   Object[] LightChart = {"Green",ColorLine,Integer.toString(obj).substring(1)};
+  		   Object[] LightChart = {"GREEN",ColorLine,Integer.toString(obj).substring(1)};
 
   		   
 
@@ -574,19 +584,24 @@ public class WaysideControllerUI extends JFrame{
   	   }
 
   	 table1 = new JTable(dm1);
-  	 	/*
-    		DefaultTableModel am = new DefaultTableModel();
-    	    am.setDataVector(new Object[][] { { "Green", "E3" },
-    	        { "Red", "I2" } }, new Object[] { "Xing", "Line"});
-*/
-    	    JTable lighttable = new JTable(am);
+  	 	
+    	    bm.setDataVector(new Object[][] { }, new Object[] { "Broken Tracks"});
+    	    BrokenTracksTable = new JTable(bm);
+
+    	    lighttable = new JTable(am);
+    	    lighttable.getColumnModel().getColumn(0).setCellRenderer(new CustomRenderer());
+    	    lighttable.getColumnModel().getColumn(1).setCellRenderer(new CustomRenderer());
     	    scroll1 = new JScrollPane(table1);
     		scroll2 = new JScrollPane(lighttable);
-    		scroll1.setPreferredSize(new Dimension(500,Scroll1Height));
+    		scroll3 = new JScrollPane(BrokenTracksTable);
+    		scroll1.setPreferredSize(new Dimension(500,250));
     		scroll2.setPreferredSize(new Dimension(250,Scroll1Height));
+    		scroll3.setPreferredSize(new Dimension(150,Scroll1Height));
 
     	TI.add(scroll1, BorderLayout.WEST);
     	TI.add(scroll2, BorderLayout.EAST);
+    	TI.add(scroll3, BorderLayout.SOUTH);
+    	
     	
     	//test
         //---------------------------------------------------------------------------------------------------------------------------------        
@@ -638,10 +653,13 @@ public class WaysideControllerUI extends JFrame{
 }
 class CustomRenderer extends DefaultTableCellRenderer 
 {
+	public static Color lightred = new Color(255, 200, 200);
+	public static Color lightgreen = new Color(200, 255, 200);
+	public static Color darkred = new Color(255, 0, 0);
+	public static Color darkgreen = new Color(0, 255, 0);
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
     {
-    	Color lightred = new Color(255, 102, 102);
-    	Color lightgreen = new Color(102, 255, 102);
+    	
     	System.out.println("TEST TEST TEST");
         Component cellComponent = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
         cellComponent.setBackground(Color.YELLOW);
@@ -652,9 +670,15 @@ class CustomRenderer extends DefaultTableCellRenderer
         } else if(table.getValueAt(row, column).equals("Green")){
             cellComponent.setBackground(lightgreen);
         }
+        else if(table.getValueAt(row, column).equals("RED")){
+            cellComponent.setBackground(darkred);
+        } else if(table.getValueAt(row, column).equals("GREEN")){
+            cellComponent.setBackground(darkgreen);
+        }
         
         return cellComponent;
     }
+
     /*
     public Component getTableCellRendererComponent2(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
     {
