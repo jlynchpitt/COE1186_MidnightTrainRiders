@@ -826,8 +826,17 @@ public class TrainModelUI extends JFrame implements ActionListener{
 			}else {
 				lblRd.setText("Closed");
 			}
-			lblLine.setText(tr.getTrainLine());
-			lblAnn.setText(tr.getAnnouncement());
+			if(tr.getTrainLine()!=null) {
+				lblLine.setText(tr.getTrainLine());
+				if(tr.getTrainLine().equals("Red")) {
+					lblLine.setForeground(Color.red);
+				}else {
+					lblLine.setForeground(Color.green);
+				}
+			}
+			if(tr.getAnnouncement()!=null) {
+				lblAnn.setText(tr.getAnnouncement());
+			}
 		}
 		
 	}
