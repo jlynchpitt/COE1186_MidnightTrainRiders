@@ -168,8 +168,8 @@ public class UpdateTrackUI {
 					JOptionPane.showMessageDialog(null, "Data Missing");
 				else {
 					int trackid = Integer.parseInt(textField.getText().replaceAll("[^0-9]", ""));
-					int speed = Integer.parseInt(textField_2.getText().replaceAll("[^0-9]", ""));
-					int authority = Integer.parseInt(textField_1.getText().replaceAll("[^0-9]", ""));
+					int speed = Integer.parseInt(textField_1.getText().replaceAll("[^0-9]", ""));
+					int authority = Integer.parseInt(textField_2.getText().replaceAll("[^0-9]", ""));
 					String occupied = textArea_1.getText();
 					if(occupied.equals("occupied")) {
 						load.updateTrackOccupied(trackid, 1);

@@ -128,8 +128,8 @@ public class TrackModelUI extends JPanel {
     			g.drawString("Click on a track to view information:", 10, 20);
     			g.drawString("Line:", 10, 50);
     			g.drawString("Occupied:", 10, 80);
-    			g.drawString("Speed:", 10, 110);
-    			g.drawString("Authority:", 10, 140);
+    			g.drawString("Authority:", 10, 110);
+    			g.drawString("Speed:", 10, 140);
     			g.drawString("Section:", 10, 170);
     			g.drawString("Block:", 10, 200);
     			g.drawString("Length(m):", 10, 230);
