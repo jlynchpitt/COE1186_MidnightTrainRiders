@@ -179,7 +179,7 @@ public class UpdateTrackUI {
 						load.updateTrackStatus(trackid, "Broken Rail");
 					}
 					else if(comboBox.getSelectedItem().equals("Circuit Failure")) {
-						load.updateTrackStatus(trackid, "Circuit Failure");
+						load.updateTrackStatus(trackid, "Track Circuit Failure");
 					}
 					else if(comboBox.getSelectedItem().equals("Power Failure")) {
 						load.updateTrackStatus(trackid, "Power Failure");

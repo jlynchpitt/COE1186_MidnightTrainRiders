@@ -9,6 +9,7 @@ import javax.swing.filechooser.*;
 
 import MTR.NorthShoreExtension.MainMTR;
 import MTR.NorthShoreExtension.MainMTR3;
+import MTR.NorthShoreExtension.MainMTRCTC;
 import MTR.NorthShoreExtension.Backend.DBHelper;
 import MTR.NorthShoreExtension.Backend.TrackModelSrc.TrackModel;
 
@@ -158,6 +159,14 @@ public class LoadTrackModelUI extends JPanel
 						ctcUI.formAndRenderGUI();
 					}
 				});
+            }
+            else if (MainMTRCTC.fullUI) {
+            	javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            		public void run() {
+            			ctcUI.formAndRenderGUI();
+            			ctcUI.setCTCTesting(1);
+            		}
+            	});
             }
             else if(MainMTR3.fullUI) {
             	//Start the TrainController, and Train Model if running that main test program

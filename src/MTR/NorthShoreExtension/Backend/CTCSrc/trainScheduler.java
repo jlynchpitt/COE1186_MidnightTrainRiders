@@ -120,6 +120,7 @@ public class trainScheduler {
 			}
 		} //end of the manual/auto mode
 		
+		System.out.println("Authority: ");
 		int k = 0;
 		for (k = 0; k < auth.size(); k++) {
 			System.out.println(".:. :" + auth.get(k));

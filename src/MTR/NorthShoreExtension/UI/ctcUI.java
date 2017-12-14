@@ -64,6 +64,12 @@ public class ctcUI {
 	public static JTextArea numTrn;
 	public static JPanel ambientTemp;
 	public static JTextArea thrhput;
+	static JButton engineerCtrls = new JButton("Engineer Controls");
+	static JButton trnInfo = new JButton("Train Model");
+	static JButton trnCtrl = new JButton("Train Controls");
+	static JButton trkCtrl = new JButton("Wayside Controls");
+	JButton schedTrain, schedRepair, reporting, timeMult, switchTest, schedules;
+	JPanel runningMode, thrput, trainNum, currTime, trkModel;
 	
 	int timeMultiplier;
 	TrainControllerHelper tch;
@@ -77,6 +83,18 @@ public class ctcUI {
 	public static TrainScheduleHelper tsh;
 	static int tempTracker = 0;
 	static long startTime = TrainControllerHelper.programStartTime; //for calculating throughput
+	
+	static int ctcTesting = 0;
+	
+	public static void setCTCTesting(int setter) {
+		ctcTesting = setter;
+		if (ctcTesting == 1) {
+			engineerCtrls.setEnabled(false);
+			trkCtrl.setEnabled(false);
+			trnCtrl.setEnabled(false);
+			trnInfo.setEnabled(false);
+		}
+	}
 	
 	public static int getRunMode() {
 		return runModeSwitch;
@@ -225,8 +243,8 @@ public class ctcUI {
 		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 		String currentTime = sdf.format(cal.getTime());*/
 		
-		JButton schedTrain, schedRepair, reporting, trnInfo, trnCtrl, trkCtrl, timeMult, switchTest, schedules, engineerCtrls;
-		JPanel runningMode, thrput, trainNum, currTime, trkModel;
+		//JButton schedTrain, schedRepair, reporting, trnInfo, trnCtrl, trkCtrl, timeMult, switchTest, schedules, engineerCtrls;
+		//JPanel runningMode, thrput, trainNum, currTime, trkModel;
 		tempF = 37;
 		numTrains = 0;
 		throughput = 0;
@@ -442,6 +460,9 @@ public class ctcUI {
 				}
 			}
 		});
+		if (ctcTesting == 1) {
+			trnInfo.setEnabled(false);
+		}
 		pane.add(trnInfo, gbc);
 		
 		trnCtrl = new JButton("Train Controls");
@@ -454,6 +475,9 @@ public class ctcUI {
 				TrainControlUI.createAndShowTrainControlGUI(null);
 			}
 		});
+		if (ctcTesting == 1) {
+			trnCtrl.setEnabled(false);
+		}
 		pane.add(trnCtrl,  gbc);
 		
 		trkCtrl = new JButton("Wayside Controls");
@@ -471,6 +495,9 @@ public class ctcUI {
 				}
 			}
 		});
+		if (ctcTesting == 1) {
+			trkCtrl.setEnabled(false);
+		}
 		pane.add(trkCtrl, gbc);
 		
 		//trackModel Panel
@@ -533,6 +560,9 @@ public class ctcUI {
 				TrainEngineerUI.createAndShowTrainEngineerGUI(null);
 			}
 		});
+		if (ctcTesting == 1) {
+			engineerCtrls.setEnabled(false);
+		}
 		pane.add(engineerCtrls,gbc);
 		
 		pane.setSize(850, 500);

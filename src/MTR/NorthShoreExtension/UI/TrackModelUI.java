@@ -21,6 +21,7 @@ public class TrackModelUI extends JPanel {
     static LoadTrackModelUI loading = new LoadTrackModelUI();
     int numTrack = loading.sendRow();
     static DBHelper load;
+    static ctcUI ctc;
     String[] returnString = new String[15];
     String showLine = " ";
 	String showStatus = " ";
@@ -188,6 +189,12 @@ public class TrackModelUI extends JPanel {
 	  		      g.setColor(Color.white);
 	  		      g.drawString("Update This Track", 40, 815);
 	    	    }
+	    	    else if(ctc.getRunMode()==0) {
+	    	    	  g.setColor(Color.red);
+    	         	g.fillRect(20, 800, 150, 20);
+  		      g.setColor(Color.white);
+  		      g.drawString("Break Track 2150", 40, 815);
+	    	    }
 	    	    g.setStroke(new BasicStroke(3));
 	    	    g.setColor(Color.white);
 	    	    g.drawString("YARD", 1200, 250);
@@ -270,7 +277,7 @@ public class TrackModelUI extends JPanel {
 			    	  		g.drawLine(drawArray[0]-20, drawArray[1]-14, drawArray[0]-15, drawArray[1]-25);
     						
     					}
-    					if(stat.equals("Broken - Power Failure") || stat.equals("Broken - Broken Rail") || stat.equals("Broken - Track Circuit Failure")) {
+    					if(stat.equals("Power Failure") || stat.equals("Broken Rail") || stat.equals("Track Circuit Failure")) {
     						//draw x
     						g.setColor(Color.red);
     						g.drawLine(drawArray[0]-5, drawArray[1]-5, drawArray[0]+5, drawArray[1]+1);
@@ -313,7 +320,12 @@ public class TrackModelUI extends JPanel {
 				showBroken = returnString[12];
 				showHeater = returnString[13];
 				if(x < 150 && (y > 800 && y < 900 )) {
-					UpdateTrackUI.createAndShowGUI();
+					if(!MainMTR.fullUI) {
+						UpdateTrackUI.createAndShowGUI();
+					}
+					else if(ctc.getRunMode()==0) {
+						load.updateTrackStatus(2150, "Broken Rail");
+					}
 				}
 				repaint();
 			}
