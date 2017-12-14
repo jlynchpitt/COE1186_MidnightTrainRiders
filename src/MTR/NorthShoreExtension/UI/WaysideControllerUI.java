@@ -157,28 +157,7 @@ public class WaysideControllerUI extends JFrame{
   	   int RedLights = 1001;
   	   System.out.println("TEST PANEL SET");
   	   
-  	   while (!load.getInfrastructure(GreenLights).equalsIgnoreCase("none"))
-  	   {
-  		   if (load.getInfrastructure(GreenLights).equalsIgnoreCase("RAILWAY CROSSING"))
-  		   {
-  			   
-  			   //System.out.println(GreenTrack);
-  			   Lights.push(GreenLights);
-  		   }
-  		   
-  		   GreenLights++;		   
-  	   }
-  	  while (!load.getInfrastructure(RedLights).equalsIgnoreCase("none"))
- 	   {
- 		   if (load.getInfrastructure(RedLights).equalsIgnoreCase("RAILWAY CROSSING"))
- 		   {
- 			   
- 			   //System.out.println(GreenTrack);
- 			   Lights.push(RedLights);
- 		   }
- 		   
- 		   RedLights++;		   
- 	   }
+  	   
    	   for(Integer obj : Lights)
    	   {
    		   //System.out.println("LIGHTS: " + Integer.toString(obj));
