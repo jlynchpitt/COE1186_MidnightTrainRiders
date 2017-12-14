@@ -176,13 +176,13 @@ public class UpdateTrackUI {
 					}
 					load.updateSpeedAuthority(trackid, speed, authority);
 					if(comboBox.getSelectedItem().equals("Broken Rail")) {
-						load.updateTrackStatus(trackid, "Broken Rail");
+						load.updateTrackStatus(trackid, "Broken - Broken Rail");
 					}
 					else if(comboBox.getSelectedItem().equals("Circuit Failure")) {
-						load.updateTrackStatus(trackid, "Circuit Failure");
+						load.updateTrackStatus(trackid, "Broken - Track Circuit Failure");
 					}
 					else if(comboBox.getSelectedItem().equals("Power Failure")) {
-						load.updateTrackStatus(trackid, "Power Failure");
+						load.updateTrackStatus(trackid, "Broken - Power Failure");
 					}
 					TrackModelUI.trackGraphic.actionPerformed(new ActionEvent(this, 1, ""));
 					//JOptionPane.showMessageDialog(null, "Data Submitted");

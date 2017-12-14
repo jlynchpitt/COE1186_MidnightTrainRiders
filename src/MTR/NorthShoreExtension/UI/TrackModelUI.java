@@ -188,6 +188,12 @@ public class TrackModelUI extends JPanel {
 	  		      g.setColor(Color.white);
 	  		      g.drawString("Update This Track", 40, 815);
 	    	    }
+	    	    else {
+	    	    	  g.setColor(Color.red);
+    	         	g.fillRect(20, 800, 150, 20);
+  		      g.setColor(Color.black);
+  		      g.drawString("Break this Track", 40, 815);
+	    	    }
 	    	    g.setStroke(new BasicStroke(3));
 	    	    g.setColor(Color.white);
 	    	    g.drawString("YARD", 1200, 250);
@@ -313,7 +319,12 @@ public class TrackModelUI extends JPanel {
 				showBroken = returnString[12];
 				showHeater = returnString[13];
 				if(x < 150 && (y > 800 && y < 900 )) {
-					UpdateTrackUI.createAndShowGUI();
+					if(!MainMTR.fullUI) {
+						UpdateTrackUI.createAndShowGUI();
+					}
+					else {
+						load.updateTrackStatus(displayTrack, "Broken - Broken Rail");
+					}
 				}
 				repaint();
 			}
