@@ -21,6 +21,7 @@ public class TrackModelUI extends JPanel {
     static LoadTrackModelUI loading = new LoadTrackModelUI();
     int numTrack = loading.sendRow();
     static DBHelper load;
+    static ctcUI ctc;
     String[] returnString = new String[15];
     String showLine = " ";
 	String showStatus = " ";
@@ -188,7 +189,7 @@ public class TrackModelUI extends JPanel {
 	  		      g.setColor(Color.white);
 	  		      g.drawString("Update This Track", 40, 815);
 	    	    }
-	    	    else {
+	    	    else if(ctc.getRunMode()==0) {
 	    	    	  g.setColor(Color.red);
     	         	g.fillRect(20, 800, 150, 20);
   		      g.setColor(Color.white);
@@ -322,7 +323,7 @@ public class TrackModelUI extends JPanel {
 					if(!MainMTR.fullUI) {
 						UpdateTrackUI.createAndShowGUI();
 					}
-					else {
+					else if(ctc.getRunMode()==0) {
 						load.updateTrackStatus(2150, "Broken Rail");
 					}
 				}
