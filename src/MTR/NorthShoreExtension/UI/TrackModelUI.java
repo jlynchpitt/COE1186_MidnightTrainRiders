@@ -186,7 +186,7 @@ public class TrackModelUI extends JPanel {
 	    	    	    g.setColor(Color.black);
 	    	        	g.fillRect(20, 800, 150, 20);
 	  		      g.setColor(Color.white);
-	  		      g.drawString("Update This Track Information", 40, 810);
+	  		      g.drawString("Update This Track", 40, 815);
 	    	    }
 	    	    g.setStroke(new BasicStroke(3));
 	    	    g.setColor(Color.white);
@@ -312,7 +312,7 @@ public class TrackModelUI extends JPanel {
 				showCEl = returnString[11];
 				showBroken = returnString[12];
 				showHeater = returnString[13];
-				if(x < 150 && (y > 810 && y < 900 )) {
+				if(x < 150 && (y > 800 && y < 900 )) {
 					UpdateTrackUI.createAndShowGUI();
 				}
 				repaint();
