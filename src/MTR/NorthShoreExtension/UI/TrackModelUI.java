@@ -183,7 +183,10 @@ public class TrackModelUI extends JPanel {
 	    	    g.drawLine(140, 700, 150, 710);
     	  		g.drawLine(150, 700, 140, 710);
 	    	    if(!MainMTR.fullUI) {
-	    	    		
+	    	    	    g.setColor(Color.red);
+	    	        	g.fillRect(20, 800, 150, 20);
+	  		      g.setColor(Color.black);
+	  		      g.drawString("Additional Testing", 40, 60);
 	    	    }
 	    	    g.setStroke(new BasicStroke(3));
 	    	    g.setColor(Color.white);
