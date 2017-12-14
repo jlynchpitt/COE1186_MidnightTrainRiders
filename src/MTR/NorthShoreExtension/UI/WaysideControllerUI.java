@@ -151,6 +151,56 @@ public class WaysideControllerUI extends JFrame{
   	   {
   		  dm1.setDataVector(new Object[][] { { "Color", "Black", "Track", "length", "speed" }}, new Object[] { "Line", "Occupied Track", "Dest Track", "Athrty (ft)", "Speed (mph)" });
   		  OccupiedTablesCreated = true;
+  		am.setDataVector(new Object[][] { }, new Object[] { "Color", "Line", "Track"});
+  		Stack<Integer> Lights = new Stack<>();
+  	   int GreenLights = 2001;
+  	   int RedLights = 1001;
+  	   System.out.println("TEST PANEL SET");
+  	   
+  	   while (!load.getInfrastructure(GreenLights).equalsIgnoreCase("none"))
+  	   {
+  		   if (load.getInfrastructure(GreenLights).equalsIgnoreCase("RAILWAY CROSSING"))
+  		   {
+  			   
+  			   //System.out.println(GreenTrack);
+  			   Lights.push(GreenLights);
+  		   }
+  		   
+  		   GreenLights++;		   
+  	   }
+  	  while (!load.getInfrastructure(RedLights).equalsIgnoreCase("none"))
+ 	   {
+ 		   if (load.getInfrastructure(RedLights).equalsIgnoreCase("RAILWAY CROSSING"))
+ 		   {
+ 			   
+ 			   //System.out.println(GreenTrack);
+ 			   Lights.push(RedLights);
+ 		   }
+ 		   
+ 		   RedLights++;		   
+ 	   }
+   	   for(Integer obj : Lights)
+   	   {
+   		   //System.out.println("LIGHTS: " + Integer.toString(obj));
+   		   String ColorLine = "Green";
+   		   int Digit = Character.getNumericValue(Integer.toString(obj).charAt(0));
+ 		   
+ 		   if (Digit == 1)
+ 		   {
+ 			   ColorLine = "Red";
+ 		   }
+ 		   if (Digit == 2)
+ 		   {
+ 			   ColorLine = "Green";
+ 		   }
+   		   Object[] LightChart = {"GREEN",ColorLine,Integer.toString(obj).substring(1)};
+
+   		   
+
+   		   
+   		  am.addRow(LightChart);
+   	       //System.out.println(load.getInfrastructure(obj) + ": " + obj + " at " + load.getSwitch(obj) + " With the Next: " + load.getNextTrack(obj, obj+1) + " or " + load.getAltTrack(obj));
+   	   }
   		  table1 = new JTable(dm1);
   	   }
     }
