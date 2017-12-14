@@ -25,7 +25,7 @@ public class Train {
 	private TrainMovement tm;
 	Passengers p;
 	
-	public Train(int t){
+	public Train(int t, int trackID){
 		tm = new TrainMovement(trainmass);
 		TrainControllerHelper tch = MainMTR.getTrainControllerHelper();
 		tc = tch.addNewTrainController(t,"Green", this);
@@ -33,7 +33,6 @@ public class Train {
 		leftdoor=false;
 		rightdoor=false;
 		trainID=t;
-		p.passengersIn();
 	}
 	
 	public int getTrainID() {
@@ -95,12 +94,11 @@ public class Train {
 	}
 	
 	public void TrainModel_stoppedAtStation() {
-		if(p.getTotalPassengers()!=0) {
-			p.passengersOut();
-			p.passengersIn();
-		}else {
-			p.passengersIn();
-		}
+		
+	}
+	
+	public void TrainModel_setNumberOfPassengers(int passengers) {
+		
 	}
 
 	

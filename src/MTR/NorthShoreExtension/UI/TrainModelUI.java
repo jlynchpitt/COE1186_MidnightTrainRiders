@@ -77,15 +77,15 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		
 		setBackground(new Color(240, 240, 240));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1280, 720);
+		setBounds(100, 100, 1920, 1080);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
-		gbl_contentPane.columnWidths = new int[]{0, 150, 20, 100, 100, 100, 100, 100, 100, 100, 100, 0};
+		gbl_contentPane.columnWidths = new int[]{0, 200, 20, 100, 100, 100, 100, 100, 100, 100, 100, 0};
 		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-		gbl_contentPane.columnWeights = new double[]{0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPane.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		contentPane.setLayout(gbl_contentPane);
 		
@@ -99,7 +99,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		contentPane.add(lblSelectTrain, gbc_lblSelectTrain);
 		
 		JSeparator separator = new JSeparator();
-		separator.setForeground(Color.GRAY);
+		separator.setForeground(Color.BLACK);
 		separator.setOrientation(SwingConstants.VERTICAL);
 		GridBagConstraints gbc_separator = new GridBagConstraints();
 		gbc_separator.insets = new Insets(0, 0, 5, 5);
@@ -196,7 +196,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		contentPane.add(comboBox, gbc_comboBox);
 		
 		JLabel lblMass = new JLabel("Train Mass:");
-		lblMass.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblMass.setFont(new Font("Dialog", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblMass = new GridBagConstraints();
 		gbc_lblMass.anchor = GridBagConstraints.WEST;
 		gbc_lblMass.insets = new Insets(0, 0, 5, 5);
@@ -206,6 +206,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		
 
 		lblM = new JLabel();
+		lblM.setFont(new Font("Dialog", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblM = new GridBagConstraints();
 		gbc_lblM.anchor = GridBagConstraints.WEST;
 		gbc_lblM.insets = new Insets(0, 0, 5, 5);
@@ -214,7 +215,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		contentPane.add(lblM, gbc_lblM);
 		
 		JLabel lblAcceleration = new JLabel("Acceleration:");
-		lblAcceleration.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblAcceleration.setFont(new Font("Dialog", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblAcceleration = new GridBagConstraints();
 		gbc_lblAcceleration.anchor = GridBagConstraints.WEST;
 		gbc_lblAcceleration.insets = new Insets(0, 0, 5, 5);
@@ -224,6 +225,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		
 
 		lblAcc = new JLabel();
+		lblAcc.setFont(new Font("Dialog", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblAcc = new GridBagConstraints();
 		gbc_lblAcc.anchor = GridBagConstraints.WEST;
 		gbc_lblAcc.insets = new Insets(0, 0, 5, 5);
@@ -233,7 +235,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		
 		
 		JLabel lblPassengerCount = new JLabel("Passenger Count:");
-		lblPassengerCount.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblPassengerCount.setFont(new Font("Dialog", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblPassengerCount = new GridBagConstraints();
 		gbc_lblPassengerCount.anchor = GridBagConstraints.WEST;
 		gbc_lblPassengerCount.insets = new Insets(0, 0, 5, 5);
@@ -243,6 +245,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		
 
 		lblPc = new JLabel();
+		lblPc.setFont(new Font("Dialog", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblPc = new GridBagConstraints();
 		gbc_lblPc.anchor = GridBagConstraints.WEST;
 		gbc_lblPc.insets = new Insets(0, 0, 5, 5);
@@ -252,7 +255,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 
 		
 		JLabel lblLights = new JLabel("Lights:");
-		lblLights.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblLights.setFont(new Font("Dialog", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblLights = new GridBagConstraints();
 		gbc_lblLights.anchor = GridBagConstraints.WEST;
 		gbc_lblLights.insets = new Insets(0, 0, 5, 5);
@@ -262,6 +265,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		
 
 		lblL_1 = new JLabel();
+		lblL_1.setFont(new Font("Dialog", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblL_1 = new GridBagConstraints();
 		gbc_lblL_1.anchor = GridBagConstraints.WEST;
 		gbc_lblL_1.insets = new Insets(0, 0, 5, 0);
@@ -271,7 +275,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 
 		
 		JLabel lblLength = new JLabel("Length:");
-		lblLength.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblLength.setFont(new Font("Dialog", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblLength = new GridBagConstraints();
 		gbc_lblLength.anchor = GridBagConstraints.WEST;
 		gbc_lblLength.insets = new Insets(0, 0, 5, 5);
@@ -281,6 +285,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		
 
 		lblL = new JLabel();
+		lblL.setFont(new Font("Dialog", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblL = new GridBagConstraints();
 		gbc_lblL.anchor = GridBagConstraints.WEST;
 		gbc_lblL.insets = new Insets(0, 0, 5, 5);
@@ -290,7 +295,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 
 		
 		JLabel lblDeceleration = new JLabel("Deceleration:");
-		lblDeceleration.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblDeceleration.setFont(new Font("Dialog", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblDeceleration = new GridBagConstraints();
 		gbc_lblDeceleration.anchor = GridBagConstraints.WEST;
 		gbc_lblDeceleration.insets = new Insets(0, 0, 5, 5);
@@ -300,6 +305,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		
 
 		lblDcc = new JLabel();
+		lblDcc.setFont(new Font("Dialog", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblDcc = new GridBagConstraints();
 		gbc_lblDcc.anchor = GridBagConstraints.WEST;
 		gbc_lblDcc.insets = new Insets(0, 0, 5, 5);
@@ -309,7 +315,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 
 		
 		JLabel lblPassengerWeight = new JLabel("Passenger Weight:");
-		lblPassengerWeight.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblPassengerWeight.setFont(new Font("Dialog", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblPassengerWeight = new GridBagConstraints();
 		gbc_lblPassengerWeight.anchor = GridBagConstraints.WEST;
 		gbc_lblPassengerWeight.insets = new Insets(0, 0, 5, 5);
@@ -319,6 +325,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		
 
 		lblPw = new JLabel();
+		lblPw.setFont(new Font("Dialog", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblPw = new GridBagConstraints();
 		gbc_lblPw.anchor = GridBagConstraints.WEST;
 		gbc_lblPw.insets = new Insets(0, 0, 5, 5);
@@ -328,7 +335,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 
 		
 		JLabel lblLeftDoor = new JLabel("Left Door:");
-		lblLeftDoor.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblLeftDoor.setFont(new Font("Dialog", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblLeftDoor = new GridBagConstraints();
 		gbc_lblLeftDoor.anchor = GridBagConstraints.WEST;
 		gbc_lblLeftDoor.insets = new Insets(0, 0, 5, 5);
@@ -338,6 +345,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		
 	
 		lblLd= new JLabel();
+		lblLd.setFont(new Font("Dialog", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblLd = new GridBagConstraints();
 		gbc_lblLd.anchor = GridBagConstraints.WEST;
 		gbc_lblLd.insets = new Insets(0, 0, 5, 0);
@@ -347,7 +355,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 
 		
 		JLabel lblWidth = new JLabel("Width:");
-		lblWidth.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblWidth.setFont(new Font("Dialog", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblWidth = new GridBagConstraints();
 		gbc_lblWidth.anchor = GridBagConstraints.WEST;
 		gbc_lblWidth.insets = new Insets(0, 0, 5, 5);
@@ -357,6 +365,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		
 	
 		lblW = new JLabel();
+		lblW.setFont(new Font("Dialog", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblW = new GridBagConstraints();
 		gbc_lblW.anchor = GridBagConstraints.WEST;
 		gbc_lblW.insets = new Insets(0, 0, 5, 5);
@@ -366,7 +375,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 
 		
 		JLabel lblVelocity = new JLabel("Velocity:");
-		lblVelocity.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblVelocity.setFont(new Font("Dialog", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblVelocity = new GridBagConstraints();
 		gbc_lblVelocity.anchor = GridBagConstraints.WEST;
 		gbc_lblVelocity.insets = new Insets(0, 0, 5, 5);
@@ -377,6 +386,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		
 		
 		lblV = new JLabel();
+		lblV.setFont(new Font("Dialog", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblV = new GridBagConstraints();
 		gbc_lblV.anchor = GridBagConstraints.WEST;
 		gbc_lblV.insets = new Insets(0, 0, 5, 5);
@@ -386,7 +396,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		
 		
 		JLabel lblCrewCount = new JLabel("Crew Count:");
-		lblCrewCount.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblCrewCount.setFont(new Font("Dialog", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblCrewCount = new GridBagConstraints();
 		gbc_lblCrewCount.anchor = GridBagConstraints.WEST;
 		gbc_lblCrewCount.insets = new Insets(0, 0, 5, 5);
@@ -396,6 +406,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		
 		
 		lblCc = new JLabel();
+		lblCc.setFont(new Font("Dialog", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblCc = new GridBagConstraints();
 		gbc_lblCc.anchor = GridBagConstraints.WEST;
 		gbc_lblCc.insets = new Insets(0, 0, 5, 5);
@@ -405,7 +416,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		
 		
 		JLabel lblRightDoor = new JLabel("Right Door:");
-		lblRightDoor.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblRightDoor.setFont(new Font("Dialog", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblRightDoor = new GridBagConstraints();
 		gbc_lblRightDoor.anchor = GridBagConstraints.WEST;
 		gbc_lblRightDoor.insets = new Insets(0, 0, 5, 5);
@@ -414,6 +425,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		contentPane.add(lblRightDoor, gbc_lblRightDoor);
 		
 		lblRd = new JLabel();
+		lblRd.setFont(new Font("Dialog", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblRd = new GridBagConstraints();
 		gbc_lblRd.anchor = GridBagConstraints.WEST;
 		gbc_lblRd.insets = new Insets(0, 0, 5, 0);
@@ -422,7 +434,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		contentPane.add(lblRd, gbc_lblRd);
 		
 		JLabel lblHeight = new JLabel("Height:");
-		lblHeight.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblHeight.setFont(new Font("Dialog", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblHeight = new GridBagConstraints();
 		gbc_lblHeight.anchor = GridBagConstraints.WEST;
 		gbc_lblHeight.insets = new Insets(0, 0, 5, 5);
@@ -432,6 +444,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		
 
 		lblH = new JLabel();
+		lblH.setFont(new Font("Dialog", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblH = new GridBagConstraints();
 		gbc_lblH.anchor = GridBagConstraints.WEST;
 		gbc_lblH.insets = new Insets(0, 0, 5, 5);
@@ -441,7 +454,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 
 		
 		JLabel lblAuthority = new JLabel("Authority:");
-		lblAuthority.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblAuthority.setFont(new Font("Dialog", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblAuthority = new GridBagConstraints();
 		gbc_lblAuthority.anchor = GridBagConstraints.WEST;
 		gbc_lblAuthority.insets = new Insets(0, 0, 5, 5);
@@ -451,6 +464,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		
 
 		lblA = new JLabel();
+		lblA.setFont(new Font("Dialog", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblA = new GridBagConstraints();
 		gbc_lblA.anchor = GridBagConstraints.WEST;
 		gbc_lblA.insets = new Insets(0, 0, 5, 5);
@@ -460,7 +474,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 
 		
 		JLabel lblTotalWeight = new JLabel("Total Weight:");
-		lblTotalWeight.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblTotalWeight.setFont(new Font("Dialog", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblTotalWeight = new GridBagConstraints();
 		gbc_lblTotalWeight.anchor = GridBagConstraints.WEST;
 		gbc_lblTotalWeight.insets = new Insets(0, 0, 5, 5);
@@ -470,6 +484,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		
 
 		lblTw = new JLabel();
+		lblTw.setFont(new Font("Dialog", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblTw = new GridBagConstraints();
 		gbc_lblTw.anchor = GridBagConstraints.WEST;
 		gbc_lblTw.insets = new Insets(0, 0, 5, 0);
@@ -479,7 +494,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 
 		
 		JLabel lblCars = new JLabel("Cars:");
-		lblCars.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblCars.setFont(new Font("Dialog", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblCars = new GridBagConstraints();
 		gbc_lblCars.anchor = GridBagConstraints.WEST;
 		gbc_lblCars.insets = new Insets(0, 0, 5, 5);
@@ -489,6 +504,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		
 
 		lblC = new JLabel();
+		lblC.setFont(new Font("Dialog", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblC = new GridBagConstraints();
 		gbc_lblC.anchor = GridBagConstraints.WEST;
 		gbc_lblC.insets = new Insets(0, 0, 5, 5);
@@ -498,7 +514,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 
 		
 		JLabel lblDistance = new JLabel("Distance:");
-		lblDistance.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblDistance.setFont(new Font("Dialog", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblDistance = new GridBagConstraints();
 		gbc_lblDistance.anchor = GridBagConstraints.WEST;
 		gbc_lblDistance.insets = new Insets(0, 0, 5, 5);
@@ -508,6 +524,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		
 
 		lblD = new JLabel();
+		lblD.setFont(new Font("Dialog", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblD = new GridBagConstraints();
 		gbc_lblD.anchor = GridBagConstraints.WEST;
 		gbc_lblD.insets = new Insets(0, 0, 5, 5);
@@ -517,6 +534,7 @@ public class TrainModelUI extends JFrame implements ActionListener{
 
 		
 		JLabel lblCumulativeDistance = new JLabel("Total Distance:");
+		lblCumulativeDistance.setFont(new Font("Dialog", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblCumulativeDistance = new GridBagConstraints();
 		gbc_lblCumulativeDistance.anchor = GridBagConstraints.WEST;
 		gbc_lblCumulativeDistance.insets = new Insets(0, 0, 5, 5);
@@ -525,12 +543,13 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		contentPane.add(lblCumulativeDistance, gbc_lblCumulativeDistance);
 		
 		JSeparator separator_1 = new JSeparator();
+		separator_1.setForeground(Color.BLACK);
 		GridBagConstraints gbc_separator_1 = new GridBagConstraints();
 		gbc_separator_1.fill = GridBagConstraints.HORIZONTAL;
 		gbc_separator_1.ipady = 1;
 		gbc_separator_1.ipadx = 1;
 		gbc_separator_1.gridwidth = 8;
-		gbc_separator_1.insets = new Insets(0, 0, 5, 5);
+		gbc_separator_1.insets = new Insets(0, 0, 5, 0);
 		gbc_separator_1.gridx = 3;
 		gbc_separator_1.gridy = 8;
 		contentPane.add(separator_1, gbc_separator_1);
@@ -585,6 +604,22 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		gbc_button.gridy = 10;
 		contentPane.add(button, gbc_button);
 		
+		JLabel lblAnnoucement = new JLabel("Annoucement:");
+		lblAnnoucement.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		GridBagConstraints gbc_lblAnnoucement = new GridBagConstraints();
+		gbc_lblAnnoucement.anchor = GridBagConstraints.WEST;
+		gbc_lblAnnoucement.insets = new Insets(0, 0, 5, 5);
+		gbc_lblAnnoucement.gridx = 7;
+		gbc_lblAnnoucement.gridy = 10;
+		contentPane.add(lblAnnoucement, gbc_lblAnnoucement);
+		
+		JLabel lblAnn = new JLabel("");
+		GridBagConstraints gbc_lblAnn = new GridBagConstraints();
+		gbc_lblAnn.insets = new Insets(0, 0, 5, 5);
+		gbc_lblAnn.gridx = 8;
+		gbc_lblAnn.gridy = 10;
+		contentPane.add(lblAnn, gbc_lblAnn);
+		
 		JLabel lblEngineFailure = new JLabel("Engine Failure:");
 		lblEngineFailure.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		GridBagConstraints gbc_lblEngineFailure = new GridBagConstraints();
@@ -615,6 +650,22 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		gbc_btnOn.gridx = 6;
 		gbc_btnOn.gridy = 11;
 		contentPane.add(btnOn, gbc_btnOn);
+		
+		JLabel lblGreenLine = new JLabel("Line:");
+		lblGreenLine.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		GridBagConstraints gbc_lblGreenLine = new GridBagConstraints();
+		gbc_lblGreenLine.anchor = GridBagConstraints.WEST;
+		gbc_lblGreenLine.insets = new Insets(0, 0, 5, 5);
+		gbc_lblGreenLine.gridx = 7;
+		gbc_lblGreenLine.gridy = 11;
+		contentPane.add(lblGreenLine, gbc_lblGreenLine);
+		
+		JLabel lblLine = new JLabel("");
+		GridBagConstraints gbc_lblLine = new GridBagConstraints();
+		gbc_lblLine.insets = new Insets(0, 0, 5, 5);
+		gbc_lblLine.gridx = 8;
+		gbc_lblLine.gridy = 11;
+		contentPane.add(lblLine, gbc_lblLine);
 		
 		JLabel lblSignalPickupFailure = new JLabel("Signal Pickup Failure: ");
 		lblSignalPickupFailure.setFont(new Font("Tahoma", Font.PLAIN, 18));
