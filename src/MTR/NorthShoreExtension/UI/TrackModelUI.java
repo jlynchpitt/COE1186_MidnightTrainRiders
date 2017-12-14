@@ -191,8 +191,8 @@ public class TrackModelUI extends JPanel {
 	    	    else {
 	    	    	  g.setColor(Color.red);
     	         	g.fillRect(20, 800, 150, 20);
-  		      g.setColor(Color.black);
-  		      g.drawString("Break this Track", 40, 815);
+  		      g.setColor(Color.white);
+  		      g.drawString("Break Track 2150", 40, 815);
 	    	    }
 	    	    g.setStroke(new BasicStroke(3));
 	    	    g.setColor(Color.white);
@@ -276,7 +276,7 @@ public class TrackModelUI extends JPanel {
 			    	  		g.drawLine(drawArray[0]-20, drawArray[1]-14, drawArray[0]-15, drawArray[1]-25);
     						
     					}
-    					if(stat.equals("Broken - Power Failure") || stat.equals("Broken - Broken Rail") || stat.equals("Broken - Track Circuit Failure")) {
+    					if(stat.equals("Power Failure") || stat.equals("Broken Rail") || stat.equals("Track Circuit Failure")) {
     						//draw x
     						g.setColor(Color.red);
     						g.drawLine(drawArray[0]-5, drawArray[1]-5, drawArray[0]+5, drawArray[1]+1);
@@ -323,7 +323,7 @@ public class TrackModelUI extends JPanel {
 						UpdateTrackUI.createAndShowGUI();
 					}
 					else {
-						load.updateTrackStatus(displayTrack, "Broken - Broken Rail");
+						load.updateTrackStatus(2150, "Broken Rail");
 					}
 				}
 				repaint();
