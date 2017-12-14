@@ -247,6 +247,7 @@ public class TrainControlTestBenchUI implements ActionListener {
     public static void main(String[] args) {
     	//Create TrainControllerHelper - with sample test data to show different UI states
     	tch = new TrainControllerHelper(); //TODO: Change this to get from MainMTR
+    	tch.setPIDParameters(0.4, 0.25);
     	tch.addNewTrainController(123, "Green", null); //TODO: CHange this null? don't think so
     	
     	//Load up database

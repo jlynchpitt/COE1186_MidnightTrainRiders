@@ -163,7 +163,9 @@ public class TrainControllerHelper {
 			/*if(ctc_ui != null) {
 				ctc_ui.setTime(simulatedClockTime);
 			}*/
-			ctcUI.setTime(simulatedClockTime);
+			if(MainMTR.fullUI) {
+				ctcUI.setTime(simulatedClockTime);
+			}
 			
 			//Repaint Track model UI - TODO: Limit how often this runs
 			if(TrackModelUI.trackGraphic != null && (simulatedClockTime - lastRedrawTime) > timeBetweenRedraw) {
