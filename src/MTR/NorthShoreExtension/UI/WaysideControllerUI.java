@@ -598,9 +598,17 @@ public class WaysideControllerUI extends JFrame{
     		scroll2.setPreferredSize(new Dimension(250,Scroll1Height));
     		scroll3.setPreferredSize(new Dimension(150,Scroll1Height));
 
+    		
+    		Box ComboBox;
+     	   	
+            //final JComboBox<String> cb = new JComboBox<String>(choices);
+            ComboBox = Box.createVerticalBox();
+            ComboBox.add( Box.createVerticalStrut( 25 ) );
+            ComboBox.add(scroll2, BorderLayout.NORTH);
+            ComboBox.add(scroll3, BorderLayout.SOUTH);
     	TI.add(scroll1, BorderLayout.WEST);
-    	TI.add(scroll2, BorderLayout.EAST);
-    	TI.add(scroll3, BorderLayout.SOUTH);
+    	TI.add(ComboBox, BorderLayout.EAST);
+    	//TI.add(scroll3, BorderLayout.SOUTH);
     	
     	
     	//test
@@ -660,7 +668,7 @@ class CustomRenderer extends DefaultTableCellRenderer
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
     {
     	
-    	System.out.println("TEST TEST TEST");
+    	//System.out.println("TEST TEST TEST");
         Component cellComponent = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
         cellComponent.setBackground(Color.YELLOW);
         
