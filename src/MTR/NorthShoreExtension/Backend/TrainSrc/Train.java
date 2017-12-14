@@ -25,7 +25,7 @@ public class Train {
 	private TrainMovement tm;
 	Passengers p;
 	
-	public Train(int t){
+	public Train(int t, int trackID){
 		tm = new TrainMovement(trainmass);
 		TrainControllerHelper tch = MainMTR.getTrainControllerHelper();
 		tc = tch.addNewTrainController(t,"Green", this);
