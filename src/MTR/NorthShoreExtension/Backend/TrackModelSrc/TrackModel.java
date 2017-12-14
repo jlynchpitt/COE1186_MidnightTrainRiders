@@ -10,6 +10,7 @@ import MTR.NorthShoreExtension.Backend.TrainSrc.Train;
 import MTR.NorthShoreExtension.Backend.WaysideController.WaysideFunctionsHub;
 import MTR.NorthShoreExtension.UI.TrackModelUI;
 import MTR.NorthShoreExtension.UI.TrainModelUI;
+import MTR.NorthShoreExtension.UI.ctcUI;
 
 import java.util.Random;
 
@@ -33,6 +34,7 @@ public class TrackModel {
 	static Train train;
 	static Train updateTrains;
 	static int lastTrack = 0;
+	static ctcUI ctc;
 		
 	class Track{
 		String line;
@@ -113,7 +115,7 @@ public class TrackModel {
 			sendBeacon(update.trackOccupying, update.trainID);
 		}
 		//System.out.println("Difference: "+difference);
-		sellTicket(update.trackOccupying);
+		sellTicket(update.trackOccupying, trainNum);
 	}
 	
 	public static void breakTrack(int id, String status) {
@@ -154,7 +156,7 @@ public class TrackModel {
 		}
 	}
 	
-	public static void sellTicket(int trackid) {
+	public static void sellTicket(int trackid, int trainid) {
 		String type = load.getInfrastructure(trackid);
 		int peopleOn = 0;
 		if(type.equals("STATION") || type.equals("STATION; PIONEER") || 
@@ -170,6 +172,9 @@ public class TrackModel {
 				type.equals("STATION; POPLAR")) {
 			soldTicket += rand.nextInt(50) + 1;
 			peopleOn = rand.nextInt(soldTicket)+1;
+			updateTrains = officialTrains.get(trainid);
+			updateTrains.TrainModel_setNumberOfPassengers(peopleOn);
+			ctc.setThroughput(soldTicket);
 		}
 		else {
 			soldTicket = soldTicket + 0;

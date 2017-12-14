@@ -179,6 +179,9 @@ public class TrackModelUI extends JPanel {
 	    	      g.drawLine(150, 670, 140, 680);
 	    	    g.setColor(Color.gray);
 	    	    g.fillRect(1200, 250, 200, 100);
+	    	    if(!MainMTR.fullUI) {
+	    	    		
+	    	    }
 	    	    g.setStroke(new BasicStroke(3));
 	    	    g.setColor(Color.white);
 	    	    g.drawString("YARD", 1200, 250);
