@@ -171,6 +171,7 @@ public class TrackModel {
 				type.equals("STATION; STATION SQUARE") || type.equals("STATION; SOUTH HILLS JUNCTION") ||
 				type.equals("STATION; POPLAR")) {
 			soldTicket += rand.nextInt(50) + 1;
+			System.out.println("Tickets sold:" + soldTicket);
 			peopleOn = rand.nextInt(soldTicket)+1;
 			updateTrains = officialTrains.get(trainid);
 			updateTrains.TrainModel_setNumberOfPassengers(peopleOn);
