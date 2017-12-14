@@ -146,7 +146,7 @@ public class TrainController {
 			Double tempPC = powerOutputSelector(tempPC1, tempPC2, tempPC3);
 			if(tempPC != null /* && validatePowerCommand(tempPC)*/) {
 				//Limit amount power command can increase in 1 second
-				int safePowerCommandJump = 10;
+				int safePowerCommandJump = 7500;
 				
 				if(tempPC - powerCommand > safePowerCommandJump) {
 					powerCommand = powerCommand + safePowerCommandJump;
@@ -651,7 +651,7 @@ public class TrainController {
 			operateEmergencyBrake(true);
 			autoAppliedEBrake = true;
 		}
-		else if(autoAppliedEBrake && manualMode == false) {
+		else if(autoAppliedEBrake) {
 			operateEmergencyBrake(false);
 		}
 		
