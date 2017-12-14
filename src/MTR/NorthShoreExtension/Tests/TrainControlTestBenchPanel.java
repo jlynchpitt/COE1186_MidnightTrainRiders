@@ -289,7 +289,9 @@ public class TrainControlTestBenchPanel extends JPanel
         			//TODO: Train back in yard - remove train from track
         			lastTrackID = currentTrackID;
         			currentTrackID = -1;
-        		}
+        			
+        			ui.removeTrain(trainController.getTrainID());
+           		}
         		else {
         			lastTrackID = currentTrackID;
         			currentTrackID--;

@@ -247,6 +247,7 @@ public class TrainControlTestBenchUI implements ActionListener {
     public static void main(String[] args) {
     	//Create TrainControllerHelper - with sample test data to show different UI states
     	tch = new TrainControllerHelper(); //TODO: Change this to get from MainMTR
+    	tch.setPIDParameters(0.4, 0.25);
     	tch.addNewTrainController(123, "Green", null); //TODO: CHange this null? don't think so
     	
     	//Load up database
@@ -316,6 +317,11 @@ public class TrainControlTestBenchUI implements ActionListener {
 		picLabel.setIcon(icon);
 	}
 	
+	public void removeTrain(int trainID) {
+		tch.removeTrain(trainID);
+		reloadGUI();
+	}
+	
 	private void updatePanelList() {
 		List<TrainController> tcList = tch.getTrainControllerList();
 		for(TrainController tc : tcList) {
@@ -324,5 +330,23 @@ public class TrainControlTestBenchUI implements ActionListener {
 				panelList.put(trainID, new TrainControlTestBenchPanel(tc, this));
 			}
 		}
+		
+		//TODO: Remove panels if there is not in list
+		for(Integer key : panelList.keySet()) {
+			boolean keyFound = false;
+			for(TrainController tc : tcList) {
+				int trainID = tc.getTrainID();
+				if(trainID == key) {
+					keyFound = true;
+					break;
+				}
+			}
+			
+        	if(!keyFound) {
+        		//remove the panel
+        		System.out.println("Removing test bench panel: " + key);
+        		panelList.remove(key);
+        	}
+        }
 	}
 }

@@ -103,11 +103,11 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 		if (Authority.length > 1)
 		{
 			System.out.println("Update chart");
-			WaysideControllerUI.OccupiedTrackAuthoritySpeedUpdater(TrackID, Authority[0], TotalLength);
+			WaysideControllerUI.OccupiedTrackAuthoritySpeedUpdater(TrackID, Authority[0], TotalLength, Speed);
 		}
 		else
 		{
-			WaysideControllerUI.OccupiedTrackAuthoritySpeedUpdater(TrackID, 0, TotalLength);
+			WaysideControllerUI.OccupiedTrackAuthoritySpeedUpdater(TrackID, 0, TotalLength, 0);
 		}
 		
 		
@@ -209,6 +209,7 @@ public class WaysideFunctionsHub //the purpose of this class is to receive and o
 			System.out.println("broke.");
 		   BrokenTrackArray = IncomingBrokenTrackArray;
 			//WaysideFunctions.CTC_getBrokenTrack(BrokenTrackArray);
+		   WaysideControllerUI.UpdateBrokenTracks(IncomingBrokenTrackArray);
 			TrainScheduleHelper.CTC_getBrokenTracks(BrokenTrackArray);
 
 	   }
