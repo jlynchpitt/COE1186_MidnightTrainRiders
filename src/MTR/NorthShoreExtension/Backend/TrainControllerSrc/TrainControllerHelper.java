@@ -91,11 +91,13 @@ public class TrainControllerHelper {
 	public TrainController addNewTrainController(int trainID, String lineColor, Train train) {
 		//Check if new train ID has been used
 		if(!idList.contains(trainID)) {
+			idList.add(trainID);
 			TrainController tc = new TrainController(trainID, train, this, pid_p, pid_i, lineColor);
 			
 			//Add tc to list of trianControllers
 			tcList.add(tc);
-			idList.add(trainID);
+			
+			TrainControlUI.reloadGUI();
 			return tc;
 		}
 		else {
