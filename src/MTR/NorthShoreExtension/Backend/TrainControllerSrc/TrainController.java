@@ -56,6 +56,8 @@ public class TrainController {
 	/* Non-Vital Train Info */
 	private String trainFaults = "none"; //TODO: Possibly change to enumerated type
 	private String announcements = "";
+	private String stationName = "";
+	private boolean onStation = false;
 	
 	//non-vital train controls
 	private boolean rightDoorOpen = false;
@@ -128,7 +130,7 @@ public class TrainController {
 			//Simple check against speed limit TODO: Move these checks into setters
 			int speedLimit = currentTrackInfo.speedLimit > currentTrackInfo.nextSpeedLimit ? currentTrackInfo.nextSpeedLimit : currentTrackInfo.speedLimit;
 			if((manualMode == false || driverCommandedSetSpeed > speedLimit) && ctcCommandedSetSpeed > speedLimit) {
-				trainSetSpeed = speedLimit;
+				trainSetSpeed = speedLimit-2; //-2 buffer for safety
 			}
 			else if(manualMode == false || driverCommandedSetSpeed > ctcCommandedSetSpeed) {
 				trainSetSpeed = ctcCommandedSetSpeed;
@@ -210,6 +212,15 @@ public class TrainController {
 				//close all doors
 				operateRightDoor(false);
 				operateLeftDoor(false);
+			}
+		}
+		
+		if(currentTrackInfo.isStation) {
+			onStation = true;
+			announcements = "At " + stationName;
+			updateUI(TrainControlPanel.ANNOUNCEMENT);
+			if(trainModel != null) {
+				trainModel.TrainModel_sendAnnouncement(announcements);
 			}
 		}
 		
@@ -376,17 +387,23 @@ public class TrainController {
 			
 			if(!isSwitch) {
 				//Station - update announcements
-				String stationName = "";
-				if(primaryNextStation != 0) {
+				stationName = "";
+				if(primaryNextStation != 0 && calculateTravelDirection()) {
 					stationName = db.getStationName(primaryNextStation);
+					announcements = "Approaching " + stationName;
+				}
+				else if(secondaryNextStation!= 0 && !calculateTravelDirection()) {
+					stationName = db.getStationName(secondaryNextStation);	
+					announcements = "Approaching " + stationName;
 				}
 				else {
-					stationName = db.getStationName(secondaryNextStation);					
+					announcements = "";
+
 				}
 				
-				announcements = "Approaching " + stationName;
 				if(trainModel != null) {
-					//trainModel.TrainModel_sendAnnouncement(announcements);
+					System.out.println("Sent announcement to train: " + announcements);
+					trainModel.TrainModel_sendAnnouncement(announcements);
 				}
 				if(testBench != null) {
 					//testBench.TrainModel_setAnnouncement(announcements);
@@ -417,6 +434,16 @@ public class TrainController {
 			}
 			
 			updateUI(TrainControlPanel.TRACK_INFO);
+			
+			if(onStation) {
+				//previous track was a station
+				onStation = false;
+				announcements = "";
+				updateUI(TrainControlPanel.ANNOUNCEMENT);
+				if(trainModel != null) {
+					trainModel.TrainModel_sendAnnouncement(announcements);
+				}
+			}
 		}
 	}
 	
