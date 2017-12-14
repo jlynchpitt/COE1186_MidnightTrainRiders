@@ -58,15 +58,13 @@ public class WaysideController //this class is the logic to decide what to do wi
 	{
 		ArrayList<Integer> StorageList = new ArrayList<Integer>();
 		StorageList.add(TrackID);
-		
 		boolean inside = false;
 		for (int x = 0; x < IncomingAuthorityArray.length; x++)
 		{
 			StorageList.add(IncomingAuthorityArray[x]);
 		}
 		//dummy list how holds the data
-	
-		System.out.println("");
+		
 		//go through list of track plans
 		for (int x = 0; x < ListOfTrackPlans.size(); x++)
 		{
@@ -258,21 +256,19 @@ public class WaysideController //this class is the logic to decide what to do wi
 										//straighten switch
 										WaysideFunctionsHub.WaysideController_Switch(NG.get(y));
 									}
-									
-								}
-								else
-								{
-									//if switch is not angled
-									if (load.getSwitch(NG.get(y)) != 1)
-									{
-										//angle switch
-										WaysideFunctionsHub.WaysideController_Switch(NG.get(y));
-									}
 								}
 								
 							}
 							//if train is over one track away
-							
+							else
+							{
+								//if switch is not angled
+								if (load.getSwitch(NG.get(y)) != 1)
+								{
+									//angle switch
+									WaysideFunctionsHub.WaysideController_Switch(NG.get(y));
+								}
+							}
 						}
 					}
 					//System.out.println("");
@@ -312,19 +308,18 @@ public class WaysideController //this class is the logic to decide what to do wi
 								WaysideFunctionsHub.WaysideController_Switch(SG.get(y));
 							}
 						}
-						else
-						{
-							//if switch is not angled
-							if (load.getSwitch(SG.get(y)) != 1)
-							{
-								//angle switch
-								WaysideFunctionsHub.WaysideController_Switch(SG.get(y));
-							}
-						}
 						
 					}
 					//if train is over one track away
-					
+					else
+					{
+						//if switch is not angled
+						if (load.getSwitch(SG.get(y)) != 1)
+						{
+							//angle switch
+							WaysideFunctionsHub.WaysideController_Switch(SG.get(y));
+						}
+					}
 				}
 			}
 			//System.out.println("");

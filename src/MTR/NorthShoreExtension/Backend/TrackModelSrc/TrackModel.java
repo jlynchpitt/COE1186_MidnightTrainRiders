@@ -113,9 +113,9 @@ public class TrackModel {
 				wayside.WaysideController_TrackOccupancy(trackOccupency);
 			}
 			sendBeacon(update.trackOccupying, update.trainID);
+			sellTicket(update.trackOccupying, trainNum);
 		}
 		//System.out.println("Difference: "+difference);
-		sellTicket(update.trackOccupying, trainNum);
 	}
 	
 	public static void breakTrack(int id, String status) {
