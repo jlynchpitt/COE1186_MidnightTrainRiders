@@ -125,7 +125,11 @@ public class TrainController {
 		
 		if(!eBrakeApplied && !brakeApplied && authority > 0 && !engineFailed) {
 			//Simple check against speed limit TODO: Move these checks into setters
-			if(driverCommandedSetSpeed > ctcCommandedSetSpeed) {
+			int speedLimit = currentTrackInfo.speedLimit > currentTrackInfo.nextSpeedLimit ? currentTrackInfo.nextSpeedLimit : currentTrackInfo.speedLimit;
+			if(driverCommandedSetSpeed > speedLimit && ctcCommandedSetSpeed > speedLimit) {
+				trainSetSpeed = speedLimit;
+			}
+			else if(driverCommandedSetSpeed > ctcCommandedSetSpeed) {
 				trainSetSpeed = ctcCommandedSetSpeed;
 			}
 			else {
