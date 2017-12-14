@@ -621,16 +621,16 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		gbc_lblBrakeFailure.gridy = 10;
 		contentPane.add(lblBrakeFailure, gbc_lblBrakeFailure);
 		
-		JButton button = new JButton("On");
+		JButton button = new JButton("Off");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(tr.getBrakeFailure()) {
 					tr.setBrakeFailure(false);
 					button.setBackground(new Color(230,230,230));
-					button.setText("On");
+					button.setText("Off");
 				}else {
 					tr.setBrakeFailure(true);
-					button.setText("Off");
+					button.setText("On");
 					button.setBackground(Color.RED);
 				}
 			}
@@ -669,16 +669,16 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		gbc_lblEngineFailure.gridy = 11;
 		contentPane.add(lblEngineFailure, gbc_lblEngineFailure);
 		
-		JButton btnOn = new JButton("On");
+		JButton btnOn = new JButton("Off");
 		btnOn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(tr.getEngineFailure()) {
 					tr.setEngineFailure(false);
 					btnOn.setBackground(new Color(230,230,230));
-					btnOn.setText("On");
+					btnOn.setText("Off");
 				}else {
 					tr.setEngineFailure(true);
-					btnOn.setText("Off");
+					btnOn.setText("On");
 					btnOn.setBackground(Color.RED);
 				}
 			}
@@ -727,16 +727,16 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		gbc_lblCd.gridy = 7;
 		contentPane.add(lblCd, gbc_lblCd);
 		
-		JButton btnOn_1 = new JButton("On");
+		JButton btnOn_1 = new JButton("Off");
 		btnOn_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(tr.getSignalFailure()) {
 					tr.setSignalFailure(false);
 					btnOn_1.setBackground(new Color(230,230,230));
-					btnOn_1.setText("On");
+					btnOn_1.setText("Off");
 				}else {
 					tr.setSignalFailure(true);
-					btnOn_1.setText("Off");
+					btnOn_1.setText("On");
 					btnOn_1.setBackground(Color.RED);
 				}
 			}
@@ -758,16 +758,16 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		gbc_lblPassengerEmergencyBrake.gridy = 13;
 		contentPane.add(lblPassengerEmergencyBrake, gbc_lblPassengerEmergencyBrake);
 		
-		JButton btnOn_2 = new JButton("On");
+		JButton btnOn_2 = new JButton("Off");
 		btnOn_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(tr.getPassengerEBrake()) {
 					tr.setPassnegerEBrake(false);
 					btnOn_2.setBackground(new Color(230,230,230));
-					btnOn_2.setText("On");
+					btnOn_2.setText("Off");
 				}else {
 					tr.setPassnegerEBrake(true);
-					btnOn_2.setText("Off");
+					btnOn_2.setText("On");
 					btnOn_2.setBackground(Color.RED);
 				}
 			}
