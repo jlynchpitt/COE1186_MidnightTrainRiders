@@ -425,7 +425,7 @@ public class TrainController {
 			}
 			else {
 				if(trainModel != null) {
-					//trainModel.TrainModel_resendSpeedAuthority();
+					trainModel.TrainModel_resendSpeedAuthority();
 				}
 				if(testBench != null) {
 					testBench.TrainModel_resendSpeedAuthority();
