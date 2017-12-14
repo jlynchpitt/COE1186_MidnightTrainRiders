@@ -146,7 +146,7 @@ public class WaysideControllerUI extends JFrame{
     {
     	if (!OccupiedTablesCreated)
   	   {
-  		  dm1.setDataVector(new Object[][] { { "Color", "Black", "Track", "length", "speed" }}, new Object[] { "Line", "Occupied Track", "Dest Track", "Athrty", "Speed" });
+  		  dm1.setDataVector(new Object[][] { { "Color", "Black", "Track", "length", "speed" }}, new Object[] { "Line", "Occupied Track", "Dest Track", "Athrty (ft)", "Speed (mph)" });
   		  OccupiedTablesCreated = true;
   	   }
     }
