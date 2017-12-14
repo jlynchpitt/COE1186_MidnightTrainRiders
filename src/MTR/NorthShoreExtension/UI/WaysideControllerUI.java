@@ -631,8 +631,7 @@ public class WaysideControllerUI extends JFrame{
 
   	 table1 = new JTable(dm1);
   	 	
-    	    bm.setDataVector(new Object[][] { }, new Object[] { "Broken Tracks"});
-    	    BrokenTracksTable = new JTable(bm);
+  	 BrokenTrackChartManager();
 
     	    lighttable = new JTable(am);
     	    lighttable.getColumnModel().getColumn(0).setCellRenderer(new CustomRenderer());
