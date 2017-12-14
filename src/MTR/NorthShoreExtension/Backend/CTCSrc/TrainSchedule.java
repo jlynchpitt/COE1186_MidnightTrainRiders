@@ -70,6 +70,10 @@ public class TrainSchedule {
 		authority = trainScheduler.calcAuthority(listOfStops);
 	}
 	
+	public List<Integer> getAuthority() {
+		return authority;
+	}
+	
 	public String getLine() {
 		return trackLine;
 	}

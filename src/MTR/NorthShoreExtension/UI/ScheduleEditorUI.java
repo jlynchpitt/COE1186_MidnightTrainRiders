@@ -16,6 +16,7 @@ import java.util.List;
 import javax.swing.*;
 
 import MTR.NorthShoreExtension.Backend.CTCSrc.*;
+import MTR.NorthShoreExtension.Backend.WaysideController.*;
 import MTR.NorthShoreExtension.UI.*;
 
 public class ScheduleEditorUI {
@@ -75,6 +76,8 @@ public class ScheduleEditorUI {
 					update.setEnabled(false);
 				}
 				ts.updateAuthority(nextStops);
+
+				WaysideFunctionsHub.OccupiedSpeedAuthority(ts.getCurrentLocation(),Integer.parseInt(updateSpeed.getText()),nextStops);
 			}
 		});
 		

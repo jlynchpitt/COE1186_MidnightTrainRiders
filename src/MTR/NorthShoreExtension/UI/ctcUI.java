@@ -87,6 +87,14 @@ public class ctcUI {
 	
 	public void setTemp(int temp) {
 		tempF = temp;
+		ambTemp.setText(temp + " F");
+		if (tempF <= 39) {
+			ambTemp.setBackground(Color.red);
+			ambientTemp.setBackground(Color.red);
+		} else if (tempF >= 40) {
+			ambTemp.setBackground(Color.green);
+			ambientTemp.setBackground(Color.green);
+		}
 	}
 	
 	public int getNumTrains() {
@@ -102,7 +110,7 @@ public class ctcUI {
 		return throughput;
 	}
 	
-	public void setThroughput(int through) {
+	public static void setThroughput(int through) {
 		throughput = through;
 	}
 	
