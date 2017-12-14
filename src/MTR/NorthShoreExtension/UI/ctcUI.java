@@ -37,16 +37,19 @@ import javax.imageio.*;
 import java.io.*;
 import java.util.*;
 import java.text.*;
+import static java.lang.Math.toIntExact;
 
 import MTR.NorthShoreExtension.UI.*;
 import MTR.NorthShoreExtension.MainMTR;
 import MTR.NorthShoreExtension.Backend.TrainControllerSrc.*;
+import MTR.NorthShoreExtension.Backend.DBHelper;
 import MTR.NorthShoreExtension.Backend.CTCSrc.*;
 
 public class ctcUI {
 	
 	//Specify the look and feel to use. Valid values: null (default), "Metal", "System",
 	//"Motif", "GTK+"
+	static DBHelper database = MainMTR.getDBHelper();
 	
 	final static String LOOKANDFEEL = "System";
 	final static boolean shouldFill = true; //used in testing GridBagLayout
@@ -60,6 +63,7 @@ public class ctcUI {
 	public static JTextArea ambTemp;
 	public static JTextArea numTrn;
 	public static JPanel ambientTemp;
+	public static JTextArea thrhput;
 	
 	int timeMultiplier;
 	TrainControllerHelper tch;
@@ -72,6 +76,7 @@ public class ctcUI {
 	public static int runModeSwitch = 0; //0 for manual, 1 for automatic
 	public static TrainScheduleHelper tsh;
 	static int tempTracker = 0;
+	static long startTime = TrainControllerHelper.programStartTime; //for calculating throughput
 	
 	public static int getRunMode() {
 		return runModeSwitch;
@@ -85,15 +90,69 @@ public class ctcUI {
 		return tempF;
 	}
 	
-	public void setTemp(int temp) {
+	public static void setTemp(int temp) {
 		tempF = temp;
 		ambTemp.setText(temp + " F");
 		if (tempF <= 39) {
 			ambTemp.setBackground(Color.red);
 			ambientTemp.setBackground(Color.red);
+			//turn the heaters on for all the stations
+			database.updateHeater(2002,"ON");
+			database.updateHeater(2009,"ON");
+			database.updateHeater(2016,"ON");
+			database.updateHeater(2022,"ON");
+			database.updateHeater(2031,"ON");
+			database.updateHeater(2039,"ON");
+			database.updateHeater(2048,"ON");
+			database.updateHeater(2057,"ON");
+			database.updateHeater(2065,"ON");
+			database.updateHeater(2073,"ON");
+			database.updateHeater(2077,"ON");
+			database.updateHeater(2088,"ON");
+			database.updateHeater(2096,"ON");
+			database.updateHeater(2105,"ON");
+			database.updateHeater(2114,"ON");
+			database.updateHeater(2123,"ON");
+			database.updateHeater(2132,"ON");
+			database.updateHeater(2141,"ON");
+			database.updateHeater(1007,"ON");
+			database.updateHeater(1015,"ON");
+			database.updateHeater(1021,"ON");
+			database.updateHeater(1025,"ON");
+			database.updateHeater(1035,"ON");
+			database.updateHeater(1045,"ON");
+			database.updateHeater(1048,"ON");
+			database.updateHeater(1060,"ON");
 		} else if (tempF >= 40) {
 			ambTemp.setBackground(Color.green);
 			ambientTemp.setBackground(Color.green);
+			//turn the heaters off for all the stations
+			database.updateHeater(2002,"Off");
+			database.updateHeater(2009,"Off");
+			database.updateHeater(2016,"Off");
+			database.updateHeater(2022,"Off");
+			database.updateHeater(2031,"Off");
+			database.updateHeater(2039,"Off");
+			database.updateHeater(2048,"Off");
+			database.updateHeater(2057,"Off");
+			database.updateHeater(2065,"Off");
+			database.updateHeater(2073,"Off");
+			database.updateHeater(2077,"Off");
+			database.updateHeater(2088,"Off");
+			database.updateHeater(2096,"Off");
+			database.updateHeater(2105,"Off");
+			database.updateHeater(2114,"Off");
+			database.updateHeater(2123,"Off");
+			database.updateHeater(2132,"Off");
+			database.updateHeater(2141,"Off");
+			database.updateHeater(1007,"Off");
+			database.updateHeater(1015,"Off");
+			database.updateHeater(1021,"Off");
+			database.updateHeater(1025,"Off");
+			database.updateHeater(1035,"Off");
+			database.updateHeater(1045,"Off");
+			database.updateHeater(1048,"Off");
+			database.updateHeater(1060,"Off");		
 		}
 	}
 	
@@ -112,6 +171,19 @@ public class ctcUI {
 	
 	public static void setThroughput(int through) {
 		throughput = through;
+		System.out.println("Through" + throughput);
+		thrhput.setText(throughput + " passengers/hour");
+		long timey = timeAsLong - startTime;
+		long div = timey/3600000;
+		System.out.println("Result: " + div);
+		if (div >= 1 ) {
+			int divisor = toIntExact(div);
+			//divide by the number of hours elapsed
+			throughput = throughput/divisor;
+			thrhput.setText(throughput + " passengers/hour");
+		} else {
+			//nothing
+		}
 	}
 	
 	public static void setTime(long givenTime) {
@@ -130,15 +202,16 @@ public class ctcUI {
 			System.out.println("Change in Temp: " + adjuster);
 			tempF = tempF + adjuster;
 			System.out.println("New Temp: " + tempF);
+			setTemp(tempF);
 			tempTracker = 0;
 			ambTemp.setText(tempF + " F");
-			if (tempF <= 39) {
-				ambTemp.setBackground(Color.red);
-				ambientTemp.setBackground(Color.red);
-			} else if (tempF >= 40) {
-				ambTemp.setBackground(Color.green);
-				ambientTemp.setBackground(Color.green);
-			}
+//			if (tempF <= 39) {
+//				ambTemp.setBackground(Color.red);
+//				ambientTemp.setBackground(Color.red);
+//			} else if (tempF >= 40) {
+//				ambTemp.setBackground(Color.green);
+//				ambientTemp.setBackground(Color.green);
+//			}
 		}
 	}
 	
@@ -154,7 +227,7 @@ public class ctcUI {
 		
 		JButton schedTrain, schedRepair, reporting, trnInfo, trnCtrl, trkCtrl, timeMult, switchTest, schedules, engineerCtrls;
 		JPanel runningMode, thrput, trainNum, currTime, trkModel;
-		tempF = 56;
+		tempF = 37;
 		numTrains = 0;
 		throughput = 0;
 		timeMultiplier = 1;
@@ -210,12 +283,12 @@ public class ctcUI {
 		gbc.gridy = 5;
 		pane.add(schedRepair, gbc);
 		
-		reporting = new JButton("Reporting");
-		reporting.setActionCommand("report");
+		reporting = new JButton("Other Testing");
+		reporting.setActionCommand("test");
 		reporting.setMnemonic(KeyEvent.VK_R);
 		reporting.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFrame reportingWindow = new reportingMenuUI();
+				OtherTestingUI.createAndShowGUI();
 			}
 		});
 		gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -270,7 +343,7 @@ public class ctcUI {
 		//throughput section
 		thrput = new JPanel();
 		thrput.setBorder(BorderFactory.createLineBorder(Color.black,1));
-		JTextArea thrhput = new JTextArea(1, 20);
+		thrhput = new JTextArea(1, 20);
 		thrhput.setEditable(false);
 		thrhput.setText(throughput + " passengers/hour");
 		thrput.add(thrhput);

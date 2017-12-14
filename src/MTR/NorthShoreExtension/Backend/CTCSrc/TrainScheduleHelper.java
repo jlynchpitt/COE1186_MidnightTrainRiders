@@ -101,4 +101,8 @@ public class TrainScheduleHelper {
 	public static void CTC_getBrokenTracks(int[] brokenTracks) {
 		broken = brokenTracks;
 	}
+	
+	public static void removeSchedule(int trainID) {
+		tsl.remove(trainID);
+	}
 }

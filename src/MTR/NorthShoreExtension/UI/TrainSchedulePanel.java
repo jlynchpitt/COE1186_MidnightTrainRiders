@@ -97,11 +97,12 @@ public class TrainSchedulePanel extends JPanel {
 		delete = new JButton("Delete");
 		delete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (dispatch.isEnabled()) {
-					dispatch.setEnabled(false);
-				} else {
-					dispatch.setEnabled(true);
-				}
+				int[] deleteAuth = {999};
+				//"vanish" the train to the yard
+				WaysideFunctionsHub.OccupiedSpeedAuthority(spot, 100, deleteAuth);
+				//remove from list of schedules, hopefully doesn't change the IDs of the trains
+				TrainScheduleHelper.removeSchedule(id);
+				TrainSchedulesUI.repaintGUI();
 			}
 		});
 		add(delete);		

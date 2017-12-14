@@ -76,7 +76,7 @@ public class ScheduleEditorUI {
 					update.setEnabled(false);
 				}
 				ts.updateAuthority(nextStops);
-
+				System.out.println("Curr Loc: " + ts.getCurrentLocation() + " New Speed: " + Integer.parseInt(updateSpeed.getText()) + " Next Stop: " + nextStops[nextStops.length-1]);
 				WaysideFunctionsHub.OccupiedSpeedAuthority(ts.getCurrentLocation(),Integer.parseInt(updateSpeed.getText()),nextStops);
 			}
 		});
