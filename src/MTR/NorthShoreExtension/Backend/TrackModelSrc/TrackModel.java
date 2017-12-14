@@ -144,7 +144,7 @@ public class TrackModel {
 		updateTrack.trainOccupying = trainid;
 		trackList.put(trackid, updateTrack);*/
 		load.updateTrackOccupied(trackid, 1);
-		train = new Train(trainid);
+		train = new Train(trainid, trackid);
 		officialTrains.put(trainid, train);
 		if(MainMTR.fullUI) {
 			wayside.WaysideController_TrackOccupancy(trackOccupency);
