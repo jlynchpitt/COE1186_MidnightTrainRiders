@@ -127,10 +127,10 @@ public class TrainController {
 		if(!eBrakeApplied && !brakeApplied && authority > 0 && !engineFailed) {
 			//Simple check against speed limit TODO: Move these checks into setters
 			int speedLimit = currentTrackInfo.speedLimit > currentTrackInfo.nextSpeedLimit ? currentTrackInfo.nextSpeedLimit : currentTrackInfo.speedLimit;
-			if(driverCommandedSetSpeed > speedLimit && ctcCommandedSetSpeed > speedLimit) {
+			if((manualMode == false || driverCommandedSetSpeed > speedLimit) && ctcCommandedSetSpeed > speedLimit) {
 				trainSetSpeed = speedLimit;
 			}
-			else if(driverCommandedSetSpeed > ctcCommandedSetSpeed) {
+			else if(manualMode == false || driverCommandedSetSpeed > ctcCommandedSetSpeed) {
 				trainSetSpeed = ctcCommandedSetSpeed;
 			}
 			else {
@@ -233,6 +233,8 @@ public class TrainController {
 	 * 		- false if brakes failed and cannot be applied */
 	public boolean operateBrake(boolean applied) {
 		boolean brakesSuccess = false;
+		autoAppliedBrake = false;
+		
 		if(brakesFailed) {
 			brakeApplied = false;
 			brakesSuccess = false;
@@ -257,6 +259,7 @@ public class TrainController {
 	
 	public void operateEmergencyBrake(boolean applied) {
 		eBrakeApplied = applied;
+		autoAppliedEBrake = false;
 		
 		/*if(applied) {
 			driverCommandedSetSpeed = 0;
@@ -642,6 +645,29 @@ public class TrainController {
 	private void ensureSafeOperations() {
 		if(authority == 0) {
 			operateEmergencyBrake(true);
+			autoAppliedEBrake = true;
+		}
+		else if(actualSpeed > currentTrackInfo.speedLimit) {
+			operateEmergencyBrake(true);
+			autoAppliedEBrake = true;
+		}
+		else if(autoAppliedEBrake && manualMode == false) {
+			operateEmergencyBrake(false);
+		}
+		
+		if(manualMode == false) {
+			if(authority > 0 && trainSetSpeed > 0) {
+				//release all brakes automatically
+				operateBrake(false);
+				operateEmergencyBrake(false);
+			}
+			if(actualSpeed > trainSetSpeed) {
+				operateBrake(true);
+				autoAppliedBrake = true;
+			}
+			else if(autoAppliedBrake) {
+				operateBrake(false);
+			}
 		}
 	}
 	
