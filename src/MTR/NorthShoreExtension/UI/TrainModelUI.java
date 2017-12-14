@@ -531,6 +531,23 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		gbc_lblD.gridx = 6;
 		gbc_lblD.gridy = 6;
 		contentPane.add(lblD, gbc_lblD);
+		
+		JLabel lblBrake = new JLabel("Brake:");
+		lblBrake.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		GridBagConstraints gbc_lblBrake = new GridBagConstraints();
+		gbc_lblBrake.anchor = GridBagConstraints.WEST;
+		gbc_lblBrake.insets = new Insets(0, 0, 5, 5);
+		gbc_lblBrake.gridx = 9;
+		gbc_lblBrake.gridy = 6;
+		contentPane.add(lblBrake, gbc_lblBrake);
+		
+		JLabel lblA_1 = new JLabel("a");
+		lblA_1.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		GridBagConstraints gbc_lblA_1 = new GridBagConstraints();
+		gbc_lblA_1.insets = new Insets(0, 0, 5, 0);
+		gbc_lblA_1.gridx = 10;
+		gbc_lblA_1.gridy = 6;
+		contentPane.add(lblA_1, gbc_lblA_1);
 
 		
 		JLabel lblCumulativeDistance = new JLabel("Total Distance:");
@@ -541,6 +558,23 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		gbc_lblCumulativeDistance.gridx = 5;
 		gbc_lblCumulativeDistance.gridy = 7;
 		contentPane.add(lblCumulativeDistance, gbc_lblCumulativeDistance);
+		
+		JLabel lblEbrake = new JLabel("E-Brake");
+		lblEbrake.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		GridBagConstraints gbc_lblEbrake = new GridBagConstraints();
+		gbc_lblEbrake.anchor = GridBagConstraints.WEST;
+		gbc_lblEbrake.insets = new Insets(0, 0, 5, 5);
+		gbc_lblEbrake.gridx = 9;
+		gbc_lblEbrake.gridy = 7;
+		contentPane.add(lblEbrake, gbc_lblEbrake);
+		
+		JLabel lblB = new JLabel("b");
+		lblB.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		GridBagConstraints gbc_lblB = new GridBagConstraints();
+		gbc_lblB.insets = new Insets(0, 0, 5, 0);
+		gbc_lblB.gridx = 10;
+		gbc_lblB.gridy = 7;
+		contentPane.add(lblB, gbc_lblB);
 		
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setForeground(Color.BLACK);
@@ -789,7 +823,6 @@ public class TrainModelUI extends JFrame implements ActionListener{
 		String[] tnames = new String[keys.size()];
 		comboBox.removeAllItems();
 		System.out.println("Add Train: Number of trains:" +tnames.length);
-		lblV.setText("PENIS");
 		for (int i=0;i<tnames.length;i++) {
 			tnames[i]="Train "+tarray[i];
 			comboBox.addItem(tnames[i]);

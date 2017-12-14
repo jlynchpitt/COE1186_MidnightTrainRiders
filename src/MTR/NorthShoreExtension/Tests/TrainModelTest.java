@@ -33,9 +33,8 @@ import MTR.NorthShoreExtension.Backend.TrainSrc.Train;
 public class TrainModelTest extends JFrame implements ActionListener{
 
 	private JPanel contentPane;
-	private Map<Integer,Train> tMap = new HashMap<Integer,Train>();
+	private static Map<Integer,Train> tMap = new HashMap<Integer,Train>();
 	private Train tr;
-	private TrackModel tm;
 	private double p;
 	private JTextField txtAcc;
 	private JLabel lblV, lblAcc, lblLd,lblRd, lblL_1;
@@ -66,7 +65,6 @@ public class TrainModelTest extends JFrame implements ActionListener{
 	 */
 	public TrainModelTest() {
 		System.out.println("HI YOU'RE RUNNING TRAINMODEL UI");
-		tMap=tm.getTrains();
 		
 		
 		setBackground(new Color(240, 240, 240));
@@ -776,14 +774,12 @@ public class TrainModelTest extends JFrame implements ActionListener{
 	
 	public void addTrain() {
 		comboBox.setSelectedIndex(-1);
-		tMap=tm.getTrains();
 		SortedSet<Integer> keys = new TreeSet<Integer>(tMap.keySet());
 		Integer[] tarray = new Integer[keys.size()];
 		keys.toArray(tarray);
 		String[] tnames = new String[keys.size()];
 		comboBox.removeAllItems();
 		System.out.println("Add Train: Number of trains:" +tnames.length);
-		lblV.setText("PENIS");
 		for (int i=0;i<tnames.length;i++) {
 			tnames[i]="Train "+tarray[i];
 			comboBox.addItem(tnames[i]);
@@ -805,7 +801,6 @@ public class TrainModelTest extends JFrame implements ActionListener{
 			lblL.setText(String.format("%.2f",tr.getLength())+" m");
 			lblC.setText(tr.getCars()+"");
 		}
-		
 	}
 	
 	
@@ -813,20 +808,26 @@ public class TrainModelTest extends JFrame implements ActionListener{
 		
 		
 		for(int i=0;i<5;i++) {
-			 Map<Integer,Train> tMap = new HashMap<Integer,Train>();
+			Train s= new Train(i,10001);
+			tMap.put(i,s);
 		}
 		
 		TrainModelTest frame = new TrainModelTest();
+		frame.addTrain();
 		frame.setVisible(true);
-		double temp =0;
+		double[] grade = {-6, 6, 0, 0, 0};
+		double[] temp = {10, 10, 10, 10, 10};
+		int[] p= {148,148, 148, 200, -5};
 		do {
 			long millis = System.currentTimeMillis();
 		    //code to run
 			for(int i=0;i<5;i++) {
-				trains[i].TrainModel_setPower(temp); 
+				tMap.get(i).setPassengers(p[i]);
+				tMap.get(i).setGrade(grade[i]);
+				tMap.get(i).TrainModel_setPower(temp[i]); 
 			}
 			frame.updateGUI();
-		    Thread.sleep(1000 - millis % 1000);
+		    //sThread.sleep(1000 - millis % 1000);
 		}while(true);
 		
 	}

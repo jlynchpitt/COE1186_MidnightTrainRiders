@@ -308,7 +308,7 @@ public class WaysideController //this class is the logic to decide what to do wi
 					
 				}
 				
-				else if (SG.contains(ListOfTrackPlans.get(x).get(1)+1))  //if an upcoming track is a switch
+				else if (SG.contains(ListOfTrackPlans.get(x).get(1)+1)&& Math.abs(ListOfTrackPlans.get(x).get(0) - ListOfTrackPlans.get(x).get(1)) >1)  //if an upcoming track is a switch
 				{
 					System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHH");
 					/*

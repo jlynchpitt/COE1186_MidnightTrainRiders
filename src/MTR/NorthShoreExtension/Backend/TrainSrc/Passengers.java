@@ -13,10 +13,15 @@ public class Passengers {
 		passengerWeight=0;
 	}
 	
-	/*
-	public void passengersIn() {
+	
+	public void passengersIn(int tickets) {
 		Random rand = new Random();
-		totalPassengers+=rand.nextInt(20);
+		int capacityLeft=maxPassengers-totalPassengers;
+		if(capacityLeft>tickets) {
+			totalPassengers+=rand.nextInt(tickets);
+		}else {
+			totalPassengers+=rand.nextInt(capacityLeft);
+		}
 		passengerWeight=totalPassengers*averageWeight;
 	}
 	
@@ -29,13 +34,18 @@ public class Passengers {
 		totalPassengers-=x;
 		passengerWeight=totalPassengers*averageWeight;
 	}
-	*/
+	
 	
 	public int getCrewCount() {
 		return crewCount;
 	}
+	
+	
 	public void setPassengers(int passengers) {
+		if(passengers>=0) {
 		totalPassengers=passengers;
+		this.passengerWeight=passengers*averageWeight;
+		}
 	}
 	
 	public double getPassengerWeight() {
