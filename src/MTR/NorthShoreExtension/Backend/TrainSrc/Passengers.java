@@ -13,6 +13,7 @@ public class Passengers {
 		passengerWeight=0;
 	}
 	
+	/*
 	public void passengersIn() {
 		Random rand = new Random();
 		totalPassengers+=rand.nextInt(20);
@@ -27,6 +28,14 @@ public class Passengers {
 		}while(totalPassengers-x<0);
 		totalPassengers-=x;
 		passengerWeight=totalPassengers*averageWeight;
+	}
+	*/
+	
+	public int getCrewCount() {
+		return crewCount;
+	}
+	public void setPassengers(int passengers) {
+		totalPassengers=passengers;
 	}
 	
 	public double getPassengerWeight() {
