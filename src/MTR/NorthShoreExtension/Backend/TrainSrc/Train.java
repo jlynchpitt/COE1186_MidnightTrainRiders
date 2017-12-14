@@ -31,7 +31,8 @@ public class Train {
 		TrainControllerHelper tch = MainMTR.getTrainControllerHelper();
 		
 		int line=(int) Math.floor(trackID / Math.pow(10, Math.floor(Math.log10(trackID))));
-		if(line==1) {
+		System.out.println("Line "+line);
+		if(line==2) {
 			tc=tch.addNewTrainController(t, "Green", this);
 			trainLine="Green";
 		}else {
