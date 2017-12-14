@@ -20,6 +20,7 @@ import MTR.NorthShoreExtension.Backend.TrackModelSrc.TrackModel;
 import MTR.NorthShoreExtension.Backend.TrainSrc.Train;
 import MTR.NorthShoreExtension.UI.TrackModelUI;
 import MTR.NorthShoreExtension.UI.TrackModelUI.TrackGraphic;
+import MTR.NorthShoreExtension.UI.TrainControlUI;
 import MTR.NorthShoreExtension.UI.TrainModelUI;
 import MTR.NorthShoreExtension.UI.ctcUI;
 
@@ -37,8 +38,8 @@ public class TrainControllerHelper {
 	public static final int SIGNAL_PICKUP_FAILURE = 2;
 	public static final int BRAKE_FAILURE = 3;
 	
-	private double pid_p = 1;
-	private double pid_i = 0; 
+	private double pid_p = 8;
+	private double pid_i = 0.25; 
 	private Timer powerTimer = new Timer();
 	private List<Integer> idList = new ArrayList<>();
 	private List<TrainController> tcList = new ArrayList<TrainController>();
@@ -90,11 +91,13 @@ public class TrainControllerHelper {
 	public TrainController addNewTrainController(int trainID, String lineColor, Train train) {
 		//Check if new train ID has been used
 		if(!idList.contains(trainID)) {
+			idList.add(trainID);
 			TrainController tc = new TrainController(trainID, train, this, pid_p, pid_i, lineColor);
 			
 			//Add tc to list of trianControllers
 			tcList.add(tc);
-			idList.add(trainID);
+			
+			TrainControlUI.reloadGUI();
 			return tc;
 		}
 		else {
@@ -140,6 +143,23 @@ public class TrainControllerHelper {
 		powerTimer.scheduleAtFixedRate(new PowerTimerTask(), 0, 1000/clockMultiplier);
 	}
 	
+	public void removeTrain(int trainID) {
+		if(getTrainIDList().contains(trainID)) {
+			//Train exists - remove it from both lists
+			idList.remove(idList.indexOf(trainID));
+			int tcIndex = -1;
+			for(TrainController tc : tcList) {
+				if(trainID == tc.getTrainID()) {
+					tcIndex = tcList.indexOf(tc);
+					break;
+				}
+			}
+			if(tcIndex != -1) {
+				tcList.remove(tcIndex);
+			}
+			TrainControlUI.reloadGUI();
+		}
+	}
 
 	public long getTime() {
 		return simulatedClockTime;
@@ -163,7 +183,9 @@ public class TrainControllerHelper {
 			/*if(ctc_ui != null) {
 				ctc_ui.setTime(simulatedClockTime);
 			}*/
-			ctcUI.setTime(simulatedClockTime);
+			if(MainMTR.fullUI) {
+				ctcUI.setTime(simulatedClockTime);
+			}
 			
 			//Repaint Track model UI - TODO: Limit how often this runs
 			if(TrackModelUI.trackGraphic != null && (simulatedClockTime - lastRedrawTime) > timeBetweenRedraw) {

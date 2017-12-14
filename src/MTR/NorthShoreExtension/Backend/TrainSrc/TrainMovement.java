@@ -18,6 +18,8 @@ public class TrainMovement {
 	final double staticFriction = 0.001; //Static Friciton of hard Steel on Steel//
 	final double kineticFriction = 0.001; //Kinetic Friction of hard Steel on steel//
 	final double gravity =  9.807; //expressed in m/s^2//
+	final double accLimit=0.5;
+	final double velLimit=19.4444;
 	final double brakeAcc = -1.2;
 	final double eBrakeAcc = -2.73;
 	
@@ -81,13 +83,18 @@ public class TrainMovement {
 		}
 		
 		
-		/*if(acceleration>0.5) {
-			acceleration=0.5;
-		}*/
+		if(acceleration>accLimit) {
+			acceleration=accLimit;
+		}
 		
 		nextVelocity = acceleration+velocity;
 		if(nextVelocity<0) {
 			nextVelocity=0;
+			acceleration=0;
+		}
+		
+		if(nextVelocity>velLimit) {
+			nextVelocity=velLimit;
 			acceleration=0;
 		}
 		distance = 0.5*acceleration+velocity;
@@ -123,5 +130,13 @@ public class TrainMovement {
 	
 	public void seteBrake(boolean b) {
 		this.eBrake=b;	
+	}
+	
+	public boolean getBrake() {
+		return brake;
+	}
+	
+	public boolean geteBrake() {
+		return eBrake;
 	}
 }

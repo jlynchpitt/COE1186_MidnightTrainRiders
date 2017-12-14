@@ -55,7 +55,9 @@ public class TrainController {
 	
 	/* Non-Vital Train Info */
 	private String trainFaults = "none"; //TODO: Possibly change to enumerated type
-	private String announcements = "at Steel Plaza";
+	private String announcements = "";
+	private String stationName = "";
+	private boolean onStation = false;
 	
 	//non-vital train controls
 	private boolean rightDoorOpen = false;
@@ -63,6 +65,7 @@ public class TrainController {
 	private boolean lightsOn = false;
 	private int setTemp = 73; //default room temperature is 73 degrees
 	private double internalTemp = 73; //TODO: Change actual temp to outside temp to start
+	private int timeSinceChangeTemp = 0;
 	
 	//Track Info
 	private DriverTrackInfo currentTrackInfo = null;
@@ -125,7 +128,11 @@ public class TrainController {
 		
 		if(!eBrakeApplied && !brakeApplied && authority > 0 && !engineFailed) {
 			//Simple check against speed limit TODO: Move these checks into setters
-			if(driverCommandedSetSpeed > ctcCommandedSetSpeed) {
+			int speedLimit = currentTrackInfo.speedLimit > currentTrackInfo.nextSpeedLimit ? currentTrackInfo.nextSpeedLimit : currentTrackInfo.speedLimit;
+			if((manualMode == false || driverCommandedSetSpeed > speedLimit) && ctcCommandedSetSpeed > speedLimit) {
+				trainSetSpeed = speedLimit-2; //-2 buffer for safety
+			}
+			else if(manualMode == false || driverCommandedSetSpeed > ctcCommandedSetSpeed) {
 				trainSetSpeed = ctcCommandedSetSpeed;
 			}
 			else {
@@ -141,7 +148,7 @@ public class TrainController {
 			Double tempPC = powerOutputSelector(tempPC1, tempPC2, tempPC3);
 			if(tempPC != null /* && validatePowerCommand(tempPC)*/) {
 				//Limit amount power command can increase in 1 second
-				int safePowerCommandJump = 10;
+				int safePowerCommandJump = 7500;
 				
 				if(tempPC - powerCommand > safePowerCommandJump) {
 					powerCommand = powerCommand + safePowerCommandJump;
@@ -166,6 +173,57 @@ public class TrainController {
 		
 		updateUI(TrainControlPanel.VITAL);
 		
+		//update the temperature
+		if(timeSinceChangeTemp > 10) {
+			timeSinceChangeTemp = 0;
+			if(internalTemp > setTemp) {
+				internalTemp--;				
+				updateUI(TrainControlPanel.TEMPERATURE);
+			}
+			else if(internalTemp < setTemp) {
+				internalTemp++;
+				updateUI(TrainControlPanel.TEMPERATURE);
+			}
+		}
+		timeSinceChangeTemp++;
+		
+		if(manualMode == false) {
+			//Auto mode - check status of lights + doors
+			if(currentTrackInfo.isUnderground) {
+				operateLights(true);
+			}
+			else {
+				operateLights(false);
+			}
+			
+			if(currentTrackInfo.isStation && actualSpeed < 0.1) {
+				//open doors - TODO: open correct side door only
+				boolean stationOnRight = db.isStationOnRight(currentTrackInfo.trackID);
+				
+				if(!calculateTravelDirection()) {
+					//If going the opposite direction switch the location of the station
+					stationOnRight = !stationOnRight;
+				}
+				
+				operateRightDoor(stationOnRight);
+				operateLeftDoor(!stationOnRight);
+			}
+			else {
+				//close all doors
+				operateRightDoor(false);
+				operateLeftDoor(false);
+			}
+		}
+		
+		if(currentTrackInfo.isStation) {
+			onStation = true;
+			announcements = "At " + stationName;
+			updateUI(TrainControlPanel.ANNOUNCEMENT);
+			if(trainModel != null) {
+				trainModel.TrainModel_sendAnnouncement(announcements);
+			}
+		}
+		
 		//Send to train model and test bench
 		if(trainModel != null) {
 			trainModel.TrainModel_setPower(powerCommand);
@@ -186,6 +244,8 @@ public class TrainController {
 	 * 		- false if brakes failed and cannot be applied */
 	public boolean operateBrake(boolean applied) {
 		boolean brakesSuccess = false;
+		autoAppliedBrake = false;
+		
 		if(brakesFailed) {
 			brakeApplied = false;
 			brakesSuccess = false;
@@ -210,6 +270,12 @@ public class TrainController {
 	
 	public void operateEmergencyBrake(boolean applied) {
 		eBrakeApplied = applied;
+		autoAppliedEBrake = false;
+		
+		/*if(applied) {
+			driverCommandedSetSpeed = 0;
+			updateUI(TrainControlPanel.DRIVER_SET_SPEED);
+		}*/
 		
 		if(trainModel != null) {
 			trainModel.TrainModel_setEBrake(applied);
@@ -224,42 +290,50 @@ public class TrainController {
 	
 	/* Functions for non-vital user inputs */
 	public void operateRightDoor(boolean open) {
-		rightDoorOpen = open;
-		
-		if(trainModel != null) {
-			trainModel.TrainModel_openRightDoor(open);
-		}
-		if(testBench != null) {
-			testBench.TrainModel_openRightDoor(open);
+		if(open != rightDoorOpen) {
+			rightDoorOpen = open;
+			
+			if(trainModel != null) {
+				trainModel.TrainModel_openRightDoor(open);
+			}
+			if(testBench != null) {
+				testBench.TrainModel_openRightDoor(open);
+			}
+			
+			updateUI(TrainControlPanel.DOORS);
 		}
 	}
 	
 	public void operateLeftDoor(boolean open) {
-		leftDoorOpen = open;
-		
-		if(trainModel != null) {
-			trainModel.TrainModel_openLeftDoor(open);
-		}
-		if(testBench != null) {
-			testBench.TrainModel_openLeftDoor(open);
+		if(open != leftDoorOpen) {
+			leftDoorOpen = open;
+			
+			if(trainModel != null) {
+				trainModel.TrainModel_openLeftDoor(open);
+			}
+			if(testBench != null) {
+				testBench.TrainModel_openLeftDoor(open);
+			}
+			updateUI(TrainControlPanel.DOORS);
 		}
 	}
 	
 	public void operateLights(boolean on) {
-		lightsOn = on;
-		
-		if(trainModel != null) {
-			trainModel.TrainModel_turnLightsOn(on);
-		}
-		if(testBench != null) {
-			testBench.TrainModel_turnLightsOn(on);
+		if(lightsOn != on) {
+			lightsOn = on;
+			
+			if(trainModel != null) {
+				trainModel.TrainModel_turnLightsOn(on);
+			}
+			if(testBench != null) {
+				testBench.TrainModel_turnLightsOn(on);
+			}
+			updateUI(TrainControlPanel.LIGHTS);
 		}
 	}
 	
 	public void setInsideTemperature(int temp) {
 		setTemp = temp;
-
-		//TODO: perform calculations of actual temperature
 	}
 	
 	public void setOperationMode(boolean manual) {
@@ -292,22 +366,57 @@ public class TrainController {
 	
 	public void TrainControl_sendBeaconInfo(int beacon) {
 		//translate beacon - TODO: 
-		if(!signalPickupFailed) {
+		if(!signalPickupFailed && beacon != 0) {
 			int trackID = (beacon & 0x1FE00000) >> 21;
-			trackID += 2000; //green line
+			boolean isGreenLine = (beacon & 0x20000000) > 0; //Bit 29 1 if green line
+			boolean isSwitch = (beacon & 0x40000000) > 0; //Bit 30 1 if switch
+			
+			//bits 20 19 18 17 primary next station
+			int primaryNextStation = (beacon & 0x1E0000) >> 17;
+			//bits 16 15 14 13 secondary next station
+			int secondaryNextStation = (beacon & 0x1E000) >> 13;
+			
+			System.out.println("id: " + trackID + " green: " + isGreenLine + " switch: " + isSwitch + " next station: " + primaryNextStation);
+			
+			if(isGreenLine) {
+				trackID += 2000; //green line
+			}
+			else {
+				trackID += 1000; //red line
+			}
+			
+			if(!isSwitch) {
+				//Station - update announcements
+				stationName = "";
+				if(primaryNextStation != 0 && calculateTravelDirection()) {
+					stationName = db.getStationName(primaryNextStation);
+					announcements = "Approaching " + stationName;
+				}
+				else if(secondaryNextStation!= 0 && !calculateTravelDirection()) {
+					stationName = db.getStationName(secondaryNextStation);	
+					announcements = "Approaching " + stationName;
+				}
+				else {
+					announcements = "";
+
+				}
+				
+				if(trainModel != null) {
+					System.out.println("Sent announcement to train: " + announcements);
+					trainModel.TrainModel_sendAnnouncement(announcements);
+				}
+				if(testBench != null) {
+					//testBench.TrainModel_setAnnouncement(announcements);
+				}
+				updateUI(TrainControlPanel.ANNOUNCEMENT);
+			}
 			
 			if(currentTrackInfo != null && trackID != currentTrackInfo.trackID) {
-				//TODO: Properly handle previous track and travel direction
-				/*boolean travelDirection = calculateTravelDirection();
-				if(currentTrackInfo != null) {
-					previousTrackInfo = currentTrackInfo.copy();
-					//previousTrackInfo = new DriverTrackInfo();
-					//previousTrackInfo.trackID = currentTrackInfo.trackID;
-				}*/
-				currentTrackInfo = db.getTrackInfo(trackID);
 				
+				currentTrackInfo = db.getTrackInfo(trackID);
 				updateUI(TrainControlPanel.TRACK_INFO);
 			}
+			//System.out.println("announcement: " + announcements);
 		}
 	}
 	
@@ -325,6 +434,16 @@ public class TrainController {
 			}
 			
 			updateUI(TrainControlPanel.TRACK_INFO);
+			
+			if(onStation) {
+				//previous track was a station
+				onStation = false;
+				announcements = "";
+				updateUI(TrainControlPanel.ANNOUNCEMENT);
+				if(trainModel != null) {
+					trainModel.TrainModel_sendAnnouncement(announcements);
+				}
+			}
 		}
 	}
 	
@@ -358,7 +477,7 @@ public class TrainController {
 			}
 			else {
 				if(trainModel != null) {
-					//trainModel.TrainModel_resendSpeedAuthority();
+					trainModel.TrainModel_resendSpeedAuthority();
 				}
 				if(testBench != null) {
 					testBench.TrainModel_resendSpeedAuthority();
@@ -553,6 +672,29 @@ public class TrainController {
 	private void ensureSafeOperations() {
 		if(authority == 0) {
 			operateEmergencyBrake(true);
+			autoAppliedEBrake = true;
+		}
+		else if(actualSpeed > currentTrackInfo.speedLimit) {
+			operateEmergencyBrake(true);
+			autoAppliedEBrake = true;
+		}
+		else if(autoAppliedEBrake) {
+			operateEmergencyBrake(false);
+		}
+		
+		if(manualMode == false) {
+			if(authority > 0 && trainSetSpeed > 0) {
+				//release all brakes automatically
+				operateBrake(false);
+				operateEmergencyBrake(false);
+			}
+			if(actualSpeed > trainSetSpeed) {
+				operateBrake(true);
+				autoAppliedBrake = true;
+			}
+			else if(autoAppliedBrake) {
+				operateBrake(false);
+			}
 		}
 	}
 	

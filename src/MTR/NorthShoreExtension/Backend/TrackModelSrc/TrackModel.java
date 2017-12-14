@@ -219,13 +219,13 @@ public class TrackModel {
 		Train sendBeacon = officialTrains.get(trainid);
 		int beacon = 0;
 		if(trackid == 2001) {
-			beacon = 1612849152;
+			beacon = 539099136;
 		}
 		else if(trackid == 2011) {
 			beacon = 1633820672;
 		}
 		else if(trackid == 2030) {
-			beacon = 1673666560;	
+			beacon = 600440832;	
 		}
 		else if(trackid == 2150) {
 			beacon = 1925324800;
@@ -240,12 +240,201 @@ public class TrackModel {
 			beacon = 1822564352;
 		}
 		else if(trackid == 2087) {
-			beacon = 1793204224;
+			beacon = 720896000;
 		}
 		else if(trackid == 2100) {
 			beacon = 1820467200;
 		}
-		sendBeacon.TrainModel_sendBeacon(beacon);
+		else if(trackid == 2003) {
+			beacon = 543170560;
+		}
+		else if(trackid == 2008) {
+			beacon = 553910272;
+		}
+		else if(trackid == 2010) {
+			beacon = 557858816;
+		}
+		else if(trackid == 2021) {
+			beacon = 581435392;
+		}
+		else if(trackid == 2023) {
+			beacon = 585138176;
+		}
+		else if(trackid == 2032) {
+			beacon = 604020736;
+		}
+		else if(trackid == 2038) {
+			beacon = 617349120;
+		}
+		else if(trackid == 2040) {
+			beacon = 620806144;
+		}
+		else if(trackid == 2047) {
+			beacon = 636354560;
+		}
+		else if(trackid == 2049) {
+			beacon = 639688704;
+		}
+		else if(trackid == 2056) {
+			beacon = 655360000;
+		}
+		else if(trackid == 2058) {
+			beacon = 658571264;
+		}
+		else if(trackid == 2064) {
+			beacon = 672268288;
+		}
+		else if(trackid == 2066) {
+			beacon = 675356672;
+		}
+		else if(trackid == 2072) {
+			beacon = 689176576;
+		}
+		else if(trackid == 2074) {
+			beacon = 692142080;
+		}
+		else if(trackid == 2076) {
+			beacon = 697696256;
+		}
+		else if(trackid == 2078) {
+			beacon = 700538880;
+		}
+		else if(trackid == 2089) {
+			beacon = 723615744;
+		}
+		else if(trackid == 2095) {
+			beacon = 737804288;
+		}
+		else if(trackid == 2097) {
+			beacon = 740401152;
+		}
+		else if(trackid == 2104) {
+			beacon = 756285440;
+		}
+		else if(trackid == 2106) {
+			beacon = 759250944;
+		}
+		else if(trackid == 2113) {
+			beacon = 775028736;
+		}
+		else if(trackid == 2115) {
+			beacon = 778117120;
+		}
+		else if(trackid == 2122) {
+			beacon = 793772032;
+		}
+		else if(trackid == 2124) {
+			beacon = 796983296;
+		}
+		else if(trackid == 2131) {
+			beacon = 812515328;
+		}
+		else if(trackid == 2133) {
+			beacon = 815849472;
+		}
+		else if(trackid == 2140) {
+			beacon = 831258624;
+		}
+		else if(trackid == 2142) {
+			beacon = 834715648;
+		}
+		else if(trackid == 2015) {
+			beacon = 568721408;
+		}
+		else if(trackid == 2017) {
+			beacon = 572547072;
+		}
+		else if(trackid == 1010) {
+			beacon = 1094852608;
+		}
+		else if(trackid == 1001) {
+			beacon = 1075978240;
+		}
+		else if(trackid == 1014) {
+			beacon = 1103241216;
+		}
+		else if(trackid == 1028) {
+			beacon = 1132601344;
+		}
+		else if(trackid == 1031) {
+			beacon = 1138892800;
+		}
+		else if(trackid == 1039) {
+			beacon = 1155670016;
+		}
+		else if(trackid == 1042) {
+			beacon = 1161961472;
+		}
+		else if(trackid == 1076) {
+			beacon = 1233264640;
+		}
+		else if(trackid == 1072) {
+			beacon = 1224876032;
+		}
+		else if(trackid == 1071) {
+			beacon = 1222778880;
+		}
+		else if(trackid == 1067) {
+			beacon = 1214390272;
+		}
+		else if(trackid == 1053) {
+			beacon = 1185030144;
+		}
+		else if(trackid == 1066) {
+			beacon = 1212293120;
+		}
+		else if(trackid == 1006) {
+			beacon = 12713984;
+		}
+		else if(trackid == 1008) {
+			beacon = 16785408;
+		}
+		else if(trackid == 1015) {
+			beacon = 31719424;
+		}
+		else if(trackid == 1017) {
+			beacon = 35667968;
+		}
+		else if(trackid == 1020) {
+			beacon = 42336256;
+		}
+		else if(trackid == 1022) {
+			beacon = 46161920;
+		}
+		else if(trackid == 1024) {
+			beacon = 50855936;
+		}
+		else if(trackid == 1026) {
+			beacon = 54558720;
+		}
+		else if(trackid == 1034) {
+			beacon = 71958528;
+		}
+		else if(trackid == 1036) {
+			beacon = 75538432;
+		}
+		else if(trackid == 1044) {
+			beacon = 93061120;
+		}
+		else if(trackid == 1046) {
+			beacon = 96518144;
+		}
+		else if(trackid == 1047) {
+			beacon = 99483648;
+		}
+		else if(trackid == 1049) {
+			beacon = 102817792;
+		}
+		else if(trackid == 1059) {
+			beacon = 124780544;
+		}
+		else if(trackid == 1061) {
+			beacon = 127991808;
+		}
+		
+		if(sendBeacon != null) {
+			sendBeacon.TrainModel_sendBeacon(beacon);
+		}
 	}
 
 }
