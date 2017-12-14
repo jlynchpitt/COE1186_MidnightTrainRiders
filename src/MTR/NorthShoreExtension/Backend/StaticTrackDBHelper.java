@@ -617,6 +617,48 @@ public class StaticTrackDBHelper {
 		return "";
    }
    
+   public boolean isStationOnRight(int trackID) {
+	   boolean onRight = true;
+	   Connection connection = null;
+		Statement statement = null;
+		ResultSet result = null;
+		
+		try {
+			connection = connect();
+			
+			statement = connection.createStatement();
+			statement.setQueryTimeout(30); //TODO: Is this needed?
+			
+			String query = "SELECT stationSide from " + STATION_LIST_TABLENAME + " WHERE trackID = '" + trackID+ "'";
+
+		    result = statement.executeQuery(query);  
+		    
+		    if(result.next())
+		    {
+		       // iterate & read the result set
+		    	String side = result.getString("stationSide");
+		    	if(side.equals("R") || side.equals("r")) {
+		    		onRight = true;
+		    	}
+		    	else {
+		    		onRight = false;
+		    	}
+		    }
+		    //System.out.println("Getting station name ID: " + stationID + " name: " + stationName);
+		    return onRight;
+		}
+		catch(SQLException e){  
+			 System.err.println(e.getMessage()); 
+		}       
+		finally {         
+			if (result != null) try { result.close(); } catch (SQLException ignore) {}
+	        if (statement != null) try { statement.close(); } catch (SQLException ignore) {}
+	        if (connection != null) try { connection.close(); } catch (SQLException ignore) {}
+		 }
+		
+		return onRight;
+   }
+   
    /* Sample query
    private ResultSet executeQuery(String query) {
 		Connection connection = null;

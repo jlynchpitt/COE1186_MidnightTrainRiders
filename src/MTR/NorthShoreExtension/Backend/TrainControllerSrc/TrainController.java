@@ -177,8 +177,15 @@ public class TrainController {
 			
 			if(currentTrackInfo.isStation && actualSpeed < 0.1) {
 				//open doors - TODO: open correct side door only
-				operateRightDoor(true);
-				operateLeftDoor(true);
+				boolean stationOnRight = db.isStationOnRight(currentTrackInfo.trackID);
+				
+				if(!calculateTravelDirection()) {
+					//If going the opposite direction switch the location of the station
+					stationOnRight = !stationOnRight;
+				}
+				
+				operateRightDoor(stationOnRight);
+				operateLeftDoor(!stationOnRight);
 			}
 			else {
 				//close all doors
