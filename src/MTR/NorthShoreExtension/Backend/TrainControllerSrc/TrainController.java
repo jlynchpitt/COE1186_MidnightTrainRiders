@@ -355,7 +355,7 @@ public class TrainController {
 	
 	public void TrainControl_sendBeaconInfo(int beacon) {
 		//translate beacon - TODO: 
-		if(!signalPickupFailed) {
+		if(!signalPickupFailed && beacon != 0) {
 			int trackID = (beacon & 0x1FE00000) >> 21;
 			boolean isGreenLine = (beacon & 0x20000000) > 0; //Bit 29 1 if green line
 			boolean isSwitch = (beacon & 0x40000000) > 0; //Bit 30 1 if switch
@@ -365,7 +365,7 @@ public class TrainController {
 			//bits 16 15 14 13 secondary next station
 			int secondaryNextStation = (beacon & 0x1E000) >> 13;
 			
-			//System.out.println("id: " + trackID + " green: " + isGreenLine + " switch: " + isSwitch + " next station: " + primaryNextStation);
+			System.out.println("id: " + trackID + " green: " + isGreenLine + " switch: " + isSwitch + " next station: " + primaryNextStation);
 			
 			if(isGreenLine) {
 				trackID += 2000; //green line
