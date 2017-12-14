@@ -104,7 +104,7 @@ public class Train {
 	}
 	
 	public void TrainModel_sendAnnouncement(String a) {
-		this.announcement=a;
+		this.setAnnouncement(a);
 	}
 	
 	
@@ -304,5 +304,13 @@ public class Train {
 	
 	public void setGrade(double g) {
 		tm.setGrade(g);
+	}
+
+	public String getAnnouncement() {
+		return announcement;
+	}
+
+	public void setAnnouncement(String announcement) {
+		this.announcement = announcement;
 	}
 }
