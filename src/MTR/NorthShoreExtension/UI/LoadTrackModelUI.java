@@ -147,7 +147,7 @@ public class LoadTrackModelUI extends JPanel
             //Start the Track model UI
             javax.swing.SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
-					TrackModelUI.createAndShowGUI();;
+					TrackModelUI.createAndShowGUI();
 				}
 			});
            

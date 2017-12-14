@@ -172,9 +172,8 @@ public class TrackModel {
 				type.equals("STATION; POPLAR")) {
 			soldTicket += rand.nextInt(50) + 1;
 			System.out.println("Tickets sold:" + soldTicket);
-			peopleOn = rand.nextInt(soldTicket)+1;
 			updateTrains = officialTrains.get(trainid);
-			updateTrains.TrainModel_setNumberOfPassengers(peopleOn);
+			updateTrains.TrainModel_setNumberOfPassengers(soldTicket);
 			ctc.setThroughput(soldTicket);
 		}
 		else {
@@ -216,26 +215,35 @@ public class TrackModel {
 	}
 	
 	public static void sendBeacon(int trackid, int trainid) {
-		String type = load.getInfrastructure(trackid);
+		//String type = load.getInfrastructure(trackid);
 		Train sendBeacon = officialTrains.get(trainid);
 		int beacon = 0;
-		if(type.equals("STATION") || type.equals("STATION; PIONEER") || 
-				type.equals("STATION; EDGEBROOK") || type.equals("STATION; WHITED") || 
-				type.equals("STATION; SOUTH BANK") || type.equals("STATION; CENTRAL; UNDERDROUND") ||
-				type.equals("STATION; INGLEWOOD; UNDERGROUND") || type.equals("STATION; OVERBROOK; UNDERGROUND") ||
-				type.equals("STATION; GLENBURY") || type.equals("STATION; DORMONT") ||
-				type.equals("STATION; MT LEBANON") || type.equals("STATION; CASTLE SHANNON") ||
-				type.equals("STATION: SHADYSIDE") || type.equals("STATION: HERRON AVE") ||
-				type.equals("STATION; SWISSVILLE") || type.equals("STATION;    PENN STATION; UNDERGROUND") ||
-				type.equals("STATION; STEEL PLAZA; UNDERGROUND") || type.equals("STATION; FIRST AVE; UNDERGROUND") ||
-				type.equals("STATION; STATION SQUARE") || type.equals("STATION; SOUTH HILLS JUNCTION") ||
-				type.equals("STATION; POPLAR")) {
-		
-				//set beacon here
+		if(trackid == 2001) {
+			beacon = 1612849152;
 		}
-		if(type.equals("SWITCH TO/FROM YARD") || type.equals("SWITCH") || type.equals("SWITCH; UNDERGROUND") ||
-				type.equals("SWITCH TO YARD") || type.equals("SWITCH FROM YARD")) {
-			    //set beacon here
+		else if(trackid == 2011) {
+			beacon = 1633820672;
+		}
+		else if(trackid == 2030) {
+			beacon = 1673666560;	
+		}
+		else if(trackid == 2150) {
+			beacon = 1925324800;
+		}
+		else if(trackid == 2059) {
+			beacon = 1734483968;
+		}
+		else if(trackid == 2075) {
+			beacon = 1768038400;
+		}
+		else if(trackid == 2101) {
+			beacon = 1822564352;
+		}
+		else if(trackid == 2087) {
+			beacon = 1793204224;
+		}
+		else if(trackid == 2100) {
+			beacon = 1820467200;
 		}
 		sendBeacon.TrainModel_sendBeacon(beacon);
 	}
