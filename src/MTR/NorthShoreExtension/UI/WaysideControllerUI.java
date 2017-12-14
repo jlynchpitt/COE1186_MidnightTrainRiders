@@ -85,6 +85,7 @@ public class WaysideControllerUI extends JFrame{
 	public static DefaultTableModel bm = new DefaultTableModel();
 	public static boolean TablesCreated = false;
 	public static boolean OccupiedTablesCreated = false;
+	public static boolean BrokenTablesCreated = false;
 	public static JTable table1;
 	public static JTable table;
 	public static JTable BrokenTracksTable;
@@ -108,6 +109,8 @@ public class WaysideControllerUI extends JFrame{
     final static String TESTPan = "Test Panel";
     final static int extraWindowWidth = 100;
 	 
+    
+    //make the GUI
     public static void createAndShowWaysideControlGUI() throws IOException 
 	{
     	TablesCreated = true;
@@ -136,7 +139,7 @@ public class WaysideControllerUI extends JFrame{
             }
         });
 	  
-      System.out.println("TEST");
+      //System.out.println("TEST");
       
 	  
    }
@@ -148,8 +151,18 @@ public class WaysideControllerUI extends JFrame{
   	   {
   		  dm1.setDataVector(new Object[][] { { "Color", "Black", "Track", "length", "speed" }}, new Object[] { "Line", "Occupied Track", "Dest Track", "Athrty (ft)", "Speed (mph)" });
   		  OccupiedTablesCreated = true;
+  		  table1 = new JTable(dm1);
   	   }
     }
+    public static void BrokenTrackChartManager()
+    {
+    	if (!BrokenTablesCreated)
+  	   {
+    		bm.setDataVector(new Object[][] { }, new Object[] { "Broken Tracks"});
+    	    BrokenTracksTable = new JTable(bm);
+  	   }
+    }
+    
     
     public static void SwitchSwitcher(int x)  //switch based on location in the chart
     {
@@ -235,7 +248,7 @@ public class WaysideControllerUI extends JFrame{
  			   if (dm1.getValueAt(x, 0).equals(LineColor) || dm1.getValueAt(x, 0).equals("Color"))
  			   {
  				   System.out.println("COLOR FOUND");
- 				  System.out.println(dm1.getValueAt(x, 1) + " to " + TrackID);
+ 				  //System.out.println(dm1.getValueAt(x, 1) + " to " + TrackID);
  				   if (dm1.getValueAt(x, 2).equals(Integer.toString(TrackID).substring(1)) || dm1.getValueAt(x, 1).equals("Black"))
  				   {
  					   System.out.println("NUMBER FOUND");
@@ -300,7 +313,7 @@ public class WaysideControllerUI extends JFrame{
     }
     
     
-    
+    //actions to the save button and the close button    
     public static void ActionAdder()
     {
     	frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -336,6 +349,7 @@ public class WaysideControllerUI extends JFrame{
 
     }
     
+    //reads the PLC
     public static void Reader() throws IOException
     {
  	   String Block = "";
@@ -420,7 +434,10 @@ public class WaysideControllerUI extends JFrame{
 
 	public static void UpdateBrokenTracks(int [] BrokenTrackArray)
 	{
-		bm.setDataVector(new Object[][] { }, new Object[] { "Broken Tracks"});
+		if (!BrokenTablesCreated)
+		{
+			BrokenTrackChartManager();
+		}
 		for (int x = 0; x < BrokenTrackArray.length; x++)
 		{
 			Object[] Tracks = {BrokenTrackArray[x]};
