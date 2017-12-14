@@ -99,6 +99,7 @@ public class Train {
 	
 	public void TrainModel_resendSpeedAuthority(int v, int a) {
 		this.authority=a;
+		this.commandedSpeed=v;
 		tc.TrainControl_setCommandedSpeedAuthority(v,a);
 	}
 	
