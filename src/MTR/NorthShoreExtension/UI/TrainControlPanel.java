@@ -113,6 +113,7 @@ public class TrainControlPanel extends JPanel
     
     /* Non-Vital Controls Components */
     JFormattedTextField setTemp;
+    int setTemperatureValue = 73;
     JButton openRDoor;
     JButton openLDoor;
     JButton turnOnLights;
@@ -355,6 +356,19 @@ public class TrainControlPanel extends JPanel
     		//TODO: Handle set speed as double? posisble loss of precision with conversions
     		int newSetSpeed_kmh = (int) UnitConverter.milesToKilometers(newSetSpeed_mph);
     		trainController.setDriverCommandedSetSpeed(newSetSpeed_kmh);
+    	}
+    	else if(e.getSource().equals(setTemp)) {
+    		int newTemp = Integer.parseInt(((JFormattedTextField)e.getSource()).getText());
+    		
+    		if(newTemp >= 0 && newTemp < 100) {
+    			setTemperatureValue = newTemp;
+    			trainController.setInsideTemperature(setTemperatureValue);
+    		}
+    		else {
+    			//restore old temp
+    			setTemp.setText(Integer.toString(setTemperatureValue));
+    		}
+    		
     	}
     }
     

@@ -63,6 +63,7 @@ public class TrainController {
 	private boolean lightsOn = false;
 	private int setTemp = 73; //default room temperature is 73 degrees
 	private double internalTemp = 73; //TODO: Change actual temp to outside temp to start
+	private int timeSinceChangeTemp = 0;
 	
 	//Track Info
 	private DriverTrackInfo currentTrackInfo = null;
@@ -169,6 +170,20 @@ public class TrainController {
 		ensureSafeOperations();
 		
 		updateUI(TrainControlPanel.VITAL);
+		
+		//update the temperature
+		if(timeSinceChangeTemp > 10) {
+			timeSinceChangeTemp = 0;
+			if(internalTemp > setTemp) {
+				internalTemp--;				
+				updateUI(TrainControlPanel.TEMPERATURE);
+			}
+			else if(internalTemp < setTemp) {
+				internalTemp++;
+				updateUI(TrainControlPanel.TEMPERATURE);
+			}
+		}
+		timeSinceChangeTemp++;
 		
 		if(manualMode == false) {
 			//Auto mode - check status of lights + doors
@@ -305,8 +320,6 @@ public class TrainController {
 	
 	public void setInsideTemperature(int temp) {
 		setTemp = temp;
-
-		//TODO: perform calculations of actual temperature
 	}
 	
 	public void setOperationMode(boolean manual) {
